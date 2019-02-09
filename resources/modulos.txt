@@ -37,7 +37,7 @@ commands.owner.load
 commands.owner.logout
 commands.owner.reload
 commands.owner.repeat_command
-@ commands.owner.source
+commands.owner.source
 commands.owner.tot_commands
 commands.owner.unload
 @ commands.rpg.battle

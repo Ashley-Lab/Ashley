@@ -15,7 +15,7 @@ class SourceGit(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command()
     async def source(self, ctx, command: str = None):
-        source_url = 'https://bitbucket.org/filizardproject/ashley/src/master/'
+        source_url = "https://github.com/Ashley-Lab/Ashley"
         if command is None:
             await ctx.send(source_url)
             return
