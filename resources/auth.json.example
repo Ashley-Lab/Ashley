@@ -1,0 +1,11 @@
+{
+  "_t__ashley": "",
+  "db_url": "",
+  "db_name": "",
+  "owner_id": 0,
+  "default_guild": 0,
+  "default_embed": "000000",
+  "default_money": "money",
+  "default_invite": "https://discord.gg/WvUbbG8",
+  "default_link": "https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8"
+}

@@ -1,0 +1,26 @@
+{
+  "Nao posso apagar mais que 100 mensagens!": {
+    "en": "Cannot purge more than 100 messages!"
+  },
+  "```Desculpe, mas apenas os **Membros da FP** podem usar esse comando!```": {
+    "en": "```Sorry, but only the **FP Members** can to use this command!```"
+  },
+  "```Sistema de lembrete: Em construção!```": {
+    "en": "```System: In construct!```"
+  },
+  "```Essa operação ficou sem tempo, por favor tente novamente.```": {
+    "en": "```Essa operação ficou sem tempo, por favor tente novamente.```"
+  },
+  "```Tempo esgotado! Tente novamente```": {
+    "en": "```Timed out! Try again```"
+  },
+  "**Fechando**": {
+    "en": "**Closing**"
+  },
+  "Você nao pode apagar mais do que 100 mensagens": {
+    "en": "Cannot purge more than 100 messages!"
+  },
+  "Não encontrei nenhuma gif para essa tag!": {
+    "en": "I could not find any gif for this tag!"
+  }
+}
