@@ -85,6 +85,8 @@ class OnReady(object):
                                 channel__ = self.bot.get_channel(data['bot_config']['ash_news_id'])
                                 if channel__ is None:
                                     continue
+                                if len(guild.members) < 50:
+                                    continue
                                 draw_member = choice(list(guild.members))
                                 member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
                                 data_member = self.bot.db.get_data("user_id", member.id, "users")

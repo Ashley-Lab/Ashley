@@ -42,15 +42,18 @@ class MarriedSystem(object):
 
             try:
                 if data_user['user']['marrieding'] is False and data_member['user']['marrieding'] is False:
-                    pass
-                elif data_user['user']['marrieding']:
+                    update_user['user']['marrieding'] = True
+                    update_member['user']['marrieding'] = True
+                    self.bot.db.update_data(data_user, update_user, 'users')
+                    self.bot.db.update_data(data_member, update_member, 'users')
+                elif data_user['user']['marrieding'] is True:
                     return await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
-                elif data_member['user']['marrieding']:
-                    return await ctx.send('<:negate:520418505993093130>│{}`` JÁ ESTÁ EM PROCESSO DE '
+                elif data_member['user']['marrieding'] is True:
+                    return await ctx.send('<:negate:520418505993093130>│{} `` JÁ ESTÁ EM PROCESSO DE '
                                           'CASAMENTO!``'.format(member.mention))
             except KeyError:
-                update_user['user']['marrieding'] = False
-                update_member['user']['marrieding'] = False
+                update_user['user']['marrieding'] = True
+                update_member['user']['marrieding'] = True
                 self.bot.db.update_data(data_user, update_user, 'users')
                 self.bot.db.update_data(data_member, update_member, 'users')
 
@@ -60,13 +63,8 @@ class MarriedSystem(object):
             update_member = data_member
 
             if data_user['user']['married'] is False and data_member['user']['married'] is False:
-                update_user['user']['marrieding'] = False
-                update_member['user']['marrieding'] = False
-                self.bot.db.update_data(data_user, update_user, 'users')
-                self.bot.db.update_data(data_member, update_member, 'users')
-
-                await ctx.send(f'<a:vergonha:525105074398167061>│{member.mention},``VOCÊ RECEBEU UM PEDIDO DE CASAMENTO'
-                               f' DE`` {ctx.author.mention} ``DIGITE`` **SIM** ``OU`` **NÃO**')
+                await ctx.send(f'<a:vergonha:525105074398167061>│{member.mention}, ``VOCÊ RECEBEU UM PEDIDO DE '
+                               f'CASAMENTO DE`` {ctx.author.mention} ``DIGITE`` **SIM** ``OU`` **NÃO**')
 
                 def check(m):
                     return m.author.id == member.id and m.content.upper() in ['SIM', 'NÃO', 'S', 'N', 'NAO', 'CLARO']
@@ -86,13 +84,9 @@ class MarriedSystem(object):
                     update_member['user']['marrieding'] = False
                     self.bot.db.update_data(data_user, update_user, 'users')
                     self.bot.db.update_data(data_member, update_member, 'users')
-                    return await ctx.send(f'<:oc_status:519896814225457152>│{ctx.author.mention}``VOCE FOI '
+                    return await ctx.send(f'<:oc_status:519896814225457152>│{ctx.author.mention} ``VOCE FOI '
                                           f'REJEITADO...``')
                 else:
-                    data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-                    data_member = self.bot.db.get_data("user_id", member.id, "users")
-                    update_user = data_user
-                    update_member = data_member
                     update_user['user']['married'] = True
                     update_member['user']['married'] = True
                     update_user['user']['married_at'] = member.id
@@ -110,9 +104,17 @@ class MarriedSystem(object):
                         f" estão casados!**")
 
             elif data_member['user']['married'] is True:
-                return await ctx.send('<:negate:520418505993093130>│``ELE(A) JÁ ESTA CASADO!``')
+                update_user['user']['marrieding'] = False
+                update_member['user']['marrieding'] = False
+                self.bot.db.update_data(data_user, update_user, 'users')
+                self.bot.db.update_data(data_member, update_member, 'users')
+                return await ctx.send('<:negate:520418505993093130>│``ELE(A) JÁ ESTA CASADO(A)!``')
             else:
-                return await ctx.send('<:negate:520418505993093130>│``VOCE JÁ ESTA CASADO!``')
+                update_user['user']['marrieding'] = False
+                update_member['user']['marrieding'] = False
+                self.bot.db.update_data(data_user, update_user, 'users')
+                self.bot.db.update_data(data_member, update_member, 'users')
+                return await ctx.send('<:negate:520418505993093130>│``VOCE JÁ ESTA CASADO(A)!``')
         else:
             await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem.``')
 
@@ -141,14 +143,14 @@ class MarriedSystem(object):
                     self.bot.db.update_data(data_user, update_user, 'users')
                     self.bot.db.update_data(data_member, update_member, 'users')
                     return await ctx.send(
-                        f"🎊 **PARABENS** 🎉 {ctx.author.mention} **e** {member.mention} **agora vocês"
-                        f" estão SEPARADOS!**")
+                        f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.mention} **agora vocês"
+                        f" estão SEPARADOS!** ``ESCOLHA MELHOR DA PROXIMA VEZ`!`")
                 else:
                     await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
             elif data_member['user']['married'] is False:
-                return await ctx.send('<:negate:520418505993093130>│``ELE(A) NÃO ESTA CASADO!``')
+                return await ctx.send('<:negate:520418505993093130>│``ELE(A) NÃO ESTA CASADO(A)!``')
             else:
-                return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO ESTA CASADO!``')
+                return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO ESTA CASADO(A)!``')
         else:
             await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem.``')
 
