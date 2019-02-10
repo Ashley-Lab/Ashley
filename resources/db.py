@@ -484,9 +484,9 @@ class DataInteraction(object):
                     self.db.update_data(data, update, "users")
                     if not message.guild.id == 425864977996578816:
                         try:
-                            await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** e ganhou'
-                                                       ' **1** ``ponto de habilidade`` e **+10** Fichas para '
-                                                       'jogar**'.format(message.author, lvl_now))
+                            await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e '
+                                                       'ganhou`` **1** ``ponto de habilidade e`` **+10** ``Fichas para '
+                                                       'jogar``'.format(message.author, lvl_now))
                         except discord.errors.Forbidden:
                             pass
 

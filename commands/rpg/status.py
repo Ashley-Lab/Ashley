@@ -103,14 +103,12 @@ class StatusClass(object):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if ctx.author.id == data["user_id"]:
-            status_number = update['status']['STR'] + update['status']['CON'] + update['status']['DEX'] + \
-                            update['status']['INT'] + update['status']['LUC']
             update['status']['STR'] = 1
             update['status']['CON'] = 1
             update['status']['DEX'] = 1
             update['status']['INT'] = 1
             update['status']['LUC'] = 1
-            update['status']['PDH'] = status_number - 5
+            update['status']['PDH'] = update['user']['level'] - 1
             self.bot.db.update_data(data, update, "users")
             await ctx.send('<:confirmado:519896822072999937>│``Status resetados com sucesso!``', delete_after=5.0)
 
