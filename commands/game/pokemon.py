@@ -2,7 +2,7 @@ import json
 import discord
 
 from discord.ext import commands
-from resources.utility import CARDS
+from resources.utility import pokemon
 from random import randint
 from resources.check import check_it
 from resources.db import Database
@@ -14,14 +14,14 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class CardsClass(object):
+class PokemonClass(object):
     def __init__(self, bot):
         self.bot = bot
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='card', aliases=['carta'])
+    @commands.command(name='pokemon', aliases=['poke'])
     async def cards(self, ctx):
 
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -33,17 +33,17 @@ class CardsClass(object):
             def check(m):
                 return m.author == ctx.author
 
-            card = CARDS[randint(0, 399)]
+            response = pokemon[randint(0, 99)]
             embed = discord.Embed(
-                title='QUAL O NOME DESSA CARTA?',
+                title='QUAL O NOME DESSE POKEMON?',
                 color=color,
             )
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-            embed.set_image(url=card['foto'])
+            embed.set_image(url=response['foto'])
             await ctx.send(embed=embed)
 
             if ctx.author.id == self.bot.owner_id:
-                await ctx.send(card['nome'].upper().split())
+                await ctx.send(response['nome'].upper().split())
 
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)
@@ -54,24 +54,16 @@ class CardsClass(object):
                                       ' CANCELADO**')
 
             update['inventory']['coins'] -= 1
-            if answer.content.upper() == card['nome'].upper():
-                await ctx.send(f'<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 ``A carta era`` '
-                               f'**{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 12 pontos!``')
+            if answer.content.upper() == response['nome'].upper():
+                await ctx.send(f'<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 ``O pokemon era`` '
+                               f'**{response["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 12 pontos!``')
                 try:
                     update['config']['points'] += 12
                 except KeyError:
                     update['config']['points'] = 12
-            elif len([name for name in answer.content.upper().split() if len(name) >= 2 and
-                     name in card['nome'].upper().split()]) > (len(card['nome'].upper().split()) / 2):
-                await ctx.send(f'<:rank:519896825411665930>│``VOCÊ QUASE ACERTOU!`` 🎊 **PARABENS** 🎉 ``A carta era`` '
-                               f'**{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 4 pontos!``')
-                try:
-                    update['config']['points'] += 4
-                except KeyError:
-                    update['config']['points'] = 4
             else:
-                await ctx.send(f'<:negate:520418505993093130>│``A carta era`` **{card["nome"]}** ``e vc respondeu`` '
-                               f'**{answer.content}** ``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
+                await ctx.send(f'<:negate:520418505993093130>│``O pokemon era`` **{response["nome"]}** ``e vc '
+                               f'respondeu`` **{answer.content}** ``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
                 try:
                     if update['config']['points'] - 8 >= 0:
                         update['config']['points'] -= 8
@@ -90,5 +82,5 @@ class CardsClass(object):
 
 
 def setup(bot):
-    bot.add_cog(CardsClass(bot))
-    print('\033[1;32mO comando \033[1;34mCARDSCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    bot.add_cog(PokemonClass(bot))
+    print('\033[1;32mO comando \033[1;34mPOKEMONCLASS\033[1;32m foi carregado com sucesso!\33[m')

@@ -62,6 +62,11 @@ class Database(object):
         else:
             return data
 
+    def delete_channels(self):
+        db = self._conn.get_collection("channels")
+        deleted = db.delete_many({})
+        print("\033[1;31m", deleted.deleted_count, " \033[1;30mregistros de canais bloqueados pela IA deletados.\33[m")
+
     def add_user(self, ctx, **data):
         db_name = data.get("db_name", "users")
         data = {

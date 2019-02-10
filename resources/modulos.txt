@@ -79,4 +79,5 @@ commands.game.hangman
 commands.member.profile
 commands.member.married
 commands.funny.dance
+commands.game.pokemon
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

@@ -131,6 +131,7 @@ class OnReady(object):
             except KeyError:
                 pass
             self.bot.db.update_data(data, update, "users")
+        self.bot.db.delete_channels()
         self.time_ready = dt.utcnow()
         time_now = self.time_ready - self.bot.start_time
 

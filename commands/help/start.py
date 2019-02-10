@@ -197,6 +197,7 @@ class Helper(object):
                                   f"{self.st[17]}│**moeda** ``or`` **hot**\n"
                                   f"{self.st[68]}│**card** ``or`` **carta**\n"
                                   f"{self.st[69]}│**whats** ``or`` **charada**\n"
+                                  f"{self.st[81]}│**pokemon** ``or`` **poke**\n"
                                   f"{self.st[77]}│**hangman** ``or`` **forca**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)

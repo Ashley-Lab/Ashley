@@ -12,7 +12,7 @@ with open("resources/auth.json") as security:
 
 color = int(_auth['default_embed'], 16)
 
-_list = ['</Members>', '</Lore>']
+_list = ['</Shop>', '</Lore>']
 
 msg_id = None
 msg_user = None
@@ -31,13 +31,13 @@ class Panel(object):
             embed = discord.Embed(
                 title="Escolha a área que você deseja ver:",
                 color=color,
-                description="- Para pegar o cargo **</Members>**: Clique em :skull_crossbones:\n"
+                description="- Para pegar o cargo **</Shop>**: Clique em :skull_crossbones:\n"
                             "- Para pegar o cargo **</Lore>**: Clique em :crossed_swords:\n")
-            botmsg = await ctx.send(embed=embed)
-            await botmsg.add_reaction('☠')
-            await botmsg.add_reaction('⚔')
+            bot_msg = await ctx.send(embed=embed)
+            await bot_msg.add_reaction('☠')
+            await bot_msg.add_reaction('⚔')
             global msg_id
-            msg_id = botmsg.id
+            msg_id = bot_msg.id
             global msg_user
             msg_user = ctx.author
         else:
@@ -63,7 +63,7 @@ class Panel(object):
                         role = discord.utils.find(lambda r: r.name == rules[c], msg.guild.roles)
                         await user.remove_roles(role)
                         await sleep(1)
-                role = discord.utils.find(lambda r: r.name == "</Members>", msg.guild.roles)
+                role = discord.utils.find(lambda r: r.name == "</Shop>", msg.guild.roles)
                 await user.add_roles(role)
                 await sleep(1)
                 timer = True
