@@ -27,16 +27,17 @@ class Ashley(commands.AutoShardedBot):
         self.commands_used = Counter()
         self.guilds_commands = Counter()
         self.guilds_messages = Counter()
-        self.announcements = ['**Anuncie comigo**: ``ENTRE NA FP E SAIBA COMO ANUNCIAR!``',
-                              '**Seja VIP**: ``SENDO VIP VOCÊ ACABA COM OS ANUNCIOS``']
+        self.announcements = ['**Anuncie comigo**: ``ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!``',
+                              '**Seja VIP**: ``SENDO VIP VOCÊ ACABA COM OS ANUNCIOS``',
+                              '**Sistema de Anuncios** ``O SISTEMA DE ANUNCIO EXISTE PARA EU PODER ME MANTER``']
         self.languages = ("pt", "en")
-        self.version = "4.9.5"
+        self.version = "4.9.9"
         self.server_ = "heroku"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
                            'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
-        self.github = "FECHADO"
-        self.progress = "99.5%"
+        self.github = "https://github.com/Ashley-Lab/Ashley"
+        self.progress = "99.9%"
         self.data_cog = {}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff']
 
@@ -72,15 +73,17 @@ class Ashley(commands.AutoShardedBot):
     async def on_command(self, ctx):
         if ctx.guild is not None:
             data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_user = self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data is not None:
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
-                if not data['vip']:
-                    if (self.guilds_commands[ctx.guild.id] % 20) == 0:
-                        for data in self.db.get_announcements():
-                            self.announcements.append(data["data"]["announce"])
-                        announce = choice(self.announcements)
-                        await ctx.send(t_(ctx, f"{announce}", "guilds"))
+                if data_user is not None:
+                    if not data_user['config']['vip']:
+                        if (self.guilds_commands[ctx.guild.id] % 20) == 0:
+                            for data in self.db.get_announcements():
+                                self.announcements.append(data["data"]["announce"])
+                            announce = choice(self.announcements)
+                            await ctx.send(t_(ctx, f"{announce}", "guilds"))
 
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:

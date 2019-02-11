@@ -579,26 +579,62 @@ class DataInteraction(object):
                           in data.limit(limit).sort("config", pymongo.DESCENDING)])
         return rank
 
-    def change_guild_vip(self, guild_id, state: int):
-        data = self.db.get_data("guild_id", guild_id, "guilds")
-        update = data
-        if state == 1:
-            update['vip'] = True
-        elif state == 0:
-            update['vip'] = False
-        else:
-            return "OPÇÃO INVALIDA"
-        self.db.update_data(data, update, "guilds")
-        return "ESTADO DE VIP ALTERADO COM SUCESSO"
+    def add_vip(self, **kwargs):
+        try:
+            if kwargs.get("help"):
+                return "Keys: type (users or guilds), Key ID = (user_id or guild_id), state (1 or 0),"
+            if kwargs.get("type") == "users":
+                data = self.db.get_data("user_id", kwargs.get("user_id"), "users")
+                update = data
+                if int(kwargs.get("state")) == 1:
+                    update['config']['vip'] = True
+                elif int(kwargs.get("state")) == 0:
+                    update['config']['vip'] = False
+                else:
+                    return "OPÇÃO INVALIDA"
+                self.db.update_data(data, update, "users")
+                return "ESTADO DE VIP ALTERADO COM SUCESSO"
+            elif kwargs.get("type") == "guilds":
+                data = self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
+                update = data
+                if int(kwargs.get("state")) == 1:
+                    update['vip'] = True
+                elif int(kwargs.get("state")) == 0:
+                    update['vip'] = False
+                else:
+                    return "OPÇÃO INVALIDA"
+                self.db.update_data(data, update, "guilds")
+                return "ESTADO DE VIP ALTERADO COM SUCESSO"
+            else:
+                return "Tipo Inexistente!"
+        except KeyError:
+            return "Chave Inexistente!"
+        except TypeError:
+            return "o estado vip tem que ser numero INTEIRO"
 
-    def change_user_vip(self, user_id, state: int):
-        data = self.db.get_data("user_id", user_id, "users")
-        update = data
-        if state == 1:
-            update['config']['vip'] = True
-        elif state == 0:
-            update['config']['vip'] = False
-        else:
-            return "OPÇÃO INVALIDA"
-        self.db.update_data(data, update, "users")
-        return "ESTADO DE VIP ALTERADO COM SUCESSO"
+    def add_field(self, **kwargs):
+        try:
+            if kwargs.get("help"):
+                return "Keys: type (users or guilds), key_1, key_2, content"
+            if kwargs.get("type") == "users":
+                all_data = self.bot.db.get_all_data("users")
+                for data in all_data:
+                    update = data
+                    if kwargs.get("key_2"):
+                        update[kwargs.get("key_1")][kwargs.get("key_2")] = kwargs.get("content")
+                    else:
+                        update[kwargs.get("key_1")] = kwargs.get("content")
+                    self.bot.db.update_data(data, update, "users")
+            elif kwargs.get("type") == "guilds":
+                all_data = self.bot.db.get_all_data("guilds")
+                for data in all_data:
+                    update = data
+                    if kwargs.get("key_2"):
+                        update[kwargs.get("key_1")][kwargs.get("key_2")] = kwargs.get("content")
+                    else:
+                        update[kwargs.get("key_1")] = kwargs.get("content")
+                    self.bot.db.update_data(data, update, "guilds")
+            else:
+                return "Tipo Inexistente!"
+        except KeyError:
+            return "Chave Inexistente!"
