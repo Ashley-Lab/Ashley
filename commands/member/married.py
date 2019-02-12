@@ -144,7 +144,7 @@ class MarriedSystem(object):
                     self.bot.db.update_data(data_member, update_member, 'users')
                     return await ctx.send(
                         f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.mention} **agora vocês"
-                        f" estão SEPARADOS!** ``ESCOLHA MELHOR DA PROXIMA VEZ`!`")
+                        f" estão SEPARADOS!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
                 else:
                     await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
             elif data_member['user']['married'] is False:

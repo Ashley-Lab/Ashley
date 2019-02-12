@@ -13,7 +13,7 @@ from collections import Counter
 from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import WebHook
-from resources.translation import t_
+# from resources.translation import t_
 from resources.utility import ERRORS
 from resources.db import Database, DataInteraction
 
@@ -83,7 +83,11 @@ class Ashley(commands.AutoShardedBot):
                             for data in self.db.get_announcements():
                                 self.announcements.append(data["data"]["announce"])
                             announce = choice(self.announcements)
-                            await ctx.send(t_(ctx, f"{announce}", "guilds"))
+                            embed = discord.Embed(
+                                color=0x000000,
+                                description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
+                                f'```{announce}```')
+                            await ctx.send(embed=embed)
 
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
