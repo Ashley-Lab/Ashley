@@ -13,6 +13,17 @@ with open("resources/auth.json") as security:
 
 color = int(_auth['default_embed'], 16)
 
+cor = {
+        'clear': '\033[m',
+        'cian': '\033[1;36m',
+        'roxo': '\033[1;35m',
+        'azul': '\033[1;34m',
+        'amar': '\033[1;33m',
+        'verd': '\033[1;32m',
+        'verm': '\033[1;31m',
+        'pers': '\033[1;35;47m'
+      }
+
 
 class OnReady(object):
     def __init__(self, bot, *args, **kwargs):
@@ -119,13 +130,26 @@ class OnReady(object):
             await sleep(time)
 
     async def on_ready(self):
+
+        owner = 'Denky#0001'
+        ver_ = "API: " + str(discord.__version__) + " | BOT: " + str(self.bot.version) + \
+               " | PROGRESS: " + str(self.bot.progress)
+        id_bot = str(self.bot.user.id)
+        name = str(self.bot.user)
+        shards = self.bot.shard_count
+        log = 'LOGADO COM SUCESSO'
+        servs = str(len(self.bot.guilds))
+        late = int(self.bot.latency * 1000)
+        emoji = len(self.bot.emojis)
+        users = len(self.bot.users)
+        chann = len(self.bot.private_channels)
+
         all_data = self.bot.db.get_all_data("users")
         for data in all_data:
             update = data
             update['config']['playing'] = False
             update['config']['battle'] = False
             update['config']['tournament'] = False
-            # update['inventory']['coins'] = 50
             try:
                 update['user']['marrieding'] = False
             except KeyError:
@@ -133,15 +157,22 @@ class OnReady(object):
             self.bot.db.update_data(data, update, "users")
         self.bot.db.delete_channels()
         self.time_ready = dt.utcnow()
-        time_now = self.time_ready - self.bot.start_time
+        time = self.time_ready - self.bot.start_time
 
-        print("\033[1;30m=================================\33[m")
-        print('\033[1;32mNome: \033[1;34m%s\033[1;32m foi carregada com sucesso!\33[m' % self.bot.user.name)
-        print('\033[1;32mID: \033[1;34m%s\033[1;32m foi definido com sucesso!\33[m' % self.bot.user.id)
-        print('\033[1;32mOn line em : \033[1;34m{}\033[1;32m Servers!\33[m'.format(str(len(self.bot.guilds))))
-        print(f'\033[1;32mBot Version: \033[1;34m{self.bot.version}\033[1;32m by Denky#4002!\33[m')
-        print(f'\033[1;32mPronto em: \033[1;34m{time_now}\033[1;32m segundos!\33[m')
-        print("\033[1;30m=================================\33[m")
+        print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])
+        print(cor['roxo'], log.center(70), cor['clear'])
+        print(cor['azul'], '▍ Owner    ⠿', cor['clear'], cor['verd'], '{}'.format(str(owner).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Versão   ⠿', cor['clear'], cor['amar'], '{}'.format(str(ver_).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ App      ⠿', cor['clear'], cor['amar'], '{}'.format(str(name).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ ID       ⠿', cor['clear'], cor['amar'], '{}'.format(str(id_bot).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Shards   ⠿', cor['clear'], cor['amar'], '{}'.format(str(shards).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Servers  ⠿', cor['clear'], cor['amar'], '{}'.format(str(servs).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Latência ⠿', cor['clear'], cor['verm'], '{}ms'.format(str(late).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Emojis   ⠿', cor['clear'], cor['amar'], '{}'.format(str(emoji).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Users    ⠿', cor['clear'], cor['amar'], '{}'.format(str(users).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ PrivateC ⠿', cor['clear'], cor['amar'], '{}'.format(str(chann).rjust(50)), cor['clear'])
+        print(cor['azul'], '▍ Uptime   ⠿', cor['clear'], cor['amar'], '{}s'.format(str(time).rjust(50)), cor['clear'])
+        print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])
 
 
 def setup(bot):

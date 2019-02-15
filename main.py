@@ -27,9 +27,10 @@ class Ashley(commands.AutoShardedBot):
         self.commands_used = Counter()
         self.guilds_commands = Counter()
         self.guilds_messages = Counter()
-        self.announcements = ['**Anuncie comigo**: ``ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!``',
-                              '**Seja VIP**: ``SENDO VIP VOCÊ ACABA COM OS ANUNCIOS``',
-                              '**Sistema de Anuncios** ``O SISTEMA DE ANUNCIO EXISTE PARA EU PODER ME MANTER``']
+        self.user_commands = Counter()
+        self.announcements = ['ANUNCIE COMIGO: ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!',
+                              'SEJA VIP: SENDO VIP VOCÊ ACABA COM OS ANUNCIOS',
+                              'SISTEMA DE ANUNCIOS: O SISTEMA DE ANUNCIO EXISTE PARA EU PODER ME MANTER']
         self.languages = ("pt", "en")
         self.version = "4.9.9"
         self.server_ = "heroku"
@@ -77,6 +78,7 @@ class Ashley(commands.AutoShardedBot):
             if isinstance(ctx.author, discord.Member) and data is not None:
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
+                self.user_commands[ctx.author.id] += 1
                 if data_user is not None:
                     if not data_user['config']['vip']:
                         if (self.guilds_commands[ctx.guild.id] % 20) == 0:
@@ -165,7 +167,7 @@ if __name__ == "__main__":
     with open("resources/auth.json") as security:
         _auth = json.loads(security.read())
 
-    description_ashley = f"Um bot de assistencia para servidores criado por: Denky#4002\n" \
+    description_ashley = f"Um bot de assistencia para servidores criado por: Denky#0001\n" \
                          f"**Adicione para seu servidor:**: {_auth['default_link']}\n" \
                          f"**Servidor de Origem**: {_auth['default_invite']}\n"
 

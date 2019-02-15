@@ -61,20 +61,29 @@ class DailyClass(object):
     @daily.group(name='work', aliases=['trabalho'])
     async def _work(self, ctx):
         if self.bot.guilds_commands[ctx.guild.id] > 50:
-            data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-            if data_user['user']['ranking'] == "Bronze":
+            if self.bot.user_commands[ctx.author.id] > 10:
                 global money
-                money = randint(120, 1200)
-            elif data_user['user']['ranking'] == "Silver":
-                money = randint(80, 800)
-            elif data_user['user']['ranking'] == "Gold":
-                money = randint(40, 400)
-            await self.bot.db.add_money(ctx, money)
-            await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` **{money}** '
-                           f'``em dinheiro do seu rank atual.!``')
+                min_ = 0
+                max_ = 0
+                for n in range(self.bot.user_commands[ctx.author.id]):
+                    min_ += 1
+                    max_ += 1
+                data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                if data_user['user']['ranking'] == "Bronze":
+                    money = randint(120 + min_, 1200 + max_)
+                elif data_user['user']['ranking'] == "Silver":
+                    money = randint(80 + min_, 800 + max_)
+                elif data_user['user']['ranking'] == "Gold":
+                    money = randint(40 + min_, 400 + max_)
+                await self.bot.db.add_money(ctx, money)
+                await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` **{money}**'
+                               f'``em dinheiro do seu rank atual.!``')
+            else:
+                await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 10 COMANDOS DA '
+                               'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
         else:
             await ctx.send('<:negate:520418505993093130>│``O SERVIDOR ATUAL AINDA NÃO USOU + DE 50 COMANDOS DA '
-                           'ASHLEY HOJE!``')
+                           'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
 
 
 def setup(bot):

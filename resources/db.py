@@ -244,6 +244,60 @@ class Database(object):
         if self.get_data("guild_id", guild.id, db_name) is None:
             self.push_data(new_data, db_name)
 
+    async def take_money(self, ctx, coin, amount: int = 0):
+        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        update_guild_native = data_guild_native
+        if coin == "bronze":
+            update_user['treasure'][coin] -= amount
+            update_guild_native['data']['total_' + str(coin)] -= amount
+            self.bot.db.update_data(data_user, update_user, 'users')
+            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``RETIRADOS COM SUCESSO!``"
+        elif coin == "silver":
+            update_user['treasure'][coin] -= amount
+            update_guild_native['data']['total_' + str(coin)] -= amount
+            self.bot.db.update_data(data_user, update_user, 'users')
+            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``RETIRADOS COM SUCESSO!``"
+        elif coin == "gold":
+            update_user['treasure'][coin] -= amount
+            update_guild_native['data']['total_' + str(coin)] -= amount
+            self.bot.db.update_data(data_user, update_user, 'users')
+            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``RETIRADOS COM SUCESSO!``"
+        else:
+            return "<:alert_status:519896811192844288>│``OPÇÃO DE MOEDA ERRADA... ESCOLHA ENTRE:`` **gold**, " \
+                   "**silver** ``OU`` **gold**"
+
+    async def give_money(self, ctx, coin, amount):
+        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        update_guild_native = data_guild_native
+        if coin == "bronze":
+            update_user['treasure'][coin] += amount
+            update_guild_native['data']['total_' + str(coin)] += amount
+            self.bot.db.update_data(data_user, update_user, 'users')
+            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``ADICIONADOS COM SUCESSO!``"
+        elif coin == "silver":
+            update_user['treasure'][coin] += amount
+            update_guild_native['data']['total_' + str(coin)] += amount
+            self.bot.db.update_data(data_user, update_user, 'users')
+            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``ADICIONADOS COM SUCESSO!``"
+        elif coin == "gold":
+            update_user['treasure'][coin] += amount
+            update_guild_native['data']['total_' + str(coin)] += amount
+            self.bot.db.update_data(data_user, update_user, 'users')
+            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``ADICIONADOS COM SUCESSO!``"
+        else:
+            return "<:alert_status:519896811192844288>│``OPÇÃO DE MOEDA ERRADA... ESCOLHA ENTRE:`` **gold**, " \
+                   "**silver** ``OU`` **gold**"
+
     async def add_money(self, ctx, amount):
 
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -609,12 +663,12 @@ class DataInteraction(object):
     def add_field(self, **kwargs):
         try:
             if kwargs.get("help", False):
-                return "Keys: type (users or guilds), key_1, key_2, content"
+                return "Keys: type (users or guilds), two_key (true or false), key_1, key_2, content"
             if kwargs.get("type") == "users":
                 all_data = self.bot.db.get_all_data("users")
                 for data in all_data:
                     update = data
-                    if kwargs.get("key_2", False):
+                    if kwargs.get("two_key", False):
                         update[kwargs.get("key_1")][kwargs.get("key_2")] = kwargs.get("content")
                     else:
                         update[kwargs.get("key_1")] = kwargs.get("content")
