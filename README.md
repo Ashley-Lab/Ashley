@@ -1,21 +1,21 @@
 # Ashley
 Meu primeiro projeto no GITHUB
 
-Criado por: Denky#4002
+Criado por: Denky#0001
 
 [**Adicione ela em seu servidor:**] (https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)
 
-[**Servidor de Suporte**] (https://discord.gg/WvUbbG8)
+[**Servidor de Suporte**] (https://discord.gg/rYT6QrM)
 
 ### Tradutores:
 
 #### Portugues
 
-- Denky#4002
+- Denky#0001
 
 #### Ingles
 
-- Denky#4002
+- Denky#0001
 
 # Informações sobre Server Host
 
