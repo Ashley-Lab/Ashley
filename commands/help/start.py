@@ -306,6 +306,7 @@ class Helper(object):
                                   f"{self.st[79]}│**divorce** ``or`` **separar**\n"
                                   f"{self.st[80]}│**dance** ``or`` **dançar**\n"
                                   f"{self.st[78]}│**profile** ``or`` **perfil**\n"
+                                  f"{self.st[82]}│**bok** ``or`` **boquete**\n"
                                   f"{self.st[46]}│**rank** ``or`` **r**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
