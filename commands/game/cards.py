@@ -43,7 +43,7 @@ class CardsClass(object):
             await ctx.send(embed=embed)
 
             if ctx.author.id == self.bot.owner_id:
-                await ctx.send(card['nome'].upper().split())
+                await ctx.send(f"``OLÁ MESTRE, SUA RESPOSTA É:`` **{card['nome'].upper()}**")
 
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)

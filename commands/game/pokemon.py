@@ -43,7 +43,7 @@ class PokemonClass(object):
             await ctx.send(embed=embed)
 
             if ctx.author.id == self.bot.owner_id:
-                await ctx.send(response['nome'].upper().split())
+                await ctx.send(f"``OLÁ MESTRE, SUA RESPOSTA É:`` **{response['nome'].upper()}**")
 
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)

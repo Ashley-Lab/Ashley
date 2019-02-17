@@ -38,7 +38,7 @@ class Ashley(commands.AutoShardedBot):
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
                            'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.progress = "V5 0.5%"
+        self.progress = "V.5 -> 0.5%"
         self.data_cog = {}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff']
 

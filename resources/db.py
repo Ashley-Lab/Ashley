@@ -610,10 +610,6 @@ class DataInteraction(object):
 
     def get_rank_silver(self, limit):
         data = self.db.get_all_data("users")
-
-        """rank_list = [x for x in data.limit(limit).sort("treasure", pymongo.DESCENDING)]
-        for rank in rank_list:"""
-
         rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
                           ': ' + str(x['treasure'].get("silver")) for x
                           in data.limit(limit).sort("treasure", pymongo.DESCENDING)])

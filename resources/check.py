@@ -69,7 +69,7 @@ def check_it(**kwargs):
                             'mensagens privadas!``', "guilds"))
 
         if not (isinstance(ctx.channel, (discord.DMChannel, discord.GroupChannel))) and kwargs.get('is_nsfw', False):
-            if "nsfw" in ctx.channel.name.casefold():
+            if "nsfw" not in ctx.channel.name.casefold():
                 raise commands.CheckFailure(t_(ctx, "<:negate:520418505993093130>│``Esse comando apenas pode ser usado"
                                                     " em um canal`` **nsfw!!**", "guilds"))
 

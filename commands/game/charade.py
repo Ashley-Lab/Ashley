@@ -46,6 +46,10 @@ class CharadeClass(object):
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
 
+            if ctx.author.id == self.bot.owner_id:
+                await ctx.send(f"``OLÁ MESTRE, SUA RESPOSTA É:`` "
+                               f"**{self.charade[charade].lower().replace('resposta: ', '')}**")
+
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:

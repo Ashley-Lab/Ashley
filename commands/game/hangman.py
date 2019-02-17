@@ -76,7 +76,7 @@ Dica: **{}**'''.format(senha, dica))
                                        'PALAVRA?``'.format(self.trying[ctx.author.id] + 1))
 
                         if ctx.author.id == self.bot.owner_id:
-                            await ctx.send(f"**{palavra}**")
+                            await ctx.send(f"``OLÁ MESTRE, SUA RESPOSTA É:`` **{palavra.upper()}**")
 
                         try:
                             resp = await self.bot.wait_for('message', check=check, timeout=60.0)
@@ -87,7 +87,7 @@ Dica: **{}**'''.format(senha, dica))
                                 '<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                 ' CANCELADO**')
 
-                        if resp.content.lower() == palavra:
+                        if resp.content.lower() == palavra.lower():
                             update['config']['playing'] = False
                             self.bot.db.update_data(data, update, 'users')
                             await self.bot.db.add_money(ctx, 20)
@@ -122,7 +122,7 @@ Dica: **{}**'''.format(senha, dica))
                         continue
                     else:
                         digitadas += tentativa
-                        if tentativa in palavra:
+                        if tentativa in palavra.lower():
                             acertos += tentativa
                         else:
                             erros[ctx.author.id] += 1
@@ -134,7 +134,7 @@ Dica: **{}**'''.format(senha, dica))
                         update['config']['playing'] = False
                         self.bot.db.update_data(data, update, 'users')
                         return await ctx.send(f"<:oc_status:519896814225457152>│``INFORCADO`` **Tente Novamente!**"
-                                              f"\n A palavra era **{palavra}**")
+                                              f"\n A palavra era **{palavra.upper()}**")
 
         else:
             if data['config']['playing']:
