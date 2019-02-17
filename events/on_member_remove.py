@@ -27,8 +27,8 @@ class OnMemberRemove(object):
                     canal = self.bot.get_channel(data['func_config']['member_remove_id'])
                     msg = discord.Embed(title='O membro {} Saiu do servidor {}!'.format(member, member.guild),
                                         color=color, description="Adeus {}, qualquer coisa é a mesma coisa e "
-                                                                 "tudo é nenhuma!".format(member.mention))
-                    msg.set_author(name="Ashley", icon_url="https://i.imgur.com/GY4nTTj.png")
+                                                                 "tudo é nenhuma!".format(member.name))
+                    msg.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                     msg.set_thumbnail(url="{}".format(member.avatar_url))
                     msg.set_footer(text="Ashley ® Todos os direitos reservados.")
                     await canal.send(embed=msg)

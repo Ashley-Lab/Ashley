@@ -30,7 +30,7 @@ class CreateDoc(object):
             if c.qualified_name not in cogs[c.cog_name]:
                 skip = False
                 for ch in c.checks:
-                    if 'is_owner' in repr(ch):  # mine. don't put on docs
+                    if 'is_owner' in repr(ch):
                         skip = True
                 if skip:
                     continue

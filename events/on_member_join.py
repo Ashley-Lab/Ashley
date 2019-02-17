@@ -35,10 +35,10 @@ class OnMemberJoin(object):
                         to_send = discord.Embed(
                             title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
                             color=color,
-                            description="{}, Eu sou o BOT oficial da {}, qualquer coisa me marque e "
+                            description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
                                         "digite ``ash.ajuda`` que eu irei ajudar você com "
-                                        "muito prazer!".format(member.mention, member.guild))
-                        to_send.set_author(name="Filizard Project", icon_url="https://i.imgur.com/GY4nTTj.png")
+                                        "muito prazer!".format(member.name, member.guild))
+                        to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                         to_send.set_thumbnail(url="{}".format(member.avatar_url))
                         to_send.set_image(url=choice(gif))
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -47,10 +47,10 @@ class OnMemberJoin(object):
                         to_send = discord.Embed(
                             title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
                             color=color,
-                            description="{}, Eu sou o BOT oficial da {}, qualquer coisa me marque e "
+                            description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
                                         "digite ``ash.ajuda`` que eu irei ajudar você com "
-                                        "muito prazer!".format(member.mention, member.guild))
-                        to_send.set_author(name="Filizard Project", icon_url="https://i.imgur.com/GY4nTTj.png")
+                                        "muito prazer!".format(member.name, member.guild))
+                        to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                         to_send.set_thumbnail(url="{}".format(member.avatar_url))
                         to_send.set_image(url=choice(gif))
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
