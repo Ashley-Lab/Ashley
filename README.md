@@ -12,7 +12,7 @@ Criado por: Denky#0001ðŸ¤´
 
 ## Grupo de Staffs:
 
-**Núcleo de Programação**
+**NÃºcleo de ProgramaÃ§Ã£o**
 
 - Denky#0001 (Daniel Amaral)
 - Patchouli Knowledge#9732 (Olivia Martins)
@@ -26,21 +26,21 @@ Criado por: Denky#0001ðŸ¤´
 **Revisores Gramaticais**
 
 - Denky#0001 (Daniel Amaral)
-- Paçoca#1865 (Emílio Silva)
-- Bublee#9482 (Geórgia Bezerra)
+- PaÃ§oca#1865 (EmÃ­lio Silva)
+- Bublee#9482 (GeÃ³rgia Bezerra)
 
 ## Roteiristas
 
 **Scripts da IA**
 
 - Denky#0001 (Daniel Amaral)
-- Bublee#9482 (Geórgia Bezerra)
+- Bublee#9482 (GeÃ³rgia Bezerra)
 
 ## Tradutores:
 
 **Portugues**
 
-- Paçoca#1865 (Emílio Silva)
+- PaÃ§oca#1865 (EmÃ­lio Silva)
 - Denky#0001 (Daniel Amaral)
 
 **Ingles**
