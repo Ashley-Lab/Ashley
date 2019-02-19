@@ -1,14 +1,20 @@
+import json
 import discord
 
-from asyncio import sleep
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+
+with open("resources/auth.json") as security:
+    _auth = json.loads(security.read())
+
+color = int(_auth['default_embed'], 16)
 
 
 class InviteClass(object):
     def __init__(self, bot):
         self.bot = bot
+        self.url = "https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8"
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -18,11 +24,14 @@ class InviteClass(object):
         await ctx.message.channel.send("<:send:519896817320591385>│``Obrigado por querer participar da`` "
                                        "**MINHA COMUNIDADE** ``irei enviar para seu privado um convite "
                                        "para que você possa entrar!``")
-        await sleep(1)
         try:
+            embed = discord.Embed(
+                color=color,
+                description=f'<:safada:530029764061298699>│[CLIQUE AQUI PARA ME ADICIONAR NO SEU '
+                            f'SERVIDOR]({self.url})')
+
             await ctx.author.send("<:confirmado:519896822072999937>│https://discord.gg/rYT6QrM")
-            await ctx.author.send("[clique aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&"
-                                  "scope=bot&permissions=8) Caso você queria me add no seu servidor!")
+            await ctx.author.send(embed=embed)
         except discord.errors.Forbidden:
             await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE NÃO FOI POSSIVEL ENVIAR A MENSAGEM PRA VOCÊ``')
 

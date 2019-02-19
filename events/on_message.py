@@ -22,12 +22,14 @@ class SystemMessage(object):
         self.bot = bot
         self.ping_test = {}
         self.tz = pytz.all_timezones
-        self.scripts = [me.about_me, me.introduction, me.server]
+        self.scripts = [me.about_me, me.introduction, me.deeping]
         self.heart = ChatBot(
             'Ashley',
             storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
             logic_adapters=[
-                'chatterbot.logic.BestMatch'
+                'chatterbot.logic.BestMatch',
+                'chatterbot.logic.MathematicalEvaluation',
+                'chatterbot.logic.SpecificResponseAdapter'
             ],
             database_uri=_auth['db_url'],
             response_selection_method=resp
@@ -68,7 +70,7 @@ class SystemMessage(object):
             data_guild = self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             if data_guild is not None:
                 if 'ashley' in message.content.lower() and data_guild['ia_config']['auto_msg']:
-                    if 'bom dia' in message.content.lower():
+                    if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
                         response = choice(bomdia)
                         return await message.channel.send(f"```{response}```")
                     if 'boa noite' in message.content.lower():
@@ -79,8 +81,8 @@ class SystemMessage(object):
                         for c in range(0, len(denky_r)):
                             if denky_r[c] in message.content:
                                 return await message.channel.send('Ei, {}! Eu to vendo você falar mal do meu pai!\n'
-                                                                  '```VOU CONTAR TUDO PRO PAPAI '
-                                                                  'DENKY!```'.format(message.author.mention))
+                                                                  '```VOU CONTAR TUDO PRO '
+                                                                  'PAPAI```'.format(message.author.mention))
 
                 await self.get_response(message, data_guild, self.bot)
 

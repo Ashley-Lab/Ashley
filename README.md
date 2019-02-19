@@ -1,38 +1,64 @@
-# Ashley
+# 🧙‍♀️Ashley🧝‍♀️
+<p align="center">
+<img height="384" src="https://i.imgur.com/3gxnqkI.png">
+</p>
 Meu primeiro projeto no GITHUB
 
-Criado por: Denky#0001
+Criado por: Denky#0001🤴
 
-[**Adicione ela em seu servidor:**] (https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)
+**Adicione ela em seu servidor [clicando aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)!**😁
 
-[**Servidor de Suporte**] (https://discord.gg/rYT6QrM)
+**Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!**👈
 
-### Tradutores:
+## Grupo de Staffs:
 
-#### Portugues
+**N�cleo de Programa��o**
+
+- Denky#0001 (Daniel Amaral)
+- Patchouli Knowledge#9732 (Olivia Martins)
+
+**Designers e Ilustradores**
+
+- Patchouli Knowledge#9732 (Olivia Martins)
+- zNunshei#8659 (Matheus Vilares)
+- Jurubeba_#5096 (Juanita Pereira)
+
+**Revisores Gramaticais**
+
+- Denky#0001 (Daniel Amaral)
+- Pa�oca#1865 (Em�lio Silva)
+- Bublee#9482 (Ge�rgia Bezerra)
+
+## Roteiristas
+
+**Scripts da IA**
+
+- Denky#0001 (Daniel Amaral)
+- Bublee#9482 (Ge�rgia Bezerra)
+
+## Tradutores:
+
+**Portugues**
+
+- Pa�oca#1865 (Em�lio Silva)
+- Denky#0001 (Daniel Amaral)
+
+**Ingles**
 
 - Denky#0001
-
-#### Ingles
-
-- Denky#0001
+- Patchouli Knowledge#9732 (Olivia Martins)
 
 # Informações sobre Server Host
-
 - [Build Pack](#build-pack)
 
 ## Build Pack
 
-### Links das Builds Packs para FFMPEG
+## Links das Builds Packs para FFMPEG
+- **[Crazycatz00](https://github.com/Crazycatz00/heroku-buildpack-libopus)**
 
-#### Crazycatz00
-> **LINK:** https://github.com/Crazycatz00/heroku-buildpack-libopus
+- **[Alevfalse](https://github.com/alevfalse/heroku-buildpack-ffmpeg)**
 
-#### Alevfalse
-> **LINK:** https://github.com/alevfalse/heroku-buildpack-ffmpeg
-
-#### Guilherme-otran
-> **LINK:** https://github.com/guilherme-otran/heroku-buildpack-ffprobe
+- **[Guilherme-otran](https://github.com/guilherme-otran/heroku-buildpack-ffprobe)**
 
 # Commands
 
@@ -40,13 +66,21 @@ Criado por: Denky#0001
 - [AsciiText Commands](#asciitext-commands)
 - [AutoDelete Commands](#autodelete-commands)
 - [Avatar Commands](#avatar-commands)
+- [Booket Commands](#booket-commands)
 - [BotInfo Commands](#botinfo-commands)
+- [CardsClass Commands](#cardsclass-commands)
+- [CharadeClass Commands](#charadeclass-commands)
+- [ConfigClass Commands](#configclass-commands)
+- [CreateDoc Commands](#createdoc-commands)
 - [DadoClass Commands](#dadoclass-commands)
+- [DanceClass Commands](#danceclass-commands)
 - [DrawUsers Commands](#drawusers-commands)
 - [Economy Commands](#economy-commands)
 - [EnterMember Commands](#entermember-commands)
+- [EvalSintax Commands](#evalsintax-commands)
 - [FarmClass Commands](#farmclass-commands)
 - [FeedBackClass Commands](#feedbackclass-commands)
+- [ForceClass Commands](#forceclass-commands)
 - [GameThinker Commands](#gamethinker-commands)
 - [GetGif Commands](#getgif-commands)
 - [GuildBank Commands](#guildbank-commands)
@@ -56,348 +90,410 @@ Criado por: Denky#0001
 - [Inverse Commands](#inverse-commands)
 - [InviteClass Commands](#inviteclass-commands)
 - [JoKenPo Commands](#jokenpo-commands)
+- [KickClass Commands](#kickclass-commands)
+- [KissClass Commands](#kissclass-commands)
+- [LickClass Commands](#lickclass-commands)
 - [LoadCog Commands](#loadcog-commands)
 - [LogoutCog Commands](#logoutcog-commands)
+- [MarriedSystem Commands](#marriedsystem-commands)
 - [MemberUpdate Commands](#memberupdate-commands)
 - [MusicDefault Commands](#musicdefault-commands)
-- [OnMemberJoin Commands](#onmemberjoin-commands)
-- [OnMemberRemove Commands](#onmemberremove-commands)
-- [OnMessageDelete Commands](#onmessagedelete-commands)
-- [OnMessageEdit Commands](#onmessageedit-commands)
-- [OnReady Commands](#onready-commands)
 - [Panel Commands](#panel-commands)
 - [PingMS Commands](#pingms-commands)
-- [RankingClass Commands](#rankingclass-commands)
+- [PokemonClass Commands](#pokemonclass-commands)
+- [ProfileSystem Commands](#profilesystem-commands)
+- [PunchClass Commands](#punchclass-commands)
+- [PushClass Commands](#pushclass-commands)
 - [Reflection Commands](#reflection-commands)
+- [RegisterAnnounce Commands](#registerannounce-commands)
 - [RegisterClass Commands](#registerclass-commands)
 - [ReloadCog Commands](#reloadcog-commands)
-- [ReplayCommand Commands](#replaycommand-commands)
+- [RepeatCommand Commands](#repeatcommand-commands)
 - [RoleInfo Commands](#roleinfo-commands)
 - [SaySomething Commands](#saysomething-commands)
 - [ServerInfo Commands](#serverinfo-commands)
 - [SkinMine Commands](#skinmine-commands)
+- [SlapClass Commands](#slapclass-commands)
+- [SourceGit Commands](#sourcegit-commands)
 - [StaffAdmin Commands](#staffadmin-commands)
 - [StatusClass Commands](#statusclass-commands)
 - [SystemMessage Commands](#systemmessage-commands)
 - [Thinkers Commands](#thinkers-commands)
+- [TopClass Commands](#topclass-commands)
+- [TotComandos Commands](#totcomandos-commands)
 - [UnloadCog Commands](#unloadcog-commands)
 - [UpTimeOnline Commands](#uptimeonline-commands)
-- [UserBank Commands](#userbank-commands)
 - [UserInfo Commands](#userinfo-commands)
 - [VoteClass Commands](#voteclass-commands)
 
 ## AllEmoji Commands
-
-#### emojis
->**Descrição:** Mostra todos os emojis do servidor.
+**ash emoji**
+>Descrição: Retorna uma lista de todos os emojis especiais do servidor.
 
 ## AsciiText Commands
-
-#### textao
->**Descrição:** Transforma seu texto em um padrao ascii.
+**ash textao (o seu texto aqui)**
+>Descrição: Transforma seu texto em um padrao ascii.
+<p align="left">
+<img height="270" src="https://i.imgur.com/NjTHvJn.png">
+</p>
 
 ## AutoDelete Commands
-
-#### gossip
->**Descrição:** Monstra uma mensagem que apos 3 segundos é deletada.
+**ash gossip (a mensagem que você quer passar aqui)**
+>Descrição: Mostra sua mensagem (fofoca) e a deleta depois de alguns segundos. A mensagem que você mandou tambem sera deletada.
 
 ## Avatar Commands
+**ash avatar @(O usuario o qual você deseja ver o avatar.)**
+>Descrição: Mostra o avatar da pessoa marcada, caso você não marque ninguem mostrara seu proprio avatar.
+<p align="left">
+<img height="270" src="https://i.imgur.com/B8dAjCt.png">
+</p>
 
-#### avatar
->**Descrição:** Mostra o avatar do membro selecionado.
+## Booket Commands
+**ash bok @(pessoa desejada)**
+>Descrição: Esse é um comando NSFW especifico para aqueles que usam o sistema de casamento do bot e apenas pode ser feito entra parceiros.
 
 ## BotInfo Commands
+**ash botinfo**
+>Descrição: Mostra uma pequena ficha sobre o bot.
 
-#### botinfo
->**Descrição:** Monstra uma pequena descrição do bot.
+## CardsClass Commands
+**ash card**
+>Descrição: É um jogo que te mostrara uma carta aleatoria de Yu-Gi-Oh, pra ganhar o jogo você precisa acertar o nome da carta ou pelo menos chegar perto
+<p align="left">
+<img height="270" src="https://i.imgur.com/v9O1GbX.png">
+</p>
+
+## CharadeClass Commands
+**ash charade ou ash charada**
+>Descrição: É um jogo que te mostrara uma charada na tela e pra ganhar você tera que respondela corretamente.
+<p align="left">
+<img height="270" src="https://i.imgur.com/W50d4rD.png">
+</p>
+
+## ConfigClass Commands
+### Comandos de configuração.
+**ash config guild**
+>Descrição: Configura os canais do seu server caso você não tenha configurado ela assim que a registrou no seu server.
+
+**ash config language**
+>Descrição: Configura qual lingua a Ashley usara em seu servidor ingles ou portugues.
+
+**ash config report**
+>Descrição: Define o canal pra onde o feedback dos comandos do bot vão.
+
+## CreateDoc Commands
+**ash make_doc**
+>Descrição: Cria um arquivo .md que ajuda a criar um arquivo README.md.
 
 ## DadoClass Commands
+**ash rolar xdy**
+>Descrição: Esse comando é feito pra rolar dados. X é o numero de dados e Y o numero de faces dos dados.
+<p align="left">
+<img height="270" src="https://i.imgur.com/u7utLAW.png">
+</p>
 
-#### rolar
->**Descrição:** Joga um dado no formato XdX, onde X é um numero!
+## DanceClass Commands
+**ash dance @(marque uma pessoa)**
+>Descrição: Esse comando mostra um gif de dança onde "você dança que você marcou".
+<p align="left">
+<img height="270" src="https://i.imgur.com/QJczAH2.png">
+</p>
 
 ## DrawUsers Commands
-
-#### sorteio
->**Descrição:** Sorteia um membro do servidor.
+**ash sorteio**
+>Descrição: Sorteia um membro aleatorio do servidor.
+<p align="left">
+<img height="270" src="https://i.imgur.com/jCTodtI.png">
+</p>
 
 ## Economy Commands
-
 ### Sistema de Economia
+**ash economy (moeda desejada)**
+>Descrição: Mostra quanto todos os servidores tem de uma determinada moeda. Você pode usar o comando apenas como ash economy caso queira ver a lista de moedas.
 
-#### economy
->**Descrição:** Mostra o estado atual da economia de todos os servidores.
+**ash tessouro (moeda desejada)**
+>Descrição: Mostra quanto o servidor que você esta tem de uma determinada moeda. Você pode usar o comando apenas como ash tessouro caso queira ver a lista de moedas.
+
+**ash carteira (moeda desejada)**
+>Descrição: Mostra quanto você tem de determinada moeda. Você pode usar o comando apenas como ash carteira caso queira ver a lista de moedas.
+
+<p align="left">
+<img height="270" src="https://i.imgur.com/ZqbTp0n.png">
+</p>
+
+**ash daily**
+>Descrição: De da uma quantia de dinheiro diaria pra você.
 
 ## EnterMember Commands
+**ash entrou @(a pessoa que você quer checar)**
+>Descrição: Esse comando te dira a exata data que um usuario entrou
 
-#### entrou
->**Descrição:** Mostra a data exata da entrada de um membro!.
+## EvalSintax Commands
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
 ## FarmClass Commands
-
-#### teleport
->**Descrição:** Comando exclusivo da Filizard Project, para acesso de areas do RPG.
+**COMMING SOON!**
 
 ## FeedBackClass Commands
+**ash feedback suggestion ou report**
+>Descrição: Manda uma mensagem de feedback diretamente pro time de criadores do bot, seja isso uma sugestão ou um bug.
+<p align="left">
+<img height="270" src="https://i.imgur.com/3hZ2fNM.png">
+</p>
 
-#### feedback
->**Descrição:** Comando para que você possa mandar uma sugestao ou aviso de erros e etc para mim.
+## ForceClass Commands
+**ash forca**
+>Descrição: O comando da inicio a um jogo de forca, assim que faltarem apenas 3 letras para acabar você obrigado a adivinhar a palavra porem pode adivinhar em qualquer momento do jogo.
 
 ## GameThinker Commands
-
-#### game
->**Descrição:** Jogo da advinhação de numeros.
+**ash guess**
+>Descrição: É um jogo de adivinhação onde o computador pensa num numero de 0 a 5 e você ganha se acertar.
+<p align="left">
+<img height="270" src="https://i.imgur.com/0rHOUTL.png">
+</p>
 
 ## GetGif Commands
-
-#### gif
->**Descrição:** Pesquisa um gif de uma palavra chave que você deseje.
-
-## GuildBank Commands
-
-#### treasure
->**Descrição:** Monstra o poder ecomino de um servidor.
+**ash gif (palavra chave do gif)**
+>Descrição: Busca e mostra um gif baseado em uma palavra chave qualquer que você queira.
+<p align="left">
+<img height="270" src="https://i.imgur.com/mvgPz6M.png">
+</p>
 
 ## HeadsOrTails Commands
-
-#### moeda
->**Descrição:** Jogo do cara ou coroa.
+**ash moeda**
+>Descrição: É um jogo de cara ou coroa.
 
 ## Helper Commands
-
-#### ajuda
->**Descrição:** Comando de ajuda do bot.
+**ash help**
+>Descrição: Manda a lista de comandos do bot pro seu privado.
 
 ## HugClass Commands
-
-#### abraço
->**Descrição:** manda um abraço para um membro desejado.
+**ash hug @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de , onde você " quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
 
 ## Inverse Commands
-
-#### palin
->**Descrição:** Monstra uma frase palindroma.
+**ash palin**
+>Descrição: Manda um palindromo, palavra que faz sentido tanto lendo da direita pra esquerda quando da esquerda pra direita, pra você.
 
 ## InviteClass Commands
-
-#### convite
->**Descrição:** Manda para seu privado um convite do servidor da Filizard Project.
+**ash convite**
+>Descrição: Envia pro seu privado um convite pro servidor de suporte/comunidade da Ashley.
 
 ## JoKenPo Commands
+**ash jokenpo**
+>Descrição: O comando da inicio a um jogo de jokenpo com o bot.
+<p align="left">
+<img height="270" src="https://i.imgur.com/S2DJGcE.png">
+</p>
 
-#### jokenpo
->**Descrição:** Jogo do pedra, papel ou tesoura.
+## KickClass Commands
+**ash kick @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de chute, onde "você chuta quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
+
+## KissClass Commands
+**ash kiss @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de beijo, onde "você beija quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
+
+## LickClass Commands
+**ash lick @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de lambida, onde "você lambe quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
 
 ## LoadCog Commands
-
-#### load
->**Descrição:** Comando OWNER para carregar uma engrenagem de codigo.
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
 ## LogoutCog Commands
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
-#### logout
->**Descrição:** Comando OWNER para desligar o bot ou reiniciar.
+## MarriedSystem Commands
+### Sistema de Casamento
 
-## MemberUpdate Commands
+**ash Marry @(o seu pretendente)**
+>Descrição: Você vai propor casamento pra pessoa que você marcou, se ela aceitar vocês se casam se não boa sorte da proxima vez.
+<p align="left">
+<img height="270" src="https://i.imgur.com/QfArPCp.png">
+</p>
 
-#### Evento MU
->**Descrição:** em construção...
+**ash divorce @(seu atual parceiro)**
+>Descrição: É o comando de divorcio, você usa e vocês se separam e cada um pro seu lado. E não esse comando não te da um advogado de divorcio gratis, sim é com você que estou falando SCHAYNNA.
+<p align="left">
+<img height="270" src="https://i.imgur.com/fSt2mzx.png">
+</p>
 
 ## MusicDefault Commands
+### Comandos de Musica
+>Nota: Para todos esses comandos funcionariem propriamente você precisa estar conectado a um canal de voz.
 
-### Comandos de Músicas
+**ash join**
+>Descrição: Usando esse comando a Ashley entrara no canal em que você estiver atualmente.
 
-#### join
->**Descrição:** Coloca o bot dentro de um canal de voz ativo pelo usuario.
+**ash play (nome ou link da musica no youtube)**
+>Descrição: Esse comando vai dar play na musica que você escolher no canal de texto que você estiver.
 
-#### play
->**Descrição:** bora uma musica para tocar.
+**ash pause**
+>Descrição: Pausa a musica podendo continuar depois.
 
-#### pause
->**Descrição:** pausa um musica que está sendo tocada atualmente.
+**ash resume**
+>Descrição: Continua a musica pausada de onde ela parou.
 
-#### resume
->**Descrição:** retorna a música que foi pausada.
+**ash skip**
+>Descrição: Pula a musica atual, se a pessoa que pediu a musica usar esse comando a musica pula automaticamente se não vai abrir uma votação onde metade das pessoas ouvindo tera que usar o comando pra musica ser pulada.
 
-#### skip
->**Descrição:** pula uma música.
+**ash playlist**
+>Descrição: Mostra as musicas na fila de espera.
 
-#### playlist
->**Descrição:** mostra uma lista das musicas que estão em espera.
+**ash current**
+>Descrição: Mostra a musica que esta tocando atualmente.
 
-#### current
->**Descrição:** Monstra informações sobre a musica atual.
+**ash vol (numero de 1 a 100)**
+>Descrição: Muda o volume da musica podendo ir de 1 até 100.
 
-#### volume
->**Descrição:** altera o volume das musicas.
+**ash stop**
+>Descrição: Para todas as musicas atualmente na playlist e a que esta tocando. A Ashley sai do canal de voz assim que esse comando é usado.
 
-#### stop
->**Descrição:** para a musica ou lista e ainda retira o bot do canal de voz.
+**ash shuffle**
+>Descrição: Embaralha as musica na playlist.
 
-## OnMemberJoin Commands
+**ash clear**
+>Descrição: Limpa a playlist removendo todas as musicas. A que esta tocando no momento não é afetada.
 
-#### Evento MJ
->**Descrição:** Manda uma mensagem quando um membro entra no servidor FP.
+**ash remove (numero da musica na playlist)**
+>Descrição: Remove uma musica da playlist baseado no numero dela na playlist.
 
-## OnMemberRemove Commands
-
-#### Evento MR
->**Descrição:** Manda uma mensagem quando um membro sai do servidor FP.
-
-## OnMessageDelete Commands
-
-#### Evento MD
->**Descrição:** Registra mensagens deletadas por usuários do servidor FP.
-
-## OnMessageEdit Commands
-
-#### Evento ME
->**Descrição:** Registra alterações de mensagem feitas pelos usuários do servidor FP.
-
-## OnReady Commands
-
-#### Evento OR
->**Descrição:** Define varios comportamentos do BOT assim que ele fica online.
+**ash repeat**
+>Descrição: Faz com que a playlist fique se repetindo sempre.
 
 ## Panel Commands
-
-#### cargos
->**Descrição:** Comando exclusivo do servidor FP para acesso a áreas do servidor.
+**ash roles**
+>Descrição: Retorna um pequeno menu pra você poder pegar certos cargos no server da Ashley.
 
 ## PingMS Commands
+**ash ping**
+>Descrição: Retorna uma mensagem com a latencia atual do bot.
 
-#### ping
->**Descrição:** Monstra a latencia do bot atualmente.
+## PokemonClass Commands
+**ash pokemon**
+>Descrição: O comando mostra a imagem de um sprite de um pokemon (6ª Geração) e você tem que adivinhar o nome do pokemon em questão. O comando pokemon funciona da mesma maneira que o comando carta para ver a imagem [clique aqui](#cardsclass-commands).
 
-## RankingClass Commands
+## ProfileSystem Commands
+**ash profile @(um usuario)**
+>Descrição: Mostre o perfil da pessoa que você marcou, caso não marque ninguem o comando retornara o seu perfil.
+<p align="left">
+<img height="270" src="https://i.imgur.com/gQrVzDr.png">
+</p>
 
-#### rank
->**Descrição:** Monstra uma imagem do membro e suas informações de ranking.
+## PunchClass Commands
+**ash punch @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de soco, onde "você soca quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
+
+## PushClass Commands
+**ash push @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de empurrão, onde "você empurra quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
 
 ## Reflection Commands
+**ash reflita**
+>Descrição: Manda uma imagem com uma frase de reflexão. Você pode colocar zueira na frente pra ver frases mais descontraidas.
 
-#### reflita
->**Descrição:** Monstra uma imagem com uma frase de reflexão.
+## RegisterAnnounce Commands
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
 ## RegisterClass Commands
-
-#### register
->**Descrição:** Comando de registro para acesso ao bot e suas funcionalidades.
+**ash register**
+>Descrição: Esse comando te registra dentro do banco de dados do bot, é preciso estar registrado pra usar certos comandos.
 
 ## ReloadCog Commands
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
-#### reload
->**Descrição:** Comando OWNER para recarregar uma engrenagem de codigo.
-
-## ReplayCommand Commands
-
-#### repita
->**Descrição:** repete um texto ate 3 vezes.
+## RepeatCommand Commands
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
 ## RoleInfo Commands
-
-#### roleinfo
->**Descrição:** Monstra informações de um cargo em questão.
+**ash roleinfo @(o cargo que você quer checar)**
+>Descrição: Mostra um embed com algumas informações sobre o cargo que você marcou.
+<p align="left">
+<img height="270" src="https://i.imgur.com/eUlSPSA.png">
+</p>
 
 ## SaySomething Commands
-
-#### diga
->**Descrição:** faz o bot dizer algo por você.
+**ash say (sua mensagem)**
+>Descrição: O bot manda uma mensagem com o que vc tiver escrito.
 
 ## ServerInfo Commands
-
-#### serverinfo
->**Descrição:** Mostra as informações do servidor.
+**ash serverinfo**
+>Descrição: Retorna um embed com as informações do servidor em que você esta.
 
 ## SkinMine Commands
+**ash skin (algum nome)**
+>Descrição: Manda pra você uma skill de minecraft que se refira ao nome informado.
+<p align="left">
+<img height="270" src="https://i.imgur.com/GKncAag.png">
+</p>
 
-#### skin
->**Descrição:** Envia uma skin do minecraft para o membro.
+## SlapClass Commands
+**ash slap @(marque uma pessoa)**
+>Descrição: Esse comando envia um gif de tapa, onde "você bate quem você marcou". Ele funciona como o comando ash dance [clique aqui](#danceclass-commands) para ver a imagem.
+
+## SourceGit Commands
+**ash source (um comando da ashley)**
+>Descrição: Esse comando te da o link pro github do arquivo que se refere ao comando que você citou.
+<p align="left">
+<img height="270" src="https://i.imgur.com/povV4XC.png">
+</p>
 
 ## StaffAdmin Commands
+### Lista de Comandos Pra Staff
 
-### Comandos de ADM
+**ash staff kick @(usuario a ser kicado)**
+>Descrição: Kica o usuario que você marcou do servidor.
 
-#### make_doc
->**Descrição:** Cria um arquivo auxiliar para o README.
+**ash staff ban @(usuario a ser banido)**
+>Descrição: Bane o usuario marcado do servidor.
 
-#### total_de_comandos
->**Descrição:** Mostra todos os comandos usados e quantas vezes os mesmos foram utilizados.
+**ash staff delete (numero de mensagens pra deletar)**
+>Descrição: Deleta a quantidade de mensagens que você especificou no comando.
 
-#### source
->**Descrição:** Monstra o link do github ou partes exatas do codigo.
+**ash staff report**
+>Descrição: Manda o formulario de report/denuncia de usuario pro seu privado tudo que você precisa fazer é responder.
 
-#### eval
->**Descrição:** Da acesso ao OWNER fazer pequenos codigos direto do bot.
-
-#### repeat_command
->**Descrição:** Repete um comando algumas vezes "comando OWNER".
-
-#### annouce
->**Descrição:** Comando OWNER, cadastra um anuncio.
-
-#### staff
->**Descrição:** Comando de informações sobre sub-comandos dos staffs.
-
-#### _limpar
->**Descrição:** Sub-Comando de STAFF, que limpa uma quantidade de mensagens do chat.
-
-#### _language
->**Descrição:** Sub-Comando de STAFF, que seta a linguagem do servidor (PT/EN).
-
-#### _ban
->**Descrição:** Sub-Comando de STAFF, que bane um membro do servidor.
-
-#### _kick
->**Descrição:** Sub-Comando de STAFF, que expulsa um membro do servidor.
-
-#### _report
->**Descrição:** Sub-Comando de STAFF, que reporta um membro infrator para os ADMs.
 
 ## StatusClass Commands
-
-#### status
->**Descrição:** Comando que mostra seus pontos de habilidade.
-
-#### status add
->**Descrição:** Sub-Comando de STATUS, que adiciona seus pontos de habilidade para uma em questao.
+**ash status**
+>Descrição: Te devolve sua fixa de atributos referente ao futuro sistema de rpg do servidor.
 
 ## SystemMessage Commands
-
-### Comandos de ON_MESSAGE
-
-#### Evento OM
->**Descrição:** Registra e atua em cima de todas as mensagens captadas pelo bot, tambem responsavem pelo sistema de XP.
-
-#### training
->**Descrição:** Comando de treinamento da IA do bot.
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
 ## Thinkers Commands
+**ash pensador**
+Descrição: Manda uma frase do pensador pra você pensar.
 
-#### pensador
->**Descrição:** Comando que envia um texto com frases engraçadas.
+## TopClass Commands
+**ash top (aquilo que você atualmente quer checar)**
+>Descrição: Mostra o top 20 atual de quem tem mais algo, aquilo que você citar no comando, dentre todos aqueles usando a Ashley. Você pode usar apenas ash top pra ter um embed com todos os "pontos" que esse comando é capaz de checar. 
+<p align="left">
+<img height="270" src="https://i.imgur.com/EhYyAVR.png">
+</p>
+
+## TotComandos Commands
+**ash total_de_comandos**
+>Descrição: Mostra o total de comandos que foram usados nela deis da ultima vez que ela foi restartada.
 
 ## UnloadCog Commands
-
-#### unload
->**Descrição:** Comando OWNER, que serve para descarregar uma engrenagem de codigo da memoria do bot.
+**!!Comando exclusivo para a equipe de criação do bot!!**
 
 ## UpTimeOnline Commands
-
-#### online
->**Descrição:** Monstra o tempo em que o bot está online.
-
-## UserBank Commands
-
-#### wallet
->**Descrição:** Mostra o poder aquisitivo de um membro em questao.
+**ash online**
+>Descrição: Mostra a quanto tempo o modulo principal da Ashley esta online sem ser desligado ou restartado.
 
 ## UserInfo Commands
-
-#### userinfo
->**Descrição:** Monstra algumas informações de um membro em questão.
+**ash userinfo @(um usuario)**
+>Descrição: Retorna um embed com informações sobre o usuario marcado. Caso use apenas userinfo sem marcar ninguem recebera suas proprias informações.
+<p align="left">
+<img height="270" src="https://i.imgur.com/UryFYu2.png">
+</p>
 
 ## VoteClass Commands
-
-#### vote
->**Descrição:** Cria uma enquete de votação para os membros de um servidor.
+**ash vote (sobre oq vão votar)**
+>Descrição: Cria uma enquete no canal que o comando foi executado, você escreve o texto da enquete que deve ser de sim ou não.
+<p align="left">
+<img height="270" src="https://i.imgur.com/qsXHPTk.png">
+</p>
