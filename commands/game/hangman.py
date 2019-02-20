@@ -69,7 +69,7 @@ Dica: **{}**'''.format(senha, dica))
                         await ctx.send('<:pqp:530031187331121152>│``Só faltam 3 ou menos letras, chute a palavra!``')
                     else:
                         await ctx.send('<a:blue:525032762256785409>│``VC ESTÁ DESPERDIÇANDO UMA DAS SUAS 3 CHANGES DE '
-                                       'ADVINHAR``')
+                                       'ADIVINHAR``')
 
                     for c in range(self.trying[ctx.author.id], 3):
                         await ctx.send('<a:red:525032764211200002>│``Tentativa {}/3``\n``QUAL A '

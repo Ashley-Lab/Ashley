@@ -28,6 +28,8 @@ class BotInfo(object):
         total_members = sum(len(s.members) for s in self.bot.guilds)
         total_online = sum(1 for m in self.bot.get_all_members() if m.status != discord.Status.offline)
         channel_types = Counter(isinstance(c, discord.TextChannel) for c in self.bot.get_all_channels())
+        ver_ = "API: " + str(discord.__version__) + " | BOT: " + str(self.bot.version) + \
+               " | PROGRESS: " + str(self.bot.progress)
         voice = channel_types[False]
         text = channel_types[True]
 
@@ -48,8 +50,9 @@ class BotInfo(object):
         embed_bot.add_field(name='📛 | Tag', value=self.bot.user)
         embed_bot.add_field(name='‍💻 | Servidores', value=str(len(self.bot.guilds)))
         embed_bot.add_field(name='👥 | Usuarios', value='{} ({} online)'.format(total_members, total_online))
-        embed_bot.add_field(name='‍⚙ | Programador', value="`DENKY#4002`")
+        embed_bot.add_field(name='‍⚙ | Programador', value="`DENKY#0001`")
         embed_bot.add_field(name='🐍 Python  | Version', value="`3.6.6`")
+        embed_bot.add_field(name='<:ashley:525348179734953995> Bot  | Version', value=str(ver_))
         embed_bot.add_field(name="<a:loading:520418506567843860> | Tempo Online",
                             value=f"{dt.utcnow() - self.bot.start_time}")
         embed_bot.add_field(name="<:bot:526147892919140371> | Me add em seu Servidor",

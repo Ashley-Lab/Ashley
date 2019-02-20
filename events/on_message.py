@@ -3,7 +3,8 @@ import time
 import pytz
 
 from chatterbot import ChatBot
-from chatterbot.trainers import ListTrainer
+from chatterbot.conversation import Statement
+from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer
 from chatterbot.response_selection import get_most_frequent_response as resp
 
 from random import choice
@@ -22,21 +23,47 @@ class SystemMessage(object):
         self.bot = bot
         self.ping_test = {}
         self.tz = pytz.all_timezones
-        self.scripts = [me.about_me, me.introduction, me.deeping]
+        self.scripts = [me.about_me, me.introduction, me.deeping, "chatterbot.corpus.Portuguese",
+                        "chatterbot.corpus.Portuguese.greetings_pt-BR"]
         self.heart = ChatBot(
             'Ashley',
             storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
+            preprocessors=[
+                'chatterbot.preprocessors.clean_whitespace',
+                'chatterbot.preprocessors.unescape_html'
+            ],
+            filters=['chatterbot.filters.get_recent_repeated_responses'],
             logic_adapters=[
-                'chatterbot.logic.BestMatch',
-                'chatterbot.logic.MathematicalEvaluation',
-                'chatterbot.logic.SpecificResponseAdapter'
+                "chatterbot.logic.BestMatch",
             ],
             database_uri=_auth['db_url'],
             response_selection_method=resp
         )
         self.trainer = ListTrainer(self.heart)
+        self.corpus_trainer = ChatterBotCorpusTrainer(self.heart)
         for script in self.scripts:
             self.trainer.train(script)
+
+    async def get_feedback(self, message):
+        def is_correct(m):
+            return m.author == message.author and m.channel == message.channel
+
+        try:
+            response = await self.bot.wait_for('message', check=is_correct, timeout=30.0)
+        except TimeoutError:
+            data = self.bot.db.get_data("channel_id", message.channel.id, "channels")
+            update = data
+            update['channel_state'] = 0
+            self.bot.db.update_data(data, update, "channels")
+            return await message.channel.send('``Desculpe, você demorou muito, Tchau`` {}**!** ``Até '
+                                              'uma próxima``'.format(message.author.mention))
+        if response.content.lower() in ['sim', 'yes']:
+            return True
+        elif response.content.lower() in ['não', 'nao', 'not', 'no']:
+            return False
+        else:
+            await message.channel.send('``por favor digite`` **sim** ``ou`` **não**')
+            return None
 
     @staticmethod
     async def get_response(message, data_guild, bot):
@@ -69,22 +96,23 @@ class SystemMessage(object):
         if message.guild is not None and message.author.id not in self.bot.blacklist:
             data_guild = self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             if data_guild is not None:
-                if 'ashley' in message.content.lower() and data_guild['ia_config']['auto_msg']:
-                    if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
-                        response = choice(bomdia)
-                        return await message.channel.send(f"```{response}```")
-                    if 'boa noite' in message.content.lower():
-                        response = choice(boanoite)
-                        return await message.channel.send(f"```{response}```")
-                elif 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
-                    if message.author.id != self.bot.owner_id:
-                        for c in range(0, len(denky_r)):
-                            if denky_r[c] in message.content:
-                                return await message.channel.send('Ei, {}! Eu to vendo você falar mal do meu pai!\n'
-                                                                  '```VOU CONTAR TUDO PRO '
-                                                                  'PAPAI```'.format(message.author.mention))
-
-                await self.get_response(message, data_guild, self.bot)
+                data = self.bot.db.get_channel_data(message.channel.id)
+                if data['channel_id'] == message.channel.id and data['channel_state'] == 0:
+                    if 'ashley' in message.content.lower() and data_guild['ia_config']['auto_msg']:
+                        if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
+                            response = choice(bomdia)
+                            return await message.channel.send(f"```{response}```")
+                        if 'boa noite' in message.content.lower():
+                            response = choice(boanoite)
+                            return await message.channel.send(f"```{response}```")
+                    elif 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
+                        if message.author.id != self.bot.owner_id:
+                            for c in range(0, len(denky_r)):
+                                if denky_r[c] in message.content:
+                                    return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu '
+                                                                      'pai!**\n```VOU CONTAR TUDO PRO '
+                                                                      'PAPAI```'.format(message.author.mention))
+                    await self.get_response(message, data_guild, self.bot)
 
                 try:
                     if message.mentions[0] == self.bot.user and 'vamos conversar' in message.content.lower():
@@ -94,8 +122,15 @@ class SystemMessage(object):
                                 update = data
                                 update['channel_state'] = 1
                                 self.bot.db.update_data(data, update, "channels")
-                                await message.channel.send('Olá {}! Certo, Vamos conversar? ``Me pergunte alguma '
-                                                           'coisa!``'.format(message.author.mention))
+                                if message.author.id not in self.bot.staff:
+                                    await message.channel.send('``Olá`` {}**!** ``Certo, Vamos conversar?`` **Me '
+                                                               'pergunte alguma '
+                                                               'coisa!**'.format(message.author.mention))
+                                else:
+                                    await message.channel.send('``Olha só um dos meus desenvolvedores, como vai`` '
+                                                               '{}**!** ``Certo, estou pronta para aprender!`` **Me '
+                                                               'pergunte alguma '
+                                                               'coisa!**'.format(message.author.mention))
                                 while True:
                                     def is_correct(m):
                                         return m.author == message.author and m.channel == message.channel
@@ -107,8 +142,9 @@ class SystemMessage(object):
                                         update = data
                                         update['channel_state'] = 0
                                         self.bot.db.update_data(data, update, "channels")
-                                        return await message.channel.send('Desculpe, você demorou muito, Tchau {}! Até '
-                                                                          'uma próxima'.format(message.author.mention))
+                                        return await message.channel.send('``Desculpe, você demorou muito, Tchau`` '
+                                                                          '{}**!** ``Até uma '
+                                                                          'próxima``'.format(message.author.mention))
                                     if response.content.lower() in goodbye:
                                         data = self.bot.db.get_data("channel_id", message.channel.id, "channels")
                                         update = data
@@ -117,11 +153,48 @@ class SystemMessage(object):
                                         await message.channel.send('``Tchau`` {}!``, Até uma '
                                                                    'próxima!``'.format(message.author.mention))
                                         break
-                                    response_ashley = self.heart.get_response(response.content)
-                                    if float(response_ashley.confidence) > 0.5:
-                                        await message.channel.send(response_ashley)
+
+                                    if message.author.id in self.bot.staff:
+                                        input_statement = Statement(text=response.content)
+                                        response_ = self.heart.generate_response(input_statement)
+                                        await message.channel.send('``É`` **{}** ``uma resposta coerente para`` **{}**'
+                                                                   '``?``'.format(response_.text, input_statement.text))
+                                        result = await self.get_feedback(message)
+                                        if result is None:
+                                            data = self.bot.db.get_data("channel_id", message.channel.id, "channels")
+                                            update = data
+                                            update['channel_state'] = 0
+                                            self.bot.db.update_data(data, update, "channels")
+                                            await message.channel.send('``Tchau`` {}!``, Até uma '
+                                                                       'próxima!``'.format(message.author.mention))
+                                            break
+                                        if result is True:
+                                            await message.channel.send('**Resposta verificada com sucesso** '
+                                                                       '``Qual a proxima pergunta?``')
+                                        else:
+                                            await message.channel.send('```Por favor insira a correta!```')
+                                            try:
+                                                response = await self.bot.wait_for('message', check=is_correct,
+                                                                                   timeout=30.0)
+                                            except TimeoutError:
+                                                data = self.bot.db.get_data("channel_id", message.channel.id,
+                                                                            "channels")
+                                                update = data
+                                                update['channel_state'] = 0
+                                                self.bot.db.update_data(data, update, "channels")
+                                                return await message.channel.send(
+                                                    '``Desculpe, você demorou muito, Tchau`` {}**!** ``Até '
+                                                    'uma próxima``'.format(message.author.mention))
+                                            correct_response = Statement(text=response.content)
+                                            self.heart.learn_response(correct_response, input_statement)
+                                            await message.channel.send('**Resposta adicionada ao meu DB!** '
+                                                                       '``Qual a proxima pergunta?``')
                                     else:
-                                        await message.channel.send(choice(negate))
+                                        response_ashley = self.heart.get_response(response.content)
+                                        if float(response_ashley.confidence) > 0.5:
+                                            await message.channel.send(response_ashley)
+                                        else:
+                                            await message.channel.send(choice(negate))
                             else:
                                 await message.channel.send('{}, ``Eu já estou conversando '
                                                            'com alguem nesse canal!``'.format(message.author.mention))
