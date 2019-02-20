@@ -5,8 +5,8 @@
 
 ## Sobre Mim
 >Meu primeiro projeto no GITHUB - Daniel Amaral (25 Anos) Recife/PE
->Email: danielamaral.f@hotmail.com
->Criado por: Denky#0001🤴
+- Email: danielamaral.f@hotmail.com
+- Criado por: Denky#0001🤴
 
 Adicione ela em seu servidor [clicando aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)!😁
 
