@@ -2,13 +2,13 @@
 <p align="center">
 <img height="384" src="https://i.imgur.com/3gxnqkI.png">
 </p>
-**Meu primeiro projeto no GITHUB - Daniel Amaral (25 Anos) Recife/PE**
--Email: danielamaral.f@hotmail.com
-Criado por: Denky#0001🤴
+>Meu primeiro projeto no GITHUB - Daniel Amaral (25 Anos) Recife/PE
+>Email: danielamaral.f@hotmail.com
+>Criado por: Denky#0001🤴
 
-**Adicione ela em seu servidor [clicando aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)!**😁
+Adicione ela em seu servidor [clicando aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)!😁
 
-**Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!**👈
+Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 ## Grupo de Staffs:
 
