@@ -50,9 +50,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - Denky#0001
 - Patchouli Knowledge#9732 (Olivia Martins)
 
-# Informações sobre Server Host
-- [Build Pack](#build-pack)
-
 ## Build Pack
 
 ### Links das Builds Packs para FFMPEG
