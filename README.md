@@ -47,7 +47,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 **Ingles**
 
-- Denky#0001
+- Denky#0001 (Daniel Amaral)
 - Patchouli Knowledge#9732 (Olivia Martins)
 
 ## Build Pack
