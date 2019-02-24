@@ -125,7 +125,7 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_guild_remove(self, guild):
         blacklist = self.get_channel(542134573010518017)
-        blacklist.send(f"{guild.id} ``ME RETIROU DO SERVIDOR LOGO PODERÁ ENTRAR NA BLACKLIST``")
+        await blacklist.send(f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO PODERÁ ENTRAR NA BLACKLIST``")
 
     async def on_message(self, message):
         if message.author.id == self.user.id:

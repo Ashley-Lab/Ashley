@@ -51,7 +51,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='xp', aliases=['exp'])
     async def _xp(self, ctx):
-        top = self.bot.data.get_rank_xp(20)
+        top = await self.bot.data.get_rank_xp(20)
         await ctx.send(f'```py\n{top}```')
 
     @check_it(no_pm=True)
@@ -59,7 +59,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='level', aliases=['nivel'])
     async def _level(self, ctx):
-        top = self.bot.data.get_rank_level(20)
+        top = await self.bot.data.get_rank_level(20)
         await ctx.send(f'```py\n{top}```')
 
     @check_it(no_pm=True)
@@ -67,7 +67,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='money', aliases=['dinheiro'])
     async def _money(self, ctx):
-        top = self.bot.data.get_rank_money(20)
+        top = await self.bot.data.get_rank_money(20)
         await ctx.send(f'```py\n{top}```')
 
     @check_it(no_pm=True)
@@ -75,7 +75,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='gold', aliases=['ouro'])
     async def _gold(self, ctx):
-        top = self.bot.data.get_rank_gold(20)
+        top = await self.bot.data.get_rank_gold(20)
         await ctx.send(f'```py\n{top}```')
 
     @check_it(no_pm=True)
@@ -83,7 +83,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='silver', aliases=['prata'])
     async def _silver(self, ctx):
-        top = self.bot.data.get_rank_silver(20)
+        top = await self.bot.data.get_rank_silver(20)
         await ctx.send(f'```py\n{top}```')
 
     @check_it(no_pm=True)
@@ -91,7 +91,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='bronze')
     async def _bronze(self, ctx):
-        top = self.bot.data.get_rank_bronze(20)
+        top = await self.bot.data.get_rank_bronze(20)
         await ctx.send(f'```py\n{top}```')
 
     @check_it(no_pm=True)
@@ -99,7 +99,7 @@ class TopClass(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='point')
     async def _point(self, ctx):
-        top = self.bot.data.get_rank_point(20)
+        top = await self.bot.data.get_rank_point(20)
         await ctx.send(f'```py\n{top}```')
 
 

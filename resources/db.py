@@ -1,17 +1,19 @@
 import json
 import discord
 import datetime
-import pymongo
+import operator
 
 from resources.translation import t_
 from discord.ext import commands
 from pymongo import MongoClient
 from random import randint
+from collections import Counter
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 epoch = datetime.datetime.utcfromtimestamp(0)
+cont = Counter()
 
 
 class Database(object):
@@ -580,53 +582,173 @@ class DataInteraction(object):
         self.db.push_data(data, "announcements")
         await ctx.send('<:confirmado:519896822072999937>│``Anuncio cadastrado com sucesso!``')
 
-    def get_rank_xp(self, limit):
+    async def get_rank_xp(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['user'].get("experience")) for x
-                          in data.limit(limit).sort("user", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['user'].get('experience')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def get_rank_level(self, limit):
+    async def get_rank_level(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['user'].get("level")) for x
-                          in data.limit(limit).sort("user", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['user'].get('level')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def get_rank_money(self, limit):
+    async def get_rank_money(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['treasure'].get("money")) for x
-                          in data.limit(limit).sort("treasure", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['treasure'].get('money')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.2f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > R$" + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def get_rank_gold(self, limit):
+    async def get_rank_gold(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['treasure'].get("gold")) for x
-                          in data.limit(limit).sort("treasure", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['treasure'].get('gold')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def get_rank_silver(self, limit):
+    async def get_rank_silver(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['treasure'].get("silver")) for x
-                          in data.limit(limit).sort("treasure", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['treasure'].get('silver')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def get_rank_bronze(self, limit):
+    async def get_rank_bronze(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['treasure'].get("bronze")) for x
-                          in data.limit(limit).sort("treasure", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['treasure'].get('bronze')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def get_rank_point(self, limit):
+    async def get_rank_point(self, limit):
         data = self.db.get_all_data("users")
-        rank = "\n".join([str(self.bot.get_user(int(x.get("user_id")))).replace("'", "").replace("#", "_") +
-                          ': ' + str(x['config'].get("points")) for x
-                          in data.limit(limit).sort("config", pymongo.DESCENDING)])
+        dict_ = dict()
+        for _ in data:
+            if _['config'].get('points') is not None:
+                dict_[str(_.get('user_id'))] = _['config'].get('points')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
     def add_vip(self, **kwargs):
