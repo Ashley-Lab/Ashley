@@ -6,7 +6,7 @@
 ## Sobre Mim
 >Meu primeiro projeto no GITHUB - Daniel Amaral (25 Anos) Recife/PE
 - Email: danielamaral.f@hotmail.com
-- Criado por: Denky#0001🤴
+- Criado por: Denky#5960🤴
 
 Adicione ela em seu servidor [clicando aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8)!😁
 
@@ -16,7 +16,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 **Núcleo de Programação**
 
-- Denky#0001 (Daniel Amaral)
+- Denky#5960 (Daniel Amaral)
 - Patchouli Knowledge#9732 (Olivia Martins)
 
 **Designers e Ilustradores**
@@ -27,7 +27,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 **Revisores Gramaticais**
 
-- Denky#0001 (Daniel Amaral)
+- Denky#5960 (Daniel Amaral)
 - Paçoca#1865 (Emílio Silva)
 - Bublee#9482 (Geórgia Bezerra)
 
@@ -35,7 +35,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 **Scripts da IA**
 
-- Denky#0001 (Daniel Amaral)
+- Denky#5960 (Daniel Amaral)
 - Bublee#9482 (Geórgia Bezerra)
 
 ## Tradutores:
@@ -43,11 +43,11 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 **Portugues**
 
 - Paçoca#1865 (Emílio Silva)
-- Denky#0001 (Daniel Amaral)
+- Denky#5960 (Daniel Amaral)
 
 **Ingles**
 
-- Denky#0001 (Daniel Amaral)
+- Denky#5960 (Daniel Amaral)
 - Patchouli Knowledge#9732 (Olivia Martins)
 
 ## Build Pack

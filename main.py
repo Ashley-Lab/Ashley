@@ -1,5 +1,5 @@
 # ARQUIVO PRINCIPAL DE INICIALIZAÇÃO DO BOT: ASHLEY PARA DISCORD.
-# CRIADO POR: DANIEL AMARAL -> Denky#0001
+# CRIADO POR: DANIEL AMARAL -> Denky#5960
 # SEGUE ABAIXO OS IMPORTS COMPLETOS
 import discord
 import logging
@@ -32,13 +32,13 @@ class Ashley(commands.AutoShardedBot):
                               'SEJA VIP: SENDO VIP VOCÊ ACABA COM OS ANUNCIOS',
                               'SISTEMA DE ANUNCIOS: O SISTEMA DE ANUNCIO EXISTE PARA EU PODER ME MANTER']
         self.languages = ("pt", "en")
-        self.version = "5.0.0"
+        self.version = "5.0.1"
         self.server_ = "heroku"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
                            'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.progress = "V.5 -> 5.0%"
+        self.progress = "V.5 -> 10.0%"
         self.data_cog = {}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff']
 
@@ -70,6 +70,19 @@ class Ashley(commands.AutoShardedBot):
         with open("resources/shutdown.json", "w") as shutdown:
             json.dump(self.shutdowns, shutdown)
         shutdown.close()
+
+    def ban_(self, id_, reason):
+        date = dt(*dt.utcnow().timetuple()[:6])
+        self.blacklist[id_][f"{date}"] = reason
+        with open("resources/blacklist.json", "w") as blacklist:
+            json.dump(self.blacklist, blacklist)
+        blacklist.close()
+
+    def un_ban_(self, id_):
+        del self.blacklist[id_]
+        with open("resources/blacklist.json", "w") as blacklist:
+            json.dump(self.blacklist, blacklist)
+        blacklist.close()
 
     async def on_command(self, ctx):
         if ctx.guild is not None:
@@ -125,7 +138,8 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_guild_remove(self, guild):
         blacklist = self.get_channel(542134573010518017)
-        await blacklist.send(f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO PODERÁ ENTRAR NA BLACKLIST``")
+        await blacklist.send(f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``")
+        self.ban_(guild.id, f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``")
 
     async def on_message(self, message):
         if message.author.id == self.user.id:
@@ -167,7 +181,7 @@ if __name__ == "__main__":
     with open("resources/auth.json") as security:
         _auth = json.loads(security.read())
 
-    description_ashley = f"Um bot de assistencia para servidores criado por: Denky#0001\n" \
+    description_ashley = f"Um bot de assistencia para servidores criado por: Denky#5960\n" \
                          f"**Adicione para seu servidor:**: {_auth['default_link']}\n" \
                          f"**Servidor de Origem**: {_auth['default_invite']}\n"
 

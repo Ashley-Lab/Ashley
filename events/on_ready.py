@@ -33,7 +33,7 @@ class OnReady(object):
         self.task_chance = self.bot.loop.create_task(self.change_status())
         self.task_temporizer_one = self.bot.loop.create_task(self.temporizer_channel_one())
         self.task_temporizer_two = self.bot.loop.create_task(self.temporizer_channel_two())
-        self.url = 'https://www.twitch.tv/filizardproject'
+        self.url = 'https://www.twitch.tv/d3nkyt0'
         self.details = ['Yu-gi-oh!', 'RPG', 'Magic', 'Ashley Project']
         self.state = ['online', 'idle', 'dnd']
         self.status = ['meu criador nos pensamentos!', 'meus cabelos ao vento!', 'minha amiga no buraco!',
@@ -72,8 +72,8 @@ class OnReady(object):
                                     continue
                                 message = choice(reflita)
                                 await channel_.send("```{}```".format(message))
-                        await sleep(10)
-                await sleep(10)
+                        await sleep(60)
+                await sleep(60)
             await sleep(3600)
 
     async def temporizer_channel_two(self):
@@ -104,7 +104,7 @@ class OnReady(object):
                                 update_member = data_member
                                 if data_member is None:
                                     await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
-                                                         f" POREM NÃO TINHA REGISTRO, LOGO NÃO HOUVE PREMIAÇÃO``")
+                                                         f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
                                     premium.append(c)
                                     continue
                                 coins = randint(2, 10)
@@ -121,8 +121,8 @@ class OnReady(object):
                                 update_member['inventory']['coins'] += coins
                                 self.bot.db.update_data(data_member, update_member, 'users')
                                 premium.append(c)
-                        await sleep(10)
-                await sleep(10)
+                        await sleep(60)
+                await sleep(60)
             if len(premium) == len(list_):
                 time = 3600
             else:
@@ -131,7 +131,7 @@ class OnReady(object):
 
     async def on_ready(self):
 
-        owner = 'Denky#0001'
+        owner = str(self.bot.get_user(self.bot.owner_id))
         ver_ = "API: " + str(discord.__version__) + " | BOT: " + str(self.bot.version) + \
                " | PROGRESS: " + str(self.bot.progress)
         id_bot = str(self.bot.user.id)

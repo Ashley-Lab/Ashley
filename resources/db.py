@@ -651,7 +651,7 @@ class DataInteraction(object):
             return cont['list']
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
-                          " > R$" + str(money_(sorted_x[x][1])) for x in range(limit)])
+                          " > R$ " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
     async def get_rank_gold(self, limit):
