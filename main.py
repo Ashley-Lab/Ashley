@@ -71,14 +71,19 @@ class Ashley(commands.AutoShardedBot):
             json.dump(self.shutdowns, shutdown)
         shutdown.close()
 
-    def ban_(self, id_, reason):
+    def ban_(self, id_: str, reason: str):
         date = dt(*dt.utcnow().timetuple()[:6])
-        self.blacklist[id_][f"{date}"] = reason
+        if id_ not in self.blacklist:
+            self.blacklist[id_] = {f"{date}": reason}
+        else:
+            self.blacklist[id_][f"{date}"] = reason
         with open("resources/blacklist.json", "w") as blacklist:
             json.dump(self.blacklist, blacklist)
         blacklist.close()
 
-    def un_ban_(self, id_):
+    def un_ban_(self, id_: str):
+        if id_ not in self.blacklist:
+            return
         del self.blacklist[id_]
         with open("resources/blacklist.json", "w") as blacklist:
             json.dump(self.blacklist, blacklist)
@@ -137,9 +142,10 @@ class Ashley(commands.AutoShardedBot):
             await guild.leave()
 
     async def on_guild_remove(self, guild):
-        blacklist = self.get_channel(542134573010518017)
-        await blacklist.send(f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``")
-        self.ban_(guild.id, f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``")
+        if guild.id not in self.blacklist:
+            blacklist = self.get_channel(542134573010518017)
+            await blacklist.send(f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``")
+            self.ban_(guild.id, f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``")
 
     async def on_message(self, message):
         if message.author.id == self.user.id:
