@@ -79,6 +79,10 @@ class DailyClass(object):
                 await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` **{money}**'
                                f'``em dinheiro do seu rank atual.!``')
             else:
+                data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                del data_['cooldown'][str(ctx.command)]
+                self.bot.db.update_data(data_, update_, 'users')
                 await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 10 COMANDOS DA '
                                'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
         else:
