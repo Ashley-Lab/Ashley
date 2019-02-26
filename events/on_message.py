@@ -245,4 +245,4 @@ class SystemMessage(object):
 
 def setup(bot):
     bot.add_cog(SystemMessage(bot))
-    print('\033[1;32mO evento \033[1;34mSYSTEM_MESSAGE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32mO evento \033[1;34mON_MESSAGE\033[1;32m foi carregado com sucesso!\33[m')

@@ -32,6 +32,7 @@ class BotInfo(object):
                " | PROGRESS: " + str(self.bot.progress)
         voice = channel_types[False]
         text = channel_types[True]
+        owner = str(self.bot.get_user(self.bot.owner_id))
 
         embed_bot = discord.Embed(title='🤖 **Informações da Ashley**', color=color, description='\n')
         embed_bot.set_thumbnail(url=self.bot.user.avatar_url)
@@ -50,7 +51,7 @@ class BotInfo(object):
         embed_bot.add_field(name='📛 | Tag', value=self.bot.user)
         embed_bot.add_field(name='‍💻 | Servidores', value=str(len(self.bot.guilds)))
         embed_bot.add_field(name='👥 | Usuarios', value='{} ({} online)'.format(total_members, total_online))
-        embed_bot.add_field(name='‍⚙ | Programador', value="`DENKY#0001`")
+        embed_bot.add_field(name='‍⚙ | Programador', value=str(owner))
         embed_bot.add_field(name='🐍 Python  | Version', value="`3.6.6`")
         embed_bot.add_field(name='<:ashley:525348179734953995> Bot  | Version', value=str(ver_))
         embed_bot.add_field(name="<a:loading:520418506567843860> | Tempo Online",

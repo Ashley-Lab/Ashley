@@ -4,7 +4,6 @@ import discord
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
-server_fp = _auth['default_guild']
 color = int(_auth['default_embed'], 16)
 
 

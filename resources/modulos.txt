@@ -63,7 +63,7 @@ events.on_message
 events.on_message_delete
 events.on_message_edit
 events.on_ready
-events.on_webhooks_update
+events.on_voice_state_update
 commands.money.daily
 commands.utility.top
 commands.game.cards
@@ -81,4 +81,7 @@ commands.member.married
 commands.funny.dance
 commands.game.pokemon
 commands.member.booket
+events.on_typing
+events.on_member_ban
+events.on_member_unban
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1
