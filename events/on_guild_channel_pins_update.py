@@ -20,10 +20,16 @@ class ChannelPinUpdate(object):
                         canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                         if canal is None:
                             return
+                        if last_pin is not None:
+                            fix_ = 'fixada'
+                            time_ = '\n em: ' + str(last_pin)
+                        else:
+                            fix_ = 'desfixada'
+                            time_ = ''
                         to_send = discord.Embed(
-                            title=":bangbang: **Uma mensagem foi fixada/desfixada**",
+                            title=f":bangbang: **Uma mensagem foi {fix_}**",
                             color=color,
-                            description=f"**Canal de texto:** {channel.mention}, en: {last_pin}")
+                            description=f"**Canal de texto:** {channel.mention} {time_}")
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                         await canal.send(embed=to_send)
                 except AttributeError:

@@ -17,16 +17,16 @@ class RoleUpdate(object):
             if data is not None:
                 try:
                     if data['log_config']['log'] and data['log_config']['role_edit']:
-                        if before.role.name != after.role.name:
+                        if before.name != after.name:
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Cargo Editado**",
                                 color=color,
-                                description=f"**Cargo:** {before.role.mention}")
-                            to_send.add_field(name='Nome Antigo', value=f'**{before.role.name}**')
-                            to_send.add_field(name='Nome Novo', value=f'**{after.role.name}**')
+                                description=f"**Cargo:** {before.mention}")
+                            to_send.add_field(name='Nome Antigo', value=f'**{before.name}**')
+                            to_send.add_field(name='Nome Novo', value=f'**{after.name}**')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                 except AttributeError:

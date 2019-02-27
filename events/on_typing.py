@@ -15,7 +15,7 @@ class OnTypingClass(object):
     async def on_typing(channel, user, when):
         if channel.id == 546753700517904405:
             embed = discord.Embed(
-                color=discord.Color.red(),
+                color=color,
                 description=f'Usuario: {user.mention}\n Quando: {when}')
             await channel.send(embed=embed)
 

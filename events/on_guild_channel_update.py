@@ -17,29 +17,29 @@ class ChannelUpdate(object):
             if data is not None:
                 try:
                     if data['log_config']['log'] and data['log_config']['channel_edit_name']:
-                        if before.channel.name != after.channel.name:
+                        if before.name != after.name:
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Canal de Texto Editado**",
                                 color=color,
-                                description=f"**Canal de texto:** {before.channel.mention}")
-                            to_send.add_field(name='Nome Antigo', value=f'**{before.channel.name}**')
-                            to_send.add_field(name='Nome Novo', value=f'**{after.channel.name}**')
+                                description=f"**Canal de texto:** {before.name}")
+                            to_send.add_field(name='Nome Antigo', value=f'**{before.name}**')
+                            to_send.add_field(name='Nome Novo', value=f'**{after.name}**')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                     if data['log_config']['log'] and data['log_config']['channel_edit_topic']:
-                        if before.channel.topic != after.channel.topic:
+                        if before.topic != after.topic:
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Canal de Texto Editado**",
                                 color=color,
-                                description=f"**Canal de texto:** {before.channel.mention}")
-                            to_send.add_field(name='Tópico Antigo', value=f'**{before.channel.topic}**')
-                            to_send.add_field(name='Tópico Novo', value=f'**{after.channel.topic}**')
+                                description=f"**Canal de texto:** {before.name}")
+                            to_send.add_field(name='Tópico Antigo', value=f'**{before.topic}**')
+                            to_send.add_field(name='Tópico Novo', value=f'**{after.topic}**')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                 except AttributeError:

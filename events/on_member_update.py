@@ -17,29 +17,29 @@ class MemberUpdate(object):
             if data is not None:
                 try:
                     if data['log_config']['log'] and data['log_config']['member_edit_nickname']:
-                        if before.member.name != after.member.name:
+                        if before.name != after.name:
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Nome de usuário alterado**",
                                 color=color,
-                                description=f"**membro:** {before.member.mention}")
-                            to_send.add_field(name='Nome Antigo', value=f'**{before.member.name}**')
-                            to_send.add_field(name='Nome Novo', value=f'**{after.member.name}**')
+                                description=f"**membro:** {before.name}")
+                            to_send.add_field(name='Nome Antigo', value=f'**{before.name}**')
+                            to_send.add_field(name='Nome Novo', value=f'**{after.name}**')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                     if data['log_config']['log'] and data['log_config']['member_edit_avatar']:
-                        if before.member.avatar_url != after.member.avatar_url:
+                        if before.avatar != after.avatar:
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Avatar de usuário alterado**",
                                 color=color,
-                                description=f"**Membro:** {before.member.mention}")
-                            to_send.add_field(name='Avatar Antigo', value=f'**{before.member.avatar_url}**')
-                            to_send.add_field(name='Avatar Novo', value=f'**{after.member.avatar_url}**')
+                                description=f"**Membro:** {before.name}")
+                            to_send.add_field(name='Avatar Antigo', value=f'**{before.avatar}**')
+                            to_send.add_field(name='Avatar Novo', value=f'**{after.avatar}**')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                 except AttributeError:
