@@ -24,6 +24,10 @@ class OnMessageEdit(object):
                         canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                         if canal is None:
                             return
+                        if before.content == after.content:
+                            return
+                        if before.author.bot or after.author.bot:
+                            return
                         to_send = discord.Embed(
                             title=f":pencil: {after.author} **editou uma mensagem de texto**",
                             color=color,

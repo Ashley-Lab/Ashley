@@ -71,15 +71,18 @@ class OnMemberJoin(object):
                     text = text.replace(str(n), numbers[n])
                 await channel_.edit(topic="Membros: " + text)
 
-            if _auth['default_guild'] == member.guild.id:
-                role = discord.utils.find(lambda r: r.name == "</Members>", member.guild.roles)
-                await member.add_roles(role)
-                channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
-                embed = discord.Embed(
-                    color=color,
-                    description="<a:blue:525032762256785409>│``USE O COMANDO`` **ash cargos** ``PARA VOCE VER OS "
-                                "CARGOS DISPONIVEIS``")
-                await channel_.send(embed=embed)
+            try:
+                if _auth['default_guild'] == member.guild.id:
+                    role = discord.utils.find(lambda r: r.name == "</Members>", member.guild.roles)
+                    await member.add_roles(role)
+                    channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
+                    embed = discord.Embed(
+                        color=color,
+                        description="<a:blue:525032762256785409>│``USE O COMANDO`` **ash cargos** ``PARA VOCE VER OS "
+                                    "CARGOS DISPONIVEIS``")
+                    await channel_.send(embed=embed)
+            except discord.Forbidden:
+                pass
 
 
 def setup(bot):

@@ -131,7 +131,11 @@ class Ashley(commands.AutoShardedBot):
                            f"`segundos` `para mandar outro comando!`".format(exception.retry_after),
                            delete_after=float("{:.2f}".format(exception.retry_after)))
         else:
-            if exception.__str__() not in ERRORS and not isinstance(exception, commands.CommandNotFound):
+            if isinstance(exception, discord.NotFound):
+                pass
+            if isinstance(exception, discord.Forbidden):
+                pass
+            elif exception.__str__() not in ERRORS and not isinstance(exception, commands.CommandNotFound):
                 channel = self.get_channel(530419409311760394)
                 await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
                                    f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "

@@ -104,7 +104,7 @@ class StaffAdmin(object):
 
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @check_it(no_pm=True, kick_members=True)
+    @check_it(no_pm=True, manage_channels=True)
     @staff.command(name='slowmode', aliases=['modolento'])
     async def _slowmode(self, ctx, timer=None):
         channel = self.bot.get_channel(ctx.channel.id)

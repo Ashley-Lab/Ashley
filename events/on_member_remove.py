@@ -37,15 +37,18 @@ class OnMemberRemove(object):
             except discord.errors.Forbidden:
                 pass
 
-            if data['func_config']['cont_users']:
-                numbers = ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
-                channel_ = self.bot.get_channel(data['func_config']['cont_users_id'])
-                if channel_ is None:
-                    return
-                text = str(member.guild.member_count)
-                for n in range(0, 10):
-                    text = text.replace(str(n), numbers[n])
-                await channel_.edit(topic="Membros: " + text)
+            try:
+                if data['func_config']['cont_users']:
+                    numbers = ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
+                    channel_ = self.bot.get_channel(data['func_config']['cont_users_id'])
+                    if channel_ is None:
+                        return
+                    text = str(member.guild.member_count)
+                    for n in range(0, 10):
+                        text = text.replace(str(n), numbers[n])
+                    await channel_.edit(topic="Membros: " + text)
+            except discord.Forbidden:
+                pass
 
 
 def setup(bot):

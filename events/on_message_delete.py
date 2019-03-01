@@ -24,6 +24,8 @@ class OnMessageDelete(object):
                         canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                         if canal is None:
                             return
+                        if message.author.bot:
+                            return
                         to_send = discord.Embed(
                             title=":pencil: **Mensagem de texto deletada**",
                             color=color,

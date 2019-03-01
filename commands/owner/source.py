@@ -1,8 +1,15 @@
 import os
+import json
+import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+
+with open("resources/auth.json") as security:
+    _auth = json.loads(security.read())
+
+color = int(_auth['default_embed'], 16)
 
 
 class SourceGit(object):
@@ -25,11 +32,15 @@ class SourceGit(object):
             try:
                 obj = obj.get_command(cmd)
                 if obj is None:
-                    await ctx.send('Não conseguir encontrar esse comando! ' + str(cmd))
-                    return
+                    embed = discord.Embed(
+                        color=color,
+                        description=f"<:negate:520418505993093130>│``NÃO CONSEGUIR ENCONTRAR O COMANDO {cmd}!``")
+                    return await ctx.send(embed=embed)
             except AttributeError:
-                await ctx.send('{0.name} esse comando não tem sub-comandos!'.format(obj))
-                return
+                embed = discord.Embed(
+                    color=color,
+                    description=f"<:negate:520418505993093130>│``{obj.name} ESSE COMANDO NÃO TEM SUB-COMANDOS!``")
+                return await ctx.send(embed=embed)
 
         src = obj.callback.__code__
 
