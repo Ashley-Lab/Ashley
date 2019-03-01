@@ -1,16 +1,19 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
 
 
-class ChannelPinUpdate(object):
+class ChannelPinUpdate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_guild_channel_pins_update(self, channel, last_pin):
         if channel.guild is not None:
             data = self.bot.db.get_data("guild_id", channel.guild.id, "guilds")

@@ -1,16 +1,19 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
 
 
-class RoleCreate(object):
+class RoleCreate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_guild_role_create(self, role):
         if role.guild is not None:
             data = self.bot.db.get_data("guild_id", role.guild.id, "guilds")

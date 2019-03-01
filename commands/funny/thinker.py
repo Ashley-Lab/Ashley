@@ -5,7 +5,7 @@ from resources.ia_list import pensador
 from resources.check import check_it
 
 
-class Thinkers(object):
+class Thinkers(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

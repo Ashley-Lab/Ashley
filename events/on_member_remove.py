@@ -1,6 +1,8 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
@@ -13,10 +15,11 @@ gif = ['https://media.giphy.com/media/fDO2Nk0ImzvvW/giphy.gif',
        'https://media.giphy.com/media/KcHXmesyPXg6Q/giphy.gif']
 
 
-class OnMemberRemove(object):
+class OnMemberRemove(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_member_remove(self, member):
 
         data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")

@@ -3,7 +3,7 @@ from resources.check import check_it
 from resources.db import Database
 
 
-class Economy(object):
+class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.money = 0

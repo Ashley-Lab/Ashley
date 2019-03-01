@@ -12,7 +12,7 @@ color = int(_auth['default_embed'], 16)
 married, achievements, strikes = None, None, None
 
 
-class ProfileSystem(object):
+class ProfileSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

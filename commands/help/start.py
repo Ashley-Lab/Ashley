@@ -13,7 +13,7 @@ color_ = int(_auth['default_embed'], 16)
 botmsg = {}
 
 
-class Helper(object):
+class Helper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
@@ -72,6 +72,7 @@ class Helper(object):
             await botmsg[ctx.author.id].add_reaction('🚓')
             await botmsg[ctx.author.id].add_reaction('🛡')
 
+    @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if user.id == self.bot.user.id:
             return

@@ -5,7 +5,7 @@ from resources.check import check_it
 from resources.db import Database
 
 
-class RepeatCommand(object):
+class RepeatCommand(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

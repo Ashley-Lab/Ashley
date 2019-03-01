@@ -1,16 +1,19 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
 
 
-class OnMessageDelete(object):
+class OnMessageDelete(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_message_delete(self, message):
         if message.author.id == self.bot.user.id:
             return

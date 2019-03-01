@@ -13,7 +13,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class ConfigClass(object):
+class ConfigClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []

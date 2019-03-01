@@ -14,7 +14,7 @@ color = int(_auth['default_embed'], 16)
 money = 0
 
 
-class DailyClass(object):
+class DailyClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []

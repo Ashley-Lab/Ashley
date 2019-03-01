@@ -5,7 +5,7 @@ from resources.check import check_it
 from resources.db import Database
 
 
-class EnterMember(object):
+class EnterMember(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

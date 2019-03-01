@@ -6,7 +6,7 @@ from resources.check import check_it
 from resources.utility import ERRORS
 
 
-class RegisterClass(object):
+class RegisterClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

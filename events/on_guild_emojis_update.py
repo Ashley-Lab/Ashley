@@ -4,14 +4,17 @@ import logging
 import discord
 import asyncio
 
+from discord.ext import commands
+
 log = logging.getLogger(__name__)
 
 
-class EmojiUpdate(object):
+class EmojiUpdate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.session = None
 
+    @commands.Cog.listener()
     async def on_guild_emojis_update(self, guild, before, after):
 
         data = self.bot.db.get_data("guild_id", guild.id, "guilds")

@@ -11,7 +11,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class InviteClass(object):
+class InviteClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.url = "https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8"

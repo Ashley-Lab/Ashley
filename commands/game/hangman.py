@@ -8,7 +8,7 @@ from asyncio import TimeoutError
 erros = {}
 
 
-class ForceCass(object):
+class ForceCass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.trying = {}

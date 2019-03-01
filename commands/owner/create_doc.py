@@ -7,7 +7,7 @@ from resources.check import check_it
 from resources.db import Database
 
 
-class CreateDoc(object):
+class CreateDoc(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

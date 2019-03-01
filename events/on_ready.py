@@ -7,6 +7,7 @@ from itertools import cycle
 from time import localtime
 from datetime import datetime as dt
 from resources.ia_list import reflita
+from discord.ext import commands
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
@@ -25,7 +26,7 @@ cor = {
       }
 
 
-class OnReady(object):
+class OnReady(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot = bot
@@ -129,6 +130,7 @@ class OnReady(object):
                 time = 10
             await sleep(time)
 
+    @commands.Cog.listener()
     async def on_ready(self):
 
         owner = str(self.bot.get_user(self.bot.owner_id))

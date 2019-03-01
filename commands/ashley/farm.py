@@ -17,7 +17,7 @@ escolheu = False
 msg_area_id = None
 
 
-class FarmClass(object):
+class FarmClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -134,6 +134,7 @@ class FarmClass(object):
                                f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
                                f'ir para outra provincia primeiro``')
 
+    @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if user.id == self.bot.user.id:
             return

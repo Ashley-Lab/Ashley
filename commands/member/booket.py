@@ -9,7 +9,7 @@ from resources.db import Database
 from PIL import Image, ImageDraw, ImageOps
 
 
-class Booket(object):
+class Booket(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

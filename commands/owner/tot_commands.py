@@ -11,7 +11,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class TotComandos(object):
+class TotComandos(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

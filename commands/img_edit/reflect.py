@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 from resources.check import check_it
 
 
-class Reflection(object):
+class Reflection(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

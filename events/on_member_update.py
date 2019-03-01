@@ -1,16 +1,19 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
 
 
-class MemberUpdate(object):
+class MemberUpdate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_member_update(self, before, after):
         if before.guild is not None:
             data = self.bot.db.get_data("guild_id", before.guild.id, "guilds")
@@ -34,14 +37,22 @@ class MemberUpdate(object):
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
+                            if 'a_' in before.avatar:
+                                format_1 = '.gif'
+                            else:
+                                format_1 = '.webp'
+                            if 'a_' in after.avatar:
+                                format_2 = '.gif'
+                            else:
+                                format_2 = '.webp'
                             to_send = discord.Embed(
                                 title=":star2: **Avatar de usuário alterado**",
                                 color=color,
                                 description=f"**Membro:** {before.name}")
                             to_send.set_thumbnail(url=f'https://cdn.discordapp.com/avatars/{before.id}/{before.avatar}'
-                                                      f'.webp?size=1024')
+                                                      f'{format_1}?size=1024')
                             to_send.set_image(url=f'https://cdn.discordapp.com/avatars/{after.id}/{after.avatar}'
-                                                  f'.webp?size=1024')
+                                                  f'{format_2}?size=1024')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                 except AttributeError:

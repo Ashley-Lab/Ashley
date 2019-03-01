@@ -25,7 +25,7 @@ def remove_acentos_e_caracteres_especiais(word):
     return re.sub('[^a-zA-Z \\\]', '', palavra_sem_acento)
 
 
-class RankingClass(object):
+class RankingClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

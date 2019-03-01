@@ -3,7 +3,7 @@ from resources.db import Database
 from resources.check import check_it
 
 
-class PingMS(object):
+class PingMS(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

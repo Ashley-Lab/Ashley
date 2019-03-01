@@ -19,7 +19,7 @@ git = ["https://media.giphy.com/media/2djU0ypmLqqsjHKEnM/giphy.gif",
        "https://media.giphy.com/media/67SVlMevO3Zoo95d8P/giphy.gif"]
 
 
-class MarriedSystem(object):
+class MarriedSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

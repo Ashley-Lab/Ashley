@@ -18,7 +18,7 @@ msg_id = None
 msg_user = None
 
 
-class Panel(object):
+class Panel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -45,6 +45,7 @@ class Panel(object):
                 t_(ctx, "<:negate:520418505993093130>│``Desculpe, mas apenas os`` **Membros do meu servidor** ``podem "
                         "usar esse comando!``", "guilds"))
 
+    @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if user.id == self.bot.user.id:
             return

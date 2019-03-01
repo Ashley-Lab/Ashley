@@ -26,7 +26,7 @@ def perms_check(role):
         return "o cargo nao possui permissão"
 
 
-class RoleInfo(object):
+class RoleInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

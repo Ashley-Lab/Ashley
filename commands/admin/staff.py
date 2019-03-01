@@ -13,7 +13,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class StaffAdmin(object):
+class StaffAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
@@ -43,6 +43,7 @@ class StaffAdmin(object):
                                   f"{self.st[1]}│**delete** ``or`` **limpar**\n"
                                   f"{self.st[1]}│**ban** ``or`` **banir**\n"
                                   f"{self.st[1]}│**kick** ``or`` **expulsar**\n"
+                                  f"{self.st[1]}│**slowmode** ``or`` **modolento**\n"
                                   f"{self.st[1]}│**report** ``or`` **denuncia**\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=embed)
@@ -106,25 +107,26 @@ class StaffAdmin(object):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @check_it(no_pm=True, manage_channels=True)
     @staff.command(name='slowmode', aliases=['modolento'])
-    async def _slowmode(self, ctx, timer=None):
-        channel = self.bot.get_channel(ctx.channel.id)
+    async def _slowmode(self, ctx, timer: str = None):
         try:
             if timer is None:
-                if channel.slowmode_delay == 0:
-                    await channel.edit(slowmode_delay=int(2))
+                if ctx.channel.slowmode_delay == 0:
+                    await ctx.channel.edit(slowmode_delay=2)
                     embed = discord.Embed(
                         color=color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY ATIVADO!``")
                     await ctx.send(embed=embed)
                 else:
-                    await channel.edit(slowmode_delay=int(0))
+                    await ctx.channel.edit(slowmode_delay=0)
                     embed = discord.Embed(
                         color=color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY DESATIVADO!``")
                     await ctx.send(embed=embed)
             elif timer.isdigit():
-                await channel.edit(slowmode_delay=int(timer))
-                if timer == 0:
+                if int(timer) > 120:
+                    timer = 120
+                await ctx.channel.edit(slowmode_delay=int(timer))
+                if int(timer) == 0:
                     embed = discord.Embed(
                         color=color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY DESATIVADO!``")
@@ -138,8 +140,6 @@ class StaffAdmin(object):
                 await ctx.send("<:negate:520418505993093130>│``POR FAVOR DIGITE UM NUMERO``")
         except discord.Forbidden:
             await ctx.send("<:negate:520418505993093130>│``NÃO TENHO PERMISSÃO PARA ALTERAR ESSE CANAL``")
-        except AttributeError:
-            await ctx.send("<:negate:520418505993093130>│``POR FAVOR DIGITE UM NUMERO``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

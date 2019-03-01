@@ -22,7 +22,7 @@ def gif_api(tag):
     return 'https://media.giphy.com/media/{}/giphy.gif'.format(gif)
 
 
-class GetGif(object):
+class GetGif(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

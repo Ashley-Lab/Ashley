@@ -1,16 +1,19 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
 
 
-class VoiceClass(object):
+class VoiceClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if member.guild is not None:
             data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
@@ -41,16 +44,17 @@ class VoiceClass(object):
                     if data['log_config']['log'] and data['log_config']['member_voice_entered']:
                         if data['log_config']['log'] and data['log_config']['member_voice_exit']:
                             if before.channel is not None and after.channel is not None:
-                                canal_ = self.bot.get_channel(data['log_config']['log_channel_id'])
-                                if canal_ is None:
-                                    return
-                                to_send_ = discord.Embed(
-                                    title=":point_left::microphone: **Membro trocou de um canal de voz**",
-                                    color=color,
-                                    description=f"**Membro:** {member.name} saiu do canal {before.channel.mention} e "
-                                                f"entrou no canal {after.channel.mention}")
-                                to_send_.set_footer(text="Ashley ® Todos os direitos reservados.")
-                                await canal_.send(embed=to_send_)
+                                if before.channel != after.channel:
+                                    canal_ = self.bot.get_channel(data['log_config']['log_channel_id'])
+                                    if canal_ is None:
+                                        return
+                                    to_send_ = discord.Embed(
+                                        title=":point_left::microphone: **Membro trocou de um canal de voz**",
+                                        color=color,
+                                        description=f"**Membro:** {member.name} saiu do canal {before.channel.mention}"
+                                        f" e entrou no canal {after.channel.mention}")
+                                    to_send_.set_footer(text="Ashley ® Todos os direitos reservados.")
+                                    await canal_.send(embed=to_send_)
                 except AttributeError:
                     pass
                 except discord.errors.HTTPException:

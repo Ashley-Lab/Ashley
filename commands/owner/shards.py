@@ -7,12 +7,13 @@ from resources.check import check_it
 from resources.db import Database
 
 
-class Shards:
+class Shards(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.web_hook = WebHook(url="https://discordapp.com/api/webhooks/529827969129250827/hf9iQua6Yqk6GZI6wGW9oyk"
                                     "WqpCHS9dA0QVg7NNVtZcbZCJJMR4u5SWK2qAgMoFKkNaP")
 
+    @commands.Cog.listener()
     async def on_shard_ready(self, shard_id):
         self.web_hook.embed = Embed(
             colour=random_color(),

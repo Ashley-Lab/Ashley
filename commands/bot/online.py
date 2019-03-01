@@ -13,7 +13,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class UpTimeOnline(object):
+class UpTimeOnline(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         self.bot = bot
         super().__init__(*args, **kwargs)

@@ -10,6 +10,7 @@ from chatterbot.response_selection import get_most_frequent_response as resp
 from random import choice
 from scripts import about_me as me
 from asyncio import TimeoutError
+from discord.ext import commands
 from resources.utility import negate, goodbye
 from resources.ia_list import perg_pq, resposta_pq, perg_qual, resposta_outras, \
     resposta_ou, denky_r, denky_f, bomdia, boanoite, resposta_comum
@@ -18,7 +19,7 @@ with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 
-class SystemMessage(object):
+class SystemMessage(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ping_test = {}
@@ -92,6 +93,7 @@ class SystemMessage(object):
                     response = choice(resposta_comum)
                     return await message.channel.send(response)
 
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild is not None and message.author.id not in self.bot.blacklist:
             data_guild = self.bot.db.get_data("guild_id", message.guild.id, "guilds")

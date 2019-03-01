@@ -19,7 +19,7 @@ hora = localtime()
 P = choice(resources.rpg_list.PREMIOS)
 
 
-class BattleRpg(object):
+class BattleRpg(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

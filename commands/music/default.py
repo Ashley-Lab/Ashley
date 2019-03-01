@@ -101,10 +101,8 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return self.__getattribute__(item)
 
     @classmethod
-    async def create_source(cls, ctx, search: str, *, loop, download=False):
+    async def create_source(cls, ctx, search: str, *, loop, download=True):
         loop = loop or asyncio.get_event_loop()
-
-        # before_args = "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 
         to_run = partial(ytdl.extract_info, url=search, download=download)
         data = await loop.run_in_executor(None, to_run)
@@ -128,7 +126,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         loop = loop or asyncio.get_event_loop()
         requester = data['requester']
 
-        to_run = partial(ytdl.extract_info, url=data['webpage_url'], download=False)
+        to_run = partial(ytdl.extract_info, url=data['webpage_url'], download=True)
         data = await loop.run_in_executor(None, to_run)
 
         return cls(discord.FFmpegPCMAudio(data['url']), data=data, requester=requester)
@@ -200,7 +198,7 @@ class MusicPlayer:
                             self.cont_[ctx.guild.id] = 0
                         self.search = str(last_search[ctx.guild.id][self.cont_[ctx.guild.id]])
                         self.cont_[ctx.guild.id] += 1
-                        source = await YTDLSource.create_source(ctx, self.search, loop=self.bot.loop, download=False)
+                        source = await YTDLSource.create_source(ctx, self.search, loop=self.bot.loop, download=True)
                         await self.queue.put(source)
                     source = await self.queue.get()
             except asyncio.TimeoutError:
@@ -261,7 +259,7 @@ class GuildState:
         return ctx.voice_client.source.requester == ctx.author
 
 
-class MusicDefault:
+class MusicDefault(commands.Cog):
     __slots__ = ('bot', 'players', 'states')
 
     def __init__(self, bot):
@@ -358,7 +356,7 @@ class MusicDefault:
             last_search[ctx.guild.id] = list()
         last_search[ctx.guild.id].append(search)
         if last_search[ctx.guild.id] is not None:
-            source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False)
+            source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
             await player.queue.put(source)
 
     @check_it(no_pm=True)

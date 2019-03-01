@@ -12,7 +12,7 @@ with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 
-class EvalSintax(object):
+class EvalSintax(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None

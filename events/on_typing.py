@@ -1,18 +1,20 @@
 import json
 import discord
 
+from discord.ext import commands
+
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
 
 
-class OnTypingClass(object):
+class OnTypingClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @staticmethod
-    async def on_typing(channel, user, when):
+    @commands.Cog.listener()
+    async def on_typing(self, channel, user, when):
         if channel.id == 546753700517904405:
             embed = discord.Embed(
                 color=color,

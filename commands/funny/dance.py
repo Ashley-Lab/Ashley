@@ -12,7 +12,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class DanceClass(object):
+class DanceClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

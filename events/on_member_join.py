@@ -2,6 +2,7 @@ import json
 import discord
 
 from random import choice
+from discord.ext import commands
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
@@ -20,10 +21,11 @@ gif = ['https://media.giphy.com/media/bAmQn1R4V3owE/giphy.gif',
        'https://media.giphy.com/media/lq2WK9kzLTLos/giphy.gif']
 
 
-class OnMemberJoin(object):
+class OnMemberJoin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_member_join(self, member):
 
         data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
