@@ -31,11 +31,6 @@ class MemberUpdate(object):
                             await canal.send(embed=to_send)
                     if data['log_config']['log'] and data['log_config']['member_edit_avatar']:
                         if before.avatar != after.avatar:
-                            prefix = 'https://cdn.discordapp.com/avatars/'
-                            avatar_mid = str(before.id) + '/'
-                            fix_ = '.webp?size=1024'
-                            before_ = prefix + avatar_mid + str(before.avatar) + fix_
-                            after_ = prefix + avatar_mid + str(before.avatar) + fix_
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
@@ -43,8 +38,10 @@ class MemberUpdate(object):
                                 title=":star2: **Avatar de usuário alterado**",
                                 color=color,
                                 description=f"**Membro:** {before.name}")
-                            to_send.set_image(url=f'{before_}')
-                            to_send.set_image(url=f'{after_}')
+                            to_send.set_thumbnail(url=f'https://cdn.discordapp.com/avatars/{before.id}/{before.avatar}'
+                                                      f'.webp?size=1024')
+                            to_send.set_image(url=f'https://cdn.discordapp.com/avatars/{after.id}/{after.avatar}'
+                                                  f'.webp?size=1024')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                 except AttributeError:
