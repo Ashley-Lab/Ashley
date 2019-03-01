@@ -226,6 +226,12 @@ class StaffAdmin(commands.Cog):
             await ctx.send('<:negate:520418505993093130>│``Você não '
                            'tem permissão para usar esse comando!``')
 
+    @_slowmode.error
+    async def _delete_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('<:negate:520418505993093130>│``Você não '
+                           'tem permissão para usar esse comando!``')
+
 
 def setup(bot):
     bot.add_cog(StaffAdmin(bot))

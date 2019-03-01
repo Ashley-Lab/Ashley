@@ -417,7 +417,8 @@ ERRORS = ['The check functions for command staff ban failed.',
           'Command raised an exception: IndexError: list index out of range',
           'Command raised an exception: TimeoutError: ',
           'The check functions for command config guild failed.',
-          'The check functions for command config report failed.']
+          'The check functions for command config report failed.',
+          'The check functions for command staff slowmode failed.']
 
 enforcado = ['''
 ```

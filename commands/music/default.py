@@ -92,10 +92,10 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         self.title = data.get('title')
         self.web_url = data.get('webpage_url')
-        self.duration = parse_duration(int(data.get('duration')))
+        self.duration = int(data.get('duration'))
 
     def __str__(self):
-        return f'**{self.title}** *[Duration: {self.duration}]*'
+        return f'**{self.title}** *[Duration: {parse_duration(self.duration)}]*'
 
     def __getitem__(self, item: str):
         return self.__getattribute__(item)
@@ -226,7 +226,7 @@ class MusicPlayer:
             if self.queue is not None:
                 self.np = await self._channel.send(f'<:play:519896828091564033>│**Tocando agora:** `{source.title}` '
                                                    f'\nsolicitado por `{source.requester}`\n'
-                                                   f'Duração: **{source.duration}**')
+                                                   f'Duração: **{parse_duration(source.duration)}**')
             await self.next.wait()
 
             if not self.repeat:
@@ -563,7 +563,7 @@ class MusicDefault(commands.Cog):
 
         player.np = await ctx.send(f'<:play:519896828091564033>│**Tocando agora:** `{vc.source.title}` \n'
                                    f'<:point:519896842192814110>│Requerido por`{vc.source.requester}` \n'
-                                   f'Duração: **{vc.source.duration}**', delete_after=20)
+                                   f'Duração: **{parse_duration(vc.source.duration)}**', delete_after=20)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
