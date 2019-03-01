@@ -3,7 +3,6 @@ import os
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-from resources.translation import t_
 
 
 class SourceGit(object):
@@ -26,10 +25,10 @@ class SourceGit(object):
             try:
                 obj = obj.get_command(cmd)
                 if obj is None:
-                    await ctx.send(await t_(ctx, 'Não conseguir encontrar esse comando! ', 'guilds') + cmd)
+                    await ctx.send('Não conseguir encontrar esse comando! ' + str(cmd))
                     return
             except AttributeError:
-                await ctx.send((await t_(ctx, '{0.name} esse comando não tem sub-comandos!', 'guilds')).format(obj))
+                await ctx.send('{0.name} esse comando não tem sub-comandos!'.format(obj))
                 return
 
         src = obj.callback.__code__

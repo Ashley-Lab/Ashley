@@ -31,6 +31,11 @@ class GuildUpdate(object):
                             await canal.send(embed=to_send)
                     if data['log_config']['log'] and data['log_config']['guild_update']:
                         if before.icon != after.icon:
+                            prefix = 'https://cdn.discordapp.com/icons/'
+                            avatar_mid = str(before.id) + '/'
+                            fix_ = '.webp?size=1024'
+                            before_ = prefix + avatar_mid + str(before.avatar) + fix_
+                            after_ = prefix + avatar_mid + str(before.avatar) + fix_
                             canal = self.bot.get_channel(data['log_config']['log_channel_id'])
                             if canal is None:
                                 return
@@ -38,8 +43,8 @@ class GuildUpdate(object):
                                 title=":star2: **Canal de Texto Editado**",
                                 color=color,
                                 description=f"**Canal de texto:** {before.name}")
-                            to_send.add_field(name='Imagem Antiga', value=f'**{before.icon}**')
-                            to_send.add_field(name='Imagem Nova', value=f'**{after.icon}**')
+                            to_send.set_image(url=f'{before_}')
+                            to_send.set_image(url=f'{after_}')
                             to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                             await canal.send(embed=to_send)
                 except AttributeError:

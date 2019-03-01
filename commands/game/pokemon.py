@@ -33,7 +33,7 @@ class PokemonClass(object):
             def check(m):
                 return m.author == ctx.author
 
-            response = pokemon[randint(0, 200)]
+            response = pokemon[randint(0, 150)]
             embed = discord.Embed(
                 title='QUAL O NOME DESSE POKEMON?',
                 color=color,
