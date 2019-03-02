@@ -132,9 +132,11 @@ class Ashley(commands.AutoShardedBot):
                            delete_after=float("{:.2f}".format(exception.retry_after)))
         else:
             if isinstance(exception, discord.NotFound):
-                pass
+                return
             if isinstance(exception, discord.Forbidden):
-                pass
+                return
+            if isinstance(exception, discord.errors.Forbidden):
+                return
             elif exception.__str__() not in ERRORS and not isinstance(exception, commands.CommandNotFound):
                 channel = self.get_channel(530419409311760394)
                 await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
@@ -171,16 +173,20 @@ class Ashley(commands.AutoShardedBot):
     async def web_hook_rpg(ctx, avatar_dir, web_hook_name, msg, quest_name):
         avatar = open(avatar_dir, 'rb')
         web_hook_ = await ctx.channel.create_webhook(name=web_hook_name, avatar=avatar.read())
+        if 'a_' in web_hook_.avatar:
+            format_1 = '.gif'
+        else:
+            format_1 = '.webp'
         web_hook = WebHook(url=web_hook_.url)
         web_hook.embed = discord.Embed(
             colour=random_color(),
-            description=f"**{msg}**",
+            description=f"{quest_name} do {ctx.author.name} disse:\n```{msg}```",
             timestamp=dt.utcnow()
         ).set_author(
-            name=quest_name,
-            icon_url=ctx.guild.icon_url
+            name=ctx.author.name,
+            icon_url=ctx.author.avatar_url
         ).set_thumbnail(
-            url=ctx.author.avatar_url
+            url=f'https://cdn.discordapp.com/avatars/{web_hook_.id}/{web_hook_.avatar}{format_1}?size=1024'
         ).to_dict()
         web_hook.send_()
         await web_hook_.delete()

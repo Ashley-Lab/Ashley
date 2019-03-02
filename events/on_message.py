@@ -120,7 +120,7 @@ class SystemMessage(commands.Cog):
                     try:
                         if message.author.id == self.bot.owner_id:
                             chance = randint(1, 100)
-                            if chance >= 50:
+                            if chance >= 90:
                                 avatar = choice(['a', 'b', 'c', 'd', 'e', 'f'])
                                 link_ = f'images/pet/denky/mask_{avatar}.png'
                                 msg = choice(resposta_comum)

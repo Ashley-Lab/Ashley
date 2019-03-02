@@ -34,21 +34,25 @@ class Shards(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def pet(self, ctx, *, msg=None):
-        avatar = choice(['a', 'b', 'c', 'd', 'e', 'f'])
-        link_ = f'images/pet/denky/mask_{avatar}.png'
+        avatar_ = choice(['a', 'b', 'c', 'd', 'e', 'f'])
+        link_ = f'images/pet/denky/mask_{avatar_}.png'
         avatar = open(link_, 'rb')
         web_hook_ = await ctx.channel.create_webhook(name="Dynno", avatar=avatar.read())
+        if 'a_' in web_hook_.avatar:
+            format_1 = '.gif'
+        else:
+            format_1 = '.webp'
         web_hook = WebHook(url=web_hook_.url)
 
         web_hook.embed = Embed(
             colour=random_color(),
-            description=f"**{msg}**",
+            description=f"Pet do {ctx.author.name} disse:\n```{msg}```",
             timestamp=datetime.utcnow()
         ).set_author(
-            name="Pet",
+            name=ctx.author.name,
             icon_url=ctx.author.avatar_url
         ).set_thumbnail(
-            url=ctx.guild.icon_url
+            url=f'https://cdn.discordapp.com/avatars/{web_hook_.id}/{web_hook_.avatar}{format_1}?size=1024'
         ).to_dict()
 
         web_hook.send_()
