@@ -397,7 +397,11 @@ class Helper(commands.Cog):
                                   f"{self.st[35]}│**load**\n"
                                   f"{self.st[41]}│**unload**\n"
                                   f"{self.st[37]}│**reload**\n"
-                                  f"{self.st[36]}│**logout**\n")
+                                  f"{self.st[36]}│**logout**\n"
+                                  f"{self.st[86]}│**add_ban**\n"
+                                  f"{self.st[86]}│**remove_ban**\n"
+                                  f"{self.st[86]}│**add_vip**\n"
+                                  f"{self.st[86]}│**remove_vip**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
             await botmsg[user.id].add_reaction('🏛')

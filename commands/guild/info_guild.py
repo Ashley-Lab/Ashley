@@ -22,6 +22,11 @@ class ServerInfo(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='serverinfo', aliases=['infoserver'])
     async def serverinfo(self, ctx):
+        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['vip']:
+            status = "<:vip_guild:546020055440425016>"
+        else:
+            status = "<:negate:520418505993093130>"
         hour = datetime.datetime.now().strftime("%H:%M:%S")
         embed = discord.Embed(title="\n", color=color, description="Abaixo está as informaçoes principais do servidor!")
         embed.set_thumbnail(url=ctx.guild.icon_url)
@@ -35,6 +40,7 @@ class ServerInfo(commands.Cog):
         embed.add_field(name="Criado em:", value=ctx.guild.created_at.strftime("%d %b %Y %H:%M"), inline=True)
         embed.add_field(name="Região:", value=str(ctx.guild.region).title(), inline=True)
         embed.add_field(name="Comandos Usados: ", value=str(self.bot.guilds_commands[ctx.guild.id]), inline=True)
+        embed.add_field(name="Vip: ", value=status)
         await ctx.send(embed=embed)
 
 

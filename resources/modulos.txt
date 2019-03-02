@@ -84,4 +84,5 @@ commands.member.booket
 events.on_typing
 events.on_member_ban
 events.on_member_unban
+commands.owner.actions
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

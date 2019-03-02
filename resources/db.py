@@ -756,55 +756,19 @@ class DataInteraction(object):
         return rank
 
     def add_vip(self, **kwargs):
-        try:
-            if kwargs.get("help", False):
-                return "Keys: type (users or guilds), Key ID = (user_id or guild_id), state (1 or 0),"
-            if kwargs.get("type") == "users":
-                data = self.db.get_data("user_id", kwargs.get("user_id"), "users")
-                update = data
-                if kwargs.get("state", False):
-                    update['config']['vip'] = True
-                else:
-                    update['config']['vip'] = False
-                self.db.update_data(data, update, "users")
-                return "ESTADO DE VIP ALTERADO COM SUCESSO"
-            elif kwargs.get("type") == "guilds":
-                data = self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
-                update = data
-                if kwargs.get("state", False):
-                    update['vip'] = True
-                else:
-                    update['vip'] = False
-                self.db.update_data(data, update, "guilds")
-                return "ESTADO DE VIP ALTERADO COM SUCESSO"
+        if kwargs.get("target") == "users":
+            data = self.db.get_data("user_id", kwargs.get("user_id"), "users")
+            update = data
+            if kwargs.get("state", False):
+                update['config']['vip'] = True
             else:
-                return "Tipo Inexistente, use (type='guilds' or type='users')!"
-        except KeyError:
-            return "Você uma chave no dicionário, reveja todos os campos e tente novamente!"
-
-    def add_field(self, **kwargs):
-        try:
-            if kwargs.get("help", False):
-                return "Keys: type (users or guilds), two_key (true or false), key_1, key_2, content"
-            if kwargs.get("type") == "users":
-                all_data = self.bot.db.get_all_data("users")
-                for data in all_data:
-                    update = data
-                    if kwargs.get("two_key", False):
-                        update[kwargs.get("key_1")][kwargs.get("key_2")] = kwargs.get("content")
-                    else:
-                        update[kwargs.get("key_1")] = kwargs.get("content")
-                    self.bot.db.update_data(data, update, "users")
-            elif kwargs.get("type") == "guilds":
-                all_data = self.bot.db.get_all_data("guilds")
-                for data in all_data:
-                    update = data
-                    if kwargs.get("key_2", False):
-                        update[kwargs.get("key_1")][kwargs.get("key_2")] = kwargs.get("content")
-                    else:
-                        update[kwargs.get("key_1")] = kwargs.get("content")
-                    self.bot.db.update_data(data, update, "guilds")
+                update['config']['vip'] = False
+            self.db.update_data(data, update, "users")
+        elif kwargs.get("type") == "guilds":
+            data = self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
+            update = data
+            if kwargs.get("state", False):
+                update['vip'] = True
             else:
-                return "Tipo Inexistente, use (type='guilds' or type='users')!"
-        except KeyError:
-            return "Você uma chave no dicionário, reveja todos os campos e tente novamente!"
+                update['vip'] = False
+            self.db.update_data(data, update, "guilds")

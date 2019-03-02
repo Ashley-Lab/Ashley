@@ -28,11 +28,11 @@ class ChannelPinUpdate(commands.Cog):
                             time_ = '\n em: ' + str(last_pin)
                         else:
                             fix_ = 'desfixada'
-                            time_ = ''
+                            time_ = '\n'
                         to_send = discord.Embed(
                             title=f":bangbang: **Uma mensagem foi {fix_}**",
                             color=color,
-                            description=f"**Canal de texto:** {channel.mention} {time_}")
+                            description=f"**Canal de texto:** {channel.name} {time_}")
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                         await canal.send(embed=to_send)
                 except AttributeError:
