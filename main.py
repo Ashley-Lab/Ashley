@@ -131,11 +131,7 @@ class Ashley(commands.AutoShardedBot):
                            f"`segundos` `para mandar outro comando!`".format(exception.retry_after),
                            delete_after=float("{:.2f}".format(exception.retry_after)))
         else:
-            if isinstance(exception, discord.NotFound):
-                return
-            if isinstance(exception, discord.Forbidden):
-                return
-            if isinstance(exception, discord.errors.Forbidden):
+            if isinstance(exception, commands.errors.DiscordException):
                 return
             elif exception.__str__() not in ERRORS and not isinstance(exception, commands.CommandNotFound):
                 channel = self.get_channel(530419409311760394)

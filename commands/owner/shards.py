@@ -1,3 +1,5 @@
+import discord
+
 from resources.color import random_color
 from discord import Embed
 from discord.ext import commands
@@ -34,29 +36,33 @@ class Shards(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def pet(self, ctx, *, msg=None):
-        avatar_ = choice(['a', 'b', 'c', 'd', 'e', 'f'])
-        link_ = f'images/pet/denky/mask_{avatar_}.png'
-        avatar = open(link_, 'rb')
-        web_hook_ = await ctx.channel.create_webhook(name="Dynno", avatar=avatar.read())
-        if 'a_' in web_hook_.avatar:
-            format_1 = '.gif'
-        else:
-            format_1 = '.webp'
-        web_hook = WebHook(url=web_hook_.url)
+        try:
+            avatar_ = choice(['a', 'b', 'c', 'd', 'e', 'f'])
+            link_ = f'images/pet/denky/mask_{avatar_}.png'
+            avatar = open(link_, 'rb')
+            web_hook_ = await ctx.channel.create_webhook(name="Dynno", avatar=avatar.read())
+            if 'a_' in web_hook_.avatar:
+                format_1 = '.gif'
+            else:
+                format_1 = '.webp'
+            web_hook = WebHook(url=web_hook_.url)
 
-        web_hook.embed = Embed(
-            colour=random_color(),
-            description=f"Pet do {ctx.author.name} disse:\n```{msg}```",
-            timestamp=datetime.utcnow()
-        ).set_author(
-            name=ctx.author.name,
-            icon_url=ctx.author.avatar_url
-        ).set_thumbnail(
-            url=f'https://cdn.discordapp.com/avatars/{web_hook_.id}/{web_hook_.avatar}{format_1}?size=1024'
-        ).to_dict()
+            web_hook.embed = Embed(
+                colour=random_color(),
+                description=f"Pet do {ctx.author.name} disse:\n```{msg}```",
+                timestamp=datetime.utcnow()
+            ).set_author(
+                name=ctx.author.name,
+                icon_url=ctx.author.avatar_url
+            ).set_thumbnail(
+                url=f'https://cdn.discordapp.com/avatars/{web_hook_.id}/{web_hook_.avatar}{format_1}?size=1024'
+            ).to_dict()
 
-        web_hook.send_()
-        await web_hook_.delete()
+            web_hook.send_()
+            await web_hook_.delete()
+        except discord.Forbidden:
+            await ctx.send("<:oc_status:519896814225457152>│``Não tenho permissão de gerenciar WEBHOOKS nesse "
+                           "servidor.``")
 
 
 def setup(bot):
