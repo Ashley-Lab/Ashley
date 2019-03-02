@@ -5,6 +5,7 @@ from resources.webhook import WebHook
 from datetime import datetime
 from resources.check import check_it
 from resources.db import Database
+from random import choice
 
 
 class Shards(commands.Cog):
@@ -32,10 +33,11 @@ class Shards(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
-    async def hook(self, ctx, *, msg=None):
-
-        avatar = open('images/monsters/dark_magician.jpg', 'rb')
-        web_hook_ = await ctx.channel.create_webhook(name="Dark Magician", avatar=avatar.read())
+    async def pet(self, ctx, *, msg=None):
+        avatar = choice(['a', 'b', 'c', 'd', 'e', 'f'])
+        link_ = f'images/pet/denky/mask_{avatar}.png'
+        avatar = open(link_, 'rb')
+        web_hook_ = await ctx.channel.create_webhook(name="Dynno", avatar=avatar.read())
         web_hook = WebHook(url=web_hook_.url)
 
         web_hook.embed = Embed(
@@ -43,7 +45,7 @@ class Shards(commands.Cog):
             description=f"**{msg}**",
             timestamp=datetime.utcnow()
         ).set_author(
-            name=ctx.author.name,
+            name="Pet",
             icon_url=ctx.author.avatar_url
         ).set_thumbnail(
             url=ctx.guild.icon_url

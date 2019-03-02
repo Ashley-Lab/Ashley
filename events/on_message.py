@@ -1,13 +1,14 @@
 import json
 import time
 import pytz
+import discord
 
 from chatterbot import ChatBot
 from chatterbot.conversation import Statement
 from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer
 from chatterbot.response_selection import get_most_frequent_response as resp
 
-from random import choice
+from random import choice, randint
 from scripts import about_me as me
 from asyncio import TimeoutError
 from discord.ext import commands
@@ -114,7 +115,18 @@ class SystemMessage(commands.Cog):
                                     return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu '
                                                                       'pai!**\n```VOU CONTAR TUDO PRO '
                                                                       'PAPAI```'.format(message.author.mention))
+
                     await self.get_response(message, data_guild, self.bot)
+                    try:
+                        if message.author.id == self.bot.owner_id:
+                            chance = randint(1, 100)
+                            if chance >= 50:
+                                avatar = choice(['a', 'b', 'c', 'd', 'e', 'f'])
+                                link_ = f'images/pet/denky/mask_{avatar}.png'
+                                msg = choice(resposta_comum)
+                                await self.bot.web_hook_rpg(message, link_, 'Dynno', msg, 'Pet')
+                    except discord.Forbidden:
+                        pass
 
                 try:
                     if message.mentions[0] == self.bot.user and 'vamos conversar' in message.content.lower():

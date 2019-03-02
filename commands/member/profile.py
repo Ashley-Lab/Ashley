@@ -70,11 +70,25 @@ class ProfileSystem(commands.Cog):
         c = b.replace('.', ',')
         d = c.replace('v', '.')
 
+        if data['config']['vip']:
+            data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            if data_['vip']:
+                status = "<:vip_full:546020055478042644>"
+            else:
+                status = "<:vip_member:546020055478042647>"
+        else:
+            status = "<:negate:520418505993093130>"
+        if data['user']['titling'] is None:
+            titling = 'Vagabundo'
+        else:
+            titling = data['user']['titling']
+
         embed = discord.Embed(title='Perfil do(a): {}'.format(member.display_name), color=color)
         embed.set_thumbnail(url=member.avatar_url)
         embed.add_field(name='Relationship Status :heart_eyes: ', value=str(married), inline=True)
-        embed.add_field(name='Wallet :moneybag:',
-                        value="R$ " + str(d), inline=True)
+        embed.add_field(name='Wallet :moneybag:',  value="R$ " + str(d), inline=True)
+        embed.add_field(name="Vip: ", value=status)
+        embed.add_field(name="Entitulação: ", value=titling)
         embed.add_field(name='Bot Staff Notes :notepad_spiral:', value=str(strikes), inline=True)
         embed.add_field(name='Fichas <:dinars:519896828930686977>', value=str(data['inventory']['coins']), inline=True)
         embed.add_field(name="Gold <:gold:540586811462778880>", value=str(data['treasure']['gold']), inline=True)
