@@ -35,7 +35,7 @@ class Shards(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
-    async def pet(self, ctx, *, msg=None):
+    async def pet(self, ctx, *, msg: str = "Oiiiii"):
         try:
             avatar_ = choice(['a', 'b', 'c', 'd', 'e', 'f'])
             link_ = f'images/pet/denky/mask_{avatar_}.png'

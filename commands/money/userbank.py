@@ -85,8 +85,12 @@ class UserBank(commands.Cog):
                 update_guild_native['data'][f'total_{currency}'] -= amount
                 update_member['treasure'][currency] += amount
                 update_guild_native_member['data'][f'total_{currency}'] += amount
-                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} PARA {member.name} '
-                                      f'COM SUCESSO!``')
+                self.bot.db.update_data(data_user, update_user, 'users')
+                self.bot.db.update_data(data_member, update_member, 'users')
+                self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+                self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
+                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} DE {currency.upper()} '
+                                      f'PARA {member.name} COM SUCESSO!``')
             else:
                 return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
                                       f"{currency.upper()}!``")
@@ -96,8 +100,12 @@ class UserBank(commands.Cog):
                 update_guild_native['data'][f'total_{currency}'] -= amount
                 update_member['treasure'][currency] += amount
                 update_guild_native_member['data'][f'total_{currency}'] += amount
-                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} PARA {member.name} '
-                                      f'COM SUCESSO!``')
+                self.bot.db.update_data(data_user, update_user, 'users')
+                self.bot.db.update_data(data_member, update_member, 'users')
+                self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+                self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
+                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} DE {currency.upper()} '
+                                      f'PARA {member.name} COM SUCESSO!``')
             else:
                 return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
                                       f"{currency.upper()}!``")
@@ -107,8 +115,12 @@ class UserBank(commands.Cog):
                 update_guild_native['data'][f'total_{currency}'] -= amount
                 update_member['treasure'][currency] += amount
                 update_guild_native_member['data'][f'total_{currency}'] += amount
-                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} PARA {member.name} '
-                                      f'COM SUCESSO!``')
+                self.bot.db.update_data(data_user, update_user, 'users')
+                self.bot.db.update_data(data_member, update_member, 'users')
+                self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+                self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
+                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} DE {currency.upper()} '
+                                      f'PARA {member.name} COM SUCESSO!``')
             else:
                 return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
                                       f"{currency.upper()}!``")
