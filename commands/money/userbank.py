@@ -82,9 +82,13 @@ class UserBank(commands.Cog):
         if currency == "bronze":
             if data_user['treasure'][currency] >= amount:
                 update_user['treasure'][currency] -= amount
+                update_user['treasure']['money'] -= amount
                 update_guild_native['data'][f'total_{currency}'] -= amount
+                update_guild_native['data'][f'total_money'] -= amount
                 update_member['treasure'][currency] += amount
+                update_member['treasure']['money'] += amount
                 update_guild_native_member['data'][f'total_{currency}'] += amount
+                update_guild_native_member['data'][f'total_money'] += amount
                 self.bot.db.update_data(data_user, update_user, 'users')
                 self.bot.db.update_data(data_member, update_member, 'users')
                 self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
@@ -97,9 +101,13 @@ class UserBank(commands.Cog):
         elif currency == "silver":
             if data_user['treasure'][currency] >= amount:
                 update_user['treasure'][currency] -= amount
+                update_user['treasure']['money'] -= amount * 10
                 update_guild_native['data'][f'total_{currency}'] -= amount
+                update_guild_native['data'][f'total_money'] -= amount * 10
                 update_member['treasure'][currency] += amount
+                update_member['treasure']['money'] += amount * 10
                 update_guild_native_member['data'][f'total_{currency}'] += amount
+                update_guild_native_member['data'][f'total_money'] += amount * 10
                 self.bot.db.update_data(data_user, update_user, 'users')
                 self.bot.db.update_data(data_member, update_member, 'users')
                 self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
@@ -112,9 +120,13 @@ class UserBank(commands.Cog):
         elif currency == "gold":
             if data_user['treasure'][currency] >= amount:
                 update_user['treasure'][currency] -= amount
+                update_user['treasure']['money'] -= amount * 100
                 update_guild_native['data'][f'total_{currency}'] -= amount
+                update_guild_native['data'][f'total_money'] -= amount * 100
                 update_member['treasure'][currency] += amount
+                update_member['treasure']['money'] += amount * 100
                 update_guild_native_member['data'][f'total_{currency}'] += amount
+                update_guild_native_member['data'][f'total_money'] += amount * 100
                 self.bot.db.update_data(data_user, update_user, 'users')
                 self.bot.db.update_data(data_member, update_member, 'users')
                 self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
