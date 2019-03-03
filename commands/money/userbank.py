@@ -54,7 +54,7 @@ class UserBank(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='pay', aliases=['pagar'])
-    async def pay(self, ctx, member: discord.Member = None, amount: int = None):
+    async def pay(self, ctx, member: discord.Member = None, amount: int = None, currency: str = "bronze"):
         if member is None:
             return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mensionar alguem.``")
         if amount is None:
@@ -68,6 +68,55 @@ class UserBank(commands.Cog):
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!`` **Você so pode se casar com membros '
                                   'cadastrados!**', delete_after=5.0)
+
+        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        data_guild_native_member = self.bot.db.get_data("guild_id", data_member['guild_id'], "guilds")
+        update_guild_native = data_guild_native
+        update_guild_native_member = data_guild_native_member
+
+        a = '{:,.0f}'.format(float(amount))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+
+        if currency == "bronze":
+            if data_user['treasure'][currency] >= amount:
+                update_user['treasure'][currency] -= amount
+                update_guild_native['data'][f'total_{currency}'] -= amount
+                update_member['treasure'][currency] += amount
+                update_guild_native_member['data'][f'total_{currency}'] += amount
+                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} PARA {member.name} '
+                                      f'COM SUCESSO!``')
+            else:
+                return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
+                                      f"{currency.upper()}!``")
+        elif currency == "silver":
+            if data_user['treasure'][currency] >= amount:
+                update_user['treasure'][currency] -= amount
+                update_guild_native['data'][f'total_{currency}'] -= amount
+                update_member['treasure'][currency] += amount
+                update_guild_native_member['data'][f'total_{currency}'] += amount
+                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} PARA {member.name} '
+                                      f'COM SUCESSO!``')
+            else:
+                return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
+                                      f"{currency.upper()}!``")
+        elif currency == "gold":
+            if data_user['treasure'][currency] >= amount:
+                update_user['treasure'][currency] -= amount
+                update_guild_native['data'][f'total_{currency}'] -= amount
+                update_member['treasure'][currency] += amount
+                update_guild_native_member['data'][f'total_{currency}'] += amount
+                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} PARA {member.name} '
+                                      f'COM SUCESSO!``')
+            else:
+                return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
+                                      f"{currency.upper()}!``")
+        elif currency == "money":
+            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa escolher algo entre: bronze, silver "
+                                  "ou gold``")
+        else:
+            return await ctx.send("<:oc_status:519896814225457152>│``OPÇÃO INVALIDA!``")
 
 
 def setup(bot):
