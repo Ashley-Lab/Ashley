@@ -331,9 +331,11 @@ class Helper(commands.Cog):
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             ajuda.set_thumbnail(url="http://www.pngmart.com/files/7/Money-PNG-Transparent-Image.png")
             ajuda.add_field(name="Economy Commands:",
-                            value=f"{self.st[28]}│**economia**\n"
-                                  f"{self.st[29]}│**tesouro**\n"
-                                  f"{self.st[30]}│**carteira**\n"
+                            value=f"{self.st[28]}│**economia** ``or`` **economy**\n"
+                                  f"{self.st[29]}│**tesouro** ``or`` **treasure**\n"
+                                  f"{self.st[30]}│**carteira** ``or`` **wallet**\n"
+                                  f"{self.st[30]}│**pay** ``or`` **pagar**\n"
+                                  f"{self.st[30]}│**give** ``or`` **dar**\n"
                                   f"{self.st[66]}│**daily** ``or`` **diario**")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
