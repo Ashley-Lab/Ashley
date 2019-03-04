@@ -95,6 +95,7 @@ class Database(object):
                 "background": data.get("background", None),
                 "married": False,
                 "winner": 0,
+                "rec": 0
             },
             "status": {
                 "STR": 1,

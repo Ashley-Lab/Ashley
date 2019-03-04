@@ -38,7 +38,9 @@ class DailyClass(commands.Cog):
             daily.add_field(name="Daily Commands:",
                             value=f"``PREFIX:`` **daily** ``or`` **diario** ``+``\n"
                                   f"{self.st[66]}│**coin** ``or`` **ficha**\n"
-                                  f"{self.st[66]}│**work** ``or`` **trabalho**\n")
+                                  f"{self.st[66]}│**work** ``or`` **trabalho**\n"
+                                  f"{self.st[66]}│**rec** ``or`` **recomendação**\n"
+                                  f"{self.st[66]}│**vip**")
             daily.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             daily.set_thumbnail(url=self.bot.user.avatar_url)
             daily.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -77,7 +79,8 @@ class DailyClass(commands.Cog):
                     money = randint(40 + min_, 400 + max_)
                 await self.bot.db.add_money(ctx, money)
                 await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` **{money}**'
-                               f'``em dinheiro do seu rank atual.!``')
+                               f'`` em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a mais por usar '
+                               f'essa mesma quantidade de comandos.``')
             else:
                 data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update_ = data_
@@ -86,8 +89,40 @@ class DailyClass(commands.Cog):
                 await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 10 COMANDOS DA '
                                'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
         else:
+            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            del data_['cooldown'][str(ctx.command)]
+            self.bot.db.update_data(data_, update_, 'users')
             await ctx.send('<:negate:520418505993093130>│``O SERVIDOR ATUAL AINDA NÃO USOU + DE 50 COMANDOS DA '
                            'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
+
+    @check_it(no_pm=True)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @daily.group(name='rec', aliases=['recomendação'])
+    async def _rec(self, ctx, member: discord.Member = None):
+        if member is None:
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
+        if member.id == ctx.author.id:
+            return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
+        data_user = self.bot.db.get_data("user_id", member.id, "users")
+        update_user = data_user
+        try:
+            update_user['user']['rec'] += 1
+        except KeyError:
+            update_user['user']['rec'] = 1
+        self.bot.db.update_data(data_user, update_user, 'users')
+        await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
+                       f'{ctx.author.mention}')
+
+    @check_it(no_pm=True)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @daily.group(name='vip')
+    async def _vip(self, ctx):
+        data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_ = data_
+        del data_['cooldown'][str(ctx.command)]
+        self.bot.db.update_data(data_, update_, 'users')
+        await ctx.send('<:negate:520418505993093130>│``Premio ainda em criação...``')
 
 
 def setup(bot):

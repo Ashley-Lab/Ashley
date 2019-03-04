@@ -54,6 +54,7 @@ class Ashley(commands.AutoShardedBot):
         self.data: DataInteraction = DataInteraction(self)
 
         self.staff = [235937029106434048, 300592580381376513]
+        self.bl_item = ['medal', 'rank_point']
 
         with open("resources/translations.json") as translations:
             self.translations = json.loads(translations.read())

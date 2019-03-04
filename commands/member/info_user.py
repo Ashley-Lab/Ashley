@@ -32,10 +32,6 @@ class UserInfo(commands.Cog):
                         status = "<:vip_member:546020055478042647>"
                 else:
                     status = "<:negate:520418505993093130>"
-                if data['user']['titling'] is None:
-                    titling = 'Vagabundo'
-                else:
-                    titling = data['user']['titling']
                 user = ctx.message.mentions[0]
                 role = ",".join([r.name for r in user.roles if r.name != "@everyone"])
                 userjoinedat = str(user.joined_at).split('.', 1)[0]
@@ -51,7 +47,6 @@ class UserInfo(commands.Cog):
                 embed.add_field(name=":label:Tag:", value=user.discriminator, inline=True)
                 embed.add_field(name="Cargos:", value=role, inline=True)
                 embed.add_field(name="Vip: ", value=status)
-                embed.add_field(name="Entitulação: ", value=titling)
                 embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
                 embed.set_thumbnail(url=user.avatar_url)
                 await ctx.channel.send(embed=embed)
@@ -65,10 +60,6 @@ class UserInfo(commands.Cog):
                         status = "<:vip_member:546020055478042647>"
                 else:
                     status = "<:negate:520418505993093130>"
-                if data['user']['titling'] is None:
-                    titling = 'Vagabundo'
-                else:
-                    titling = data['user']['titling']
                 user2 = ctx.author
                 role2 = ",".join([r.name for r in ctx.author.roles if r.name != "@everyone"])
                 userjoinedat2 = str(user2.joined_at).split('.', 1)[0]
@@ -84,7 +75,6 @@ class UserInfo(commands.Cog):
                 embed2.add_field(name=":label:Tag:", value=user2.discriminator, inline=True)
                 embed2.add_field(name="Cargos:", value=role2, inline=True)
                 embed2.add_field(name="Vip: ", value=status)
-                embed2.add_field(name="Entitulação: ", value=titling)
                 embed2.set_footer(text="Pedido por {}#{}".format(ctx.author, ctx.author.discriminator))
                 embed2.set_thumbnail(url=ctx.author.avatar_url)
                 await ctx.channel.send(embed=embed2)
