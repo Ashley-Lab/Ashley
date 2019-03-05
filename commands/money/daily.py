@@ -101,8 +101,16 @@ class DailyClass(commands.Cog):
     @daily.group(name='rec', aliases=['recomendação'])
     async def _rec(self, ctx, member: discord.Member = None):
         if member is None:
+            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            del data_['cooldown'][str(ctx.command)]
+            self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
         if member.id == ctx.author.id:
+            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            del data_['cooldown'][str(ctx.command)]
+            self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
         data_user = self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
