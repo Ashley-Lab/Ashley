@@ -157,7 +157,7 @@ class RankingClass(commands.Cog):
         # guild image
         guild_ = self.bot.get_guild(data['guild_id'])
         if guild_ is not None:
-            url_guild = requests.get(data['guild_icon_url'])
+            url_guild = requests.get(guild_.icon_url)
             icon_guild = Image.open(BytesIO(url_guild.content)).convert("RGBA")
             icon_guild = icon_guild.resize((190, 190))
         else:
