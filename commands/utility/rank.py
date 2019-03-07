@@ -84,18 +84,23 @@ class RankingClass(commands.Cog):
         amount_rp = 200
         amount_medal = 0
         count_medal = 1
-        count_patent = 0
-        patent = 1
+        count_patent = 1
+        patent = 0
+
+        list_ = list()
+        for n in range(100):
+            list_.append(n)
 
         if 100 < rank_point < 200:
             patent += 1
         elif rank_point > 200:
             while True:
                 if rank_point >= amount_rp and medal >= amount_medal:
-                    amount_medal += count_medal
+                    amount_medal += list_[count_medal]
                     amount_rp += 100
                     count_medal += 1
                     count_patent += 1
+                    count_medal += 1
                 else:
                     patent = count_patent
                     if patent >= 30:
