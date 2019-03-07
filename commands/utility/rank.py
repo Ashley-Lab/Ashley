@@ -43,7 +43,7 @@ class RankingClass(commands.Cog):
         update = data
 
         def check(m):
-            return m.author == ctx.author
+            return m.author == ctx.author and m.content.isdigit()
 
         await ctx.channel.send('Quantas vezes campeão?', delete_after=10.0)
 
@@ -53,14 +53,11 @@ class RankingClass(commands.Cog):
             return await  ctx.channel.send('Desculpe, você demorou muito, Comando cancelado!')
 
         valor = int(answer.content)
+        if valor > 20:
+            valor = 20
 
-        try:
-            update.delete(data['user']["winner"])
-            update['user']['winner'] = valor
-        except IndexError:
-            update['user']['winner'] = valor
-            self.bot.db.push_data(data, update, "users")
-
+        update['user']['winner'] = valor
+        self.bot.db.push_data(data, update, "users")
         await ctx.channel.send('Registrado!', delete_after=3.0)
 
     @check_it(no_pm=True)
@@ -87,7 +84,7 @@ class RankingClass(commands.Cog):
         amount_rp = 200
         amount_medal = 0
         count_medal = 1
-        count_patent = 1
+        count_patent = 0
         patent = 1
 
         if 100 < rank_point < 200:

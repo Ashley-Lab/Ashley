@@ -7,7 +7,7 @@ import psutil
 import json
 import os
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
-from random import choice
+from random import choice, randint
 from datetime import datetime as dt
 from collections import Counter
 from discord.ext import commands
@@ -113,9 +113,34 @@ class Ashley(commands.AutoShardedBot):
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
             data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_user = self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data is not None:
                 await self.db.add_money(ctx, 6)
                 await self.data.add_experience(ctx.message, 5)
+            if isinstance(ctx.author, discord.Member) and data_user is not None:
+                update_user = data_user
+                try:
+                    update_user['user']['commands'] += 1
+                except KeyError:
+                    update_user['user']['commands'] = 1
+                self.db.update_data(data_user, update_user, 'users')
+                if (update_user['user']['commands'] % 10) == 0:
+                    chance = randint(1, 100)
+                    if chance >= 80:
+                        update_user['inventory']['rank_point'] += 1
+                        await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
+                                       "<:coin:519896843388452864> **1** ``RANKPOINT A MAIS!``")
+                if (update_user['user']['commands'] % 50) == 0:
+                    guild_ = self.get_guild(update_user['guild_id'])
+                    if guild_ is not None:
+                        await ctx.send("<:negate:520418505993093130>│``SUA GUILDA DE CADASTRO FOI DELETADA, TENTE "
+                                       "USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
+                if (update_user['user']['commands'] % 100) == 0:
+                    chance = randint(1, 100)
+                    if chance >= 90:
+                        update_user['inventory']['medal'] += 1
+                        await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
+                                       "<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")
