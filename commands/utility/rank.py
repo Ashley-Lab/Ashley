@@ -5,12 +5,13 @@ import discord
 import requests
 import unicodedata
 
-from discord.ext import commands
 from io import BytesIO
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from discord.ext import commands
 from asyncio import TimeoutError
-from resources.check import check_it
 from resources.db import Database
+from resources.check import check_it
+from PIL import Image, ImageDraw, ImageFont, ImageOps
+
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
@@ -80,7 +81,6 @@ class RankingClass(commands.Cog):
         medal = data['inventory']['medal']
         rank_point = data['inventory']['rank_point']
         data_ = self.bot.db.get_all_data("users")
-
         rank = [x.get("user_id") for x in data_.limit(int(data_.count())).sort("user", pymongo.DESCENDING)]
 
         position = int(rank.index(user.id)) + 1
@@ -113,7 +113,7 @@ class RankingClass(commands.Cog):
         # take avatar member
         url_avatar = requests.get(user.avatar_url)
         avatar = Image.open(BytesIO(url_avatar.content))
-        avatar = avatar.resize((270, 270))
+        avatar = avatar.resize((250, 250))
         big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
         mascara = Image.new('L', big_avatar, 0)
         trim = ImageDraw.Draw(mascara)
@@ -126,58 +126,93 @@ class RankingClass(commands.Cog):
 
         # patent image
         patent_img = Image.open('images/patente/{}.png'.format(patent))
+        patent_img = patent_img.resize((205, 248))
 
         # champion image
-        champion = Image.open('images/elements/campeao.png')
-        champion = champion.resize((130, 90))
+        champion = dict()
+        for n in range(1, 21):
+            if data['user']['winner']:
+                if data['user']['winner'] == 0:
+                    star_ = 'star_default'
+                    champion[n-1] = Image.open(f'images/elements/{star_}.png')
+                    champion[n-1] = champion[n-1].resize((130, 90))
+                else:
+                    if data['user']['ranking'] == "Gold":
+                        star_ = 'star_gold'
+                    elif data['user']['ranking'] == "Silver":
+                        star_ = 'star_silver'
+                    else:
+                        star_ = 'star_bronze'
+                    if n <= data['user']['winner']:
+                        star = star_
+                    else:
+                        star = 'star_default'
+                    champion[n-1] = Image.open(f'images/elements/{star}.png')
+                    champion[n-1] = champion[n-1].resize((130, 90))
+            else:
+                star_ = 'star_default'
+                champion[n-1] = Image.open(f'images/elements/{star_}.png')
+                champion[n-1] = champion[n-1].resize((130, 90))
+
         # guild image
-        url_guild = requests.get(data['guild_icon_url'])
-        icon_guild = Image.open(BytesIO(url_guild.content))
-        icon_guild = icon_guild.resize((170, 170))
-        big_icon_guild = (icon_guild.size[0] * 3, icon_guild.size[1] * 3)
-        mascara_guild = Image.new('L', big_icon_guild, 0)
-        trim_guild = ImageDraw.Draw(mascara_guild)
-        trim_guild.ellipse((0, 0) + big_icon_guild, fill=255)
-        mascara_guild = mascara_guild.resize(icon_guild.size, Image.ANTIALIAS)
-        icon_guild.putalpha(mascara_guild)
-        exit_icon_guild = ImageOps.fit(icon_guild, mascara_guild.size, centering=(0.5, 0.5))
-        exit_icon_guild.putalpha(mascara_guild)
-        exit_icon_guild.save('icon_guild.png')
+        guild_ = self.bot.get_guild(data['guild_id'])
+        if guild_ is not None:
+            url_guild = requests.get(data['guild_icon_url'])
+            icon_guild = Image.open(BytesIO(url_guild.content)).convert("RGBA")
+            icon_guild = icon_guild.resize((190, 190))
+        else:
+            icon_guild = Image.open('images/elements/no_found.png').convert("RGBA")
+            icon_guild = icon_guild.resize((190, 190))
 
         # load fonts
         font = ImageFont.truetype('fonts/bot.otf', 100)
-        font_2 = ImageFont.truetype('fonts/bot.otf', 80)
 
-        # img
+        # User Align
+        bounding_box = [150, 275, 2200, 375]
+        x1, y1, x2, y2 = bounding_box
         img = Image.open('images/dashboards/rank.png')
+        show = ImageDraw.Draw(img)
+        w, h = show.textsize(nome.upper(), font=font)
+        x = (x2 - x1 - w) / 2 + x1
+        y = (y2 - y1 - h) / 2 + y1
+        top = 182
 
         # add text to img
         show = ImageDraw.Draw(img)
-        show.text(xy=(700, 320), text=nome.upper(), fill=(255, 255, 255), font=font)
-        show.text(xy=(730, 573), text=f'{medal}', fill=(255, 90, 0), font=font_2)
-        show.text(xy=(1840, 570), text=f'{rank_point}', fill=(255, 90, 0), font=font_2)
-        show.text(xy=(450, 324), text=f'#{position}', fill=(255, 255, 255), font=font_2)
+        show.text(xy=(x + 2, y + 2), text=nome.upper(), fill=(0, 0, 0), font=font)
+        show.text(xy=(x, y), text=nome.upper(), fill=(255, 255, 255), font=font)
+        show.text(xy=(792, 440), text=f'{medal}', fill=(0, 0, 0), font=font)
+        show.text(xy=(790, 438), text=f'{medal}', fill=(128, 0, 128), font=font)
+        show.text(xy=(1942, 440), text=f'{rank_point}', fill=(0, 0, 0), font=font)
+        show.text(xy=(1940, 438), text=f'{rank_point}', fill=(128, 0, 128), font=font)
+        show.text(xy=(1102, 440), text=f'#{position}', fill=(0, 0, 0), font=font)
+        show.text(xy=(1100, 438), text=f'#{position}', fill=(255, 255, 255), font=font)
 
         # add img to main img
-        img.paste(avatar, (1030, 550), avatar)
-        img.paste(patent_img, (2055, 300), patent_img)
-        # img.paste(rank, (712, 684), rank)
-        img.paste(icon_guild, (1400, 710), icon_guild)
-
-        try:
-            if data['user']['winner'] == 1:
-                img.paste(champion, (800, 435), champion)
-            elif data['user']['winner'] == 2:
-                img.paste(champion, (800, 435), champion)
-                img.paste(champion, (900, 435), champion)
-            elif data['user']['winner'] == 3:
-                img.paste(champion, (800, 435), champion)
-                img.paste(champion, (900, 435), champion)
-                img.paste(champion, (1000, 435), champion)
-            img.save('rank.png')
-        except IndexError:
-            img.save('rank.png')
-
+        img.paste(avatar, (1050, 600), avatar)
+        img.paste(patent_img, (765, 595), patent_img)
+        img.paste(icon_guild, (1373, 620), icon_guild)
+        img.paste(champion[0], (130, top), champion[0])
+        img.paste(champion[1], (230, top), champion[1])
+        img.paste(champion[2], (330, top), champion[2])
+        img.paste(champion[3], (430, top), champion[3])
+        img.paste(champion[4], (530, top), champion[4])
+        img.paste(champion[5], (630, top), champion[5])
+        img.paste(champion[6], (730, top), champion[6])
+        img.paste(champion[7], (830, top), champion[7])
+        img.paste(champion[8], (930, top), champion[8])
+        img.paste(champion[9], (1030, top), champion[9])
+        img.paste(champion[10], (1130, top), champion[10])
+        img.paste(champion[11], (1230, top), champion[11])
+        img.paste(champion[12], (1330, top), champion[12])
+        img.paste(champion[13], (1430, top), champion[13])
+        img.paste(champion[14], (1530, top), champion[14])
+        img.paste(champion[15], (1630, top), champion[15])
+        img.paste(champion[16], (1730, top), champion[16])
+        img.paste(champion[17], (1830, top), champion[17])
+        img.paste(champion[18], (1930, top), champion[18])
+        img.paste(champion[19], (2030, top), champion[19])
+        img.save('rank.png')
         await msg.delete()
         await ctx.channel.send(file=discord.File('rank.png'))
 

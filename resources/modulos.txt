@@ -44,7 +44,7 @@ commands.owner.unload
 commands.rpg.status
 commands.utility.avatar
 commands.utility.draw
-@ commands.utility.rank
+commands.utility.rank
 commands.utility.roll
 commands.utility.vote
 events.on_guild_channel_create

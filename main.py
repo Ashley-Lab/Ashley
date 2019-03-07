@@ -32,13 +32,13 @@ class Ashley(commands.AutoShardedBot):
                               'SEJA VIP: SENDO VIP VOCÊ ACABA COM OS ANUNCIOS',
                               'SISTEMA DE ANUNCIOS: O SISTEMA DE ANUNCIO EXISTE PARA EU PODER ME MANTER']
         self.languages = ("pt", "en")
-        self.version = "5.0.1"
+        self.version = "5.3.6"
         self.server_ = "heroku"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
                            'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.progress = "V.5 -> 10.0%"
+        self.progress = "V.5 -> 36.0%"
         self.data_cog = {}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff']
 

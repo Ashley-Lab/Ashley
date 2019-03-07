@@ -38,7 +38,7 @@ class SlapClass(commands.Cog):
             await ctx.send(embed=slapemb)
         except IndexError:
             await ctx.send('<:negate:520418505993093130>│``Você precisa mencionar um usuário específico para '
-                           'abraçar!``')
+                           'dar um tapa!``')
 
 
 def setup(bot):
