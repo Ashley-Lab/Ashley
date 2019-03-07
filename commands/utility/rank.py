@@ -33,8 +33,8 @@ class RankingClass(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='winner', aliases=['vencedor'])
-    async def winner(self, ctx):
+    @commands.command(name='stars', aliases=['estrelas'])
+    async def stars(self, ctx):
         try:
             data = self.bot.db.get_data("user_id", ctx.message.mentions[0].id, "users")
         except IndexError:
@@ -43,22 +43,25 @@ class RankingClass(commands.Cog):
         update = data
 
         def check(m):
-            return m.author == ctx.author and m.content.isdigit()
+            return m.author == ctx.author
 
-        await ctx.channel.send('Quantas vezes campeão?', delete_after=10.0)
+        await ctx.channel.send('Quantas vezes campeão?', delete_after=30.0)
 
         try:
-            answer = await self.bot.wait_for('message', check=check, timeout=10.0)
+            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
-            return await  ctx.channel.send('Desculpe, você demorou muito, Comando cancelado!')
+            return await  ctx.channel.send('Desculpe você demorou muito, Comando cancelado!')
 
-        valor = int(answer.content)
-        if valor > 20:
-            valor = 20
+        try:
+            valor = int(answer.content)
+            if valor > 20:
+                valor = 20
+        except TypeError:
+            valor = 0
 
         update['user']['winner'] = valor
         self.bot.db.push_data(data, update, "users")
-        await ctx.channel.send('Registrado!', delete_after=3.0)
+        await ctx.channel.send(f'{valor} Estrelas Registradas!', delete_after=10.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
