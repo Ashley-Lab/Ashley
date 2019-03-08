@@ -19,17 +19,17 @@ class ActionsClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
-    async def add_vip(self, ctx, target: str = "guild", id_: int = None):
+    async def add_vip(self, ctx, id_: int = None, target: str = "guild"):
         if target == "guild":
             guild = self.bot.get_guild(id_)
             if guild is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
-            self.bot.data.add_vip(target="guilds", guild_id=id_, state=True)
+            self.bot.data.add_vip(target="guild", guild_id=id_, state=True)
         elif target == "user":
             user = self.bot.get_user(id_)
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
-            self.bot.data.add_vip(target="users", user_id=id_, state=True)
+            self.bot.data.add_vip(target="user", user_id=id_, state=True)
         else:
             return await ctx.send("<:oc_status:519896814225457152>│``OPÇÃO INVALIDA!``")
         embed = discord.Embed(
@@ -41,7 +41,7 @@ class ActionsClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
-    async def remove_vip(self, ctx, target: str = "guild", id_: int = None):
+    async def remove_vip(self, ctx, id_: int = None, target: str = "guild"):
         if target == "guild":
             guild = self.bot.get_guild(id_)
             if guild is None:

@@ -762,18 +762,18 @@ class DataInteraction(object):
         return rank
 
     def add_vip(self, **kwargs):
-        if kwargs.get("target") == "users":
+        if kwargs.get("target") == "user":
             data = self.db.get_data("user_id", kwargs.get("user_id"), "users")
             update = data
-            if kwargs.get("state", False):
+            if kwargs.get("state"):
                 update['config']['vip'] = True
             else:
                 update['config']['vip'] = False
             self.db.update_data(data, update, "users")
-        elif kwargs.get("type") == "guilds":
+        elif kwargs.get("target") == "guild":
             data = self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
             update = data
-            if kwargs.get("state", False):
+            if kwargs.get("state"):
                 update['vip'] = True
             else:
                 update['vip'] = False
