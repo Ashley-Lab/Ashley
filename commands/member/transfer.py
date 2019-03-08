@@ -1,6 +1,7 @@
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from asyncio import TimeoutError
 
 
 class TransferClass(commands.Cog):
@@ -18,17 +19,20 @@ class TransferClass(commands.Cog):
         update_user = data_user
         update_guild_native = data_guild_native
         update_guild_future = data_guild_future
-
-        a = '{:,.2f}'.format(float(data_user["treasure"]["money"]))
+        a = '{:,.2f}'.format(float(update_user["treasure"]["money"]))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')
         d = c.replace('v', '.')
 
         def check(m):
-            return m.author.id == ctx.guild.owner.id and m.channel.id == ctx.channel.id and m.content in ['S', 'N']
+            if m.author.id == ctx.guild.owner.id:
+                if m.channel.id == ctx.channel.id:
+                    if m.content.upper() in ['S', 'N']:
+                        return True
+            return False
 
-        await ctx.send(f'{ctx.guild.owner.mention} ``o membro`` {ctx.author.mention} ``quer associar sua conta da '
-                       f'ashley na sua guilda.``\n ``Sua conta atual contem exatos`` **R${d} de Money** ``você deseja '
+        await ctx.send(f'{ctx.guild.owner.mention} ``o membro`` {ctx.author.mention} ``quer associar sua conta do meu '
+                       f'sistema na sua guilda.``\n ``A conta dele contem exatos`` **R${d} de Money** ``você deseja '
                        f'recebe-lo? Responsta com`` **[S/N]**', delete_after=60.0)
 
         try:
@@ -41,8 +45,8 @@ class TransferClass(commands.Cog):
             total = 1 * update_user['treasure']['bronze']
             total += 10 * update_user['treasure']['silver']
             total += 100 * update_user['treasure']['gold']
-            update_guild_native['data']['total_money'] -= update_user['treasure'][total]
-            update_guild_future['data']['total_money'] += update_user['treasure'][total]
+            update_guild_native['data']['total_money'] -= total
+            update_guild_future['data']['total_money'] += total
             update_guild_native['data']['total_gold'] -= update_user['treasure']['gold']
             update_guild_future['data']['total_gold'] += update_user['treasure']['gold']
             update_guild_native['data']['total_silver'] -= update_user['treasure']['silver']
@@ -58,7 +62,7 @@ class TransferClass(commands.Cog):
             await ctx.send(f'<:confirmado:519896822072999937>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
                            f' aceito com sucesso, você agora faz parte da guilda`` **{ctx.guild.name}**')
         else:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, seu pedido de transferencia foi negado!``')
+            await ctx.send('<:negate:520418505993093130>│``Desculpe, seu pedido de transferencia foi negado!``')
 
 
 def setup(bot):
