@@ -119,7 +119,9 @@ class DailyClass(commands.Cog):
         except KeyError:
             update_user['user']['rec'] = 1
         if (update_user['user']['rec'] % 20) == 0:
-            update_user['user']['winner'] += 1
+            chance = randint(1, 100)
+            if chance >= 50:
+                update_user['user']['winner'] += 1
         self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')

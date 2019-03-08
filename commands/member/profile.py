@@ -88,6 +88,11 @@ class ProfileSystem(commands.Cog):
         except KeyError:
             rec = 0
 
+        try:
+            cmds = data['user']['commands']
+        except KeyError:
+            cmds = 0
+
         embed = discord.Embed(title='Perfil do(a): {}'.format(member.display_name), color=color)
         embed.set_thumbnail(url=member.avatar_url)
         embed.add_field(name='Relationship Status :heart_eyes: ', value=str(married), inline=True)
@@ -95,6 +100,7 @@ class ProfileSystem(commands.Cog):
         embed.add_field(name="Vip: ", value=status)
         embed.add_field(name="Entitulação: ", value=titling)
         embed.add_field(name="Recomendações: ", value=rec)
+        embed.add_field(name="Total de Comandos: ", value=cmds)
         embed.add_field(name='Bot Staff Notes :notepad_spiral:', value=str(strikes), inline=True)
         embed.add_field(name='Fichas <:dinars:519896828930686977>', value=str(data['inventory']['coins']), inline=True)
         embed.add_field(name="Gold <:gold:540586811462778880>", value=str(data['treasure']['gold']), inline=True)

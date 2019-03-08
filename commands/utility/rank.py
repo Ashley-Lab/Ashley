@@ -34,34 +34,38 @@ class RankingClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='stars', aliases=['estrelas'])
     async def stars(self, ctx):
+        try:
+            user = ctx.message.mentions[0]
+        except IndexError:
+            user = ctx.author
+
         def check(m):
             return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
-        await ctx.channel.send('Quantas vezes campeão?', delete_after=30.0)
+        await ctx.send(f'<a:loading:520418506567843860>│``Quantas estrelas deseja registrar para`` **{user.name}?**',
+                       delete_after=30.0)
 
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
-            return await ctx.channel.send('Desculpe você demorou muito, Comando cancelado!')
+            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+                                  '**COMANDO CANCELADO**')
 
         try:
             valor = int(answer.content)
             if valor > 20:
                 valor = 20
         except ValueError:
-            return await ctx.send("Digite apenas Números!")
+            return await ctx.send("<:negate:520418505993093130>│``Digite apenas Números!``")
 
-        try:
-            data = self.bot.db.get_data("user_id", ctx.message.mentions[0].id, "users")
-        except IndexError:
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data = self.bot.db.get_data("user_id", user.id, "users")
         update = data
-        if update is not None:
+        if data is not None:
             update['user']['winner'] = valor
             self.bot.db.update_data(data, update, "users")
-            await ctx.channel.send(f'{valor} Estrelas Registradas!', delete_after=10.0)
+            await ctx.send(f'<:confirmado:519896822072999937>│**{valor}** ``Estrelas Registradas!``', delete_after=10.0)
         else:
-            await ctx.channel.send(f'Usuário não encontrado!', delete_after=10.0)
+            await ctx.send('<:negate:520418505993093130>│``Usuário não encontrado!``', delete_after=10.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

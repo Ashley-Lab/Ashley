@@ -527,6 +527,11 @@ class DataInteraction(object):
                                             ' jogar``'.format(message.author, "Gold"))
                                     except discord.errors.Forbidden:
                                         pass
+                        if message.guild.id == update['guild_id']:
+                            update["guild_id"] = message.guild.id
+                            update["guild_name"] = message.guild.name
+                            update["guild_icon_url"] = message.guild.icon_url
+                        update["user_name"] = message.author.name
                         update['user']['experience'] += exp * update['user']['level']
                         update["user"]['xp_time'] = (datetime.datetime.utcnow() - epoch).total_seconds()
                         self.db.update_data(record, update, "users")
