@@ -112,6 +112,8 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
+            if ctx.author.id not in self.blacklist:
+                await self.data.level_up(ctx)
             data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data is not None:
@@ -184,7 +186,6 @@ class Ashley(commands.AutoShardedBot):
 
         if message.guild is not None and message.author.id not in self.blacklist:
             await self.data.add_experience(message, 5)
-            await self.data.level_up(message)
 
     @staticmethod
     def get_ram():
