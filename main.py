@@ -6,6 +6,7 @@ import logging
 import psutil
 import json
 import os
+import copy
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
 from random import choice, randint
 from datetime import datetime as dt
@@ -186,6 +187,10 @@ class Ashley(commands.AutoShardedBot):
 
         if message.guild is not None and message.author.id not in self.blacklist:
             await self.data.add_experience(message, 5)
+            if message.content.lower() == "ash rec":
+                msg = copy.copy(message)
+                msg.content = "ash daily rec"
+                await self.process_commands(msg)
 
     @staticmethod
     def get_ram():
