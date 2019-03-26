@@ -4,7 +4,7 @@ with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 
-def t_(ctx, translation, db_name):
+def t_(ctx, translation, db_name="guilds"):
     if ctx.guild is not None:
         data = ctx.bot.db.get_data("guild_id", ctx.guild.id, db_name)
         if data is not None:

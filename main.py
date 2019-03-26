@@ -41,6 +41,8 @@ class Ashley(commands.AutoShardedBot):
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.progress = "V.5 -> 36.0%"
         self.data_cog = {}
+        self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash rec': 'ash daily rec',
+                         'ash vip': 'ash daily vip'}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff']
 
         self.log_dir = os.path.dirname(__file__)
@@ -182,15 +184,14 @@ class Ashley(commands.AutoShardedBot):
         if message.author.id == self.user.id:
             return
 
-        if message.author.id not in self.blacklist:
-            await self.process_commands(message)
-
         if message.guild is not None and message.author.id not in self.blacklist:
             await self.data.add_experience(message, 5)
-            if message.content.lower() == "ash rec":
+            if message.content.lower() in self.shortcut:
                 msg = copy.copy(message)
-                msg.content = "ash daily rec"
+                msg.content = self.shortcut[message.content.lower()]
                 await self.process_commands(msg)
+            else:
+                await self.process_commands(message)
 
     @staticmethod
     def get_ram():

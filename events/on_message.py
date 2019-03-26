@@ -5,7 +5,7 @@ import discord
 
 from chatterbot import ChatBot
 from chatterbot.conversation import Statement
-from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer
+from chatterbot.trainers import ListTrainer
 from chatterbot.response_selection import get_most_frequent_response as resp
 
 from random import choice, randint
@@ -29,11 +29,6 @@ class SystemMessage(commands.Cog):
         self.heart = ChatBot(
             'Ashley',
             storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
-            preprocessors=[
-                'chatterbot.preprocessors.clean_whitespace',
-                'chatterbot.preprocessors.unescape_html'
-            ],
-            filters=['chatterbot.filters.get_recent_repeated_responses'],
             logic_adapters=[
                 "chatterbot.logic.BestMatch",
             ],
@@ -41,7 +36,6 @@ class SystemMessage(commands.Cog):
             response_selection_method=resp
         )
         self.trainer = ListTrainer(self.heart)
-        self.corpus_trainer = ChatterBotCorpusTrainer(self.heart)
         for script in self.scripts:
             self.trainer.train(script)
 
@@ -204,7 +198,7 @@ class SystemMessage(commands.Cog):
                                                                        '``Qual a proxima pergunta?``')
                                     else:
                                         response_ashley = self.heart.get_response(response.content)
-                                        if float(response_ashley.confidence) > 0.5:
+                                        if float(response_ashley.confidence) >= 0.3:
                                             await message.channel.send(response_ashley)
                                         else:
                                             await message.channel.send(choice(negate))
