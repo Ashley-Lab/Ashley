@@ -8,6 +8,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 from random import randint
 from collections import Counter
+from resources.utility import parse_duration
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
@@ -224,7 +225,11 @@ class Database(object):
                 "member_join": data.get("member_join", False),
                 "member_join_id": data.get("member_join_id", None),
                 "member_remove": data.get("member_remove", False),
-                "member_remove_id": data.get("member_remove_id", None)
+                "member_remove_id": data.get("member_remove_id", None),
+                "join_system": data.get("join_system", False),
+                "join_system_id": data.get("join_system_id", None),
+                "join_system_role": data.get("join_system_role", None),
+                "join_system_member_state": dict()
             },
             "warn_config": {
                 "warn": data.get("warn", False),
@@ -444,9 +449,8 @@ class Database(object):
 
                         if time_diff < kwargs.get("time"):
                             raise commands.CheckFailure(f'<:negate:520418505993093130>│**Aguarde**: `Você deve '
-                                                        f'esperar` **{{:.2f}}** `horas para usar esse comando '
-                                                        f'novamente!`'.format((kwargs.get("time") -
-                                                                               time_diff) / 3600))
+                                                        f'esperar` **{{}}** `para usar esse comando '
+                                                        f'novamente!`'.format(parse_duration(kwargs.get("time"))))
                         if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
                             update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
                                                                          - epoch).total_seconds()

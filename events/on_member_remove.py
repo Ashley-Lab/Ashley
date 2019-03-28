@@ -23,6 +23,7 @@ class OnMemberRemove(commands.Cog):
     async def on_member_remove(self, member):
 
         data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+        update = data
         if data is not None:
 
             try:
@@ -50,6 +51,24 @@ class OnMemberRemove(commands.Cog):
                     for n in range(0, 10):
                         text = text.replace(str(n), numbers[n])
                     await channel_.edit(topic="Membros: " + text)
+            except discord.Forbidden:
+                pass
+
+            try:
+                if data['func_config']['join_system']:
+                    pass
+            except KeyError:
+                update['func_config']['join_system'] = False
+                update['func_config']['join_system_id'] = None
+                update['func_config']['join_system_role'] = None
+                update['func_config']['join_system_member_state'] = dict()
+                self.bot.db.update_data(data, update, 'guilds')
+
+            try:
+                data = self.bot.db.get_data("user_id", member.guild.id, "guilds")
+                update = data
+                if data['func_config']['join_system']:
+                    self.bot.db.update_data(data, update, 'guilds')
             except discord.Forbidden:
                 pass
 

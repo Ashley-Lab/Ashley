@@ -13,6 +13,7 @@ from youtube_dl import YoutubeDL
 from discord import opus
 from resources.db import Database
 from resources.check import check_it
+from resources.utility import parse_duration
 from collections import Counter
 
 with open("resources/auth.json") as security:
@@ -64,24 +65,6 @@ ffmpegopts = {
 }
 
 ytdl = YoutubeDL(ytdlopts)
-
-
-def parse_duration(duration: int):
-    minutes, seconds = divmod(duration, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-
-    duration = []
-    if days > 0:
-        duration.append(f'{days} dias')
-    if hours > 0:
-        duration.append(f'{hours} horas')
-    if minutes > 0:
-        duration.append(f'{minutes} minutos')
-    if seconds > 0:
-        duration.append(f'{seconds} segundos')
-
-    return ', '.join(duration)
 
 
 class YTDLSource(discord.PCMVolumeTransformer):

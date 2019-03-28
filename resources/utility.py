@@ -1,3 +1,33 @@
+def parse_duration(duration: int):
+    minutes, seconds = divmod(duration, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+
+    duration = []
+    if days > 0:
+        if days > 1:
+            duration.append(f'{days} dias')
+        else:
+            duration.append(f'{days} dia')
+    if hours > 0:
+        if hours > 1:
+            duration.append(f'{hours} horas')
+        else:
+            duration.append(f'{hours} hora')
+    if minutes > 0:
+        if minutes > 1:
+            duration.append(f'{minutes} minutos')
+        else:
+            duration.append(f'{minutes} minuto')
+    if seconds > 0:
+        if seconds > 1:
+            duration.append(f'{seconds} segundos')
+        else:
+            duration.append(f'{seconds} segundo')
+
+    return ', '.join(duration)
+
+
 CARDS = [{'nome': 'Castle of Dark Illusions', 'foto': 'https://i.imgur.com/ldZhcpF.jpg'},
          {'nome': 'Unexpected Dai', 'foto': 'https://i.imgur.com/qTQGUnC.jpg'},
          {'nome': 'Misfortune', 'foto': 'https://i.imgur.com/AMkZVPP.jpg'},

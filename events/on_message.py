@@ -29,6 +29,7 @@ class SystemMessage(commands.Cog):
         self.heart = ChatBot(
             'Ashley',
             storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
+            read_only=True,
             logic_adapters=[
                 "chatterbot.logic.BestMatch",
             ],

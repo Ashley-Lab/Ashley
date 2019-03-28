@@ -29,6 +29,8 @@ class OnMemberJoin(commands.Cog):
     async def on_member_join(self, member):
 
         data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+        update = data
+
         if data is not None:
 
             if data['func_config']['member_join']:
@@ -64,14 +66,17 @@ class OnMemberJoin(commands.Cog):
                     pass
 
             if data['func_config']['cont_users']:
-                numbers = ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
-                channel_ = self.bot.get_channel(data['func_config']['cont_users_id'])
-                if channel_ is None:
-                    return
-                text = str(member.guild.member_count)
-                for n in range(0, 10):
-                    text = text.replace(str(n), numbers[n])
-                await channel_.edit(topic="Membros: " + text)
+                try:
+                    numbers = ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
+                    channel_ = self.bot.get_channel(data['func_config']['cont_users_id'])
+                    if channel_ is None:
+                        return
+                    text = str(member.guild.member_count)
+                    for n in range(0, 10):
+                        text = text.replace(str(n), numbers[n])
+                    await channel_.edit(topic="Membros: " + text)
+                except discord.errors.Forbidden:
+                    pass
 
             try:
                 if _auth['default_guild'] == member.guild.id:
@@ -83,6 +88,24 @@ class OnMemberJoin(commands.Cog):
                         description="<a:blue:525032762256785409>│``USE O COMANDO`` **ash cargos** ``PARA VOCE VER OS "
                                     "CARGOS DISPONIVEIS``")
                     await channel_.send(embed=embed)
+            except discord.Forbidden:
+                pass
+
+            try:
+                if data['func_config']['join_system']:
+                    pass
+            except KeyError:
+                update['func_config']['join_system'] = False
+                update['func_config']['join_system_id'] = None
+                update['func_config']['join_system_role'] = None
+                update['func_config']['join_system_member_state'] = dict()
+                self.bot.db.update_data(data, update, 'guilds')
+
+            try:
+                data = self.bot.db.get_data("user_id", member.guild.id, "guilds")
+                update = data
+                if data['func_config']['join_system']:
+                    self.bot.db.update_data(data, update, 'guilds')
             except discord.Forbidden:
                 pass
 
