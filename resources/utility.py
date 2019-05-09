@@ -2,7 +2,6 @@ def parse_duration(duration: int):
     minutes, seconds = divmod(duration, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-
     duration = []
     if days > 0:
         if days > 1:
@@ -24,7 +23,6 @@ def parse_duration(duration: int):
             duration.append(f'{seconds} segundos')
         else:
             duration.append(f'{seconds} segundo')
-
     return ', '.join(duration)
 
 
@@ -448,7 +446,8 @@ ERRORS = ['The check functions for command staff ban failed.',
           'Command raised an exception: TimeoutError: ',
           'The check functions for command config guild failed.',
           'The check functions for command config report failed.',
-          'The check functions for command staff slowmode failed.']
+          'The check functions for command staff slowmode failed.',
+          'The check functions for command staff delete failed.']
 
 enforcado = ['''
 ```

@@ -329,6 +329,13 @@ class MusicDefault(commands.Cog):
         await ctx.trigger_typing()
         vc = ctx.voice_client
 
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
+
         if not vc:
             last_search[ctx.guild.id] = list()
             await ctx.invoke(self._connect)
@@ -349,6 +356,13 @@ class MusicDefault(commands.Cog):
     async def pause_(self, ctx):
         vc = ctx.voice_client
 
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
+
         if not vc or not vc.is_playing():
             return await ctx.send('<:alert_status:519896811192844288>│``Atualmente não estou tocando nada!``',
                                   delete_after=20)
@@ -367,6 +381,13 @@ class MusicDefault(commands.Cog):
     @commands.command(name='resume', aliases=['voltar', 'retornar'])
     async def resume_(self, ctx):
         vc = ctx.voice_client
+
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
 
         if not vc or not vc.is_connected():
             return await ctx.send('<:alert_status:519896811192844288>│``Atualmente não estou tocando nada!``',
@@ -388,6 +409,13 @@ class MusicDefault(commands.Cog):
     async def skip_(self, ctx):
         vc = ctx.voice_client
 
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
+
         if not vc or not vc.is_connected():
             return await ctx.send('<:alert_status:519896811192844288>│``Atualmente não estou tocando nada!``',
                                   delete_after=20)
@@ -404,7 +432,7 @@ class MusicDefault(commands.Cog):
         else:
             client = ctx.guild.voice_client
             channel = client.channel
-            users_in_channel = len([member for member in channel.members if not member.bot])
+            users_in_channel = len([member for member in channel.members])
             await self._vote_skip(channel, ctx.author)
             required_votes = math.ceil(0.5 * users_in_channel)
             await ctx.send(f"<:alert_status:519896811192844288>│{ctx.author.mention} ``Votou para pular`` "
@@ -459,6 +487,13 @@ class MusicDefault(commands.Cog):
     async def _shuffle(self, ctx):
         state = self.get_player(ctx)
 
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
+
         if len(state.queue) == 0:
             return await ctx.send('<:alert_status:519896811192844288>│``Não há itens na lista``', delete_after=20)
 
@@ -474,6 +509,13 @@ class MusicDefault(commands.Cog):
     @commands.command(name='remove', aliases=['remover'])
     async def _remove(self, ctx, index=-1):
         state = self.get_player(ctx)
+
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
 
         if len(state.queue) == 0:
             return await ctx.send('<:alert_status:519896811192844288>│``Não há itens na lista``', delete_after=20)
@@ -498,6 +540,13 @@ class MusicDefault(commands.Cog):
     async def _clear(self, ctx):
         state = self.get_player(ctx)
 
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
+
         if len(state.queue) == 0:
             return await ctx.send('<:alert_status:519896811192844288>│``Não há itens na lista``', delete_after=20)
 
@@ -513,6 +562,12 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='repeat', aliases=['repetir'])
     async def _repeat(self, ctx):
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
         state = self.get_state(ctx.guild)
         if ctx.channel.permissions_for(ctx.author).administrator or state.is_requester(ctx):
             player = self.get_player(ctx)
@@ -555,6 +610,13 @@ class MusicDefault(commands.Cog):
     async def change_volume(self, ctx, *, vol: float = 100.0):
         vc = ctx.voice_client
 
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
+
         if not vc or not vc.is_connected():
             return await ctx.send('<:alert_status:519896811192844288>│``Atualmente não estou conectado à nenhum canal '
                                   'de voz!``', delete_after=20)
@@ -580,6 +642,13 @@ class MusicDefault(commands.Cog):
     @commands.command(name='stop', aliases=['parar'])
     async def stop_(self, ctx):
         vc = ctx.voice_client
+
+        try:
+            channel = ctx.author.voice.channel
+            if channel:
+                pass
+        except AttributeError:
+            raise commands.CheckFailure('<:oc_status:519896814225457152>│``Entre num canal de voz!``')
 
         if not vc or not vc.is_connected():
             return await ctx.send('<:alert_status:519896811192844288>│``Atualmente não estou tocando nada!``',

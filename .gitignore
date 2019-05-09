@@ -1,6 +1,5 @@
 # Ashley Git Ignore
 resources/auth.json
-resources/blacklist.json
 discord.log
 
 # Byte-compiled / optimized / DLL files

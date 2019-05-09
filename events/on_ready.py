@@ -152,10 +152,7 @@ class OnReady(commands.Cog):
             update['config']['playing'] = False
             update['config']['battle'] = False
             update['config']['tournament'] = False
-            try:
-                update['user']['marrieding'] = False
-            except KeyError:
-                pass
+            update['user']['marrieding'] = False
             self.bot.db.update_data(data, update, "users")
         self.bot.db.delete_channels()
         self.time_ready = dt.utcnow()

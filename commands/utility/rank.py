@@ -147,6 +147,12 @@ class RankingClass(commands.Cog):
                         star_ = 'star_silver'
                     else:
                         star_ = 'star_bronze'
+                    if data['config']['vip']:
+                        star_ = "star_greem"
+                    elif ctx.author.id == ctx.guild.owner.id:
+                        star_ = "star_pink"
+                    elif ctx.author.id in self.bot.staff:
+                        star_ = "star_blue"
                     if n <= data['user']['winner']:
                         star = star_
                     else:

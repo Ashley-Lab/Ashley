@@ -23,9 +23,7 @@ class OnMemberRemove(commands.Cog):
     async def on_member_remove(self, member):
 
         data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
-        update = data
         if data is not None:
-
             try:
                 if data['func_config']['member_remove']:
                     canal = self.bot.get_channel(data['func_config']['member_remove_id'])
@@ -58,19 +56,13 @@ class OnMemberRemove(commands.Cog):
                 if data['func_config']['join_system']:
                     pass
             except KeyError:
+                data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+                update = data
                 update['func_config']['join_system'] = False
                 update['func_config']['join_system_id'] = None
                 update['func_config']['join_system_role'] = None
                 update['func_config']['join_system_member_state'] = dict()
                 self.bot.db.update_data(data, update, 'guilds')
-
-            try:
-                data = self.bot.db.get_data("user_id", member.guild.id, "guilds")
-                update = data
-                if data['func_config']['join_system']:
-                    self.bot.db.update_data(data, update, 'guilds')
-            except discord.Forbidden:
-                pass
 
 
 def setup(bot):

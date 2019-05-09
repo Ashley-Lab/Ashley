@@ -43,7 +43,7 @@ class EvalSintax(commands.Cog):
             'guild': ctx.message.guild,
             'message': ctx.message,
             '_': self._last_result,
-            'self': self,
+            'self': self
         }
         env.update(globals())
         body = self.cleanup_code(body)

@@ -36,26 +36,29 @@ class ProfileSystem(commands.Cog):
             global married
             if data['user']['married'] is False:
                 married = "Solteiro(a)"
-            elif data['user']['married'] == "engaged":
-                user = self.bot.get_user(data['user']['married_at'])
-                married = "Noivo(a) com: " + str(user.name)
-            elif data['user']['married'] is True:
+            else:
                 user = self.bot.get_user(data['user']['married_at'])
                 married = "Casado(a) com: " + str(user.name)
         except KeyError:
             update['user']['married'] = False
+            married = "Solteiro(a)"
         try:
             if data['user']['achievements'] is None:
                 global achievements
                 achievements = "```Sem Conquistas```"
+            else:
+                answer = "".join(data['user']['achievements'])
+                achievements = f"```{answer}```"
         except KeyError:
             update['user']['achievements'] = None
+            achievements = "```Sem Conquistas```"
         try:
             if data['user']['strikes'] == 0:
                 global strikes
                 strikes = "Ficha Limpa"
         except KeyError:
             update['user']['strikes'] = 0
+            strikes = "Ficha Limpa"
         try:
             if data['user']['about']:
                 pass
@@ -73,20 +76,27 @@ class ProfileSystem(commands.Cog):
         if data['config']['vip']:
             data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             if data_['vip']:
-                status = "<:vip_full:546020055478042644>"
+                status = "<:vip_full:546020055478042644> - **VIP Diario Ativo + VIP do Servidor Ativo**"
             else:
-                status = "<:vip_member:546020055478042647>"
+                status = "<:vip_member:546020055478042647> - **VIP Diario Ativo** & " \
+                         "**VIP do Servidor Inativo**"
         else:
-            status = "<:negate:520418505993093130>"
+            data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            if data_['vip']:
+                status = "<:vip_guild:546020055440425016> - **VIP do Servidor Ativo** & " \
+                         "<:negate:520418505993093130> - **Seu VIP Diário Acabou**"
+            else:
+                status = "<:negate:520418505993093130> - **Seu VIP Diário Acabou** & " \
+                         "**VIP do Servidor Inativo**"
         if data['user']['titling'] is None:
-            titling = 'Vagabundo'
+            titling = 'Vagabond'
         else:
             titling = data['user']['titling']
 
         try:
-            rec = data['user']['rec']
+            rec = f"{data['user']['rec']} recomendações & {data['user']['winner']} estrelas adiquidiras"
         except KeyError:
-            rec = 0
+            rec = "0 recomendações & 0 estrelas adiquidiras"
 
         try:
             cmds = data['user']['commands']
@@ -122,7 +132,8 @@ class ProfileSystem(commands.Cog):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if text is None:
-            return await ctx.send("<:alert_status:519896811192844288>│``DIGITE ALGO PARA COLOCAR NO SEU PERFIL``")
+            return await ctx.send("<:alert_status:519896811192844288>│``DIGITE ALGO PARA COLOCAR NO SEU PERFIL, "
+                                  "LOGO APÓS O COMANDO!``")
         if len(text) >= 201:
             return await ctx.send("<:alert_status:519896811192844288>│``SEU TEXTO NAO PODE TER MAIS QUE 200 "
                                   "CARACTERES``")

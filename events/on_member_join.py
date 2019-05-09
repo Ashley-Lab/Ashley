@@ -29,10 +29,7 @@ class OnMemberJoin(commands.Cog):
     async def on_member_join(self, member):
 
         data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
-        update = data
-
         if data is not None:
-
             if data['func_config']['member_join']:
                 try:
                     if member.guild.system_channel is not None:
@@ -95,19 +92,13 @@ class OnMemberJoin(commands.Cog):
                 if data['func_config']['join_system']:
                     pass
             except KeyError:
+                data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+                update = data
                 update['func_config']['join_system'] = False
                 update['func_config']['join_system_id'] = None
                 update['func_config']['join_system_role'] = None
                 update['func_config']['join_system_member_state'] = dict()
                 self.bot.db.update_data(data, update, 'guilds')
-
-            try:
-                data = self.bot.db.get_data("user_id", member.guild.id, "guilds")
-                update = data
-                if data['func_config']['join_system']:
-                    self.bot.db.update_data(data, update, 'guilds')
-            except discord.Forbidden:
-                pass
 
 
 def setup(bot):

@@ -27,6 +27,10 @@ class Database(object):
         db = self._conn.get_collection(db_name)
         db.insert_one(data)
 
+    def delete_data(self, data, db_name):
+        db = self._conn.get_collection(db_name)
+        db.delete_one(data)
+
     def update_data(self, data, update, db_name):
         db = self._conn.get_collection(db_name)
         db.update_one({'_id': data['_id']}, {
@@ -77,7 +81,6 @@ class Database(object):
             "user_name": ctx.author.name,
             "guild_id": ctx.guild.id,
             "guild_name": ctx.guild.name,
-            "guild_icon_url": ctx.guild.icon_url,
             "config": {
                 "tournament": False,
                 "playing": False,
@@ -92,7 +95,7 @@ class Database(object):
                 "experience": 0,
                 "level": 1,
                 "ranking": "Bronze",
-                "titling": None,
+                "titling": "Vagabond",
                 "background": data.get("background", None),
                 "married": False,
                 "winner": 0,
@@ -318,29 +321,29 @@ class Database(object):
 
         if data_user is not None:
             if update_user['user']['ranking'] == 'Bronze':
-                await self.add_bronze(ctx, amount)
+                await self.add_type(ctx, amount, "bronze")
             elif update_user['user']['ranking'] == 'Silver':
                 if change <= 50:
-                    await self.add_bronze(ctx, amount)
+                    await self.add_type(ctx, amount, "bronze")
                 else:
-                    await self.add_bronze(ctx, amount)
-                    await self.add_silver(ctx, amount)
+                    await self.add_type(ctx, amount, "bronze")
+                    await self.add_type(ctx, amount, "silver")
             elif update_user['user']['ranking'] == 'Gold':
                 if change <= 33:
-                    await self.add_bronze(ctx, amount)
+                    await self.add_type(ctx, amount, "bronze")
                 elif change <= 66:
-                    await self.add_bronze(ctx, amount)
-                    await self.add_silver(ctx, amount)
+                    await self.add_type(ctx, amount, "bronze")
+                    await self.add_type(ctx, amount, "silver")
                 else:
-                    await self.add_bronze(ctx, amount)
-                    await self.add_silver(ctx, amount)
-                    await self.add_gold(ctx, amount)
+                    await self.add_type(ctx, amount, "bronze")
+                    await self.add_type(ctx, amount, "silver")
+                    await self.add_type(ctx, amount, "gold")
 
-    async def add_bronze(self, ctx, amount):
+    async def add_type(self, ctx, amount, key: str):
         # DATA DO MEMBRO
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        update_user['treasure']['bronze'] += amount
+        update_user['treasure'][key] += amount
         total = 1 * update_user['treasure']['bronze']
         total += 10 * update_user['treasure']['silver']
         total += 100 * update_user['treasure']['gold']
@@ -350,7 +353,7 @@ class Database(object):
         # DATA NATIVA DO SERVIDOR
         data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        update_guild_native['data']['total_bronze'] += amount
+        update_guild_native['data'][f'total_{key}'] += amount
         total = 1 * update_guild_native['data']['total_bronze']
         total += 10 * update_guild_native['data']['total_silver']
         total += 100 * update_guild_native['data']['total_gold']
@@ -360,69 +363,7 @@ class Database(object):
         # DATA DO SERVIDOR
         data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update_guild = data_guild
-        update_guild['treasure']['total_bronze'] += amount // 2
-        total = 1 * update_guild['treasure']['total_bronze']
-        total += 10 * update_guild['treasure']['total_silver']
-        total += 100 * update_guild['treasure']['total_gold']
-        update_guild['treasure']['total_money'] = total
-        self.bot.db.update_data(data_guild, update_guild, 'guilds')
-
-    async def add_silver(self, ctx, amount):
-        # DATA DO MEMBRO
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-        update_user = data_user
-        update_user['treasure']['silver'] += amount
-        total = 1 * update_user['treasure']['bronze']
-        total += 10 * update_user['treasure']['silver']
-        total += 100 * update_user['treasure']['gold']
-        update_user['treasure']['money'] = total
-        self.bot.db.update_data(data_user, update_user, 'users')
-
-        # DATA NATIVA DO SERVIDOR
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
-        update_guild_native = data_guild_native
-        update_guild_native['data']['total_silver'] += amount
-        total = 1 * update_guild_native['data']['total_bronze']
-        total += 10 * update_guild_native['data']['total_silver']
-        total += 100 * update_guild_native['data']['total_gold']
-        update_guild_native['data']['total_money'] = total
-        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-
-        # DATA DO SERVIDOR
-        data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-        update_guild = data_guild
-        update_guild['treasure']['total_silver'] += amount // 2
-        total = 1 * update_guild['treasure']['total_bronze']
-        total += 10 * update_guild['treasure']['total_silver']
-        total += 100 * update_guild['treasure']['total_gold']
-        update_guild['treasure']['total_money'] = total
-        self.bot.db.update_data(data_guild, update_guild, 'guilds')
-
-    async def add_gold(self, ctx, amount):
-        # DATA DO MEMBRO
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-        update_user = data_user
-        update_user['treasure']['gold'] += amount
-        total = 1 * update_user['treasure']['bronze']
-        total += 10 * update_user['treasure']['silver']
-        total += 100 * update_user['treasure']['gold']
-        update_user['treasure']['money'] = total
-        self.bot.db.update_data(data_user, update_user, 'users')
-
-        # DATA NATIVA DO SERVIDOR
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
-        update_guild_native = data_guild_native
-        update_guild_native['data']['total_gold'] += amount
-        total = 1 * update_guild_native['data']['total_bronze']
-        total += 10 * update_guild_native['data']['total_silver']
-        total += 100 * update_guild_native['data']['total_gold']
-        update_guild_native['data']['total_money'] = total
-        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-
-        # DATA DO SERVIDOR
-        data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-        update_guild = data_guild
-        update_guild['treasure']['total_gold'] += amount // 2
+        update_guild['treasure'][f'total_{key}'] += amount // 2
         total = 1 * update_guild['treasure']['total_bronze']
         total += 10 * update_guild['treasure']['total_silver']
         total += 100 * update_guild['treasure']['total_gold']
@@ -444,13 +385,13 @@ class Database(object):
             if data_user is not None:
                 try:
                     if kwargs.get("cooldown"):
-                        time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() - \
-                                    update_user["cooldown"][str(ctx.command)]
+                        time_diff = update_user["cooldown"][str(ctx.command)] - (datetime.datetime.utcnow() -
+                                                                                 epoch).total_seconds()
 
                         if time_diff < kwargs.get("time"):
                             raise commands.CheckFailure(f'<:negate:520418505993093130>│**Aguarde**: `Você deve '
                                                         f'esperar` **{{}}** `para usar esse comando '
-                                                        f'novamente!`'.format(parse_duration(kwargs.get("time"))))
+                                                        f'novamente!`'.format(parse_duration(int(time_diff))))
                         if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
                             update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
                                                                          - epoch).total_seconds()
@@ -476,7 +417,7 @@ class Database(object):
             else:
                 raise commands.CheckFailure(t_(ctx, f'<:negate:520418505993093130>│``Você ainda não está registrado, '
                                                     f'por favor use`` **ash registro** ``ou`` **ash register**.',
-                                               "guilds"))
+                                                    "guilds"))
         else:
             return True
 
@@ -534,7 +475,6 @@ class DataInteraction(object):
                         if message.guild.id == update['guild_id']:
                             update["guild_id"] = message.guild.id
                             update["guild_name"] = message.guild.name
-                            update["guild_icon_url"] = message.guild.icon_url
                         update["user_name"] = message.author.name
                         update['user']['experience'] += exp * update['user']['level']
                         update["user"]['xp_time'] = (datetime.datetime.utcnow() - epoch).total_seconds()
@@ -615,6 +555,7 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
@@ -639,6 +580,7 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
@@ -663,6 +605,7 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > R$ " + str(money_(sorted_x[x][1])) for x in range(limit)])
@@ -687,6 +630,7 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
@@ -711,6 +655,7 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
@@ -735,6 +680,7 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
@@ -760,13 +706,39 @@ class DataInteraction(object):
             global cont
             cont['list'] += 1
             return cont['list']
+
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        return rank
+
+    async def get_rank_commands(self, limit):
+        data = self.db.get_all_data("users")
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['user'].get('commands', 0)
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            global cont
+            cont['list'] += 1
+            return cont['list']
+
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
     def add_vip(self, **kwargs):
-        if kwargs.get("target") == "user":
+        if kwargs.get("target") == "users":
             data = self.db.get_data("user_id", kwargs.get("user_id"), "users")
             update = data
             if kwargs.get("state"):
@@ -774,7 +746,7 @@ class DataInteraction(object):
             else:
                 update['config']['vip'] = False
             self.db.update_data(data, update, "users")
-        elif kwargs.get("target") == "guild":
+        elif kwargs.get("target") == "guilds":
             data = self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
             update = data
             if kwargs.get("state"):

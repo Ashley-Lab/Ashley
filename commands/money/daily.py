@@ -82,17 +82,23 @@ class DailyClass(commands.Cog):
                                f'`` em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a mais por usar '
                                f'essa mesma quantidade de comandos.``')
             else:
+                try:
+                    data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update_ = data_
+                    del data_['cooldown'][str(ctx.command)]
+                    self.bot.db.update_data(data_, update_, 'users')
+                except KeyError:
+                    pass
+                await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 10 COMANDOS DA '
+                               'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
+        else:
+            try:
                 data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update_ = data_
                 del data_['cooldown'][str(ctx.command)]
                 self.bot.db.update_data(data_, update_, 'users')
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 10 COMANDOS DA '
-                               'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
-        else:
-            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update_ = data_
-            del data_['cooldown'][str(ctx.command)]
-            self.bot.db.update_data(data_, update_, 'users')
+            except KeyError:
+                pass
             await ctx.send('<:negate:520418505993093130>│``O SERVIDOR ATUAL AINDA NÃO USOU + DE 50 COMANDOS DA '
                            'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
 
@@ -131,10 +137,29 @@ class DailyClass(commands.Cog):
     @daily.group(name='vip')
     async def _vip(self, ctx):
         data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
-        update_ = data_
-        del data_['cooldown'][str(ctx.command)]
-        self.bot.db.update_data(data_, update_, 'users')
-        await ctx.send('<:negate:520418505993093130>│``Premio ainda em criação...``')
+        if data_['config']['vip']:
+            await ctx.send('<:negate:520418505993093130>│``Você ja é vip e por isso não pode receber o prêmio de '
+                           'VIP DIARIO``')
+            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            del data_['cooldown'][str(ctx.command)]
+            self.bot.db.update_data(data_, update_, 'users')
+        else:
+            if ctx.guild.id != _auth['default_guild']:
+                await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro do'
+                               'meu servidor de suporte, para isso use o comando ASH INVITE para receber no seu'
+                               'privado o link do meu servidor.``')
+                data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                del data_['cooldown'][str(ctx.command)]
+                self.bot.db.update_data(data_, update_, 'users')
+            else:
+                data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                update_['config']['vip'] = True
+                self.bot.db.update_data(data_, update_, 'users')
+                await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
+                               f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
 
 
 def setup(bot):
