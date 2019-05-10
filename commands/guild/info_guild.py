@@ -27,6 +27,10 @@ class ServerInfo(commands.Cog):
             status = "<:vip_guild:546020055440425016>"
         else:
             status = "<:negate:520418505993093130>"
+        try:
+            cmds = str(data['data']['commands']) + " comandos contabilizados no total"
+        except KeyError:
+            cmds = str(self.bot.guilds_commands[ctx.guild.id]) + "comandos usados desde que fiquei online"
         hour = datetime.datetime.now().strftime("%H:%M:%S")
         embed = discord.Embed(title="\n", color=color, description="Abaixo está as informaçoes principais do servidor!")
         embed.set_thumbnail(url=ctx.guild.icon_url)
@@ -39,7 +43,7 @@ class ServerInfo(commands.Cog):
         embed.add_field(name="Bots:", value=str(len([a for a in ctx.guild.members if a.bot])), inline=True)
         embed.add_field(name="Criado em:", value=ctx.guild.created_at.strftime("%d %b %Y %H:%M"), inline=True)
         embed.add_field(name="Região:", value=str(ctx.guild.region).title(), inline=True)
-        embed.add_field(name="Comandos Usados: ", value=str(self.bot.guilds_commands[ctx.guild.id]), inline=True)
+        embed.add_field(name="Comandos Usados: ", value=str(cmds), inline=True)
         embed.add_field(name="Vip: ", value=status)
         await ctx.send(embed=embed)
 

@@ -35,9 +35,10 @@ class ConfigClass(commands.Cog):
                                 f"<:stream_status:519896814825242635>│Vip")
             top.add_field(name="Configs Commands:",
                           value=f"``PREFIX:`` **config** ``+``\n"
-                                f"{self.st[0]}│**guild** ``or`` **server**\n"
-                                f"{self.st[0]}│**report** ``or`` **reportar**\n"
-                                f"{self.st[0]}│**language** ``or`` **idioma**\n")
+                          f"{self.st[0]}│**guild** ``or`` **server**\n"
+                          f"{self.st[0]}│**report** ``or`` **reportar**\n"
+                          f"{self.st[0]}│**language** ``or`` **idioma**\n"
+                          f"{self.st[0]}│**log**")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -62,6 +63,52 @@ class ConfigClass(commands.Cog):
         else:
             await ctx.send(f'<:confirmado:519896822072999937>│``Sua linguagem atual é`` '
                            f'**{self.bot.data.get_language(ctx.guild.id)}**')
+
+    @check_it(no_pm=True, manage_guild=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @config.command(name='log')
+    async def _log(self, ctx):
+        changes = {}
+        configs = ['log', 'log_channel_id', 'msg_delete', 'msg_edit', 'channel_edit_topic', 'channel_edit_name',
+                   'channel_created', 'channel_deleted', 'channel_edit', 'role_created', 'role_deleted',
+                   'role_edit', 'guild_update', 'member_edit_avatar', 'member_edit_nickname',
+                   'member_voice_entered', 'member_voice_exit', 'member_ban', 'member_unBan', 'emoji_update']
+        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        update = data
+        if data is not None:
+            for config in configs:
+                def check_option(m):
+                    return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
+
+                def check_channel(m):
+                    return m.author == ctx.author and m.channel_mentions[0].id
+
+                if "log" in changes.keys():
+                    if changes['log'] is False:
+                        continue
+
+                if config != "log_channel_id":
+                    question = await ctx.send(f'<:stream_status:519896814825242635>│``Você deseja ativar o(a) '
+                                              f'{config}`` **1** para ``SIM`` ou **0** para ``NÃO``')
+                    answer = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+                    changes[config] = bool(int(answer.content))
+                else:
+                    question = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal de LOG``')
+                    answer = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                    changes[config] = answer.content
+
+                await question.delete()
+
+            if "log" in changes.keys():
+                if changes['log']:
+                    for config in configs:
+                        update['log_config'][config] = changes[config]
+                else:
+                    update['log_config']['log'] = False
+
+            self.bot.db.update_data(data, update, "guilds")
+            await ctx.send('<:confirmado:519896822072999937>│**PARABENS** : '
+                           '``CONFIGURAÇÃO REALIZADA COM SUCESSO!``', delete_after=5.0)
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -304,6 +351,17 @@ class ConfigClass(commands.Cog):
 
     @_guild.error
     async def _guild_error(self, ctx, error):
+        if error.__str__() in ERRORS[4]:
+            return await ctx.send('<:negate:520418505993093130>│``Você não marcou um canal de texto:`` '
+                                  '**COMANDO CANCELADO**')
+        if error.__str__() in ERRORS[5]:
+            return await ctx.send("<:oc_status:519896814225457152>│``Tempo esgotado, por favor tente novamente.``")
+        if error.__str__() in ERRORS[6]:
+            return await ctx.send('<:negate:520418505993093130>│``Você precisa de uma permissão especifica:`` '
+                                  '**manage_guild / Gerenciar Servidor**')
+
+    @_log.error
+    async def _log_error(self, ctx, error):
         if error.__str__() in ERRORS[4]:
             return await ctx.send('<:negate:520418505993093130>│``Você não marcou um canal de texto:`` '
                                   '**COMANDO CANCELADO**')

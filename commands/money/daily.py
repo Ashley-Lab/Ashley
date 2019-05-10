@@ -124,10 +124,13 @@ class DailyClass(commands.Cog):
             update_user['user']['rec'] += 1
         except KeyError:
             update_user['user']['rec'] = 1
-        if (update_user['user']['rec'] % 20) == 0:
+        if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)
-            if chance >= 50:
+            if chance >= 95:
                 update_user['user']['winner'] += 1
+                await ctx.send('<:rank:519896825411665930>│``VOCÊ GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
+                               '**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
+                               '``ASH RANK``')
         self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')
@@ -147,7 +150,7 @@ class DailyClass(commands.Cog):
         else:
             if ctx.guild.id != _auth['default_guild']:
                 await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro do'
-                               'meu servidor de suporte, para isso use o comando ASH INVITE para receber no seu'
+                               ' meu servidor de suporte, para isso use o comando ASH INVITE para receber no seu '
                                'privado o link do meu servidor.``')
                 data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update_ = data_

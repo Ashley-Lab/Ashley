@@ -162,6 +162,7 @@ class Database(object):
             "guild_owner_name": owner_name,
             "vip": False,
             "data": {
+                "commands": 0,
                 "lang": "pt",
                 "ranking": "Bronze",
                 "items": dict(),
@@ -407,11 +408,12 @@ class Database(object):
                 if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
                     self.bot.db.update_data(data_user, update_user, 'users')
 
-                if kwargs.get("vip") and data_guild['vip']:
+                if kwargs.get("vip") and data_user['config']['vip']:
                     return True
-                elif kwargs.get("vip") and data_guild['vip'] is False:
-                    raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS GUILDS PARCEIRAS PODEM USAR "
-                                                "ESSE COMANDO``")
+                elif kwargs.get("vip") and data_user['config']['vip'] is False:
+                    raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS USUARIOS COM VIP ATIVO PODEM "
+                                                "USAR ESSE COMANDO``\n **Para ganhar seu vip diário use ASH INVITE "
+                                                "entre no meu canal de suporte e use o comando ASH VIP**")
 
                 return True
             else:

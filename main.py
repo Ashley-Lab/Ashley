@@ -77,6 +77,12 @@ class Ashley(commands.AutoShardedBot):
         with open("resources/translations.json") as translations:
             self.translations = json.loads(translations.read())
 
+        with open("resources/items.json") as items:
+            self.items = json.loads(items.read())
+
+        with open("resources/icons.json") as icons:
+            self.icons = json.loads(icons.read())
+
     def shutdown(self, reason):
         date = dt(*dt.utcnow().timetuple()[:6])
         data = {"_id": date, "reason": reason}
@@ -109,6 +115,12 @@ class Ashley(commands.AutoShardedBot):
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
                 self.user_commands[ctx.author.id] += 1
+                update = data
+                try:
+                    update['data']['commands'] += 1
+                except KeyError:
+                    update['data']['commands'] = 1
+                self.db.update_data(data, update, 'guilds')
                 if data_user is not None:
                     if not data_user['config']['vip']:
                         if (self.guilds_commands[ctx.guild.id] % 20) == 0:
