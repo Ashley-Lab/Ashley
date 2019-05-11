@@ -79,7 +79,7 @@ class DailyClass(commands.Cog):
                     money = randint(40 + min_, 400 + max_)
                 await self.bot.db.add_money(ctx, money)
                 await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` **{money}**'
-                               f'`` em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a mais por usar '
+                               f' ``em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a mais por usar '
                                f'essa mesma quantidade de comandos.``')
             else:
                 try:

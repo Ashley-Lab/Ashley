@@ -122,26 +122,6 @@ class Database(object):
                 "rank_point": 0,
                 "coins": 10
             },
-            "royal": {
-                "royal": data.get("royal", False),
-                "victories": 0,
-                "defeats": 0,
-                "draws": 0,
-                "points": 0,
-                "team": "default",
-                "deck": "common",
-                "matches": 0
-            },
-            "cup": {
-                "cup": data.get("cup", False),
-                "victories": 0,
-                "defeats": 0,
-                "draws": 0,
-                "points": 0,
-                "team": "default",
-                "deck": "common",
-                "matches": 0
-            },
             "cooldown": {}
         }
         if self.get_data("user_id", ctx.author.id, db_name) is None:
@@ -239,22 +219,6 @@ class Database(object):
                 "warn": data.get("warn", False),
                 "warn_channel_id": data.get("warn_channel_id", None),
                 "bad_word": data.get("bad_word", False)
-            },
-            "royal_config": {
-                "royal": data.get("royal", False),
-                "members": [],
-                "victories": 0,
-                "defeats": 0,
-                "draws": 0,
-                "points": 0
-            },
-            "cup_config": {
-                "cup": data.get("cup", False),
-                "members": [],
-                "victories": 0,
-                "defeats": 0,
-                "draws": 0,
-                "points": 0
             }
         }
         if self.get_data("guild_id", guild.id, db_name) is None:
@@ -386,13 +350,16 @@ class Database(object):
             if data_user is not None:
                 try:
                     if kwargs.get("cooldown"):
-                        time_diff = update_user["cooldown"][str(ctx.command)] - (datetime.datetime.utcnow() -
+                        time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() \
+                                     - update_user["cooldown"][str(ctx.command)]
+
+                        time_left = update_user["cooldown"][str(ctx.command)] - (datetime.datetime.utcnow() -
                                                                                  epoch).total_seconds()
 
                         if time_diff < kwargs.get("time"):
                             raise commands.CheckFailure(f'<:negate:520418505993093130>│**Aguarde**: `Você deve '
                                                         f'esperar` **{{}}** `para usar esse comando '
-                                                        f'novamente!`'.format(parse_duration(int(time_diff))))
+                                                        f'novamente!`'.format(parse_duration(int(time_left))))
                         if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
                             update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
                                                                          - epoch).total_seconds()

@@ -135,8 +135,8 @@ class Ashley(commands.AutoShardedBot):
                     else:
                         try:
                             epoch = datetime.datetime.utcfromtimestamp(0)
-                            time_diff = data_user["cooldown"]["daily vip"] - (datetime.datetime.utcnow() -
-                                                                              epoch).total_seconds()
+                            cooldown = data_user["cooldown"]["daily vip"]
+                            time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() - cooldown
                             if time_diff >= 86400:
                                 data_ = self.db.get_data("user_id", ctx.author.id, "users")
                                 update_ = data_
@@ -285,8 +285,8 @@ if __name__ == "__main__":
         _auth = json.loads(security.read())
 
     description_ashley = f"Um bot de assistencia para servidores criado por: Denky#5960\n" \
-                         f"**Adicione para seu servidor:**: {_auth['default_link']}\n" \
-                         f"**Servidor de Origem**: {_auth['default_invite']}\n"
+        f"**Adicione para seu servidor:**: {_auth['default_link']}\n" \
+        f"**Servidor de Origem**: {_auth['default_invite']}\n"
 
     prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
               'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
