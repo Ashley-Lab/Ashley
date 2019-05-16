@@ -304,6 +304,21 @@ class Database(object):
                     await self.add_type(ctx, amount, "silver")
                     await self.add_type(ctx, amount, "gold")
 
+    async def add_reward(self, ctx, list_):
+        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+        response = 'Você ganhou: \n'
+        for item in list_:
+            amount = randint(1, 3)
+            try:
+                update_user['inventory'][item] += amount
+            except KeyError:
+                update_user['inventory'][item] = amount
+            response += f"**{amount}**: ``{item}``\n"
+        self.bot.db.update_data(data_user, update_user, 'users')
+        response += "Jogue de novo para ganhar mais!"
+        return response
+
     async def add_type(self, ctx, amount, key: str):
         # DATA DO MEMBRO
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")

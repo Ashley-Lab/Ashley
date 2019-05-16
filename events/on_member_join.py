@@ -64,14 +64,18 @@ class OnMemberJoin(commands.Cog):
 
             if data['func_config']['cont_users']:
                 try:
-                    numbers = ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
+                    numbers = ['<:0_:578615675182907402>', '<:1_:578615669487304704>', '<:2_:578615674109165568>',
+                               '<:3_:578615683424976916>', '<:4_:578615679406833685>', '<:5_:578615684708171787>',
+                               '<:6_:578617070309343281>', '<:7_:578615679041798144>', '<:8_:578617071521497088>',
+                               '<:9_:578617070317469708>']
                     channel_ = self.bot.get_channel(data['func_config']['cont_users_id'])
                     if channel_ is None:
                         return
                     text = str(member.guild.member_count)
-                    for n in range(0, 10):
-                        text = text.replace(str(n), numbers[n])
-                    await channel_.edit(topic="Membros: " + text)
+                    list_ = list()
+                    for l in text:
+                        list_.append(numbers[int(l)])
+                    await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:** " + str(list_))
                 except discord.errors.Forbidden:
                     pass
 

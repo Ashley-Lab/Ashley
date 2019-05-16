@@ -86,4 +86,5 @@ events.on_member_ban
 events.on_member_unban
 commands.owner.actions
 commands.member.transfer
+commands.rpg.inventory
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

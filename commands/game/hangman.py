@@ -25,6 +25,7 @@ class ForceCass(commands.Cog):
         update = data
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
+            update['inventory']['coins'] -= 1
             self.bot.db.update_data(data, update, 'users')
 
             self.trying[ctx.author.id] = 0
@@ -56,14 +57,14 @@ Dica: **{}**'''.format(senha, dica))
                     try:
                         resp = await self.bot.wait_for('message', check=check_response, timeout=60.0)
                     except TimeoutError:
+                        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
                         update['config']['playing'] = False
                         self.bot.db.update_data(data, update, 'users')
                         return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                               ' CANCELADO**')
 
                 if senha.count('_') <= 3 or resp.content.upper() == 'S':
-
-                    update['inventory']['coins'] -= 1
 
                     if senha.count('_') <= 3:
                         await ctx.send('<:pqp:530031187331121152>│``Só faltam 3 ou menos letras, chute a palavra!``')
@@ -81,6 +82,8 @@ Dica: **{}**'''.format(senha, dica))
                         try:
                             resp = await self.bot.wait_for('message', check=check, timeout=60.0)
                         except TimeoutError:
+                            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            update = data
                             update['config']['playing'] = False
                             self.bot.db.update_data(data, update, 'users')
                             return await ctx.send(
@@ -88,6 +91,8 @@ Dica: **{}**'''.format(senha, dica))
                                 ' CANCELADO**')
 
                         if resp.content.lower() == palavra.lower():
+                            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            update = data
                             update['config']['playing'] = False
                             self.bot.db.update_data(data, update, 'users')
                             await self.bot.db.add_money(ctx, 20)
@@ -95,6 +100,8 @@ Dica: **{}**'''.format(senha, dica))
                                                   "<:coin:519896843388452864> **20** ``moedas de "
                                                   "{}``".format(data['user']['ranking']))
                         elif self.trying[ctx.author.id] == 2:
+                            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            update = data
                             update['config']['playing'] = False
                             self.bot.db.update_data(data, update, 'users')
                             return await ctx.send("<:oc_status:519896814225457152>│``Infelizmente você perdeu`` "
@@ -112,6 +119,8 @@ Dica: **{}**'''.format(senha, dica))
                         tentativa = await self.bot.wait_for('message', check=check)
                         tentativa = tentativa.content.lower()
                     except TimeoutError:
+                        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
                         update['config']['playing'] = False
                         self.bot.db.update_data(data, update, 'users')
                         return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
@@ -131,6 +140,8 @@ Dica: **{}**'''.format(senha, dica))
                     await ctx.send(enforcado[erros[ctx.author.id]])
 
                     if erros[ctx.author.id] == 6:
+                        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
                         update['config']['playing'] = False
                         self.bot.db.update_data(data, update, 'users')
                         return await ctx.send(f"<:oc_status:519896814225457152>│``INFORCADO`` **Tente Novamente!**"

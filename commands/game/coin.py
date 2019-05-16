@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, randint
 from asyncio import sleep, TimeoutError
 from discord.ext import commands
 from resources.check import check_it
@@ -11,7 +11,7 @@ class HeadsOrTails(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='hot', aliases=['moeda'])
     async def hot(self, ctx):
 
@@ -33,21 +33,33 @@ class HeadsOrTails(commands.Cog):
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:
+                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
                 update['config']['playing'] = False
                 self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
             update['inventory']['coins'] -= 1
+            self.bot.db.update_data(data, update, 'users')
+
             if choice_ == '1':
                 msg_r = await ctx.send("Cara!")
                 await msg_r.add_reaction('🙂')
                 await sleep(1)
                 if answer.content == choice_:
-                    await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
-                                   '``você GANHOU:`` <:coin:519896843388452864> **5** ``moedas de '
-                                   '{}``'.format(data['user']['ranking']))
-                    await self.bot.db.add_money(ctx, 5)
+                    change = randint(1, 100)
+                    if change < 50:
+                        await self.bot.db.add_money(ctx, 5)
+                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                                       '``você GANHOU:`` <:coin:519896843388452864> **5** ``moedas de '
+                                       '{}``'.format(data['user']['ranking']))
+                    else:
+                        response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
+                                                                      'crystal_fragment_enery',
+                                                                      'crystal_fragment_dark'])
+                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                                       '{}'.format(response))
                 else:
                     await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
             if choice_ == '2':
@@ -55,12 +67,22 @@ class HeadsOrTails(commands.Cog):
                 await msg_r.add_reaction('👑')
                 await sleep(1)
                 if answer.content == choice_:
-                    await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
-                                   '``você GANHOU:`` <:coin:519896843388452864> **5** ``moedas de '
-                                   '{}``'.format(data['user']['ranking']))
-                    await self.bot.db.add_money(ctx, 5)
+                    change = randint(1, 100)
+                    if change < 50:
+                        await self.bot.db.add_money(ctx, 5)
+                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                                       '``você GANHOU:`` <:coin:519896843388452864> **5** ``moedas de '
+                                       '{}``'.format(data['user']['ranking']))
+                    else:
+                        response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
+                                                                      'crystal_fragment_enery',
+                                                                      'crystal_fragment_dark'])
+                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                                       '{}'.format(response))
                 else:
                     await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
+            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             update['config']['playing'] = False
             self.bot.db.update_data(data, update, 'users')
         else:

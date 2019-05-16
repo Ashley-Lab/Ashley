@@ -48,6 +48,8 @@ class CardsClass(commands.Cog):
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:
+                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
                 update['config']['playing'] = False
                 self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'

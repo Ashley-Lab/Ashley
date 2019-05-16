@@ -1,6 +1,6 @@
 {
 	"SoulStoneYellow": [":SoulStoneYellow:546019944970715136>", "bronze", "500"],
-	"SoulStoneRed": ["", "bronze", "500"],
+	"SoulStoneRed": ["<:SoulStoneRed:546019944861794333>", "bronze", "500"],
 	"SoulStonePurple": ["<:SoulStonePurple:546019944584708123>", "bronze", "500"],
 	"SoulStoneGreen": ["<:SoulStoneGreen:546019944568061975>", "bronze", "500"],
 	"SoulStoneDarkGreen": ["<:SoulStoneDarkGreen:546019944987623439>", "bronze", "500"],
@@ -62,5 +62,8 @@
 	"bastao_do_milenio": ["<:bastao_do_milenio:560906603188977664>", "bronze", "500"],
 	"balanca_do_milenio": ["<:balana_do_milenio:560906600039317514>", "bronze", "500"],
 	"anel_do_milenio": ["<:anel_do_milenio:560906589918461990>", "bronze", "500"],
-	"quantum_cubo_do_milenio": ["<:quantum_cubo_do_milanio:560906607597191209>", "bronze", "500"]
+	"quantum_cubo_do_milenio": ["<:quantum_cubo_do_milanio:560906607597191209>", "bronze", "500"],
+	"coins": ["<:coin:546019942936608778>", "bronze", "500"],
+	"medal": ["<:medals:519896836375314442>", "bronze", "500"],
+	"rank_point": ["<:silver:519896828120924170>", "bronze", "500"]
 }
