@@ -82,6 +82,7 @@ class RankingClass(commands.Cog):
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
 
+        star_ = "star_default"
         medal = data['inventory']['medal']
         rank_point = data['inventory']['rank_point']
         data_ = self.bot.db.get_all_data("users")
@@ -141,17 +142,17 @@ class RankingClass(commands.Cog):
                     champion[n - 1] = Image.open(f'images/elements/{star_}.png')
                     champion[n - 1] = champion[n - 1].resize((130, 90))
                 else:
+                    if data['user']['ranking'] == "Bronze":
+                        star_ = 'star_bronze'
+                    if data['user']['ranking'] == "Silver":
+                        star_ = 'star_silver'
                     if data['user']['ranking'] == "Gold":
                         star_ = 'star_gold'
-                    elif data['user']['ranking'] == "Silver":
-                        star_ = 'star_silver'
-                    else:
-                        star_ = 'star_bronze'
                     if data['config']['vip']:
                         star_ = "star_greem"
-                    elif ctx.author.id == ctx.guild.owner.id:
+                    if user.id == ctx.guild.owner.id:
                         star_ = "star_pink"
-                    elif ctx.author.id in self.bot.staff:
+                    if user.id in self.bot.staff:
                         star_ = "star_blue"
                     if n <= data['user']['winner']:
                         star = star_

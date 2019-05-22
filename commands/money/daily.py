@@ -141,8 +141,12 @@ class DailyClass(commands.Cog):
     async def _vip(self, ctx):
         data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
         if data_['config']['vip']:
-            await ctx.send('<:negate:520418505993093130>│``Você ja é vip e por isso não pode receber o prêmio de '
-                           'VIP DIARIO, aguarde seu VIP atual acabar e volte aqui novamente!``')
+            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            update_['config']['vip'] = True
+            self.bot.db.update_data(data_, update_, 'users')
+            await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
+                           f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
         else:
             if ctx.guild.id != _auth['default_guild']:
                 await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro do'

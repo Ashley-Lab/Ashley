@@ -1,9 +1,11 @@
 import json
 import discord
 
+from datetime import datetime as dt
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from resources.utility import parse_duration
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
@@ -65,6 +67,15 @@ class ProfileSystem(commands.Cog):
         except KeyError:
             update['user']['about'] = "Sou um membro cadastrado"
 
+        try:
+            global time_left
+            epoch = dt.utcfromtimestamp(0)
+            cooldown = data["cooldown"]["daily vip"]
+            time_diff = cooldown - (dt.utcnow() - epoch).total_seconds()
+            time_left = parse_duration(int(time_diff))
+        except KeyError:
+            time_left = None
+
         self.bot.db.update_data(data, update, 'users')
         data = self.bot.db.get_data("user_id", member.id, "users")
 
@@ -80,6 +91,8 @@ class ProfileSystem(commands.Cog):
             else:
                 status = "<:vip_member:546020055478042647> - **VIP Diario Ativo** & " \
                          "**VIP do Servidor Inativo**"
+            if time_left is not None:
+                status += f"\n **Tempo restante para o fim do seu VIP:** {time_left}"
         else:
             data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             if data_['vip']:
@@ -88,6 +101,8 @@ class ProfileSystem(commands.Cog):
             else:
                 status = "<:negate:520418505993093130> - **Seu VIP Diário Acabou** & " \
                          "**VIP do Servidor Inativo**"
+            if time_left is not None:
+                status += f"\n **Tempo restante para o fim do seu VIP:** {time_left}"
         if data['user']['titling'] is None:
             titling = 'Vagabond'
         else:

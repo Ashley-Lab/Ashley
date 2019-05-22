@@ -69,6 +69,9 @@ class UserBank(commands.Cog):
         if data_member is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
+        if data_member['config']['playing']:
+            return await ctx.send("<:alert_status:519896811192844288>│``O membro está jogando, aguarde para quando"
+                                  " ele estiver livre!``")
 
         data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         data_guild_native_member = self.bot.db.get_data("guild_id", data_member['guild_id'], "guilds")
@@ -163,6 +166,9 @@ class UserBank(commands.Cog):
         if data_member is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
+        if data_member['config']['playing']:
+            return await ctx.send("<:alert_status:519896811192844288>│``O membro está jogando, aguarde para quando"
+                                  " ele estiver livre!``")
         if item in data_user['inventory']:
             if data_user['inventory'][item] >= amount:
                 update_user['inventory'][item] -= amount

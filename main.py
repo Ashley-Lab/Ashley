@@ -4,7 +4,6 @@
 import discord
 import logging
 import psutil
-import datetime
 import json
 import os
 import copy
@@ -134,9 +133,9 @@ class Ashley(commands.AutoShardedBot):
                             await ctx.send(embed=embed)
                     else:
                         try:
-                            epoch = datetime.datetime.utcfromtimestamp(0)
+                            epoch = dt.utcfromtimestamp(0)
                             cooldown = data_user["cooldown"]["daily vip"]
-                            time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() - cooldown
+                            time_diff = (dt.utcnow() - epoch).total_seconds() - cooldown
                             if time_diff >= 86400:
                                 data_ = self.db.get_data("user_id", ctx.author.id, "users")
                                 update_ = data_
@@ -169,20 +168,21 @@ class Ashley(commands.AutoShardedBot):
                     update_user['user']['commands'] += 1
                 except KeyError:
                     update_user['user']['commands'] = 1
-                if (update_user['user']['commands'] % 10) == 0:
+                if (update_user['user']['commands'] % 2) == 0:
                     chance = randint(1, 100)
+                    quant = randint(1, 3)
                     if chance >= 51:
-                        update_user['inventory']['rank_point'] += 1
-                        await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
-                                       "<:coin:519896843388452864> **1** ``RANKPOINT A MAIS!``")
+                        update_user['inventory']['rank_point'] += quant
+                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
+                                       f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
                 if (update_user['user']['commands'] % 50) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
                         await ctx.send("<:negate:520418505993093130>│``SUA GUILDA DE CADASTRO FOI DELETADA, TENTE "
                                        "USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
-                if (update_user['user']['commands'] % 20) == 0:
+                if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
-                    if chance >= 80:
+                    if chance >= 81:
                         update_user['inventory']['medal'] += 1
                         await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
                                        "<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
