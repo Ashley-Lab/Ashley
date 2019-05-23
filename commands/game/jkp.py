@@ -61,19 +61,17 @@ class JoKenPo(commands.Cog):
                                    "**{}** ``EMPATAMOS.``".format(ctx.author, player_, jkp, player_, jkp))
                 elif jkp == "Tesoura":
                     change = randint(1, 100)
+                    answer_ = await self.bot.db.add_money(ctx, 10)
+                    await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
+                                   "escolhi`` **{}, {}** ``ganha de`` "
+                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
+                                   "<:coin:519896843388452864> {}".format(ctx.author, player_, jkp,
+                                                                          player_, jkp, answer_))
                     if change < 50:
-                        await self.bot.db.add_money(ctx, 10)
-                        await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
-                                       "escolhi`` **{}, {}** ``ganha de`` "
-                                       "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                       "<:coin:519896843388452864> **10** ``moedas de "
-                                       "{}``".format(ctx.author, player_, jkp, player_, jkp,
-                                                     data['user']['ranking']))
-                    else:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
                                                                       'crystal_fragment_dark'])
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                        await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 elif jkp == "Papel":
                     await ctx.send("<:negate:520418505993093130>│``{}, você escolheu`` **{}** ``e eu "
@@ -84,19 +82,17 @@ class JoKenPo(commands.Cog):
 
                 if jkp == "Pedra":
                     change = randint(1, 100)
+                    answer_ = await self.bot.db.add_money(ctx, 10)
+                    await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
+                                   "escolhi`` **{}, {}** ``ganha de`` "
+                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
+                                   "<:coin:519896843388452864> {}".format(ctx.author, player_, jkp,
+                                                                          player_, jkp, answer_))
                     if change < 50:
-                        await self.bot.db.add_money(ctx, 10)
-                        await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
-                                       "escolhi`` **{}, {}** ``ganha de`` "
-                                       "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                       "<:coin:519896843388452864> **10** ``moedas de "
-                                       "{}``".format(ctx.author, player_, jkp, player_, jkp,
-                                                     data['user']['ranking']))
-                    else:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
                                                                       'crystal_fragment_dark'])
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                        await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 elif jkp == "Papel":
                     await ctx.send("<:game:519896830230790157>│``{}, você escolheu`` **{}** ``e eu "
@@ -115,19 +111,17 @@ class JoKenPo(commands.Cog):
                                    "**{}** ``VOCÊ PERDEU!!``".format(ctx.author, player_, jkp, player_, jkp))
                 elif jkp == "Papel":
                     change = randint(1, 100)
+                    answer_ = await self.bot.db.add_money(ctx, 10)
+                    await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
+                                   "escolhi`` **{}, {}** ``ganha de`` "
+                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
+                                   "<:coin:519896843388452864> {}".format(ctx.author, player_, jkp,
+                                                                          player_, jkp, answer_))
                     if change < 50:
-                        await self.bot.db.add_money(ctx, 10)
-                        await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
-                                       "escolhi`` **{}, {}** ``ganha de`` "
-                                       "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                       "<:coin:519896843388452864> **10** ``moedas de "
-                                       "{}``".format(ctx.author, player_, jkp, player_, jkp,
-                                                     data['user']['ranking']))
-                    else:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
                                                                       'crystal_fragment_dark'])
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                        await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 elif jkp == "Tesoura":
                     await ctx.send("<:game:519896830230790157>│``{}, você escolheu`` **{}** ``e eu "

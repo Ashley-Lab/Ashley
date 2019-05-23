@@ -18,6 +18,7 @@ from bson.json_util import dumps
 # from resources.translation import t_
 from resources.utility import ERRORS
 from resources.db import Database, DataInteraction
+from resources.boosters import Booster
 
 
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
@@ -81,6 +82,8 @@ class Ashley(commands.AutoShardedBot):
 
         with open("resources/icons.json") as icons:
             self.icons = json.loads(icons.read())
+
+        self.booster: Booster = Booster(self.items)
 
     def shutdown(self, reason):
         date = dt(*dt.utcnow().timetuple()[:6])

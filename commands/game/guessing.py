@@ -44,17 +44,15 @@ class GameThinker(commands.Cog):
                 self.bot.db.update_data(data, update, 'users')
                 if resposta.content == number:
                     change = randint(1, 100)
+                    answer_ = await self.bot.db.add_money(ctx, 15)
+                    await ctx.send("<:rank:519896825411665930>│``O numero que eu pensei foi`` **{}** "
+                                   "``e o número que vc falou foi`` **{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
+                                   "<:coin:519896843388452864> {}".format(number, resposta.content, answer_))
                     if change < 50:
-                        await self.bot.db.add_money(ctx, 15)
-                        await ctx.send("<:rank:519896825411665930>│``O numero que eu pensei foi`` **{}** "
-                                       "``e o número que vc falou foi`` **{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                       "<:coin:519896843388452864> **15** ``moedas de "
-                                       "{}``".format(number, resposta.content, data['user']['ranking']))
-                    else:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
                                                                       'crystal_fragment_dark'])
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                        await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:
                     await ctx.send("<:negate:520418505993093130>│``O numero que eu pensei foi`` **{}** "

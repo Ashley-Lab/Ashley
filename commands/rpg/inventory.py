@@ -14,6 +14,7 @@ color = int(_auth['default_embed'], 16)
 class InventoryClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.i = self.bot.items
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -25,23 +26,26 @@ class InventoryClass(commands.Cog):
             if ctx.author.id == data["user_id"]:
                 inventory = 'Itens: \n'
                 for key in data['inventory'].keys():
-                    inventory += f"{self.bot.items[key][0]} **{key.upper()}**: {data['inventory'][key]}\n"
-                resposta = discord.Embed(
+                    try:
+                        inventory += f"{self.i[key][0]} **{self.i[key][1]}**: ``{data['inventory'][key]}``\n"
+                    except KeyError:
+                        inventory += f"<:negate:520418505993093130> **{key.upper()}:** ``ITEM NÃO ENCONTRADO!``\n"
+                answer = discord.Embed(
                     title='Inventário (BETA):',
                     color=color,
                     description=f"{inventory}"
                 )
-                resposta.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
-                resposta.set_thumbnail(url="{}".format(ctx.author.avatar_url))
-                resposta.set_footer(text="Ashley ® Todos os direitos reservados.")
-                await ctx.channel.send(embed=resposta, delete_after=120.0)
+                answer.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
+                answer.set_thumbnail(url="{}".format(ctx.author.avatar_url))
+                answer.set_footer(text="Ashley ® Todos os direitos reservados.")
+                await ctx.send(embed=answer, delete_after=120.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @inventory.command(name='shop', aliases=['loja'])
+    @inventory.command(name='quest', aliases=['missao'])
     async def _shop(self, ctx):
-        return
+        return await ctx.send("<:negate:520418505993093130>│``O inventário de missões ainda não está disponível!``")
 
 
 def setup(bot):

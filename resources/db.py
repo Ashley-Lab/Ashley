@@ -283,40 +283,49 @@ class Database(object):
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         change = randint(1, 100)
+        msg = None
 
         if data_user is not None:
             if update_user['user']['ranking'] == 'Bronze':
                 await self.add_type(ctx, amount, "bronze")
+                msg = f"**{amount}** ``moedas de bronze``"
             elif update_user['user']['ranking'] == 'Silver':
                 if change <= 50:
                     await self.add_type(ctx, amount, "bronze")
+                    msg = f"**{amount}** ``moedas de bronze``"
                 else:
                     await self.add_type(ctx, amount, "bronze")
                     await self.add_type(ctx, amount, "silver")
+                    msg = f"**{amount}** ``moedas de bronze e`` **{amount}** ``moedas de prata``"
             elif update_user['user']['ranking'] == 'Gold':
                 if change <= 33:
                     await self.add_type(ctx, amount, "bronze")
+                    msg = f"**{amount}** ``moedas de bronze``"
                 elif change <= 66:
                     await self.add_type(ctx, amount, "bronze")
                     await self.add_type(ctx, amount, "silver")
+                    msg = f"**{amount}** ``moedas de bronze e`` **{amount}** ``moedas de prata``"
                 else:
                     await self.add_type(ctx, amount, "bronze")
                     await self.add_type(ctx, amount, "silver")
                     await self.add_type(ctx, amount, "gold")
+                    msg = f"**{amount}** ``moedas de bronze,`` **{amount}** ``moedas de prata e`` **{amount}** " \
+                          f"``moedas de ouro``"
+            return msg
 
     async def add_reward(self, ctx, list_):
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        response = 'Você ganhou: \n'
+        response = '``Caiu pra você:`` \n'
         for item in list_:
             amount = randint(1, 3)
             try:
                 update_user['inventory'][item] += amount
             except KeyError:
                 update_user['inventory'][item] = amount
-            response += f"**{amount}**: ``{item}``\n"
+            response += f"**{amount}**: ``{self.bot.items[item][1]}``\n"
         self.bot.db.update_data(data_user, update_user, 'users')
-        response += "Jogue de novo para ganhar mais!"
+        response += "```Jogue de novo para ganhar mais!```"
         return response
 
     async def add_type(self, ctx, amount, key: str):

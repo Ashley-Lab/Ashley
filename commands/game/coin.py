@@ -49,16 +49,14 @@ class HeadsOrTails(commands.Cog):
                 await sleep(1)
                 if answer.content == choice_:
                     change = randint(1, 100)
+                    answer_ = await self.bot.db.add_money(ctx, 5)
+                    await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                                   '``você GANHOU:`` <:coin:519896843388452864> {}'.format(answer_))
                     if change < 50:
-                        await self.bot.db.add_money(ctx, 5)
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
-                                       '``você GANHOU:`` <:coin:519896843388452864> **5** ``moedas de '
-                                       '{}``'.format(data['user']['ranking']))
-                    else:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
                                                                       'crystal_fragment_dark'])
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                        await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:
                     await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
@@ -68,16 +66,14 @@ class HeadsOrTails(commands.Cog):
                 await sleep(1)
                 if answer.content == choice_:
                     change = randint(1, 100)
+                    answer_ = await self.bot.db.add_money(ctx, 5)
+                    await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                                   '``você GANHOU:`` <:coin:519896843388452864> {}'.format(answer_))
                     if change < 50:
-                        await self.bot.db.add_money(ctx, 5)
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
-                                       '``você GANHOU:`` <:coin:519896843388452864> **5** ``moedas de '
-                                       '{}``'.format(data['user']['ranking']))
-                    else:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
                                                                       'crystal_fragment_dark'])
-                        await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
+                        await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:
                     await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
