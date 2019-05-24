@@ -92,12 +92,12 @@ class RankingClass(commands.Cog):
         amount_rp = 200
         amount_medal = 0
         count_medal = 0
-        count_patent = 0
+        count_patent = 1
         patent = 0
 
         if 100 < rank_point < 200:
             patent += 1
-        elif rank_point > 200:
+        elif rank_point >= 200:
             while True:
                 if rank_point >= amount_rp and medal >= amount_medal:
                     amount_medal += count_medal
