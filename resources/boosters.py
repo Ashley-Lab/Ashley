@@ -11,6 +11,7 @@ class Booster(object):
         # box configs
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "n": 0, "c": 0}}
         self.legend = {"Comum": 0, "Normal": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+        self.bl = {"Comum": "c", "Normal": "n", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur", "Secret": "secret"}
         self.rarity = {"Comum": 500, "Normal": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
 
         # booster configs
@@ -18,8 +19,8 @@ class Booster(object):
         self.booster_bronze = {"Comum": 95, "Normal": 1, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
         self.booster_silver = {"Comum": 60, "Normal": 36, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
         self.booster_gold = {"Comum": 50, "Normal": 46, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_vip = {"Comum": 50, "Normal": 30, "Raro": 15, "Super Raro": 2, "Ultra Raro": 1, "Secret": 1}
-        self.booster_secret = {"Comum": 40, "Normal": 30, "Raro": 20, "Super Raro": 8, "Ultra Raro": 2, "Secret": 1}
+        self.booster_vip = {"Comum": 50, "Normal": 30, "Raro": 15, "Super Raro": 3, "Ultra Raro": 1, "Secret": 1}
+        self.booster_secret = {"Comum": 40, "Normal": 30, "Raro": 20, "Super Raro": 7, "Ultra Raro": 2, "Secret": 1}
 
         # contadores de itens
         self.secret = 0
@@ -139,10 +140,13 @@ class Booster(object):
         list_items = []
         for i_, amount in self.booster_choice.items():
             list_items += [i_] * amount
-        result = choice(list_items)
 
-        self.item_ = choice(list(box_['items'].values()))
-        while list(self.legend.keys())[list(self.legend.values()).index(self.item_['data'][-2])] != result:
-            self.item_ = choice(list(box_['items'].values()))
+        while True:
+            result = choice(list_items)
+            if box_['status'][self.bl[result]] > 0:
+                self.item_ = choice(list(box_['items'].values()))
+                while list(self.legend.keys())[list(self.legend.values()).index(self.item_['data'][3])] != result:
+                    self.item_ = choice(list(box_['items'].values()))
+                break
 
         return self.item_

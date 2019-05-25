@@ -87,4 +87,8 @@ events.on_member_unban
 commands.owner.actions
 commands.member.transfer
 commands.rpg.inventory
+commands.img_edit.facebook
+commands.img_edit.instagram
+commands.img_edit.twitter
+commands.img_edit.whatsapp
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

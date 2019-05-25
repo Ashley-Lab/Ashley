@@ -43,25 +43,25 @@ class PunchClass(commands.Cog):
 
             if chance <= 10:
                 punch = choice(fail)
-                text = ' Ele(a) iria levar um soco de '
-                end = '! Mas ele(a) falhou miseravelmente...'
+                text = 'Ele(a) iria levar um soco de'
+                end = 'Mas ele(a) falhou miseravelmente...'
             elif chance <= 90:
                 punch = choice(punchimg)
-                text = ' Ele(a) levou um soco de '
-                end = '! GAME! :regional_indicator_k: :regional_indicator_o:'
+                text = 'Ele(a) levou um soco de'
+                end = 'GAME! :regional_indicator_k: :regional_indicator_o:'
             else:
-                text = ' Ele(a) levou um soco de '
-                end = '! QUE ACABOU COM A CARA DELE(A)! **DEPOIS DESSA VAI PRECISAR DE OUTRA!**'
+                text = 'Ele(a) levou um soco de'
+                end = 'QUE ACABOU COM A CARA DELE(A)! **DEPOIS DESSA VAI PRECISAR DE OUTRA!**'
                 punch = 'https://thumbs.gfycat.com/PeskyApprehensiveCapeghostfrog-size_restricted.gif'
 
             if ctx.author.id == self.bot.owner_id:
-                text = ' Ele(a) levou um soco de '
-                end = '! QUE ACABOU COM A VIDA DELE(A)! **DEPOIS DESSA VAI PRECISAR NASCER DE NOVO!**'
+                text = 'Ele(a) levou um soco de'
+                end = 'QUE ACABOU COM A VIDA DELE(A)! **DEPOIS DESSA VAI PRECISAR NASCER DE NOVO!**'
                 punch = 'https://i.makeagif.com/media/4-09-2016/E9n3n4.gif'
 
             punchemb = discord.Embed(title='Soco :boxing_glove: ',
                                      description=f'**{ctx.message.mentions[0].name}** {text} **{ctx.author.name}**! '
-                                     f'{end}',
+                                                 f'{end}',
                                      color=color)
             punchemb.set_image(url=punch)
             punchemb.set_footer(text="Ashley ® Todos os direitos reservados.")

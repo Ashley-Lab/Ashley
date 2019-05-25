@@ -45,13 +45,13 @@ class Ashley(commands.AutoShardedBot):
                               '"ASH DAILY REC", "ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
                               'SISTEMA DE ANUNCIOS: O SISTEMA DE ANUNCIO EXISTE PARA EU ME MANTER!']
         self.languages = ("pt", "en")
-        self.version = "5.5.0"
+        self.version = "5.8.7"
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
                            'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.progress = "V.5 -> 50.0%"
+        self.progress = "V.5 -> 87.0%"
         self.data_cog = {}
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash rec': 'ash daily rec',
                          'ash vip': 'ash daily vip'}

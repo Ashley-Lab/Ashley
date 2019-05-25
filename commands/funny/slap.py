@@ -1,7 +1,7 @@
 import json
 import discord
 
-from random import choice
+from random import choice, randint
 from discord.ext import commands
 from resources.db import Database
 from resources.check import check_it
@@ -27,11 +27,36 @@ class SlapClass(commands.Cog):
                        'https://media.giphy.com/media/7zMvSym6iPdlNvm8hd/giphy.gif',
                        'https://media.giphy.com/media/3d5NhNnsXQ7LB1XhH5/giphy.gif',
                        'https://media.giphy.com/media/U86rbsmKUVtQVODuoI/giphy.gif']
-            slap = choice(slapimg)
+
+            chance = randint(1, 100)
+
+            if ctx.message.mentions[0].id == self.bot.owner_id:
+                chance = 1
+
+            if ctx.message.mentions[0].id == self.bot.user.id:
+                return await ctx.send('<:negate:520418505993093130>│``Você quer me bater com meu proprio recurso?``')
+
+            if chance <= 10:
+                slap = "https://i.gifer.com/VF8X.gif"
+                text = "Ele(a) iria levar um tapa de"
+                end = 'Mas ele(a) falhou miseravelmente...'
+            elif chance <= 90:
+                text = "Ele(a) levou um tapa de"
+                end = "Acho que doeu... SOLDADO FERIDO! :broken_heart:"
+                slap = choice(slapimg)
+            else:
+                text = "Ele(a) levou um tapão de"
+                end = 'QUE ACABOU COM A CARA DELE(A)! **DEPOIS DESSA VAI PRECISAR DE OUTRA!**'
+                slap = 'https://media.giphy.com/media/AkKEOnHxc4IU0/giphy.gif'
+
+            if ctx.author.id == self.bot.owner_id:
+                text = "Ele(a) levou um tapa animal de"
+                end = 'QUE ACABOU COM A VIDA DELE(A)! **DEPOIS DESSA VAI PRECISAR NASCER DE NOVO!**'
+                slap = 'https://media1.tenor.com/images/b8ff9e6e9cb5a8652f18cc388c4028b0/tenor.gif?itemid=5389796'
+
             slapemb = discord.Embed(title='Tapa :wave:',
-                                    description='**{}** Ele(a) levou um tapa de **{}**! Acho que doeu... '
-                                                'SOLDADO FERIDO! :broken_heart: '.format(ctx.message.mentions[0].name,
-                                                                                         ctx.author.name),
+                                    description='**{}** {} **{}**! {}'.format(ctx.message.mentions[0].name, text,
+                                                                              ctx.author.name, end),
                                     color=color)
             slapemb.set_image(url=slap)
             slapemb.set_footer(text="Ashley ® Todos os direitos reservados.")

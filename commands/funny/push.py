@@ -1,7 +1,7 @@
 import json
 import discord
 
-from random import choice
+from random import choice, randint
 from discord.ext import commands
 from resources.db import Database
 from resources.check import check_it
@@ -10,6 +10,7 @@ with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
+link = 'http://eupodiatamatando.com/wp-content/uploads/2011/02/jogo_futebol_empurra_cara_cai_na_escada.gif'
 
 
 class PushClass(commands.Cog):
@@ -27,10 +28,36 @@ class PushClass(commands.Cog):
                        'https://media.giphy.com/media/dB1Ds51ye6smSv09lX/giphy.gif',
                        'https://media.giphy.com/media/vcAXxIghuHWaPainqe/giphy.gif',
                        'https://media.giphy.com/media/65zUCIaDvzhyQdYThW/giphy.gif']
-            push = choice(pushimg)
+
+            chance = randint(1, 100)
+
+            if ctx.message.mentions[0].id == self.bot.owner_id:
+                chance = 1
+
+            if ctx.message.mentions[0].id == self.bot.user.id:
+                return await ctx.send('<:negate:520418505993093130>│``Você quer me bater com meu proprio recurso?``')
+
+            if chance <= 10:
+                push = "https://media2.giphy.com/media/bKrynkeJjTKow/giphy.gif"
+                text = "Ele(a) iria receber um empurrão de"
+                end = 'Mas ele(a) falhou miseravelmente...'
+            elif chance <= 90:
+                text = "Ele(a) recebeu um empurrão de"
+                end = "Acho que doeu... SOLDADO FERIDO! :broken_heart:"
+                push = choice(pushimg)
+            else:
+                text = "Ele(a) recebeu um empurrão daqueles de"
+                end = 'QUE ACABOU COM ELE(A)! **DEPOIS DESSA VAI PRECISAR IR PARA O HOSPITAL!**'
+                push = 'https://pa1.narvii.com/6968/8ecedea605b7e13d285e20e177739b79149f8498r1-338-200_00.gif'
+
+            if ctx.author.id == self.bot.owner_id:
+                text = "Ele(a) recebeu um empurrão animal de"
+                end = 'QUE ACABOU COM A VIDA DELE(A)! **DEPOIS DESSA VAI PRECISAR NASCER DE NOVO!**'
+                push = link
+
             pushemb = discord.Embed(title='Empurrão :raised_hands:',
-                                    description='**{}** Ele(a) recebeu um empurrão de **{}**! BRIGA! '
-                                                ':laughing: '.format(ctx.message.mentions[0].name, ctx.author.name),
+                                    description='**{}** {} **{}**! {}'.format(ctx.message.mentions[0].name, text,
+                                                                              ctx.author.name, end),
                                     color=color)
             pushemb.set_image(url=push)
             pushemb.set_footer(text="Ashley ® Todos os direitos reservados.")
