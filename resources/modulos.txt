@@ -91,4 +91,5 @@ commands.img_edit.facebook
 commands.img_edit.instagram
 commands.img_edit.twitter
 commands.img_edit.whatsapp
+commands.rpg.shop
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

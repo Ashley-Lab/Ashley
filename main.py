@@ -7,6 +7,8 @@ import psutil
 import json
 import os
 import copy
+import traceback
+import sys
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
 from random import choice, randint
 from datetime import datetime as dt
@@ -55,7 +57,10 @@ class Ashley(commands.AutoShardedBot):
         self.data_cog = {}
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash rec': 'ash daily rec',
                          'ash vip': 'ash daily vip'}
-        self.vip_cog = ['commands.music.default', 'commands.admin.staff']
+        self.vip_cog = ['commands.music.default', 'commands.admin.staff', 'commands.game.coin', 'events.on_message',
+                        'commands.game.guessing', 'commands.game.jkp', 'commands.ashley.farm', 'commands.rpg.status',
+                        'commands.owner.shards', 'commands.member.married', 'commands.member.booket',
+                        'commands.member.transfer', 'commands.rpg.inventory', 'commands.rpg.shop']
         self.titling = {"10": "Vassal", "25": "Heir", "50": "Knight", "100": "Elder", "200": "Baron", "300": "Viscount",
                         "400": "Count", "500": "Marquis", "1000": "Duke", "1500": "Grand Duke"}
 
@@ -82,6 +87,9 @@ class Ashley(commands.AutoShardedBot):
 
         with open("resources/icons.json") as icons:
             self.icons = json.loads(icons.read())
+
+        with open("resources/pets.json") as pets:
+            self.pets = json.loads(pets.read())
 
         self.booster: Booster = Booster(self.items)
 
@@ -178,7 +186,7 @@ class Ashley(commands.AutoShardedBot):
                         update_user['inventory']['rank_point'] += quant
                         await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
                                        f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
-                if (update_user['user']['commands'] % 50) == 0:
+                if (update_user['user']['commands'] % 10) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
                         await ctx.send("<:negate:520418505993093130>│``SUA GUILDA DE CADASTRO FOI DELETADA, TENTE "
@@ -218,6 +226,9 @@ class Ashley(commands.AutoShardedBot):
                 await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
                                    f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
                                    f"**{ctx.channel}** ``e o erro foi:`` **{exception}**")
+            else:
+                error = getattr(exception, 'original', exception)
+                traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:

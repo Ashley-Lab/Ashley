@@ -2,13 +2,11 @@ import json
 import time
 import discord
 
-from random import choice, randint
-from scripts import about_me as me
+from random import choice
 from asyncio import TimeoutError
 from discord.ext import commands
-from resources.utility import negate, goodbye
-from resources.ia_list import perg_pq, resposta_pq, perg_qual, resposta_outras, \
-    resposta_ou, denky_r, denky_f, bomdia, boanoite, resposta_comum
+from resources.utility import get_response
+from resources.ia_list import *
 
 with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
@@ -19,34 +17,21 @@ class SystemMessage(commands.Cog):
         self.bot = bot
         self.msg = None
         self.ping_test = {}
-        self.scripts = [me.about_me, me.introduction, me.deeping, me.concept, negate, goodbye]
+        self.letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                        't', 'u', 'v', 'w', 'x', 'y', 'z')
 
-    @staticmethod
-    async def get_response(message, data_guild, bot):
-        if '?' in message.content.lower() and data_guild['ia_config']['auto_msg']:
-            if 'ashley' in message.content.lower() and len(message.content) > 20:
-                try:
-                    if message.mentions[0] == bot.user:
-                        return
-                except IndexError:
-                    pass
-                for c in range(0, len(perg_pq)):
-                    if perg_pq[c] in message.content.lower():
-                        response = choice(resposta_pq)
-                        return await message.channel.send(response)
-                for c in range(0, len(perg_qual)):
-                    if perg_qual[c] in message.content.lower():
-                        response = choice(resposta_outras)
-                        return await message.channel.send(response)
-                if ' ou ' in message.content.lower():
-                    response = choice(resposta_ou)
-                    return await message.channel.send(response)
-                elif 'denky' in message.content.lower():
-                    response = choice(denky_f)
-                    return await message.channel.send(response)
-                else:
-                    response = choice(resposta_comum)
-                    return await message.channel.send(response)
+    async def send_message(self, message):
+        pet_n = choice(list(self.bot.pets.keys()))
+        pet = self.bot.pets[pet_n]
+        if pet['colour'][0] is True:
+            pet_c = choice(pet['colour'][2])
+            indice = pet['colour'][2].index(pet_c)
+            mask = choice(self.letters[:pet['mask'][indice]])
+            link_ = f'images/pet/{pet_n}/{pet_c}/mask_{mask}.png'
+        else:
+            mask = choice(self.letters[:pet['mask'][0]])
+            link_ = f'images/pet/{pet_n}/mask_{mask}.png'
+        await self.bot.web_hook_rpg(message, link_, pet_n, self.msg, 'Pet')
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -55,14 +40,7 @@ class SystemMessage(commands.Cog):
             if data_guild is not None:
                 data = self.bot.db.get_channel_data(message.channel.id)
                 if data['channel_id'] == message.channel.id and data['channel_state'] == 0:
-                    if 'ashley' in message.content.lower() and data_guild['ia_config']['auto_msg']:
-                        if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
-                            response = choice(bomdia)
-                            return await message.channel.send(f"```{response}```")
-                        if 'boa noite' in message.content.lower():
-                            response = choice(boanoite)
-                            return await message.channel.send(f"```{response}```")
-                    elif 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
+                    if 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
                         if message.author.id != self.bot.owner_id:
                             for c in range(0, len(denky_r)):
                                 if denky_r[c] in message.content:
@@ -70,30 +48,19 @@ class SystemMessage(commands.Cog):
                                                                       'pai!**\n```VOU CONTAR TUDO PRO '
                                                                       'PAPAI```'.format(message.author.mention))
 
-                    await self.get_response(message, data_guild, self.bot)
                     try:
-                        if message.author.id == self.bot.owner_id:
-                            if '?' in message.content.lower():
-                                chance = randint(1, 100)
-                                if chance >= 80:
-                                    avatar = choice(['a', 'b', 'c', 'd', 'e', 'f'])
-                                    link_ = f'images/pet/denky/mask_{avatar}.png'
-                                    while True:
-                                        for c in range(0, len(perg_pq)):
-                                            if perg_pq[c] in message.content.lower():
-                                                self.msg = choice(resposta_pq)
-                                                break
-                                        for c in range(0, len(perg_qual)):
-                                            if perg_qual[c] in message.content.lower():
-                                                self.msg = choice(resposta_outras)
-                                                break
-                                        if ' ou ' in message.content.lower():
-                                            self.msg = choice(resposta_ou)
-                                            break
-                                        else:
-                                            self.msg = choice(resposta_comum)
-                                            break
-                                    await self.bot.web_hook_rpg(message, link_, 'Dynno', self.msg, 'Pet')
+                        user_data = self.bot.db.get_data("user_id", message.author.id, "users")
+                        if user_data is not None:
+                            if user_data['config']['vip'] is True and 'pet' in message.content.lower():
+                                if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
+                                    self.msg = choice(bomdia)
+                                    await self.send_message(message)
+                                if 'boa noite' in message.content.lower():
+                                    self.msg = choice(boanoite)
+                                    await self.send_message(message)
+                                if '?' in message.content.lower():
+                                    self.msg = await get_response(message)
+                                    await self.send_message(message)
                     except discord.Forbidden:
                         pass
 

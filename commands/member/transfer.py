@@ -10,7 +10,7 @@ class TransferClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='transfer', aliases=['trans'])
     async def transfer(self, ctx):
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")

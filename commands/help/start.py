@@ -155,20 +155,14 @@ class Helper(commands.Cog):
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-            ajuda.set_thumbnail(
-                url="https://res.cloudinary.com/hrscywv4p/image/upload/c_limit,fl_lossy,h_630,w_1200,f_auto,"
-                    "q_auto/v1/82571/2016-11-ia-logo-circle_ofybij.png")
-            ajuda.add_field(name="IA Iterations:",
+            ajuda.set_thumbnail(url="https://i.imgur.com/XNHWd3M.png")
+            ajuda.add_field(name="Pet Iterations:",
                             value=f"{self.st[61]}│**Pergunte Algo** : "
-                                  f"``Respondo a mensagens que tenha uma interrogação e meu nome!``\n"
-                                  f"{self.st[61]}│**Bom dia** : "
-                                  f"``Respondo a mensagens que tenham: bom dia e meu nome``\n"
-                                  f"{self.st[61]}│**Boa Noite** : "
-                                  f"``Respondo a mensagens que tenham: boa tarde e meu nome``\n"
-                                  f"{self.st[61]}│**Marcação** : ``há quase ia me esquecendo, "
-                                  f"por favor não fique me `` **marcando**\n"
-                                  f"{self.st[61]}│**Meu Pai** : "
-                                  f"``Se você ofender meu pai eu vou dizer tudo pra ele!``")
+                                  f"``Respondo a mensagens que começam com \"pet!\" e tenham uma interrogação``\n"
+                                  f"{self.st[61]}│**Saudação** : "
+                                  f"``Respondo a mensagens que tenham: bom dia \"pet!\", boa tarde \"pet!\" e "
+                                  f"boa noite \"pet!\"``\n"
+                                  f"{self.st[76]}│**pet** ``or`` **p**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
             await botmsg[user.id].add_reaction('🏛')
@@ -295,17 +289,21 @@ class Helper(commands.Cog):
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             ajuda.set_thumbnail(url="http://www.pngall.com/wp-content/uploads/2016/06/Earth-Free-PNG-Image-180x180.png")
-            ajuda.add_field(name="FP Commands:",
+            ajuda.add_field(name="General Commands:",
                             value=f"{self.st[9]}│**cargos** ``or`` **roles**\n"
                                   f"{self.st[7]}│**teleport** ``or`` **teletransportar**\n"
                                   f"{self.st[7]}│**respawn** ``or`` **return**\n"
-                                  f"{self.st[42]}│**combate** ``or`` **battle**\n"
-                                  f"{self.st[42]}│**reset** ``or`` **resetar**\n"
                                   f"{self.st[79]}│**marry** ``or`` **casar**\n"
                                   f"{self.st[79]}│**divorce** ``or`` **separar**\n"
                                   f"{self.st[80]}│**dance** ``or`` **dançar**\n"
                                   f"{self.st[78]}│**profile** ``or`` **perfil**\n"
-                                  f"{self.st[82]}│**bok** ``or`` **boquete**\n"
+                                  f"{self.st[82]}│**bok** ``or`` **booket**\n"
+                                  f"{self.st[87]}│**transfer** ``or`` **trans**\n"
+                                  f"{self.st[88]}│**inventory** ``or`` **i**\n"
+                                  f"{self.st[89]}│**facebook** ``or`` **fb**\n"
+                                  f"{self.st[90]}│**instagram** ``or`` **insta**\n"
+                                  f"{self.st[91]}│**twitter** ``or`` **tt**\n"
+                                  f"{self.st[92]}│**whatsapp** ``or`` **zap**\n"
                                   f"{self.st[46]}│**rank** ``or`` **r**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
@@ -334,7 +332,8 @@ class Helper(commands.Cog):
                                   f"{self.st[30]}│**carteira** ``or`` **wallet**\n"
                                   f"{self.st[30]}│**pay** ``or`` **pagar**\n"
                                   f"{self.st[30]}│**give** ``or`` **dar**\n"
-                                  f"{self.st[66]}│**daily** ``or`` **diario**")
+                                  f"{self.st[66]}│**daily** ``or`` **diario**\n"
+                                  f"{self.st[93]}│**shop** ``or`` **loja**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
             await botmsg[user.id].add_reaction('🏛')

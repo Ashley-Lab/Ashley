@@ -36,7 +36,7 @@ class FarmClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='respawn', aliases=['return'])
     async def respawn(self, ctx):
         if ctx.guild.id == _auth['default_guild']:
@@ -69,7 +69,7 @@ class FarmClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='hell', aliases=['inferno'])
     async def hell(self, ctx):
         record = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -105,7 +105,7 @@ class FarmClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='teleport', aliases=['teletransportar'])
     async def teleport(self, ctx):
         record = self.bot.db.get_data("user_id", ctx.author.id, "users")

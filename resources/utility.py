@@ -1,3 +1,35 @@
+from random import choice
+from resources.ia_list import *
+
+
+def get_content(content):
+    answer = content.replace("`", "[censored]").replace("*", "[censored]").replace("_", "[censored]")\
+        .replace("~", "[censored]").replace("@", "[censored]").replace("here", "[censored]")\
+        .replace("everyone", "[censored]").replace("ash ", "[censored]").replace("ash.", "[censored]")
+    return answer
+
+
+async def get_response(message):
+    if len(message.content) > 20:
+        for c in range(0, len(perg_pq)):
+            if perg_pq[c] in message.content.lower():
+                response = choice(resposta_pq)
+                return response
+        for c in range(0, len(perg_qual)):
+            if perg_qual[c] in message.content.lower():
+                response = choice(resposta_outras)
+                return response
+        if ' ou ' in message.content.lower():
+            response = choice(resposta_ou)
+            return response
+        elif 'denky' in message.content.lower():
+            response = choice(denky_f)
+            return response
+        else:
+            response = choice(resposta_comum)
+            return response
+
+
 def parse_duration(duration: int):
     minutes, seconds = divmod(duration, 60)
     hours, minutes = divmod(minutes, 60)

@@ -18,7 +18,7 @@ class StatusClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='status', aliases=['habilidades'])
     async def status(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -43,7 +43,7 @@ class StatusClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @status.command(name='add', aliases=['adicionar'])
     async def _add(self, ctx):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -97,7 +97,7 @@ class StatusClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @status.command(name='reset', aliases=['resetar'])
     async def _reset(self, ctx):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
