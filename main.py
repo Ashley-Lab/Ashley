@@ -48,7 +48,7 @@ class Ashley(commands.AutoShardedBot):
                               'SISTEMA DE ANUNCIOS: O SISTEMA DE ANUNCIO EXISTE PARA EU ME MANTER!']
         self.languages = ("pt", "en")
         self.progress = "V.5 -> 91.0%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.1 | PROGRESS: " + str(self.bot.progress)
+        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.1 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
