@@ -52,6 +52,7 @@ class EvalSintax(commands.Cog):
         try:
             exec(to_compile, env)
         except SyntaxError as e:
+            await ctx.message.add_reaction('❌')
             return await ctx.send(self.get_syntax_error(e))
         func = env['func']
         try:

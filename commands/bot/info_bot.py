@@ -28,8 +28,7 @@ class BotInfo(commands.Cog):
         total_members = sum(len(s.members) for s in self.bot.guilds)
         total_online = sum(1 for m in self.bot.get_all_members() if m.status != discord.Status.offline)
         channel_types = Counter(isinstance(c, discord.TextChannel) for c in self.bot.get_all_channels())
-        ver_ = "API: " + str(discord.__version__) + " | BOT: " + str(self.bot.version) + \
-               " | PROGRESS: " + str(self.bot.progress)
+        ver_ = self.bot.version
         voice = channel_types[False]
         text = channel_types[True]
         owner = str(self.bot.get_user(self.bot.owner_id))

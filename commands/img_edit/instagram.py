@@ -152,4 +152,4 @@ class InstagramClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(InstagramClass(bot))
-    print('\033[1;32mO comando \033[1;34mInstagramClass\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32mO comando \033[1;34mINSTAGRAMCLASS\033[1;32m foi carregado com sucesso!\33[m')

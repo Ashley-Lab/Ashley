@@ -20,7 +20,7 @@ cont = Counter()
 class Database(object):
     def __init__(self, bot):
         self.bot = bot
-        self._data_brute = MongoClient(_auth['db_url'], connectTimeoutMS=30000)
+        self._data_brute = MongoClient(_auth['db_url'] + "?retryWrites=false", connectTimeoutMS=30000)
         self._conn = self._data_brute.get_database(_auth['db_name'])
 
     def push_data(self, data, db_name):
