@@ -7,6 +7,7 @@ class Booster(object):
         self.ranking = None
         self.is_vip = None
         self.item_ = None
+        self.key_item = None
 
         # box configs
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "n": 0, "c": 0}}
@@ -51,7 +52,7 @@ class Booster(object):
         self.n = 0
         self.c = 0
 
-    def create_booster(self):
+    def create_box(self):
         self.reset_counts()
         rarity = choice(list(self.rarity.keys()))
         size = self.rarity[rarity]
@@ -59,7 +60,7 @@ class Booster(object):
         self.box['status']['size'] = size
         self.box['items'] = dict()
         while self.box_count < size:
-            item: object = choice(list(self.items.keys()))
+            item = choice(list(self.items.keys()))
             if self.items[item][3] == 5:
                 if self.secret < self.l_secret:
                     if item not in self.box['items']:
@@ -119,6 +120,25 @@ class Booster(object):
                     self.box_count += 1
         return self.box
 
+    async def buy_box(self, bot, ctx):
+        data = bot.db.get_data("user_id", ctx.author.id, "users")
+        if data['treasure']['bronze'] > 10000:
+            answer = await bot.db.take_money(ctx, 'bronze', 10000)
+        elif data['treasure']['silver'] > 1000:
+            answer = await bot.db.take_money(ctx, 'silver', 1000)
+        elif data['treasure']['gold'] > 100:
+            answer = await bot.db.take_money(ctx, 'gold', 100)
+        else:
+            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR OU RESETAR "
+                                  "A BOX!\nVOCÊ PRECISA DE 10.000 BRONZE, 1.000 SILVER OU 100 GOLD PARA COMPRAR.``")
+        data = bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        box = self.create_box()
+        update['box'] = box
+        bot.db.update_data(data, update, 'users')
+        await ctx.send(answer)
+        await ctx.send("```A BOX ENCONTRA-SE NA SUA CONTA!```")
+
     def buy_item(self, box_, ranking, is_vip):
         self.ranking = ranking
         self.is_vip = is_vip
@@ -150,3 +170,43 @@ class Booster(object):
                 break
 
         return self.item_
+
+    async def buy_booster(self, bot, ctx):
+        data = bot.db.get_data("user_id", ctx.author.id, "users")
+        try:
+            if data['box']['status']['active']:
+                pass
+            else:
+                await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
+        except KeyError:
+            await ctx.send("<:alert_status:519896811192844288>│``VOCÊ PRECISA COMPRAR UMA BOX PARA PODER COMPRAR "
+                           "BOOSTERS!")
+        if data['treasure']['bronze'] > 1000:
+            answer = await bot.db.take_money(ctx, 'bronze', 1000)
+        elif data['treasure']['silver'] > 100:
+            answer = await bot.db.take_money(ctx, 'silver', 100)
+        elif data['treasure']['gold'] > 10:
+            answer = await bot.db.take_money(ctx, 'gold', 10)
+        else:
+            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
+                                  "\nVOCÊ PRECISA DE 10.00 BRONZE, 100 SILVER OU 10 GOLD PARA COMPRAR.``")
+        data = bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        item = self.buy_item(data['box'], data['user']['ranking'], data['config']['vip'])
+        for k, v in self.items.items():
+            if v == item['data']:
+                self.key_item = k
+        rarity = list(self.legend.keys())[list(self.legend.values()).index(item['data'][3])]
+        update['box']['status'][self.bl[rarity]] -= 1
+        update['box']['status']['size'] -= 1
+        update['box']['items'][self.key_item]['size'] -= 1
+        try:
+            update['inventory'][self.key_item] += 1
+        except KeyError:
+            update['inventory'][self.key_item] = 1
+        if update['box']['status']['size'] <= 0:
+            update['box']['status']['active'] = False
+        bot.db.update_data(data, update, 'users')
+        await ctx.send(answer)
+        await ctx.send(f"``O ITEM ``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
+                       f"TEM O TIER`` **{rarity.upper()}**")
