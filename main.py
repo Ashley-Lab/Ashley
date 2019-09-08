@@ -26,7 +26,7 @@ from resources.boosters import Booster
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
 class Ashley(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, shard_count=1, **kwargs)
+        super().__init__(*args, shard_count=2, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
         self.commands_used = Counter()
@@ -34,8 +34,8 @@ class Ashley(commands.AutoShardedBot):
         self.guilds_messages = Counter()
         self.user_commands = Counter()
         self.announcements = ['ANUNCIE COMIGO: ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!',
-                              'SISTEMA DE LINGAGUEM: O IDIOMA INGLES SERÁ LIBERADO EM POUCAS SEMANAS!',
-                              'VIP: AO ENTRAR NO MEU SERVIDOR VOCÊ SE TORNA VIP!',
+                              'SISTEMA DE LINGAGUEM: O IDIOMA INGLES SERÁ LIBERADO EM BREVE!',
+                              'VIP: VOCê SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
                               'O COMANDO "RANK" ESTÁ FINALIZADO, AGORA VOCÊ PODERÁ OLHAR SEU RANK A QUALQUER MOMENTO!',
                               'O COMANDO REC SERVE PARA VOCÊ ADIQUIRIR ESTRELAS NO SEU RANK!',
                               'A COR DAS ESTRELAS VARIA PELO SEU RANKING ATUAL (BRONZE, PRATA OU OURO) OU DO SEU STATUS'
@@ -45,10 +45,12 @@ class Ashley(commands.AutoShardedBot):
                               'RANKING',
                               'VC ADQUIRE DINHEIRO USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO:'
                               '"ASH DAILY REC", "ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
-                              'SISTEMA DE ANUNCIOS: O SISTEMA DE ANUNCIO EXISTE PARA EU ME MANTER!']
+                              'AGORA SEU SERVIDOR TAMBEM SE TORNA VIP, COM ISSO O DONO DO SERVIDOR PODE CADASTRAR SEUS'
+                              ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
+                              ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!']
         self.languages = ("pt", "en")
-        self.progress = "V.5 -> 91.0%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.1 | PROGRESS: " + str(self.progress)
+        self.progress = "V.5 -> 93.0%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.3 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
@@ -119,30 +121,30 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_command(self, ctx):
         if ctx.guild is not None:
-            data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_guild = self.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = self.db.get_data("user_id", ctx.author.id, "users")
-            if isinstance(ctx.author, discord.Member) and data is not None:
+            if isinstance(ctx.author, discord.Member) and data_guild is not None:
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
                 self.user_commands[ctx.author.id] += 1
-                update = data
+                update_guild = data_guild
                 try:
-                    update['data']['commands'] += 1
+                    update_guild['data']['commands'] += 1
                 except KeyError:
-                    update['data']['commands'] = 1
-                self.db.update_data(data, update, 'guilds')
+                    update_guild['data']['commands'] = 1
+                self.db.update_data(data_guild, update_guild, 'guilds')
                 if data_user is not None:
-                    if not data_user['config']['vip']:
-                        if (self.guilds_commands[ctx.guild.id] % 20) == 0:
-                            for data in self.db.get_announcements():
+                    if (self.guilds_commands[ctx.guild.id] % 20) == 0:
+                        for data in self.db.get_announcements():
+                            if data['data']['status']:
                                 self.announcements.append(data["data"]["announce"])
-                            announce = choice(self.announcements)
-                            embed = discord.Embed(
-                                color=0x000000,
-                                description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
-                                f'```{announce}```')
-                            await ctx.send(embed=embed)
-                    else:
+                        announce = choice(self.announcements)
+                        embed = discord.Embed(
+                            color=0x000000,
+                            description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
+                            f'```{announce}```')
+                        await ctx.send(embed=embed)
+                    if data_user['config']['vip']:
                         try:
                             epoch = dt.utcfromtimestamp(0)
                             cooldown = data_user["cooldown"]["daily vip"]
@@ -220,15 +222,15 @@ class Ashley(commands.AutoShardedBot):
                            delete_after=float("{:.2f}".format(exception.retry_after)))
         else:
             if isinstance(exception, commands.errors.DiscordException):
-                return
+                if not isinstance(exception, commands.CommandNotFound):
+                    return print(exception)
             elif exception.__str__() not in ERRORS and not isinstance(exception, commands.CommandNotFound):
                 channel = self.get_channel(530419409311760394)
                 await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
                                    f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
                                    f"**{ctx.channel}** ``e o erro foi:`` **{exception}**")
             else:
-                error = getattr(exception, 'original', exception)
-                traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+                return print(exception)
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
@@ -242,6 +244,10 @@ class Ashley(commands.AutoShardedBot):
             except discord.errors.Forbidden:
                 await guild.system_channel.send(msg)
             await guild.leave()
+        else:
+            entrance = self.get_channel(619899848082063372)
+            msg = f"{guild.id}: **{guild.name}** ``ME ADICINOU NO SERVIDOR!``"
+            await entrance.send(msg)
 
     async def on_guild_remove(self, guild):
         if str(guild.id) not in self.blacklist:

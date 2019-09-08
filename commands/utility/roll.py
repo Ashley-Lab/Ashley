@@ -4,6 +4,8 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
+result = None
+
 
 class DadoClass(commands.Cog):
     def __init__(self, bot):

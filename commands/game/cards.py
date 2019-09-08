@@ -65,8 +65,8 @@ class CardsClass(commands.Cog):
                     update['config']['points'] = 12
             elif len([name for name in answer.content.upper().split() if len(name) >= 2 and
                      name in card['nome'].upper().split()]) > (len(card['nome'].upper().split()) / 2):
-                await ctx.send(f'<:rank:519896825411665930>│``VOCÊ QUASE ACERTOU!`` 🎊 **PARABENS** 🎉 ``A carta era`` '
-                               f'**{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 4 pontos!``')
+                await ctx.send(f'<:rank:519896825411665930>│``VOCÊ QUASE ACERTOU!`` 🎊 **PARABENS** 🎉 ``A carta era``'
+                               f' **{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 4 pontos!``')
                 try:
                     update['config']['points'] += 4
                 except KeyError:

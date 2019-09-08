@@ -32,7 +32,8 @@ class ServerInfo(commands.Cog):
         except KeyError:
             cmds = str(self.bot.guilds_commands[ctx.guild.id]) + "comandos usados desde que fiquei online"
         hour = datetime.datetime.now().strftime("%H:%M:%S")
-        embed = discord.Embed(title="\n", color=color, description="Abaixo está as informaçoes principais do servidor!")
+        embed = discord.Embed(title="\n", color=color, description="Abaixo está as informaçoes principais do "
+                                                                   "servidor!")
         embed.set_thumbnail(url=ctx.guild.icon_url)
         embed.set_footer(text="{} • {}".format(ctx.author, hour))
         embed.add_field(name="Nome:", value=ctx.guild.name, inline=True)

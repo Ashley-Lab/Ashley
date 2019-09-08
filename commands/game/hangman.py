@@ -5,7 +5,8 @@ from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError
 
-erros = {}
+errors = {}
+resp = None
 
 
 class ForceCass(commands.Cog):
@@ -19,7 +20,7 @@ class ForceCass(commands.Cog):
     @commands.command(name='hangman', aliases=['forca'])
     async def hangman(self, ctx):
 
-        global resp, erros
+        global resp, errors
 
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -41,7 +42,7 @@ class ForceCass(commands.Cog):
             palavra = forca[dica]
             digitadas = []
             acertos = [' ', ]
-            erros[ctx.author.id] = 0
+            errors[ctx.author.id] = 0
 
             while True:
                 senha = ""
@@ -61,8 +62,8 @@ Dica: **{}**'''.format(senha, dica))
                         update = data
                         update['config']['playing'] = False
                         self.bot.db.update_data(data, update, 'users')
-                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
-                                              ' CANCELADO**')
+                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+                                              '**COMANDO CANCELADO**')
 
                 if senha.count('_') <= 3 or resp.content.upper() == 'S':
 
@@ -123,8 +124,8 @@ Dica: **{}**'''.format(senha, dica))
                         update = data
                         update['config']['playing'] = False
                         self.bot.db.update_data(data, update, 'users')
-                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
-                                              ' CANCELADO**')
+                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+                                              '**COMANDO CANCELADO**')
 
                     if tentativa in digitadas:
                         await ctx.send("<:alert_status:519896811192844288>│``Você já tentou esta letra!``")
@@ -134,12 +135,12 @@ Dica: **{}**'''.format(senha, dica))
                         if tentativa in palavra.lower():
                             acertos += tentativa
                         else:
-                            erros[ctx.author.id] += 1
+                            errors[ctx.author.id] += 1
                             await ctx.send("<:oc_status:519896814225457152>│``A palavra não tem essa letra!``")
 
-                    await ctx.send(enforcado[erros[ctx.author.id]])
+                    await ctx.send(enforcado[errors[ctx.author.id]])
 
-                    if erros[ctx.author.id] == 6:
+                    if errors[ctx.author.id] == 6:
                         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
                         update['config']['playing'] = False

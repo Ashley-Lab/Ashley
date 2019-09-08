@@ -377,8 +377,7 @@ class Database(object):
                         time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() \
                                      - update_user["cooldown"][str(ctx.command)]
 
-                        time_left = update_user["cooldown"][str(ctx.command)] - (datetime.datetime.utcnow() -
-                                                                                 epoch).total_seconds()
+                        time_left = kwargs.get("time") - time_diff
 
                         if time_diff < kwargs.get("time"):
                             raise commands.CheckFailure(f'<:negate:520418505993093130>│**Aguarde**: `Você deve '
@@ -519,15 +518,18 @@ class DataInteraction(object):
     async def add_announcement(self, ctx, announce):
         date = datetime.datetime(*datetime.datetime.utcnow().timetuple()[:6])
         data = {
-            "user_id": ctx.author.id,
-            "user_name": ctx.author.name,
+            "_id": ctx.author.id,
             "data": {
+                "status": False,
                 "announce": announce,
                 "date": "{}".format(date)
             }
         }
         self.db.push_data(data, "announcements")
-        await ctx.send('<:confirmado:519896822072999937>│``Anuncio cadastrado com sucesso!``')
+        await ctx.send('<:confirmado:519896822072999937>│``Anuncio cadastrado com sucesso!``\n```AGUARDE APROVAÇÃO```')
+        pending = self.bot.get_channel(619969149791240211)
+        msg = f"{ctx.author.id}: **{ctx.author.name}** ``ADICIONOU UM NOVO ANUNCIO PARA APROVAÇÃO!``"
+        await pending.send(msg)
 
     async def get_rank_xp(self, limit):
         data = self.db.get_all_data("users")
@@ -550,7 +552,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -575,7 +577,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -600,7 +602,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > R$ " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -625,7 +627,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -650,7 +652,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -675,7 +677,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -701,7 +703,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
@@ -726,7 +728,7 @@ class DataInteraction(object):
             return cont['list']
 
         rank = "\n".join([str(counter()) + "º: " +
-                          str(await self.bot.get_user_info(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 

@@ -4,6 +4,8 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
+player_ = ""
+
 
 class JoKenPo(commands.Cog):
     def __init__(self, bot):

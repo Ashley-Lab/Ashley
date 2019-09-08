@@ -63,7 +63,8 @@ class RankingClass(commands.Cog):
         if data is not None:
             update['user']['winner'] = valor
             self.bot.db.update_data(data, update, "users")
-            await ctx.send(f'<:confirmado:519896822072999937>│**{valor}** ``Estrelas Registradas!``', delete_after=10.0)
+            await ctx.send(f'<:confirmado:519896822072999937>│**{valor}** ``Estrelas Registradas!``',
+                           delete_after=10.0)
         else:
             await ctx.send('<:negate:520418505993093130>│``Usuário não encontrado!``', delete_after=10.0)
 
@@ -77,6 +78,7 @@ class RankingClass(commands.Cog):
         except IndexError:
             user = ctx.author
         data = self.bot.db.get_data("user_id", user.id, "users")
+        data_guild = self.db.get_data("guild_id", user.guild.id, "guilds")
 
         if data is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
@@ -148,7 +150,7 @@ class RankingClass(commands.Cog):
                         star_ = 'star_silver'
                     if data['user']['ranking'] == "Gold":
                         star_ = 'star_gold'
-                    if data['config']['vip']:
+                    if data_guild['vip']:
                         star_ = "star_greem"
                     if user.id == ctx.guild.owner.id:
                         star_ = "star_pink"

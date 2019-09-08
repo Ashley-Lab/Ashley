@@ -12,6 +12,7 @@ with open("resources/auth.json") as security:
 
 color = int(_auth['default_embed'], 16)
 married, achievements, strikes = None, None, None
+time_left = None
 
 
 class ProfileSystem(commands.Cog):

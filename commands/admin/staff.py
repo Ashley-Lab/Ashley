@@ -59,7 +59,8 @@ class StaffAdmin(commands.Cog):
         try:
             await ctx.message.channel.purge(limit=number)
         except discord.Forbidden:
-            await ctx.send("<:negate:520418505993093130>│``Não tenho permissão para apagar mensagens nesse servidor!``")
+            await ctx.send("<:negate:520418505993093130>│``Não tenho permissão para apagar mensagens nesse "
+                           "servidor!``")
 
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
@@ -100,8 +101,8 @@ class StaffAdmin(commands.Cog):
         except IndexError:
             await ctx.send("<:alert_status:519896811192844288>│``Você deve especificar um usuario para expulsar!``")
         except discord.Forbidden:
-            await ctx.send("<:negate:520418505993093130>│``Não posso expulsar o usuário, o cargo dele está acima de mim"
-                           " ou não tenho permissão para banir membros!``")
+            await ctx.send("<:negate:520418505993093130>│``Não posso expulsar o usuário, o cargo dele está acima de"
+                           " mim ou não tenho permissão para banir membros!``")
 
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))

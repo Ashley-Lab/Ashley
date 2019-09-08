@@ -34,13 +34,13 @@ class EmojiUpdate(commands.Cog):
                 if channel is None:
                     return
 
-                for emoji in added:
-                    async with self.session.get(emoji.url) as resp:
+                for _ in added:
+                    async with self.session.get(_.url) as resp:
                         if resp.status != 200:
                             continue
 
                         data = io.BytesIO(await resp.read())
-                        await channel.send(emoji.name, file=discord.File(data, f'{emoji.name}.png'))
+                        await channel.send(_.name, file=discord.File(data, f'{_.name}.png'))
                         await asyncio.sleep(1)
 
 

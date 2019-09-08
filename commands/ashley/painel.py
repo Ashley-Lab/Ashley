@@ -16,6 +16,7 @@ _list = ['</Shop>', '</Lore>']
 
 msg_id = None
 msg_user = None
+timer = None
 
 
 class Panel(commands.Cog):
@@ -42,8 +43,8 @@ class Panel(commands.Cog):
             msg_user = ctx.author
         else:
             await ctx.send(
-                t_(ctx, "<:negate:520418505993093130>│``Desculpe, mas apenas os`` **Membros do meu servidor** ``podem "
-                        "usar esse comando!``", "guilds"))
+                t_(ctx, "<:negate:520418505993093130>│``Desculpe, mas apenas os`` **Membros do meu servidor** ``"
+                        "podem usar esse comando!``", "guilds"))
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

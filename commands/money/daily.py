@@ -78,9 +78,9 @@ class DailyClass(commands.Cog):
                 elif data_user['user']['ranking'] == "Gold":
                     money = randint(40 + min_, 400 + max_)
                 await self.bot.db.add_money(ctx, money)
-                await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` **{money}**'
-                               f' ``em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a mais por usar '
-                               f'essa mesma quantidade de comandos.``')
+                await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` '
+                               f'**{money}** ``em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a '
+                               f'mais por usar essa mesma quantidade de comandos.``')
             else:
                 try:
                     data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -126,11 +126,21 @@ class DailyClass(commands.Cog):
             update_user['user']['rec'] = 1
         if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)
-            if chance >= 95:
+            if chance >= 80:
                 update_user['user']['winner'] += 1
                 await ctx.send('<:rank:519896825411665930>│``VOCÊ GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
                                '**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
                                '``ASH RANK``')
+                if update_user['user']['winner'] >= 10:
+                    data_guild = self.db.get_data("guild_id", ctx.guild.id, "guilds")
+                    update_guilda = data_guild
+                    if data_guild['vip'] is False and ctx.author.id == ctx.guild.owner.id:
+                        update_guilda['vip'] = True
+                        self.db.update_data(data_guild, update_guild, 'guilds')
+                        await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
+                                       '**VOCÊ TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
+                                       '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '
+                                       '"ASH ANNOUNCE"``')
         self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')

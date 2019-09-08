@@ -15,6 +15,7 @@ color = int(_auth['default_embed'], 16)
 resposta_area = -1
 escolheu = False
 msg_area_id = None
+msg_user_farm = None
 
 
 class FarmClass(commands.Cog):
@@ -94,8 +95,8 @@ class FarmClass(commands.Cog):
                     else:
                         await ctx.send(
                             t_(ctx,
-                               "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu servidor**"
-                               " ``podem usar esse comando!``", "guilds"))
+                               "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
+                               "servidor** ``podem usar esse comando!``", "guilds"))
                 else:
                     await ctx.send(f'<:oc_status:519896814225457152>│``Você já está no inferno!``')
             else:
@@ -170,8 +171,8 @@ class FarmClass(commands.Cog):
                     else:
                         await ctx.send(
                             t_(ctx,
-                               "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu servidor**"
-                               " ``podem usar esse comando!``", "guilds"))
+                               "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
+                               "servidor** ``podem usar esse comando!``", "guilds"))
                 else:
                     await ctx.send(f'<:oc_status:519896814225457152>│``Você já está numa provincia! '
                                    f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '

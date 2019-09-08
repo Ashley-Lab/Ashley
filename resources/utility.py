@@ -1,33 +1,42 @@
+import resources.ia_list as ia
 from random import choice
-from resources.ia_list import *
 
 
 def get_content(content):
-    answer = content.replace("`", "[censored]").replace("*", "[censored]").replace("_", "[censored]")\
-        .replace("~", "[censored]").replace("@", "[censored]").replace("here", "[censored]")\
+    answer = content.replace("`", "[censored]").replace("*", "[censored]").replace("_", "[censored]") \
+        .replace("~", "[censored]").replace("@", "[censored]").replace("here", "[censored]") \
         .replace("everyone", "[censored]").replace("ash ", "[censored]").replace("ash.", "[censored]")
     return answer
 
 
 async def get_response(message):
-    if len(message.content) > 20:
-        for c in range(0, len(perg_pq)):
-            if perg_pq[c] in message.content.lower():
-                response = choice(resposta_pq)
+    if len(message.content) > 10:
+        if 'denky' in message.content.lower():
+            if message.author.id != 300592580381376513:
+                response = choice(ia.denky_f)
                 return response
-        for c in range(0, len(perg_qual)):
-            if perg_qual[c] in message.content.lower():
-                response = choice(resposta_outras)
+            else:
+                return "Eu não consigo falar nada contra o senhor!"
+        for c in range(0, len(ia.perg_pq)):
+            if ia.perg_pq[c] in message.content.lower():
+                response = choice(ia.resposta_pq)
                 return response
+        for c in range(0, len(ia.perg_qual)):
+            if ia.perg_qual[c] in message.content.lower():
+                if ia.perg_qual[c] == "quando":
+                    response = choice(ia.resposta_quando)
+                    return response
+                elif ia.perg_qual[c] == "onde":
+                    response = choice(ia.resposta_onde)
+                    return response
+                else:
+                    response = choice(ia.resposta_outras)
+                    return response
         if ' ou ' in message.content.lower():
-            response = choice(resposta_ou)
+            response = choice(ia.resposta_ou)
             return response
-        elif 'denky' in message.content.lower():
-            response = choice(denky_f)
-            return response
-        else:
-            response = choice(resposta_comum)
-            return response
+    response = choice(ia.resposta_comum)
+    return response
 
 
 def parse_duration(duration: int):
@@ -481,71 +490,6 @@ ERRORS = ['The check functions for command staff ban failed.',
           'The check functions for command staff slowmode failed.',
           'The check functions for command staff delete failed.']
 
-enforcado = ['''
-```
-X==:==
-X  :   
-X   
-X 
-X 
-X
-===========
-```''', '''
-```
-X==:==
-X  :   
-X  O   
-X  
-X  
-X
-===========
-```''', '''
-```
-X==:==
-X  :   
-X  O   
-X  |
-X  
-X
-===========
-```''', '''
-```
-X==:==
-X  :   
-X  O   
-X \|
-X 
-X
-===========
-```''', '''
-```
-X==:==
-X  :   
-X  O   
-X \|/ 
-X  
-X
-===========
-```''', '''
-```
-X==:==
-X  :   
-X  O   
-X \|/ 
-X /  
-X
-===========
-```
-''', '''
-```
-X==:==
-X  :   
-X  O   
-X \|/ 
-X / \ 
-X
-===========
-```''']
 forca = {'Pokemon': 'Mewtwo',
          'Programador': 'Denky',
          'Sayajin': 'Vegeta',
@@ -1057,3 +1001,69 @@ pokemon = [{'nome': 'Caterpie', 'foto': 'https://i.imgur.com/Y5wlakH.jpg'},
            {'nome': 'Cranidos', 'foto': 'https://i.imgur.com/gowoN4t.jpg'},
            {'nome': 'Budew', 'foto': 'https://i.imgur.com/fKf0iDY.jpg'},
            {'nome': 'Luxray', 'foto': 'https://i.imgur.com/4JseYGm.jpg'}]
+
+enforcado = ['''
+```
+X==:== 
+X  :   
+X   
+X  
+X  
+X  
+===========
+```''', '''
+```
+X==:== 
+X  :   
+X  O   
+X  
+X  
+X  
+===========
+```''', '''
+```
+X==:== 
+X  :   
+X  O   
+X  | 
+X  
+X  
+===========
+```''', '''
+```
+X==:== 
+X  :   
+X  O   
+X \| 
+X 
+X 
+===========
+```''', '''
+```
+X==:== 
+X  :   
+X  O   
+X \|/ 
+X  
+X  
+===========
+```''', '''
+```
+X==:== 
+X  :   
+X  O   
+X \|/ 
+X /  
+X  
+===========
+```
+''', '''
+```
+X==:== 
+X  :   
+X  O   
+X \|/ 
+X / \ 
+X 
+===========
+```''']

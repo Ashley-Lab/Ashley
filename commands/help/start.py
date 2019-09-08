@@ -362,7 +362,8 @@ class Helper(commands.Cog):
                                   f"{self.st[1]}│**staff** ``ban``\n"
                                   f"{self.st[1]}│**staff** ``kick``\n"
                                   f"{self.st[1]}│**staff** ``slowmode``\n"
-                                  f"{self.st[1]}│**staff** ``report``")
+                                  f"{self.st[1]}│**staff** ``report``\n"
+                                  f"{self.st[32]}│**announce**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
             await botmsg[user.id].add_reaction('🏛')
@@ -387,11 +388,11 @@ class Helper(commands.Cog):
                                     "language-classes.png")
             ajuda.add_field(name="Owner Commands:",
                             value=f"{self.st[33]}│**make_doc**\n"
+                                  f"{self.st[32]}│**verify**\n"
                                   f"{self.st[40]}│**total_de_comandos**\n"
                                   f"{self.st[39]}│**source**\n"
                                   f"{self.st[34]}│**eval**\n"
                                   f"{self.st[38]}│**repeat_command**\n"
-                                  f"{self.st[32]}│**announce**\n"
                                   f"{self.st[35]}│**load**\n"
                                   f"{self.st[41]}│**unload**\n"
                                   f"{self.st[37]}│**reload**\n"
