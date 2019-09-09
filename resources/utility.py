@@ -1,5 +1,8 @@
+import discord
+
 import resources.ia_list as ia
 from random import choice
+from asyncio import TimeoutError
 
 
 def get_content(content):
@@ -7,6 +10,60 @@ def get_content(content):
         .replace("~", "[censored]").replace("@", "[censored]").replace("here", "[censored]") \
         .replace("everyone", "[censored]").replace("ash ", "[censored]").replace("ash.", "[censored]")
     return answer
+
+
+async def paginator(bot, items, inventory, embed, ctx):
+    descriptions = []
+    cont = 0
+    description = ''
+    for key in inventory.keys():
+        if cont == 0:
+            description = embed[2]
+        try:
+            string = f'{items[key][0]} **{items[key][1]}**: ``{inventory[key]}``\n'
+        except KeyError:
+            string = f"<:negate:520418505993093130> **{key.upper()}:** ``ITEM NÃO ENCONTRADO!``"
+        cont += len(string)
+        if cont <= 1500:
+            description += string
+        else:
+            descriptions.append(description)
+            description = f'{embed[2]}{string}'
+            cont = len(description)
+    descriptions.append(description)
+    cont = 0
+    emojis = ['⬅', '➡', '✖']
+    msg = await ctx.send('<:alert_status:519896811192844288>│``Aguarde...``')
+    for c in emojis:
+        await msg.add_reaction(c)
+    while True:
+        Embed = discord.Embed(
+            title=embed[0],
+            color=embed[1],
+            description=descriptions[cont]
+            )
+        Embed.set_author(name=bot.user, icon_url=bot.user.avatar_url)
+        Embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
+        Embed.set_footer(text="Ashley ® Todos os direitos reservados.  Pag{}".format(cont+1))
+        await msg.edit(embed=Embed, content='')
+        try:
+            reaction = await bot.wait_for('reaction_add', timeout=60.0)
+        except TimeoutError:
+            break
+        while reaction[1].id != ctx.author.id:
+            try:
+                reaction = await bot.wait_for('reaction_add', timeout=60.0)
+            except TimeoutError:
+                break
+        if reaction[0].emoji == '⬅' and cont > 0:
+            cont -= 1
+        if reaction[0].emoji == '➡' and cont < len(descriptions) - 1:
+            cont += 1
+        if reaction[0].emoji == '✖':
+            break
+        if reaction[0].emoji not in ['⬅', '➡', '✖']:
+            await ctx.send('<:alert_status:519896811192844288>│``Para de tentar bugar o treco...``', delete_after=30.0)
+    await msg.delete()
 
 
 async def get_response(message):

@@ -40,7 +40,7 @@ commands.owner.repeat_command
 commands.owner.source
 commands.owner.tot_commands
 commands.owner.unload
-# commands.rpg.battle
+@ commands.rpg.battle
 commands.rpg.status
 commands.utility.avatar
 commands.utility.draw

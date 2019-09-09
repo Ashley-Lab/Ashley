@@ -122,15 +122,15 @@ class Booster(object):
 
     async def buy_box(self, bot, ctx):
         data = bot.db.get_data("user_id", ctx.author.id, "users")
-        if data['treasure']['bronze'] > 5000:
-            answer = await bot.db.take_money(ctx, 'bronze', 5000)
-        elif data['treasure']['silver'] > 500:
-            answer = await bot.db.take_money(ctx, 'silver', 500)
-        elif data['treasure']['gold'] > 50:
-            answer = await bot.db.take_money(ctx, 'gold', 50)
+        if data['treasure']['bronze'] > 1000:
+            answer = await bot.db.take_money(ctx, 'bronze', 1000)
+        elif data['treasure']['silver'] > 100:
+            answer = await bot.db.take_money(ctx, 'silver', 100)
+        elif data['treasure']['gold'] > 10:
+            answer = await bot.db.take_money(ctx, 'gold', 10)
         else:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR OU RESETAR "
-                                  "A BOX!\nVOCÊ PRECISA DE 5.000 BRONZE, 500 SILVER OU 50 GOLD PARA COMPRAR.``")
+                                  "A BOX!\nVOCÊ PRECISA DE 1.000 BRONZE, 100 SILVER OU 10 GOLD PARA COMPRAR.``")
         data = bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         box = self.create_box()
