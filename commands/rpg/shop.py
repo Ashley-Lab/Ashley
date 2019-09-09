@@ -11,6 +11,7 @@ with open("resources/auth.json") as security:
 color_ = int(_auth['default_embed'], 16)
 
 botmsg = {}
+ctx_ = {}
 
 
 class ShopClass(commands.Cog):
@@ -36,7 +37,8 @@ class ShopClass(commands.Cog):
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
         embed.set_thumbnail(url="https://icon-library.net/images/shop-icon-png/shop-icon-png-6.jpg")
         embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-        global botmsg
+        global botmsg, ctx_
+        ctx_[ctx.author.id] = ctx
         botmsg[ctx.author.id] = await ctx.send(embed=embed)
         await botmsg[ctx.author.id].add_reaction('<:gold_box:546019944211415040>')
         await botmsg[ctx.author.id].add_reaction('<:coin:546019942936608778>')
@@ -102,8 +104,8 @@ class ShopClass(commands.Cog):
             embed = discord.Embed(
                 title="Box",
                 color=color_,
-                description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
-                            f"- For **Reset**: click in <:2_:578615674109165568>\n"
+                description=f"- For **Buy**: click in 🎫\n"
+                            f"- For **Reset**: click in 💳\n"
                             f"- For **Back**: click in ↩")
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="https://icon-library.net/images/shop-icon-png/shop-icon-png-6.jpg")
@@ -111,8 +113,8 @@ class ShopClass(commands.Cog):
             try:
                 await botmsg[user.id].clear_reactions()
                 await botmsg[user.id].edit(embed=embed)
-                await botmsg[user.id].add_reaction('<:1_:578615669487304704>')
-                await botmsg[user.id].add_reaction('<:2_:578615674109165568>')
+                await botmsg[user.id].add_reaction('🎫')
+                await botmsg[user.id].add_reaction('💳')
                 await botmsg[user.id].add_reaction('↩')
             except discord.errors.Forbidden:
                 await botmsg[user.id].delete()
@@ -125,8 +127,7 @@ class ShopClass(commands.Cog):
             embed = discord.Embed(
                 title="Box",
                 color=color_,
-                description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
-                            f"- For **Reset**: click in <:2_:578615674109165568>\n"
+                description=f"- For **Buy**: click in 💵\n"
                             f"- For **Back**: click in ↩")
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="https://icon-library.net/images/shop-icon-png/shop-icon-png-6.jpg")
@@ -134,14 +135,12 @@ class ShopClass(commands.Cog):
             try:
                 await botmsg[user.id].clear_reactions()
                 await botmsg[user.id].edit(embed=embed)
-                await botmsg[user.id].add_reaction('<:1_:578615669487304704>')
-                await botmsg[user.id].add_reaction('<:2_:578615674109165568>')
+                await botmsg[user.id].add_reaction('💵')
                 await botmsg[user.id].add_reaction('↩')
             except discord.errors.Forbidden:
                 await botmsg[user.id].delete()
                 botmsg[user.id] = await channel.send(embed=embed)
-                await botmsg[user.id].add_reaction('<:1_:578615669487304704>')
-                await botmsg[user.id].add_reaction('<:2_:578615674109165568>')
+                await botmsg[user.id].add_reaction('💵')
                 await botmsg[user.id].add_reaction('↩')
 
         if str(reaction.emoji) == "<:booster_f:546019942756253764>" and reaction.message.id == botmsg[user.id].id:
@@ -281,6 +280,24 @@ class ShopClass(commands.Cog):
                 await botmsg[user.id].add_reaction('<:1_:578615669487304704>')
                 await botmsg[user.id].add_reaction('<:2_:578615674109165568>')
                 await botmsg[user.id].add_reaction('↩')
+
+        if str(reaction.emoji) == "<:1_:578615669487304704>" and reaction.message.id == botmsg[user.id].id:
+            botmsg[user.id] = await channel.send("<:negate:520418505993093130>│``Em contrução...``")
+
+        if str(reaction.emoji) == "<:2_:578615674109165568>" and reaction.message.id == botmsg[user.id].id:
+            botmsg[user.id] = await channel.send("<:negate:520418505993093130>│``Em contrução...``")
+
+        if reaction.emoji == "🎫" and reaction.message.id == botmsg[user.id].id:
+            botmsg[user.id] = await channel.send("<:alert_status:519896811192844288>│``Comprando box...``")
+            await self.bot.booster.buy_box(self.bot, ctx_[user.id])
+
+        if reaction.emoji == "💳" and reaction.message.id == botmsg[user.id].id:
+            botmsg[user.id] = await channel.send("<:alert_status:519896811192844288>│``Resetando box...``")
+            await self.bot.booster.buy_box(self.bot, ctx_[user.id])
+
+        if reaction.emoji == "💵" and reaction.message.id == botmsg[user.id].id:
+            botmsg[user.id] = await channel.send("<:alert_status:519896811192844288>│``Comprando booster...``")
+            await self.bot.booster.buy_booster(self.bot, ctx_[user.id])
 
 
 def setup(bot):

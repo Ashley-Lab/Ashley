@@ -122,15 +122,15 @@ class Booster(object):
 
     async def buy_box(self, bot, ctx):
         data = bot.db.get_data("user_id", ctx.author.id, "users")
-        if data['treasure']['bronze'] > 10000:
-            answer = await bot.db.take_money(ctx, 'bronze', 10000)
-        elif data['treasure']['silver'] > 1000:
-            answer = await bot.db.take_money(ctx, 'silver', 1000)
-        elif data['treasure']['gold'] > 100:
-            answer = await bot.db.take_money(ctx, 'gold', 100)
+        if data['treasure']['bronze'] > 5000:
+            answer = await bot.db.take_money(ctx, 'bronze', 5000)
+        elif data['treasure']['silver'] > 500:
+            answer = await bot.db.take_money(ctx, 'silver', 500)
+        elif data['treasure']['gold'] > 50:
+            answer = await bot.db.take_money(ctx, 'gold', 50)
         else:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR OU RESETAR "
-                                  "A BOX!\nVOCÊ PRECISA DE 10.000 BRONZE, 1.000 SILVER OU 100 GOLD PARA COMPRAR.``")
+                                  "A BOX!\nVOCÊ PRECISA DE 5.000 BRONZE, 500 SILVER OU 50 GOLD PARA COMPRAR.``")
         data = bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         box = self.create_box()
@@ -181,15 +181,15 @@ class Booster(object):
         except KeyError:
             await ctx.send("<:alert_status:519896811192844288>│``VOCÊ PRECISA COMPRAR UMA BOX PARA PODER COMPRAR "
                            "BOOSTERS!")
-        if data['treasure']['bronze'] > 1000:
-            answer = await bot.db.take_money(ctx, 'bronze', 1000)
-        elif data['treasure']['silver'] > 100:
-            answer = await bot.db.take_money(ctx, 'silver', 100)
-        elif data['treasure']['gold'] > 10:
-            answer = await bot.db.take_money(ctx, 'gold', 10)
+        if data['treasure']['bronze'] > 100:
+            answer = await bot.db.take_money(ctx, 'bronze', 100)
+        elif data['treasure']['silver'] > 10:
+            answer = await bot.db.take_money(ctx, 'silver', 10)
+        elif data['treasure']['gold'] > 1:
+            answer = await bot.db.take_money(ctx, 'gold', 1)
         else:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
-                                  "\nVOCÊ PRECISA DE 10.00 BRONZE, 100 SILVER OU 10 GOLD PARA COMPRAR.``")
+                                  "\nVOCÊ PRECISA DE 100 BRONZE, 10 SILVER OU 1 GOLD PARA COMPRAR.``")
         data = bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         item = self.buy_item(data['box'], data['user']['ranking'], data['config']['vip'])
