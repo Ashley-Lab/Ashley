@@ -78,7 +78,7 @@ class RankingClass(commands.Cog):
         except IndexError:
             user = ctx.author
         data = self.bot.db.get_data("user_id", user.id, "users")
-        data_guild = self.db.get_data("guild_id", user.guild.id, "guilds")
+        data_guild = self.bot.db.get_data("guild_id", user.guild.id, "guilds")
 
         if data is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '

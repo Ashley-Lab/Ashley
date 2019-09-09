@@ -408,7 +408,7 @@ class Database(object):
                 return True
             else:
                 raise commands.CheckFailure(t_(ctx, f'<:negate:520418505993093130>│``Você ainda não está registrado, '
-                                                    f'por favor use`` **ash registro** ``ou`` **ash register**.',
+                                                    f'por favor use`` **ash register**.',
                                                     "guilds"))
         else:
             return True

@@ -26,6 +26,10 @@ class DadoClass(commands.Cog):
             return
         global result
         result = ''
+        if rolls > 99:
+            return await ctx.send('<:alert_status:519896811192844288>│``Número muito grande de dados!``')
+        if limit > 1000000:
+            return await ctx.send('<:alert_status:519896811192844288>│``Número muito grande de lados!``')
         for r in range(rolls):
             result += ''.join(str(random.randint(1, limit))) + ', '
         await ctx.send(f'```{result}```')

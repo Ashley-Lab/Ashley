@@ -26,7 +26,7 @@ from resources.boosters import Booster
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
 class Ashley(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, shard_count=2, **kwargs)
+        super().__init__(*args, shard_count=3, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
         self.commands_used = Counter()
@@ -134,7 +134,7 @@ class Ashley(commands.AutoShardedBot):
                     update_guild['data']['commands'] = 1
                 self.db.update_data(data_guild, update_guild, 'guilds')
                 if data_user is not None:
-                    if (self.guilds_commands[ctx.guild.id] % 20) == 0:
+                    if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                         for data in self.db.get_announcements():
                             if data['data']['status']:
                                 self.announcements.append(data["data"]["announce"])
