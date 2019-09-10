@@ -12,7 +12,7 @@ with open("resources/auth.json") as security:
 color = int(_auth['default_embed'], 16)
 
 
-class StatusClass(commands.Cog):
+class SkillClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -44,7 +44,7 @@ class StatusClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @status.command(name='add', aliases=['adicionar'])
+    @skill.command(name='add', aliases=['adicionar'])
     async def _add(self, ctx):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -98,7 +98,7 @@ class StatusClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @status.command(name='reset', aliases=['resetar'])
+    @skill.command(name='reset', aliases=['resetar'])
     async def _reset(self, ctx):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -114,5 +114,5 @@ class StatusClass(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(StatusClass(bot))
+    bot.add_cog(SkillClass(bot))
     print('\033[1;32mO comando \033[1;34mSKILLCLASS\033[1;32m foi carregado com sucesso!\33[m')
