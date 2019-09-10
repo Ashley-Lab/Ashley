@@ -26,7 +26,7 @@ from resources.boosters import Booster
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
 class Ashley(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, shard_count=3, **kwargs)
+        super().__init__(*args, shard_count=2, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
         self.commands_used = Counter()

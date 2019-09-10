@@ -2,7 +2,7 @@ commands.admin.config
 commands.admin.staff
 commands.bot.feedback
 commands.bot.info_bot
-commands.bot.online
+commands.rpg.box
 commands.bot.ping
 commands.data.register
 commands.ashley.farm
@@ -23,9 +23,9 @@ commands.guild.info_guild
 commands.guild.info_role
 commands.help.start
 commands.img_edit.reflect
-commands.member.entered
+@ deletado
 commands.member.info_user
-commands.minecraft.skin
+@ deletado
 commands.money.economy
 commands.money.guildbank
 commands.money.userbank
@@ -37,16 +37,16 @@ commands.owner.load
 commands.owner.logout
 commands.owner.reload
 commands.owner.repeat_command
-commands.owner.source
+commands.admin.source
 commands.owner.tot_commands
 commands.owner.unload
-@ commands.rpg.battle
-commands.rpg.status
+@ deletado
+commands.rpg.skill
 commands.utility.avatar
 commands.utility.draw
 commands.utility.rank
 commands.utility.roll
-commands.utility.vote
+@ deletado
 events.on_guild_channel_create
 events.on_guild_channel_delete
 events.on_guild_channel_pins_update
@@ -74,7 +74,7 @@ commands.funny.lick
 commands.funny.punch
 commands.funny.push
 commands.funny.slap
-commands.owner.shards
+commands.member.pet
 commands.game.hangman
 commands.member.profile
 commands.member.married

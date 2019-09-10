@@ -4,6 +4,8 @@ import resources.ia_list as ia
 from random import choice
 from asyncio import TimeoutError
 
+legend = {"Comum": 0, "Normal": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+
 
 def get_content(content):
     answer = content.replace("`", "[censored]").replace("*", "[censored]").replace("_", "[censored]") \
@@ -15,21 +17,26 @@ def get_content(content):
 async def paginator(bot, items, inventory, embed, ctx):
     descriptions = []
     cont = 0
+    cont_i = 0
     description = ''
     for key in inventory.keys():
         if cont == 0:
             description = embed[2]
         try:
-            string = f'{items[key][0]} **{items[key][1]}**: ``{inventory[key]}``\n'
+            rarity = list(legend.keys())[list(legend.values()).index(items[key][3])]
+            string = f'{items[key][0]} **{items[key][1]}** - Quant: ``{inventory[key]}`` ' \
+                     f'Tier: ``{rarity.upper()}``\n'
         except KeyError:
             string = f"<:negate:520418505993093130> **{key.upper()}:** ``ITEM NÃO ENCONTRADO!``"
         cont += len(string)
-        if cont <= 1500:
+        if cont <= 1500 and cont_i < 20:
             description += string
+            cont_i += 1
         else:
             descriptions.append(description)
             description = f'{embed[2]}{string}'
             cont = len(description)
+            cont_i = 0
     descriptions.append(description)
     cont = 0
     emojis = ['⬅', '➡', '✖']
@@ -44,7 +51,7 @@ async def paginator(bot, items, inventory, embed, ctx):
             )
         Embed.set_author(name=bot.user, icon_url=bot.user.avatar_url)
         Embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
-        Embed.set_footer(text="Ashley ® Todos os direitos reservados.  Pag{}".format(cont+1))
+        Embed.set_footer(text="Ashley ® Todos os direitos reservados.  [Pag {}/{}]".format(cont+1, len(descriptions)))
         await msg.edit(embed=Embed, content='')
         try:
             reaction = await bot.wait_for('reaction_add', timeout=60.0)
@@ -61,8 +68,6 @@ async def paginator(bot, items, inventory, embed, ctx):
             cont += 1
         if reaction[0].emoji == '✖':
             break
-        if reaction[0].emoji not in ['⬅', '➡', '✖']:
-            await ctx.send('<:alert_status:519896811192844288>│``Para de tentar bugar o treco...``', delete_after=30.0)
     await msg.delete()
 
 

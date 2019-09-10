@@ -19,8 +19,8 @@ class StatusClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.group(name='status', aliases=['habilidades'])
-    async def status(self, ctx):
+    @commands.group(name='skill', aliases=['habilidade'])
+    async def skill(self, ctx):
         if ctx.invoked_subcommand is None:
             data = self.bot.db.get_data("user_id", ctx.author.id, "users")
             if ctx.author.id == data["user_id"]:
@@ -39,7 +39,7 @@ class StatusClass(commands.Cog):
                 resposta.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
                 resposta.set_thumbnail(url="{}".format(ctx.author.avatar_url))
                 resposta.set_footer(text="Ashley ® Todos os direitos reservados.")
-                await ctx.channel.send(embed=resposta, delete_after=60.0)
+                await ctx.send(embed=resposta, delete_after=60.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -60,7 +60,7 @@ class StatusClass(commands.Cog):
             resposta.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
             resposta.set_thumbnail(url="{}".format(ctx.author.avatar_url))
             resposta.set_footer(text="Ashley ® Todos os direitos reservados.")
-            await ctx.channel.send(embed=resposta, delete_after=60.0)
+            await ctx.send(embed=resposta, delete_after=60.0)
 
             def is_correct(m):
                 return m.author == ctx.author and m.content.isdigit()
@@ -115,4 +115,4 @@ class StatusClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(StatusClass(bot))
-    print('\033[1;32mO comando \033[1;34mSTATUSCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32mO comando \033[1;34mSKILLCLASS\033[1;32m foi carregado com sucesso!\33[m')

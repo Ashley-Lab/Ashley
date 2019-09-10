@@ -157,11 +157,10 @@ class Helper(commands.Cog):
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             ajuda.set_thumbnail(url="https://i.imgur.com/XNHWd3M.png")
             ajuda.add_field(name="Pet Iterations:",
-                            value=f"{self.st[61]}│**Pergunte Algo** : "
-                                  f"``Respondo a mensagens que começam com \"pet!\" e tenham uma interrogação``\n"
-                                  f"{self.st[61]}│**Saudação** : "
-                                  f"``Respondo a mensagens que tenham: bom dia \"pet!\", boa tarde \"pet!\" e "
-                                  f"boa noite \"pet!\"``\n"
+                            value=f"{self.st[61]}│**pet** + ``pergunta``\n"
+                                  f"{self.st[61]}│**pet** + ``bom dia``\n"
+                                  f"{self.st[61]}│**pet** + ``boa tarde``\n"
+                                  f"{self.st[61]}│**pet** + ``boa noite``\n"
                                   f"{self.st[76]}│**pet** ``or`` **p**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
@@ -218,7 +217,6 @@ class Helper(commands.Cog):
                                   f"{self.st[16]}│**pensador** ``or`` **thinker**\n"
                                   f"{self.st[20]}│**emojis** ``or`` **emoji**\n"
                                   f"{self.st[44]}│**avatar** ``or`` **a**\n"
-                                  f"{self.st[4]}│**online** ``or`` **uptime**\n"
                                   f"{self.st[15]}│**diga** ``or`` **say**\n"
                                   f"{self.st[21]}│**serverinfo** ``or`` **infoserver**\n"
                                   f"{self.st[26]}│**userinfo** ``or`` **infouser**\n"
@@ -255,16 +253,15 @@ class Helper(commands.Cog):
                             value=f"{self.st[12]}│**fofoca** ``or`` **gossip**\n"
                                   f"{self.st[11]}│**gif** ``or`` **giphy**\n"
                                   f"{self.st[5]}│**ping** ``or`` **latency**\n"
-                                  f"{self.st[48]}│**vote** ``or`` **voto**\n"
                                   f"{self.st[47]}│**rolar** ``or`` **roll**\n"
                                   f"{self.st[2]}│**feedback** ``or`` **sugestao**\n"
                                   f"{self.st[10]}│**textao** ``or`` **ascii**\n"
                                   f"{self.st[45]}│**sorteio** ``or`` **draw**\n"
-                                  f"{self.st[27]}│**skin** ``or`` **mine**\n"
                                   f"{self.st[8]}│**convite** ``or`` **invite**\n"
                                   f"{self.st[14]}│**palin** ``or`` **palindromo**\n"
-                                  f"{self.st[43]}│**status** ``or`` **habilidades**\n"
-                                  f"{self.st[43]}│**status** + ``add`` **or** ``adicionar``\n"
+                                  f"{self.st[43]}│**skill** ``or`` **habilidades**\n"
+                                  f"{self.st[43]}│**skill** + ``add``\n"
+                                  f"{self.st[43]}│**skill** + ``reset``\n"
                                   f"{self.st[74]}│**push** ``or`` **empurrao**\n"
                                   f"{self.st[75]}│**slap** ``or`` **tapa**\n"
                                   f"{self.st[67]}│**top**")
@@ -292,6 +289,7 @@ class Helper(commands.Cog):
             ajuda.add_field(name="General Commands:",
                             value=f"{self.st[9]}│**cargos** ``or`` **roles**\n"
                                   f"{self.st[7]}│**teleport** ``or`` **teletransportar**\n"
+                                  f"{self.st[7]}│**hell** ``or`` **inferno**\n"
                                   f"{self.st[7]}│**respawn** ``or`` **return**\n"
                                   f"{self.st[79]}│**marry** ``or`` **casar**\n"
                                   f"{self.st[79]}│**divorce** ``or`` **separar**\n"
@@ -363,6 +361,7 @@ class Helper(commands.Cog):
                                   f"{self.st[1]}│**staff** ``kick``\n"
                                   f"{self.st[1]}│**staff** ``slowmode``\n"
                                   f"{self.st[1]}│**staff** ``report``\n"
+                                  f"{self.st[39]}│**source**\n"
                                   f"{self.st[32]}│**announce**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
@@ -390,7 +389,6 @@ class Helper(commands.Cog):
                             value=f"{self.st[33]}│**make_doc**\n"
                                   f"{self.st[32]}│**verify**\n"
                                   f"{self.st[40]}│**total_de_comandos**\n"
-                                  f"{self.st[39]}│**source**\n"
                                   f"{self.st[34]}│**eval**\n"
                                   f"{self.st[38]}│**repeat_command**\n"
                                   f"{self.st[35]}│**load**\n"
