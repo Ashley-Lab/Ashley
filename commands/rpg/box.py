@@ -10,6 +10,7 @@ with open("resources/auth.json") as security:
     _auth = json.loads(security.read())
 
 color = int(_auth['default_embed'], 16)
+legend = {"Comum": 500, "Normal": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
 
 
 class BoxClass(commands.Cog):
@@ -25,14 +26,45 @@ class BoxClass(commands.Cog):
         if ctx.author.id == data["user_id"]:
             try:
                 if data['box']:
-                    embed = discord.Embed(
-                        title='Box:',
+                    status = data['box']['status']['active']
+                    rarity = data['box']['status']['rarity']
+                    num = legend[rarity]
+                    secret = data['box']['status']['secret']
+                    ur = data['box']['status']['ur']
+                    sr = data['box']['status']['sr']
+                    r = data['box']['status']['r']
+                    n = data['box']['status']['n']
+                    c = data['box']['status']['c']
+                    size = data['box']['status']['size']
+                    images = {'Secret': 'https://i.imgur.com/qjenk0j.png',
+                              'Ultra Raro': 'https://i.imgur.com/fdudP2k.png',
+                              'Super Raro': 'https://i.imgur.com/WYebgvF.png',
+                              'Raro': 'https://i.imgur.com/7LnlnDA.png',
+                              'Normal': 'https://i.imgur.com/TnoC2j1.png',
+                              'Comum': 'https://i.imgur.com/ma5tHvK.png'}
+                    description = '''
+Raridade da Box:
+**{}**
+ ```Markdown
+STATUS:
+<ACTIVE: {}>
+ITEMS:
+<SECRET: {}>
+<UR: {}>
+<SR: {}>
+<R: {}>
+<N: {}>
+<C: {}>
+<SITE: {}/{}>```'''.format(rarity, status, secret, ur, sr, r, n, c, size, num)
+                    box = discord.Embed(
+                        title="{}'s box:".format(ctx.author.name),
                         color=color,
-                        description=f"```py\n{data['box']['status']}```")
-                    embed.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
-                    embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
-                    embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-                    await ctx.send(embed=embed)
+                        description=description
+                    )
+                    box.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
+                    box.set_thumbnail(url="{}".format(images[rarity]))
+                    box.set_footer(text="Ashley ® Todos os direitos reservados.")
+                    await ctx.send(embed=box)
             except KeyError:
                 await ctx.send("<:negate:520418505993093130>│``Você nao tem box na sua conta ainda...``")
 
