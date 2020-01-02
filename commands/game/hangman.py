@@ -39,7 +39,7 @@ class ForceCass(commands.Cog):
 
             lista = list(forca.keys())
             dica = choice(lista)
-            palavra = forca[dica]
+            palavra = forca[dica].lower()
             digitadas = []
             acertos = [' ', ]
             errors[ctx.author.id] = 0
@@ -47,6 +47,7 @@ class ForceCass(commands.Cog):
             while True:
                 senha = ""
                 for letra in palavra:
+                    print(senha)
                     senha += '{}.'.format(letra.upper()) if letra in acertos else "_."
                 await ctx.send('''
 `{}`

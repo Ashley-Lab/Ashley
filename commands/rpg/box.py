@@ -55,7 +55,7 @@ ITEMS:
 <R: {}>
 <N: {}>
 <C: {}>
-<SITE: {}/{}>```'''.format(rarity, status, secret, ur, sr, r, n, c, size, num)
+<SIZE: {}/{}>```'''.format(rarity, status, secret, ur, sr, r, n, c, size, num)
                     box = discord.Embed(
                         title="{}'s box:".format(ctx.author.name),
                         color=color,

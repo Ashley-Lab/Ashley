@@ -45,7 +45,7 @@ class TwitterClass(commands.Cog):
 ''') > rede[4]:
             await ctx.send('<:alert_status:519896811192844288>│``Sua mensagem foi muito grande!``')
         else:
-            avatarurl = requests.get(ctx.author.avatar_url)
+            avatarurl = requests.get(ctx.author.avatar_url_as(format="png"))
             avatar = Image.open(BytesIO(avatarurl.content))
             avatar = avatar.resize((rede[0][0], rede[0][0]))
             big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
@@ -56,7 +56,7 @@ class TwitterClass(commands.Cog):
             avatar.putalpha(mascara)
             exit_avatar = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
             exit_avatar.putalpha(mascara)
-            exit_avatar.save('avatar.png')
+            avatar = exit_avatar
 
             imgurl = random.choice(['https://i.imgur.com/2Owhe1y.jpg',
                                     'https://i.imgur.com/pFuPCUE.jpg',

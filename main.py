@@ -26,7 +26,7 @@ from resources.boosters import Booster
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
 class Ashley(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, shard_count=2, **kwargs)
+        super().__init__(*args, shard_count=1, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
         self.commands_used = Counter()
@@ -35,12 +35,15 @@ class Ashley(commands.AutoShardedBot):
         self.user_commands = Counter()
         self.announcements = ['ANUNCIE COMIGO: ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!',
                               'SISTEMA DE LINGAGUEM: O IDIOMA INGLES SERÁ LIBERADO EM BREVE!',
-                              'VIP: VOCê SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
-                              'O COMANDO "RANK" ESTÁ FINALIZADO, AGORA VOCÊ PODERÁ OLHAR SEU RANK A QUALQUER MOMENTO!',
-                              'O COMANDO REC SERVE PARA VOCÊ ADIQUIRIR ESTRELAS NO SEU RANK!',
+                              'VIP: VOCÊ SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
+                              'O COMANDO "ASH RANK" ESTÁ FINALIZADO, AGORA VOCÊ PODERÁ OLHAR SEU RANK A QUALQUER'
+                              ' MOMENTO!',
+                              'O COMANDO "ASH REC" SERVE PARA VOCÊ ADIQUIRIR ESTRELAS NO SEU RANK, POREM VOCÊ APENAS'
+                              ' PODE DAR RECOMENDAÇÃO PARA OUTRAS PESSOAS!',
                               'A COR DAS ESTRELAS VARIA PELO SEU RANKING ATUAL (BRONZE, PRATA OU OURO) OU DO SEU STATUS'
-                              'QUE PODE SER: VIP MEMBRO, DONO DE SERVIDOR (GUILD) OU MEU DESENVOLVEDOR!',
-                              'PARA SUBIR DE PATENTE, VC PRECISA USAR OS MEUS COMANDOS E FARMAR RANKPOINTS E MEDALHAS!',
+                              ' QUE PODE SER: MEMBRO DE SERVIDOR VIP, DONO DE SERVIDOR (GUILD) OU MEU DESENVOLVEDOR!',
+                              'PARA SUBIR DE PATENTE, VC PRECISA USAR OS MEUS COMANDOS E ADQUIRIR RANKPOINTS E'
+                              ' MEDALHAS!',
                               'QUANTO MAIS COMANDOS DIFERENTES VC USAR, MAIS CHANCES DE VC SUBIR O SEU NIVEL DE '
                               'RANKING',
                               'VC ADQUIRE DINHEIRO USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO:'
@@ -49,8 +52,8 @@ class Ashley(commands.AutoShardedBot):
                               ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
                               ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!']
         self.languages = ("pt", "en")
-        self.progress = "V.5 -> 93.0%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.3 | PROGRESS: " + str(self.progress)
+        self.progress = "V.5 -> 98.0%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.8 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',

@@ -118,7 +118,7 @@ class RankingClass(commands.Cog):
         nome = remove_acentos_e_caracteres_especiais(str(user))
 
         # take avatar member
-        url_avatar = requests.get(user.avatar_url)
+        url_avatar = requests.get(user.avatar_url_as(format="png"))
         avatar = Image.open(BytesIO(url_avatar.content))
         avatar = avatar.resize((250, 250))
         big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
@@ -129,7 +129,7 @@ class RankingClass(commands.Cog):
         avatar.putalpha(mascara)
         exit_avatar = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
         exit_avatar.putalpha(mascara)
-        exit_avatar.save('avatar.png')
+        avatar = exit_avatar
 
         # patent image
         patent_img = Image.open('images/patente/{}.png'.format(patent))
