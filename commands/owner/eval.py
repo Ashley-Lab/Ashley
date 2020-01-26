@@ -8,7 +8,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
+with open("data/auth.json") as security:
     _auth = json.loads(security.read())
 
 
@@ -88,4 +88,4 @@ class EvalSintax(commands.Cog):
 
 def setup(bot):
     bot.add_cog(EvalSintax(bot))
-    print('\033[1;32mO comando \033[1;34mEVALSINTAX\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mEVALSINTAX\033[1;32m foi carregado com sucesso!\33[m')

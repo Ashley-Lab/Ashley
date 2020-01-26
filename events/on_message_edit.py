@@ -1,17 +1,12 @@
-import json
 import discord
 
 from discord.ext import commands
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 
 class OnMessageEdit(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
@@ -33,7 +28,7 @@ class OnMessageEdit(commands.Cog):
                             return
                         to_send = discord.Embed(
                             title=f":pencil: {after.author} **editou uma mensagem de texto**",
-                            color=color,
+                            color=self.color,
                             description=f"**Canal de texto:** {after.channel.mention}")
                         to_send.add_field(name="**Antiga mensagem:**", value=f"```{before.content}```")
                         to_send.add_field(name="**Nova mensagem:**", value=f"```{after.content}```")
@@ -51,4 +46,4 @@ class OnMessageEdit(commands.Cog):
 
 def setup(bot):
     bot.add_cog(OnMessageEdit(bot))
-    print('\033[1;32mO evento \033[1;34mMEMBER_EDIT\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( * ) | O evento \033[1;34mMEMBER_EDIT\033[1;33m foi carregado com sucesso!\33[m')

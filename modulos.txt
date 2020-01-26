@@ -23,9 +23,9 @@ commands.guild.info_guild
 commands.guild.info_role
 commands.help.start
 commands.img_edit.reflect
-@ deletado
+events.on_shard_ready
 commands.member.info_user
-@ deletado
+commands.rpg.battle
 commands.money.economy
 commands.money.guildbank
 commands.money.userbank
@@ -40,13 +40,13 @@ commands.owner.repeat_command
 commands.admin.source
 commands.owner.tot_commands
 commands.owner.unload
-@ deletado
+@ disponivel 2
 commands.rpg.skill
 commands.utility.avatar
 commands.utility.draw
 commands.utility.rank
 commands.utility.roll
-@ deletado
+@ disponivel 3
 events.on_guild_channel_create
 events.on_guild_channel_delete
 events.on_guild_channel_pins_update

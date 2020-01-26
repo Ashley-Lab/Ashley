@@ -11,28 +11,11 @@ from random import choice
 from resources.utility import get_content
 
 
-class Shards(commands.Cog):
+class Pet(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.web_hook = WebHook(url="https://discordapp.com/api/webhooks/529827969129250827/hf9iQua6Yqk6GZI6wGW9oyk"
-                                    "WqpCHS9dA0QVg7NNVtZcbZCJJMR4u5SWK2qAgMoFKkNaP")
         self.letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                         't', 'u', 'v', 'w', 'x', 'y', 'z')
-
-    @commands.Cog.listener()
-    async def on_shard_ready(self, shard_id):
-        self.web_hook.embed = Embed(
-            colour=random_color(),
-            description=f"**O shard `{shard_id}` se encontra pronto para uso**\nAproveite o dia ;)",
-            timestamp=datetime.utcnow()
-        ).set_author(
-            name=f"Shard {shard_id}",
-            icon_url=self.bot.user.avatar_url
-        ).set_thumbnail(
-            url=self.bot.user.avatar_url
-        ).to_dict()
-        
-        self.web_hook.send_()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -76,4 +59,5 @@ class Shards(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Shards(bot))
+    bot.add_cog(Pet(bot))
+    print('\033[1;32m( * ) | O comando \033[1;34mPET\033[1;32m foi carregado com sucesso!\33[m')

@@ -1,4 +1,3 @@
-import json
 import discord
 
 from random import choice, randint
@@ -6,15 +5,11 @@ from discord.ext import commands
 from resources.db import Database
 from resources.check import check_it
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class SlapClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -57,7 +52,7 @@ class SlapClass(commands.Cog):
             slapemb = discord.Embed(title='Tapa :wave:',
                                     description='**{}** {} **{}**! {}'.format(ctx.message.mentions[0].name, text,
                                                                               ctx.author.name, end),
-                                    color=color)
+                                    color=self.color)
             slapemb.set_image(url=slap)
             slapemb.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=slapemb)
@@ -68,4 +63,4 @@ class SlapClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(SlapClass(bot))
-    print('\033[1;32mO comando \033[1;34mSLAPCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mSLAPCLASS\033[1;32m foi carregado com sucesso!\33[m')

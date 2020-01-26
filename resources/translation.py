@@ -1,7 +1,4 @@
-import json
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
+from config import data as config
 
 
 def t_(ctx, translation, db_name="guilds"):
@@ -9,16 +6,16 @@ def t_(ctx, translation, db_name="guilds"):
         data = ctx.bot.db.get_data("guild_id", ctx.guild.id, db_name)
         if data is not None:
             lang = data["data"].get("lang", "pt")
-            currency = data["data"].get("currency", _auth['default_money'])
+            currency = data["data"].get("currency", config['config']['default_money'])
 
             # troca o nome da moeda padrao para a customizavel do servidor
             if lang == "pt":
-                return translation.replace(_auth['default_money'], currency)
+                return translation.replace(config['config']['default_money'], currency)
 
             try:
                 translation_ = ctx.bot.translations[translation][lang]
-                return translation_.replace(_auth['default_money'], currency)
+                return translation_.replace(config['config']['default_money'], currency)
             except None:
-                return translation.replace(_auth['default_money'], currency)
+                return translation.replace(config['config']['default_money'], currency)
 
     return translation

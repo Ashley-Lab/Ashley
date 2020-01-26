@@ -1,4 +1,3 @@
-import json
 import discord
 
 from datetime import datetime as dt
@@ -7,10 +6,6 @@ from resources.check import check_it
 from resources.db import Database
 from resources.utility import parse_duration
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 married, achievements, strikes = None, None, None
 time_left = None
 
@@ -18,6 +13,7 @@ time_left = None
 class ProfileSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -119,7 +115,7 @@ class ProfileSystem(commands.Cog):
         except KeyError:
             cmds = 0
 
-        embed = discord.Embed(title='Perfil do(a): {}'.format(member.display_name), color=color)
+        embed = discord.Embed(title='Perfil do(a): {}'.format(member.display_name), color=self.color)
         embed.set_thumbnail(url=member.avatar_url)
         embed.add_field(name='Relationship Status :heart_eyes: ', value=str(married), inline=True)
         embed.add_field(name='Wallet :moneybag:',  value="R$ " + str(d), inline=True)
@@ -166,4 +162,4 @@ class ProfileSystem(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ProfileSystem(bot))
-    print('\033[1;32mO comando \033[1;34mPROFILE_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mPROFILE_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')

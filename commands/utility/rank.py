@@ -12,9 +12,6 @@ from resources.db import Database
 from resources.check import check_it
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
 
 def remove_acentos_e_caracteres_especiais(word):
     # Unicode normalize transforma um caracter em seu equivalente em latin.
@@ -119,7 +116,7 @@ class RankingClass(commands.Cog):
 
         # take avatar member
         url_avatar = requests.get(user.avatar_url_as(format="png"))
-        avatar = Image.open(BytesIO(url_avatar.content))
+        avatar = Image.open(BytesIO(url_avatar.content)).convert('RGBA')
         avatar = avatar.resize((250, 250))
         big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
         mascara = Image.new('L', big_avatar, 0)
@@ -132,7 +129,7 @@ class RankingClass(commands.Cog):
         avatar = exit_avatar
 
         # patent image
-        patent_img = Image.open('images/patente/{}.png'.format(patent))
+        patent_img = Image.open('images/patente/{}.png'.format(patent)).convert('RGBA')
         patent_img = patent_img.resize((205, 248))
 
         # champion image
@@ -141,7 +138,7 @@ class RankingClass(commands.Cog):
             if data['user']['winner']:
                 if data['user']['winner'] == 0:
                     star_ = 'star_default'
-                    champion[n - 1] = Image.open(f'images/elements/{star_}.png')
+                    champion[n - 1] = Image.open(f'images/elements/{star_}.png').convert('RGBA')
                     champion[n - 1] = champion[n - 1].resize((130, 90))
                 else:
                     if data['user']['ranking'] == "Bronze":
@@ -160,11 +157,11 @@ class RankingClass(commands.Cog):
                         star = star_
                     else:
                         star = 'star_default'
-                    champion[n - 1] = Image.open(f'images/elements/{star}.png')
+                    champion[n - 1] = Image.open(f'images/elements/{star}.png').convert('RGBA')
                     champion[n - 1] = champion[n - 1].resize((130, 90))
             else:
                 star_ = 'star_default'
-                champion[n - 1] = Image.open(f'images/elements/{star_}.png')
+                champion[n - 1] = Image.open(f'images/elements/{star_}.png').convert('RGBA')
                 champion[n - 1] = champion[n - 1].resize((130, 90))
 
         # guild image
@@ -183,7 +180,7 @@ class RankingClass(commands.Cog):
         # User Align
         bounding_box = [150, 275, 2200, 375]
         x1, y1, x2, y2 = bounding_box
-        img = Image.open('images/dashboards/rank.png')
+        img = Image.open('images/dashboards/rank.png').convert('RGBA')
         show = ImageDraw.Draw(img)
         w, h = show.textsize(nome.upper(), font=font)
         x = (x2 - x1 - w) / 2 + x1
@@ -232,4 +229,4 @@ class RankingClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(RankingClass(bot))
-    print('\033[1;32mO comando \033[1;34mRANKING\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mRANKING\033[1;32m foi carregado com sucesso!\33[m')

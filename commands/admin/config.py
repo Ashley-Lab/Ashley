@@ -1,4 +1,3 @@
-import json
 import discord
 
 from asyncio import sleep
@@ -7,16 +6,12 @@ from resources.check import check_it
 from resources.utility import ERRORS
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class ConfigClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
+        self.color = self.bot.color
 
     def status(self):
         for v in self.bot.data_cog.values():
@@ -28,7 +23,7 @@ class ConfigClass(commands.Cog):
     async def config(self, ctx):
         if ctx.invoked_subcommand is None:
             self.status()
-            top = discord.Embed(title="Commands Status", color=color,
+            top = discord.Embed(title="Commands Status", color=self.color,
                                 description=f"<:on_status:519896814799945728>│On\n"
                                 f"<:alert_status:519896811192844288>│Alert\n"
                                 f"<:oc_status:519896814225457152>│Off\n"
@@ -395,4 +390,4 @@ class ConfigClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ConfigClass(bot))
-    print('\033[1;32mO comando \033[1;34mCONFIG\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mCONFIG\033[1;32m foi carregado com sucesso!\33[m')

@@ -1,20 +1,15 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class TopClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
+        self.color = self.bot.color
 
     def status(self):
         for v in self.bot.data_cog.values():
@@ -27,7 +22,7 @@ class TopClass(commands.Cog):
     async def top(self, ctx):
         if ctx.invoked_subcommand is None:
             self.status()
-            top = discord.Embed(title="Commands Status", color=color,
+            top = discord.Embed(title="Commands Status", color=self.color,
                                 description=f"<:on_status:519896814799945728>│On\n"
                                 f"<:alert_status:519896811192844288>│Alert\n"
                                 f"<:oc_status:519896814225457152>│Off\n"
@@ -114,4 +109,4 @@ class TopClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(TopClass(bot))
-    print('\033[1;32mO comando \033[1;34mTOPCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mTOPCLASS\033[1;32m foi carregado com sucesso!\33[m')

@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -7,18 +6,12 @@ from asyncio import TimeoutError
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class CharadeClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-        with open("resources/charadas.json", "r", encoding='utf-8') as f:
-            self.charade = json.loads(f.read())
+        self.color = self.bot.color
+        self.charade = self.bot.config['riddles']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -41,7 +34,7 @@ class CharadeClass(commands.Cog):
             embed = discord.Embed(
                 title='A CHADARA É...',
                 description=f'```{charade}```',
-                color=color,
+                color=self.color,
             )
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
@@ -109,4 +102,4 @@ class CharadeClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(CharadeClass(bot))
-    print('\033[1;32mO comando \033[1;34mCHARADECLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mCHARADECLASS\033[1;32m foi carregado com sucesso!\33[m')

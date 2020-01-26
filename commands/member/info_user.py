@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -6,15 +5,10 @@ from resources.check import check_it
 from resources.db import Database
 
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
-
 class UserInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -38,7 +32,7 @@ class UserInfo(commands.Cog):
                 usercreatedat = str(user.created_at).split('.', 1)[0]
                 embed = discord.Embed(
                     title=":pushpin:Informações pessoais de:",
-                    color=color,
+                    color=self.color,
                     description=user.name
                 )
                 embed.add_field(name=":door:Entrou no server em:", value=userjoinedat, inline=True)
@@ -66,7 +60,7 @@ class UserInfo(commands.Cog):
                 usercreatedat2 = str(user2.created_at).split('.', 1)[0]
                 embed2 = discord.Embed(
                     title=":pushpin:Informações pessoais de:",
-                    color=color,
+                    color=self.color,
                     description=user2.name
                 )
                 embed2.add_field(name=":door:Entrou no server em:", value=userjoinedat2, inline=True)
@@ -84,4 +78,4 @@ class UserInfo(commands.Cog):
 
 def setup(bot):
     bot.add_cog(UserInfo(bot))
-    print('\033[1;32mO comando \033[1;34mUSERINFO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mUSERINFO\033[1;32m foi carregado com sucesso!\33[m')

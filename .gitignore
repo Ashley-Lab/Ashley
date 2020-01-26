@@ -1,6 +1,9 @@
 # Ashley Git Ignore
-resources/auth.json
+data/auth.json
 discord.log
+
+# Python Configs
+*.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

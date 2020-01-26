@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -7,13 +6,8 @@ from resources.translation import t_
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 _list = ['</Shop>', '</Lore>']
-
 msg_id = None
 msg_user = None
 timer = None
@@ -22,16 +16,17 @@ timer = None
 class Panel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='roles', aliases=['cargos'])
     async def roles(self, ctx):
-        if ctx.guild.id == _auth['default_guild']:
+        if ctx.guild.id == self.bot.config['config']['default_guild']:
             embed = discord.Embed(
                 title="Escolha a área que você deseja ver:",
-                color=color,
+                color=self.color,
                 description="- Para pegar o cargo **</Shop>**: Clique em :skull_crossbones:\n"
                             "- Para pegar o cargo **</Lore>**: Clique em :crossed_swords:\n")
             bot_msg = await ctx.send(embed=embed)
@@ -109,4 +104,4 @@ class Panel(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Panel(bot))
-    print('\033[1;32mO comando \033[1;34mPAINEL\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mPAINEL\033[1;32m foi carregado com sucesso!\33[m')

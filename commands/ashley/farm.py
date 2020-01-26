@@ -1,17 +1,12 @@
-import json
 import discord
 
-from resources.ia_list import areas_ctf
 from resources.check import check_it
 from discord.ext import commands
 from asyncio import sleep
 from resources.translation import t_
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
 
-color = int(_auth['default_embed'], 16)
 resposta_area = -1
 escolheu = False
 msg_area_id = None
@@ -21,6 +16,8 @@ msg_user_farm = None
 class FarmClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
+        self.ctf = self.bot.config['ctf']['areas_ctf']
 
     async def add_role(self, ctx, roles, province):
         record = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -40,7 +37,7 @@ class FarmClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='respawn', aliases=['return'])
     async def respawn(self, ctx):
-        if ctx.guild.id == _auth['default_guild']:
+        if ctx.guild.id == self.bot.config['config']['default_guild']:
             cargos = ctx.author.roles
             record = self.bot.db.get_data("user_id", ctx.author.id, "users")
             updates = record
@@ -77,7 +74,7 @@ class FarmClass(commands.Cog):
         if ctx.author.id == record["user_id"]:
             if record['config']['provinces'] is None:
                 if ctx.channel.id != 576795574783705104:
-                    if ctx.guild.id == _auth['default_guild']:
+                    if ctx.guild.id == self.bot.config['config']['default_guild']:
                         await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU LHE ENVINANDO PARA O "
                                        "SUB-MUNDO!``", delete_after=30.0)
 
@@ -115,11 +112,11 @@ class FarmClass(commands.Cog):
                 if record['config']['provinces'] is None:
                     global msg_user_farm
                     msg_user_farm = ctx.author
-                    if ctx.guild.id == _auth['default_guild']:
+                    if ctx.guild.id == self.bot.config['config']['default_guild']:
                         embed = discord.Embed(
                             title="Escolha a área que você deseja Ir:\n"
                                   "```COMANDO PARA VOLTAR AO CLAN ATUAL: ash.respawn```",
-                            color=color,
+                            color=self.color,
                             description="- Para ir até **Etheria**: Clique em :crystal_ball:\n"
                                         "- Para ir até **Rauberior**: Clique em :lion_face:\n"
                                         "- Para ir até **Ilumiora**: Clique em :candle:\n"
@@ -159,13 +156,13 @@ class FarmClass(commands.Cog):
                             rules = ctx.author.roles
 
                             roles = [r.name for r in ctx.author.roles if r.name != "@everyone"]
-                            await self.add_role(ctx, roles, areas_ctf[resposta_area])
+                            await self.add_role(ctx, roles, self.ctf[resposta_area])
 
                             for c in range(0, len(rules)):
                                 if rules[c].name != "@everyone":
                                     await ctx.author.remove_roles(rules[c])
                                     await sleep(1)
-                            role = discord.utils.find(lambda r: r.name == areas_ctf[resposta_area], ctx.guild.roles)
+                            role = discord.utils.find(lambda r: r.name == self.ctf[resposta_area], ctx.guild.roles)
                             await ctx.author.add_roles(role)
                         await botmsg.delete()
                     else:
@@ -295,4 +292,4 @@ class FarmClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(FarmClass(bot))
-    print('\033[1;32mO comando \033[1;34mFARM\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mFARM\033[1;32m foi carregado com sucesso!\33[m')

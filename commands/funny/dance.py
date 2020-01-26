@@ -1,4 +1,3 @@
-import json
 import discord
 
 from random import choice
@@ -6,20 +5,16 @@ from discord.ext import commands
 from resources.db import Database
 from resources.check import check_it
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class DanceClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='dance', aliases=['dança'])
+    @commands.command(name='dance', aliases=['dançar'])
     async def dance(self, ctx):
         try:
             dance_img = ['https://media.giphy.com/media/1woCaEQvSvKMODsyEA/giphy.gif',
@@ -32,7 +27,7 @@ class DanceClass(commands.Cog):
                                         description='**{}** Ele(a) esta dançando com **{}**! Alguem tira foto! EU '
                                                     'SHIPPO! :heart_eyes: '.format(ctx.message.mentions[0].name,
                                                                                    ctx.author.name),
-                                        color=color)
+                                        color=self.color)
             dance_embed.set_image(url=dance)
             dance_embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=dance_embed)
@@ -43,4 +38,4 @@ class DanceClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(DanceClass(bot))
-    print('\033[1;32mO comando \033[1;34mDANCE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mDANCE\033[1;32m foi carregado com sucesso!\33[m')

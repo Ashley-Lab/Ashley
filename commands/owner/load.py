@@ -1,19 +1,14 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class LoadCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -23,7 +18,7 @@ class LoadCog(commands.Cog):
         try:
             self.bot.load_extension('{}'.format(cog))
             embed = discord.Embed(
-                color=color,
+                color=self.color,
                 description=f'<:confirmado:519896822072999937>│Extenção **{cog}**, carregada com sucesso!')
             await ctx.send(embed=embed)
         except ModuleNotFoundError as e:
@@ -35,4 +30,4 @@ class LoadCog(commands.Cog):
 
 def setup(bot):
     bot.add_cog(LoadCog(bot))
-    print('\033[1;32mO comando \033[1;34mLOAD\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mLOAD\033[1;32m foi carregado com sucesso!\33[m')

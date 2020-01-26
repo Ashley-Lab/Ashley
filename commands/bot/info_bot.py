@@ -1,4 +1,3 @@
-import json
 import discord
 import psutil
 
@@ -9,15 +8,11 @@ from resources.db import Database
 from collections import Counter
 from datetime import datetime as dt
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class BotInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -33,7 +28,7 @@ class BotInfo(commands.Cog):
         text = channel_types[True]
         owner = str(self.bot.get_user(self.bot.owner_id))
 
-        embed_bot = discord.Embed(title='🤖 **Informações da Ashley**', color=color, description='\n')
+        embed_bot = discord.Embed(title='🤖 **Informações da Ashley**', color=self.color, description='\n')
         embed_bot.set_thumbnail(url=self.bot.user.avatar_url)
         embed_bot.add_field(name="📨 | Comandos Executados",
                             value='**{}** ``comandos``'.format(sum(self.bot.commands_used.values())))
@@ -65,4 +60,4 @@ class BotInfo(commands.Cog):
 
 def setup(bot):
     bot.add_cog(BotInfo(bot))
-    print('\033[1;32mO comando \033[1;34mBOTINFO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mBOTINFO\033[1;32m foi carregado com sucesso!\33[m')

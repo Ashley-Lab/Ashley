@@ -1,17 +1,12 @@
-import json
 import discord
 
 from discord.ext import commands
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 
 class ChannelUpdate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @commands.Cog.listener()
     async def on_guild_channel_update(self, before, after):
@@ -26,7 +21,7 @@ class ChannelUpdate(commands.Cog):
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Canal de Texto Editado**",
-                                color=color,
+                                color=self.color,
                                 description=f"**Canal de texto:** {before.name}")
                             to_send.add_field(name='Nome Antigo', value=f'**{before.name}**')
                             to_send.add_field(name='Nome Novo', value=f'**{after.name}**')
@@ -39,7 +34,7 @@ class ChannelUpdate(commands.Cog):
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Canal de Texto Editado**",
-                                color=color,
+                                color=self.color,
                                 description=f"**Canal de texto:** {before.name}")
                             to_send.add_field(name='Tópico Antigo', value=f'**{before.topic}**')
                             to_send.add_field(name='Tópico Novo', value=f'**{after.topic}**')
@@ -55,4 +50,4 @@ class ChannelUpdate(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ChannelUpdate(bot))
-    print('\033[1;32mO evento \033[1;34mCHANNEL_UPDATE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( * ) | O evento \033[1;34mCHANNEL_UPDATE\033[1;33m foi carregado com sucesso!\33[m')

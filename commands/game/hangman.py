@@ -1,6 +1,6 @@
 from discord.ext import commands
 from random import choice
-from resources.utility import enforcado, forca
+from resources.utility import enforcado
 from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError
@@ -37,6 +37,7 @@ class ForceCass(commands.Cog):
             def check_response(m):
                 return m.author == ctx.author and m.content.upper() in ['S', 'N']
 
+            forca = self.bot.config['forca']['list']
             lista = list(forca.keys())
             dica = choice(lista)
             palavra = forca[dica].lower()
@@ -47,7 +48,6 @@ class ForceCass(commands.Cog):
             while True:
                 senha = ""
                 for letra in palavra:
-                    print(senha)
                     senha += '{}.'.format(letra.upper()) if letra in acertos else "_."
                 await ctx.send('''
 `{}`
@@ -158,4 +158,4 @@ Dica: **{}**'''.format(senha, dica))
 
 def setup(bot):
     bot.add_cog(ForceCass(bot))
-    print('\033[1;32mO comando de \033[1;34mFORCECLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando de \033[1;34mFORCECLASS\033[1;32m foi carregado com sucesso!\33[m')

@@ -1,4 +1,3 @@
-import json
 import discord
 
 from random import choice
@@ -6,15 +5,11 @@ from discord.ext import commands
 from resources.db import Database
 from resources.check import check_it
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class KissClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -31,7 +26,7 @@ class KissClass(commands.Cog):
             kissemb = discord.Embed(title='Beijo :heart:',
                                     description='**{}** Ele(a) recebeu um beijo de **{}**! Que casal fofo! '
                                                 ':heart_eyes: '.format(ctx.message.mentions[0].name, ctx.author.name),
-                                    color=color)
+                                    color=self.color)
             kissemb.set_image(url=kiss)
             kissemb.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=kissemb)
@@ -42,4 +37,4 @@ class KissClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(KissClass(bot))
-    print('\033[1;32mO comando \033[1;34mKISSCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mKISSCLASS\033[1;32m foi carregado com sucesso!\33[m')

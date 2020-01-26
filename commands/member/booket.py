@@ -31,7 +31,7 @@ class Booket(commands.Cog):
             if data_user['user']['married'] is True and data_member['user']['married'] is True:
                 if data_user['user']['married_at'] == member.id and data_member['user']['married_at'] == ctx.author.id:
                     img_ = choice(['images/married/bokfb2.png', 'images/married/bokfb1.png'])
-                    original = Image.open(img_)
+                    original = Image.open(img_).convert('RGBA')
                     original = original.resize((992, 1402))
                     original.save('marrysend.png')
                     mens = member
@@ -44,7 +44,7 @@ class Booket(commands.Cog):
                             avatarurl = requests.get(lista[0][0])
                         else:
                             avatarurl = requests.get(lista[0][1])
-                        avatar = Image.open(BytesIO(avatarurl.content))
+                        avatar = Image.open(BytesIO(avatarurl.content)).convert('RGBA')
                         avatar = avatar.resize((lista[1][c], lista[1][c]))
                         big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
                         mascara = Image.new('L', big_avatar, 0)
@@ -74,4 +74,4 @@ class Booket(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Booket(bot))
-    print('\033[1;32mO comando \033[1;34mBOOKET\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mBOOKET\033[1;32m foi carregado com sucesso!\33[m')

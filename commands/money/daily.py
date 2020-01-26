@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -6,11 +5,6 @@ from resources.check import check_it
 from resources.db import Database
 from random import randint
 
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 money = 0
 
 
@@ -18,6 +12,7 @@ class DailyClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
+        self.color = self.bot.color
 
     def status(self):
         for v in self.bot.data_cog.values():
@@ -30,7 +25,7 @@ class DailyClass(commands.Cog):
     async def daily(self, ctx):
         if ctx.invoked_subcommand is None:
             self.status()
-            daily = discord.Embed(title="Commands Status", color=color,
+            daily = discord.Embed(title="Commands Status", color=self.color,
                                   description=f"<:on_status:519896814799945728>│On\n"
                                               f"<:alert_status:519896811192844288>│Alert\n"
                                               f"<:oc_status:519896814225457152>│Off\n"
@@ -158,7 +153,7 @@ class DailyClass(commands.Cog):
             await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
                            f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
         else:
-            if ctx.guild.id != _auth['default_guild']:
+            if ctx.guild.id != self.bot.config['config']['default_guild']:
                 await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro do'
                                ' meu servidor de suporte, para isso use o comando ASH INVITE para receber no seu '
                                'privado o link do meu servidor.``')
@@ -177,4 +172,4 @@ class DailyClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(DailyClass(bot))
-    print('\033[1;32mO comando \033[1;34mDAILYCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mDAILYCLASS\033[1;32m foi carregado com sucesso!\33[m')

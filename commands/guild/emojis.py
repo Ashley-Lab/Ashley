@@ -1,19 +1,14 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class AllEmoji(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
@@ -30,7 +25,7 @@ class AllEmoji(commands.Cog):
                 emojis_2 = ""
                 for emoji in emojis_list[int(num / 2):]:
                     emojis_2 += "".join(emoji)
-                embed1 = discord.Embed(colour=color)
+                embed1 = discord.Embed(colour=self.color)
                 embed1.add_field(name="Emojis [ PARTE 1 ]", value=emojis_1)
                 embed1.add_field(name="Emojis [ PARTE 2 ]", value=emojis_2)
                 await ctx.send(embed=embed1)
@@ -47,7 +42,7 @@ class AllEmoji(commands.Cog):
                 emojis_4 = ""
                 for emoji in emojis_list[int(num / 2)+int(num / 4):]:
                     emojis_4 += "".join(emoji)
-                embed1 = discord.Embed(colour=color)
+                embed1 = discord.Embed(colour=self.color)
                 embed1.add_field(name="Emojis [ PARTE 1 ]", value=emojis_1)
                 embed1.add_field(name="Emojis [ PARTE 2 ]", value=emojis_2)
                 embed1.add_field(name="Emojis [ PARTE 3 ]", value=emojis_3)
@@ -59,4 +54,4 @@ class AllEmoji(commands.Cog):
 
 def setup(bot):
     bot.add_cog(AllEmoji(bot))
-    print('\033[1;32mO comando \033[1;34mEMOJIS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mEMOJIS\033[1;32m foi carregado com sucesso!\33[m')

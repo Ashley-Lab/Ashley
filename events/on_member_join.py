@@ -1,13 +1,7 @@
-import json
 import discord
 
 from random import choice
 from discord.ext import commands
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 gif = ['https://media.giphy.com/media/bAmQn1R4V3owE/giphy.gif',
        'https://media.giphy.com/media/skVEP0BeduG4/giphy.gif',
@@ -24,6 +18,7 @@ gif = ['https://media.giphy.com/media/bAmQn1R4V3owE/giphy.gif',
 class OnMemberJoin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -35,7 +30,7 @@ class OnMemberJoin(commands.Cog):
                     if member.guild.system_channel is not None:
                         to_send = discord.Embed(
                             title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
-                            color=color,
+                            color=self.color,
                             description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
                                         "digite ``ash.ajuda`` que eu irei ajudar você com "
                                         "muito prazer!".format(member.name, member.guild))
@@ -47,7 +42,7 @@ class OnMemberJoin(commands.Cog):
                     else:
                         to_send = discord.Embed(
                             title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
-                            color=color,
+                            color=self.color,
                             description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
                                         "digite ``ash.ajuda`` que eu irei ajudar você com "
                                         "muito prazer!".format(member.name, member.guild))
@@ -80,12 +75,12 @@ class OnMemberJoin(commands.Cog):
                     pass
 
             try:
-                if _auth['default_guild'] == member.guild.id:
+                if self.bot.config['config']['default_guild'] == member.guild.id:
                     role = discord.utils.find(lambda r: r.name == "</Members>", member.guild.roles)
                     await member.add_roles(role)
                     channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
                     embed = discord.Embed(
-                        color=color,
+                        color=self.color,
                         description="<a:blue:525032762256785409>│``USE O COMANDO`` **ash cargos** ``PARA VOCE VER OS "
                                     "CARGOS DISPONIVEIS``")
                     await channel_.send(embed=embed)
@@ -107,4 +102,4 @@ class OnMemberJoin(commands.Cog):
 
 def setup(bot):
     bot.add_cog(OnMemberJoin(bot))
-    print('\033[1;32mO evento \033[1;34mMEMBER_JOIN\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( * ) | O evento \033[1;34mMEMBER_JOIN\033[1;33m foi carregado com sucesso!\33[m')

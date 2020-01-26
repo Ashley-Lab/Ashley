@@ -35,15 +35,18 @@ class EmojiUpdate(commands.Cog):
                     return
 
                 for _ in added:
-                    async with self.session.get(_.url) as resp:
-                        if resp.status != 200:
-                            continue
+                    try:
+                        async with self.session.get(_.url) as resp:
+                            if resp.status != 200:
+                                continue
 
-                        data = io.BytesIO(await resp.read())
-                        await channel.send(_.name, file=discord.File(data, f'{_.name}.png'))
-                        await asyncio.sleep(1)
+                            data = io.BytesIO(await resp.read())
+                            await channel.send(_.name, file=discord.File(data, f'{_.name}.png'))
+                            await asyncio.sleep(1)
+                    except TypeError:
+                        continue
 
 
 def setup(bot):
     bot.add_cog(EmojiUpdate(bot))
-    print('\033[1;32mO evento \033[1;34mEMOJI_UPDATE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( * ) | O evento \033[1;34mEMOJI_UPDATE\033[1;33m foi carregado com sucesso!\33[m')

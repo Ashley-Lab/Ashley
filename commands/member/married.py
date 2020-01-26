@@ -1,16 +1,10 @@
 import discord
-import json
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError
 from random import choice
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 git = ["https://media.giphy.com/media/2djU0ypmLqqsjHKEnM/giphy.gif",
        "https://media.giphy.com/media/69xjQSxBEeiJ2nfTZU/giphy.gif",
@@ -22,6 +16,7 @@ git = ["https://media.giphy.com/media/2djU0ypmLqqsjHKEnM/giphy.gif",
 class MarriedSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -96,7 +91,7 @@ class MarriedSystem(commands.Cog):
                     self.bot.db.update_data(data_user, update_user, 'users')
                     self.bot.db.update_data(data_member, update_member, 'users')
                     img = choice(git)
-                    embed = discord.Embed(color=color)
+                    embed = discord.Embed(color=self.color)
                     embed.set_image(url=img)
                     await ctx.send(embed=embed)
                     return await ctx.send(
@@ -136,11 +131,27 @@ class MarriedSystem(commands.Cog):
         if data_member is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
-        if member.id == ctx.author.id:
-            return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE SE SEPARAR DE VOCÊ MESMO!``')
+        if member is not None:
+            if member.id == ctx.author.id:
+                return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE SE SEPARAR DE VOCÊ MESMO!``')
+        else:
+            pass
 
         if data_user['user']['married'] is True and data_member['user']['married'] is True:
-            if data_user['user']['married_at'] == member.id and data_member['user']['married_at'] == ctx.author.id:
+            if member is not None:
+                if data_user['user']['married_at'] == member.id and data_member['user']['married_at'] == ctx.author.id:
+                    update_user['user']['married'] = False
+                    update_member['user']['married'] = False
+                    update_user['user']['married_at'] = None
+                    update_member['user']['married_at'] = None
+                    self.bot.db.update_data(data_user, update_user, 'users')
+                    self.bot.db.update_data(data_member, update_member, 'users')
+                    return await ctx.send(
+                        f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.mention} **agora vocês"
+                        f" estão SEPARADOS!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
+                else:
+                    await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
+            else:
                 update_user['user']['married'] = False
                 update_member['user']['married'] = False
                 update_user['user']['married_at'] = None
@@ -148,10 +159,8 @@ class MarriedSystem(commands.Cog):
                 self.bot.db.update_data(data_user, update_user, 'users')
                 self.bot.db.update_data(data_member, update_member, 'users')
                 return await ctx.send(
-                    f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.mention} **agora vocês"
-                    f" estão SEPARADOS!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
-            else:
-                await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
+                    f"😢 **QUE PENA** 😢 {ctx.author.mention} **agora você"
+                    f" está SEPARADO(A)!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
         elif data_member['user']['married'] is False:
             return await ctx.send('<:negate:520418505993093130>│``ELE(A) NÃO ESTA CASADO(A)!``')
         else:
@@ -160,4 +169,4 @@ class MarriedSystem(commands.Cog):
 
 def setup(bot):
     bot.add_cog(MarriedSystem(bot))
-    print('\033[1;32mO comando \033[1;34mMARRIED_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mMARRIED_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')

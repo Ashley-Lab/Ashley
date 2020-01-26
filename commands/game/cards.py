@@ -1,22 +1,16 @@
-import json
 import discord
 
 from discord.ext import commands
-from resources.utility import CARDS
 from random import randint
 from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class CardsClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -33,10 +27,11 @@ class CardsClass(commands.Cog):
             def check(m):
                 return m.author == ctx.author
 
+            CARDS = self.bot.config['cards']['list']
             card = CARDS[randint(0, 399)]
             embed = discord.Embed(
                 title='QUAL O NOME DESSA CARTA?',
-                color=color,
+                color=self.color,
             )
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             embed.set_image(url=card['foto'])
@@ -93,4 +88,4 @@ class CardsClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(CardsClass(bot))
-    print('\033[1;32mO comando \033[1;34mCARDSCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mCARDSCLASS\033[1;32m foi carregado com sucesso!\33[m')

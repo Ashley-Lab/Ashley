@@ -1,4 +1,3 @@
-import json
 import discord
 
 from random import choice
@@ -6,15 +5,11 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class DrawUsers(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
@@ -25,7 +20,7 @@ class DrawUsers(commands.Cog):
         member = discord.utils.get(ctx.guild.members, name="{}".format(draw_member.name))
         embed = discord.Embed(
             title="``Fiz o sorteio de um membro``",
-            colour=color,
+            colour=self.color,
             description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│``Parabens!!``".format(member)
         )
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -36,4 +31,4 @@ class DrawUsers(commands.Cog):
 
 def setup(bot):
     bot.add_cog(DrawUsers(bot))
-    print('\033[1;32mO comando \033[1;34mSORTEIO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mSORTEIO\033[1;32m foi carregado com sucesso!\33[m')

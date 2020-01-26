@@ -12,7 +12,7 @@ class GameThinker(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='guess', aliases=['advinhe'])
+    @commands.command(name='guess', aliases=['advinhe', 'adivinhe'])
     async def guess(self, ctx):
 
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -74,4 +74,4 @@ class GameThinker(commands.Cog):
 
 def setup(bot):
     bot.add_cog(GameThinker(bot))
-    print('\033[1;32mO comando de \033[1;34mGAME\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando de \033[1;34mGAME\033[1;32m foi carregado com sucesso!\33[m')

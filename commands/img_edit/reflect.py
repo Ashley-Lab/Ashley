@@ -4,7 +4,6 @@ import textwrap
 from discord.ext import commands
 from random import choice
 from resources.db import Database
-from resources.ia_list import reflita, reflita_zueira
 from PIL import Image, ImageDraw, ImageFont
 from resources.check import check_it
 
@@ -12,6 +11,7 @@ from resources.check import check_it
 class Reflection(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.reflect = self.bot.config['reflect']['list']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -20,9 +20,7 @@ class Reflection(commands.Cog):
     async def reflect(self, ctx):
         image = Image.open('images/memes/reflita.png')
         draw = ImageDraw.Draw(image)
-        message = choice(reflita)
-        if 'zueira' in ctx.message.content:
-            message = choice(reflita_zueira)
+        message = choice(self.reflect)
         msg = textwrap.wrap(message, width=25)
         font = ImageFont.truetype('fonts/text.ttf', 25)
         bounding_box = [310, 25, 620, 320]
@@ -43,4 +41,4 @@ class Reflection(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Reflection(bot))
-    print('\033[1;32mO comando \033[1;34mREFLITA\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mREFLITA\033[1;32m foi carregado com sucesso!\33[m')

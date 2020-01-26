@@ -17,7 +17,7 @@ class WhatsappClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='whatsapp', aliases=['zap'])
-    async def whatsapp(self, ctx, *, resp):
+    async def whatsapp(self, ctx, *, resp=None):
         if resp is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
 
@@ -123,7 +123,7 @@ chamado de mobrau''', (147, 216), 7], ['''pare com as drogas''', (177, 237), 7]]
             trim.rectangle((0, 0) + big_img, fill=255)  # opacidade
             mascara = mascara.resize(img.size, Image.ANTIALIAS)
             img.putalpha(mascara)
-            exit_img = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
+            exit_img = ImageOps.fit(img, mascara.size, centering=(0.5, 0.5))
             exit_img.putalpha(mascara)
             img = exit_img
 
@@ -155,4 +155,4 @@ chamado de mobrau''', (147, 216), 7], ['''pare com as drogas''', (177, 237), 7]]
 
 def setup(bot):
     bot.add_cog(WhatsappClass(bot))
-    print('\033[1;32mO comando \033[1;34mWHATSAPPCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mWHATSAPPCLASS\033[1;32m foi carregado com sucesso!\33[m')

@@ -8,11 +8,6 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.translation import t_
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 def gif_api(tag):
     url = 'http://api.giphy.com/v1/gifs/search?q={}&api_key=NTK5lt0KnPWsHfNmtquZq2FLtAsqharZ&limit=16'.format(tag)
@@ -25,6 +20,7 @@ def gif_api(tag):
 class GetGif(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
@@ -35,7 +31,7 @@ class GetGif(commands.Cog):
             return await ctx.send('<:negate:520418505993093130>│``DIGITE UMA TAG PARA O GIF``')
         try:
             answer = gif_api(tag)
-            embed_gif = discord.Embed(title="\n", description='\n', color=color)
+            embed_gif = discord.Embed(title="\n", description='\n', color=self.color)
             embed_gif.set_image(url=answer)
             embed_gif.set_footer(text=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             await ctx.send(embed=embed_gif)
@@ -45,4 +41,4 @@ class GetGif(commands.Cog):
 
 def setup(bot):
     bot.add_cog(GetGif(bot))
-    print('\033[1;32mO comando \033[1;34mGIF\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mGIF\033[1;32m foi carregado com sucesso!\33[m')

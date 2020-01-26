@@ -1,5 +1,4 @@
 from discord.ext import commands
-from resources.ia_list import palin
 from random import choice
 from resources.check import check_it
 from resources.db import Database
@@ -14,10 +13,11 @@ class Inverse(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='palin', aliases=['palindromo'])
     async def palin(self, ctx):
+        palin = self.bot.config['palin']['list']
         answer = choice(palin)
         await ctx.channel.send('''```Markdown\n [>]: {}```'''.format(answer.upper()))
 
 
 def setup(bot):
     bot.add_cog(Inverse(bot))
-    print('\033[1;32mO comando \033[1;34mPALINDROMO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mPALINDROMO\033[1;32m foi carregado com sucesso!\33[m')

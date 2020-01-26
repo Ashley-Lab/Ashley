@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -6,15 +5,11 @@ from asyncio import TimeoutError
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class SkillClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -26,7 +21,7 @@ class SkillClass(commands.Cog):
             if ctx.author.id == data["user_id"]:
                 resposta = discord.Embed(
                     title='Escolha onde você quer adiconar seu ponto de habilidade:',
-                    color=color,
+                    color=self.color,
                     description='**ATUALMENTE VOCÊ TEM {} PONTOS DE HABILIDADES DISPONIVEIS**\n'
                                 '``E ABAIXO SE ENCONTRA SEUS PONTOS DISTRIBUIDOS:``\n'
                                 '**1**: ``Strenght - {}``\n**2**: ``Constitution - {}``\n**3**: ``Dexterity - {}``\n'
@@ -51,7 +46,7 @@ class SkillClass(commands.Cog):
         if ctx.author.id == data["user_id"]:
             resposta = discord.Embed(
                 title='Escolha onde você quer adiconar seu ponto de habilidade:',
-                color=color,
+                color=self.color,
                 description='**ATUALMENTE VOCÊ TEM {} PONTOS DE HABILIDADE**\n'
                             '``QUAL HABILIDADE VOCE DESEJA AUMENTAR?``\n'
                             '**1**: ``{}``\n**2**: ``{}``\n**3**: ``{}``\n'
@@ -115,4 +110,4 @@ class SkillClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(SkillClass(bot))
-    print('\033[1;32mO comando \033[1;34mSKILLCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mSKILLCLASS\033[1;32m foi carregado com sucesso!\33[m')

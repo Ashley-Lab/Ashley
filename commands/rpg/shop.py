@@ -1,15 +1,9 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError, sleep
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color_ = int(_auth['default_embed'], 16)
 
 botmsg = {}
 ctx_ = {}
@@ -18,6 +12,7 @@ ctx_ = {}
 class ShopClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @staticmethod
     def verify_money(data, num):
@@ -40,7 +35,7 @@ class ShopClass(commands.Cog):
     async def shop(self, ctx):
         embed = discord.Embed(
             title="Choice Category:",
-            color=color_,
+            color=self.color,
             description=f"- For **Box**: click in <:gold_box:546019944211415040>\n"
                         f"- For **Booster**: click in <:coin:546019942936608778>\n"
                         f"- For **-**: click in <:booster_f:546019942756253764>\n"
@@ -80,7 +75,7 @@ class ShopClass(commands.Cog):
         if reaction.emoji == "↩" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="Choice Category",
-                color=color_,
+                color=self.color,
                 description=f"- For **Box**: click in <:gold_box:546019944211415040>\n"
                             f"- For **Booster**: click in <:coin:546019942936608778>\n"
                             f"- For **-**: click in <:booster_f:546019942756253764>\n"
@@ -118,7 +113,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:gold_box:546019944211415040>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="Box",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in 🎫\n"
                             f"- For **Reset**: click in 💳\n"
                             f"- For **Back**: click in ↩")
@@ -141,7 +136,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:coin:546019942936608778>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="Booster",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in 💵\n"
                             f"- For **Back**: click in ↩")
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -161,7 +156,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:booster_f:546019942756253764>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="Booster",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
                             f"- For **Reset**: click in <:2_:578615674109165568>\n"
                             f"- For **Back**: click in ↩")
@@ -184,7 +179,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:booster_e:546019942374572053>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="None",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
                             f"- For **Reset**: click in <:2_:578615674109165568>\n"
                             f"- For **Back**: click in ↩")
@@ -207,7 +202,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:booster_d:546019942550601729>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="None",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
                             f"- For **Reset**: click in <:2_:578615674109165568>\n"
                             f"- For **Back**: click in ↩")
@@ -230,7 +225,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:booster_c:546019942705922048>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="None",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
                             f"- For **Reset**: click in <:2_:578615674109165568>\n"
                             f"- For **Back**: click in ↩")
@@ -253,7 +248,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:booster_b:546019942512853003>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="None",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
                             f"- For **Reset**: click in <:2_:578615674109165568>\n"
                             f"- For **Back**: click in ↩")
@@ -276,7 +271,7 @@ class ShopClass(commands.Cog):
         if str(reaction.emoji) == "<:booster_a:546019942680756234>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
                 title="None",
-                color=color_,
+                color=self.color,
                 description=f"- For **Buy**: click in <:1_:578615669487304704>\n"
                             f"- For **Reset**: click in <:2_:578615674109165568>\n"
                             f"- For **Back**: click in ↩")
@@ -349,4 +344,4 @@ class ShopClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ShopClass(bot))
-    print('\033[1;32mO comando \033[1;34mSHOP\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mSHOP\033[1;32m foi carregado com sucesso!\33[m')

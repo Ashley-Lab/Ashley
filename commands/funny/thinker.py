@@ -1,7 +1,6 @@
 from discord.ext import commands
 from random import choice
 from resources.db import Database
-from resources.ia_list import pensador
 from resources.check import check_it
 
 
@@ -14,10 +13,11 @@ class Thinkers(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='thinker', aliases=['pensador'])
     async def thinker(self, ctx):
-        answer = choice(pensador)
+        thinker = self.bot.config['thinker']['list']
+        answer = choice(thinker)
         await ctx.message.channel.send("Assim diz o **pensador**: ``{}``".format(answer))
 
 
 def setup(bot):
     bot.add_cog(Thinkers(bot))
-    print('\033[1;32mO comando \033[1;34mPENSADOR\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mPENSADOR\033[1;32m foi carregado com sucesso!\33[m')

@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -7,16 +6,12 @@ from asyncio import TimeoutError
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class StaffAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
+        self.color = self.bot.color
 
     def status(self):
         for v in self.bot.data_cog.values():
@@ -31,7 +26,7 @@ class StaffAdmin(commands.Cog):
             self.status()
             embed = discord.Embed(
                 title="Commands Status",
-                color=color,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n"
                 f"<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n"
@@ -114,13 +109,13 @@ class StaffAdmin(commands.Cog):
                 if ctx.channel.slowmode_delay == 0:
                     await ctx.channel.edit(slowmode_delay=2)
                     embed = discord.Embed(
-                        color=color,
+                        color=self.color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY ATIVADO!``")
                     await ctx.send(embed=embed)
                 else:
                     await ctx.channel.edit(slowmode_delay=0)
                     embed = discord.Embed(
-                        color=color,
+                        color=self.color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY DESATIVADO!``")
                     await ctx.send(embed=embed)
             elif timer.isdigit():
@@ -129,12 +124,12 @@ class StaffAdmin(commands.Cog):
                 await ctx.channel.edit(slowmode_delay=int(timer))
                 if int(timer) == 0:
                     embed = discord.Embed(
-                        color=color,
+                        color=self.color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY DESATIVADO!``")
                     await ctx.send(embed=embed)
                 else:
                     embed = discord.Embed(
-                        color=color,
+                        color=self.color,
                         description="<:confirmado:519896822072999937>│``MODO DALEY ATIVADO!``")
                     await ctx.send(embed=embed)
             else:
@@ -185,7 +180,7 @@ class StaffAdmin(commands.Cog):
                 except TimeoutError:
                     return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
                 await msg_4.delete()
-                embed = discord.Embed(colour=color,
+                embed = discord.Embed(colour=self.color,
                                       description="O Úsuario: {} acabou de denunciar um "
                                                   "membro!".format(ctx.author.mention))
                 embed.add_field(name='✏Motivo:', value=report.content)
@@ -236,4 +231,4 @@ class StaffAdmin(commands.Cog):
 
 def setup(bot):
     bot.add_cog(StaffAdmin(bot))
-    print('\033[1;32mO  grupo de comandos \033[1;34mSTAFFS\033[1;32m foram carregados com sucesso!\33[m')
+    print('\033[1;36m( * ) | O  grupo de comandos \033[1;31mSTAFFS\033[1;36m foram carregados com sucesso!\33[m')

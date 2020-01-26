@@ -1,4 +1,3 @@
-import json
 import discord
 
 from discord.ext import commands
@@ -6,16 +5,13 @@ from resources.check import check_it
 from resources.db import Database
 from resources.utility import paginator
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 legend = {"Comum": 500, "Normal": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
 
 
 class BoxClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -58,7 +54,7 @@ ITEMS:
 <SIZE: {}/{}>```'''.format(rarity, status, secret, ur, sr, r, n, c, size, num)
                     box = discord.Embed(
                         title="{}'s box:".format(ctx.author.name),
-                        color=color,
+                        color=self.color,
                         description=description
                     )
                     box.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
@@ -71,4 +67,4 @@ ITEMS:
 
 def setup(bot):
     bot.add_cog(BoxClass(bot))
-    print('\033[1;32mO comando \033[1;34mBOXCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mBOXCLASS\033[1;32m foi carregado com sucesso!\33[m')

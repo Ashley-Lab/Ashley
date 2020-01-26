@@ -24,6 +24,9 @@ class TransferClass(commands.Cog):
         c = b.replace('.', ',')
         d = c.replace('v', '.')
 
+        if data_user['guild_id'] == ctx.guild.id:
+            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você já está casdastrado nessa guilda!``')
+
         def check(m):
             if m.author.id == ctx.guild.owner.id:
                 if m.channel.id == ctx.channel.id:
@@ -55,7 +58,6 @@ class TransferClass(commands.Cog):
             update_guild_future['data']['total_bronze'] += update_user['treasure']['bronze']
             update_user["guild_id"] = ctx.guild.id
             update_user["guild_name"] = ctx.guild.name
-            update_user["guild_icon_url"] = ctx.guild.icon_url
             self.bot.db.update_data(data_user, update_user, 'users')
             self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             self.bot.db.update_data(data_guild_future, update_guild_future, 'guilds')
@@ -67,4 +69,4 @@ class TransferClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(TransferClass(bot))
-    print('\033[1;32mO comando \033[1;34mTRANSFER_CLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mTRANSFER_CLASS\033[1;32m foi carregado com sucesso!\33[m')

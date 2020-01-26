@@ -10,8 +10,11 @@ from random import randint
 from collections import Counter
 from resources.utility import parse_duration
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
+with open("data/auth.json") as auth:
+    _auth = json.loads(auth.read())
+
+with open("data/config.json") as config:
+    config = json.loads(config.read())
 
 epoch = datetime.datetime.utcfromtimestamp(0)
 cont = Counter()
@@ -57,22 +60,6 @@ class Database(object):
     def get_announcements(self):
         db = self._conn.get_collection("announcements")
         return db.find()
-
-    def get_channel_data(self, channel_id):
-        db = self._conn.get_collection("channels")
-        data = db.find_one({"channel_id": channel_id})
-        if data is None:
-            data = {"channel_id": channel_id,
-                    "channel_state": 0}
-            self.push_data(data, "channels")
-            return data
-        else:
-            return data
-
-    def delete_channels(self):
-        db = self._conn.get_collection("channels")
-        deleted = db.delete_many({})
-        print("\033[1;31m", deleted.deleted_count, " \033[1;30mregistros de canais bloqueados pela IA deletados.\33[m")
 
     def add_user(self, ctx, **data):
         db_name = data.get("db_name", "users")
@@ -147,7 +134,7 @@ class Database(object):
                 "ranking": "Bronze",
                 "items": dict(),
                 "accounts": 0,
-                "currency": _auth['default_money'],
+                "currency": config['default_money'],
                 "total_money": 0,
                 "total_gold": 0,
                 "total_silver": 0,

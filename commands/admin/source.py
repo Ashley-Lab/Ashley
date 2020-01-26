@@ -1,20 +1,15 @@
 import os
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class SourceGit(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -33,12 +28,12 @@ class SourceGit(commands.Cog):
                 obj = obj.get_command(cmd)
                 if obj is None:
                     embed = discord.Embed(
-                        color=color,
+                        color=self.color,
                         description=f"<:negate:520418505993093130>│``NÃO CONSEGUIR ENCONTRAR O COMANDO {cmd}!``")
                     return await ctx.send(embed=embed)
             except AttributeError:
                 embed = discord.Embed(
-                    color=color,
+                    color=self.color,
                     description=f"<:negate:520418505993093130>│``{obj.name} ESSE COMANDO NÃO TEM SUB-COMANDOS!``")
                 return await ctx.send(embed=embed)
 
@@ -57,4 +52,4 @@ class SourceGit(commands.Cog):
 
 def setup(bot):
     bot.add_cog(SourceGit(bot))
-    print('\033[1;32mO comando \033[1;34mSOURCE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mSOURCE\033[1;32m foi carregado com sucesso!\33[m')

@@ -1,12 +1,10 @@
 import re
-import json
 import discord.utils
 
+from config import data
 from discord.ext import commands
 from .translation import t_
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
 
 staff = [235937029106434048, 300592580381376513]
 
@@ -73,11 +71,11 @@ def check_it(**kwargs):
                 raise commands.CheckFailure(t_(ctx, "<:negate:520418505993093130>│``Esse comando apenas pode ser usado"
                                                     " em um canal`` **nsfw!!**", "guilds"))
 
-        if ctx.message.author.id == _auth['owner_id'] and kwargs.get('is_owner', False):
+        if ctx.message.author.id == data['config']['owner_id'] and kwargs.get('is_owner', False):
             pass
         elif ctx.message.author.id in staff and kwargs.get('is_owner', False):
             pass
-        elif ctx.message.author.id != _auth['owner_id'] and kwargs.get('is_owner', False):
+        elif ctx.message.author.id != data['config']['owner_id'] and kwargs.get('is_owner', False):
             raise commands.CheckFailure(t_(ctx, "<:negate:520418505993093130>│``Apenas meu criador pode usar esse "
                                                 "comando!``", "guilds"))
 

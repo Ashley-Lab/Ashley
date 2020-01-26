@@ -17,10 +17,11 @@ from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import WebHook
 from bson.json_util import dumps
-# from resources.translation import t_
+from resources.translation import t_
 from resources.utility import ERRORS
 from resources.db import Database, DataInteraction
 from resources.boosters import Booster
+from config import data as config
 
 
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
@@ -34,7 +35,7 @@ class Ashley(commands.AutoShardedBot):
         self.guilds_messages = Counter()
         self.user_commands = Counter()
         self.announcements = ['ANUNCIE COMIGO: ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!',
-                              'SISTEMA DE LINGAGUEM: O IDIOMA INGLES SERÁ LIBERADO EM BREVE!',
+                              'SISTEMA DE LINGAGUEM: O IDIOMA INGLES SERÁ LIBERADO EM BREVE...',
                               'VIP: VOCÊ SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
                               'O COMANDO "ASH RANK" ESTÁ FINALIZADO, AGORA VOCÊ PODERÁ OLHAR SEU RANK A QUALQUER'
                               ' MOMENTO!',
@@ -52,8 +53,8 @@ class Ashley(commands.AutoShardedBot):
                               ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
                               ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!']
         self.languages = ("pt", "en")
-        self.progress = "V.5 -> 98.0%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 5.9.8 | PROGRESS: " + str(self.progress)
+        self.progress = "V.6 -> 20.3%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 6.1.0 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
@@ -64,7 +65,7 @@ class Ashley(commands.AutoShardedBot):
                          'ash vip': 'ash daily vip'}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff', 'commands.game.coin', 'events.on_message',
                         'commands.game.guessing', 'commands.game.jkp', 'commands.ashley.farm', 'commands.rpg.status',
-                        'commands.owner.shards', 'commands.member.married', 'commands.member.booket',
+                        'commands.member.pet', 'commands.member.married', 'commands.member.booket',
                         'commands.member.transfer', 'commands.rpg.inventory', 'commands.rpg.shop']
         self.titling = {"10": "Vassal", "25": "Heir", "50": "Knight", "100": "Elder", "200": "Baron", "300": "Viscount",
                         "400": "Count", "500": "Marquis", "1000": "Duke", "1500": "Grand Duke"}
@@ -79,22 +80,17 @@ class Ashley(commands.AutoShardedBot):
         self.db: Database = Database(self)
         self.data: DataInteraction = DataInteraction(self)
 
-        self.staff = [235937029106434048, 300592580381376513]
+        self.staff = [235937029106434048, 300592580381376513, 299273939614564363]
         self.bl_item = ['medal', 'rank_point']
         self.blacklist = dumps(self.db.get_all_data("blacklist"))
         self.shutdowns = dumps(self.db.get_all_data("shutdown"))
+        self.config = config
 
-        with open("resources/translations.json") as translations:
-            self.translations = json.loads(translations.read())
-
-        with open("resources/items.json") as items:
-            self.items = json.loads(items.read())
-
-        with open("resources/icons.json") as icons:
-            self.icons = json.loads(icons.read())
-
-        with open("resources/pets.json") as pets:
-            self.pets = json.loads(pets.read())
+        self.translations = self.config['translations']
+        self.items = self.config['items']
+        self.icons = self.config['icons']
+        self.pets = self.config['pets']
+        self.color = int(self.config['config']['default_embed'], 16)
 
         self.booster: Booster = Booster(self.items)
 
@@ -211,10 +207,7 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")
-        if isinstance(exception, commands.MissingRequiredArgument):
-            await ctx.send(f"<:negate:520418505993093130>│``ESTÁ FALTANDO ALGO PARA QUE VOCÊ POSSA USAR ESSE "
-                           f"COMANDO!``")
-        elif isinstance(exception, commands.CheckFailure):
+        if isinstance(exception, commands.CheckFailure):
             if exception.__str__() == 'The check functions for command register guild failed.':
                 await ctx.send(f"<:negate:520418505993093130>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE COMANDO!``")
             elif exception.__str__() not in ERRORS:
@@ -254,10 +247,17 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_guild_remove(self, guild):
         if str(guild.id) not in self.blacklist:
-            blacklist = self.get_channel(542134573010518017)
-            msg = f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
-            await blacklist.send(msg)
-            self.ban_(guild.id, msg)
+            data = self.db.get_data("guild_id", guild.id, "guilds")
+            if data is not None:
+                blacklist = self.get_channel(542134573010518017)
+                msg = f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
+                await blacklist.send(msg)
+                self.ban_(guild.id, msg)
+            else:
+                blacklist = self.get_channel(542134573010518017)
+                msg = f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, ENTÃO" \
+                      f"NÃO ENTROU NA MINHA BLACKLIST!``"
+                await blacklist.send(msg)
 
     async def on_message(self, message):
         if message.author.id == self.user.id:
@@ -304,12 +304,12 @@ class Ashley(commands.AutoShardedBot):
 
 if __name__ == "__main__":
 
-    with open("resources/auth.json") as security:
-        _auth = json.loads(security.read())
+    with open("data/auth.json") as auth:
+        _auth = json.loads(auth.read())
 
     description_ashley = f"Um bot de assistencia para servidores criado por: Denky#5960\n" \
-        f"**Adicione para seu servidor:**: {_auth['default_link']}\n" \
-        f"**Servidor de Origem**: {_auth['default_invite']}\n"
+        f"**Adicione para seu servidor:**: {config['config']['default_link']}\n" \
+        f"**Servidor de Origem**: {config['config']['default_invite']}\n"
 
     prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
               'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
@@ -318,7 +318,9 @@ if __name__ == "__main__":
     bot.remove_command('help')
 
     try:
-        f = open("resources/modulos.txt", "r")
+        print("\033[1;35m( # ) | Iniciando...\033[m")
+        print("\033[1;35m( * ) | Iniciando carregamento de extensões...\033[m")
+        f = open("modulos.txt", "r")
         for name in f.readlines():
             if len(name.strip()) > 0:
                 try:
@@ -330,16 +332,16 @@ if __name__ == "__main__":
                             bot.data_cog[name.strip()] = "<:stream_status:519896814825242635>"
                     else:
                         if '#' not in name.strip():
-                            print(f'\033[1;30mCog: \033[1;34m{name.strip()}\033[1;30m não foi carregada!\33[m')
+                            print(f'\033[1;36m( X ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
                             bot.data_cog[name.strip()] = "<:oc_status:519896814225457152>"
                 except Exception as e:
                     if '#' not in name.strip():
-                        print(
-                            '\033[1;30mCog: \033[1;34m{}\033[1;30m teve um [Erro] : \033[1;31m{}\33[m'.format(name, e))
+                        print(f"\033[1;31m( E ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
                         bot.data_cog[name.strip()] = "<:alert_status:519896811192844288>"
                     continue
         f.close()
     except Exception as e:
         print('[Erro] : {}'.format(e))
 
+    print(f"\033[1;35m( # ) | {len(bot.data_cog.keys())} extensões foram carregadas!\033[m")
     bot.run(_auth['_t__ashley'])

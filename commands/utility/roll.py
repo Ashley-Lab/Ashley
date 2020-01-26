@@ -22,13 +22,13 @@ class DadoClass(commands.Cog):
         try:
             rolls, limit = map(int, dice.split('d'))
         except ValueError:
-            await ctx.send('<:alert_status:519896811192844288>│``Não foi um formado:`` **N**d**N**!')
+            await ctx.send('<:alert_status:519896811192844288>│``Não foi um formato:`` **N**``d``**N**!')
             return
         global result
         result = ''
         if rolls > 99:
             return await ctx.send('<:alert_status:519896811192844288>│``Número muito grande de dados!``')
-        if limit > 1000000:
+        if limit > 99999:
             return await ctx.send('<:alert_status:519896811192844288>│``Número muito grande de lados!``')
         for r in range(rolls):
             result += ''.join(str(random.randint(1, limit))) + ', '
@@ -37,4 +37,4 @@ class DadoClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(DadoClass(bot))
-    print('\033[1;32mO comando \033[1;34mROLARDADO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mROLARDADO\033[1;32m foi carregado com sucesso!\33[m')

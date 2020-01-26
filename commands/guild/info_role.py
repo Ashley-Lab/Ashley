@@ -1,15 +1,8 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 
 def perms_check(role):
@@ -29,6 +22,7 @@ def perms_check(role):
 class RoleInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -36,7 +30,7 @@ class RoleInfo(commands.Cog):
     @commands.command(name='roleinfo', aliases=['inforole'])
     async def roleinfo(self, ctx, *, role: commands.RoleConverter = None):
         if role is not None:
-            embed = discord.Embed(color=color, description='**Informações do cargo:**')
+            embed = discord.Embed(color=self.color, description='**Informações do cargo:**')
             embed.add_field(name='`📋 | Nome:`', value=str(role))
             embed.add_field(name='`💻 | ID:`', value=str(role.id))
             embed.add_field(name='`🌈 | Cor:`', value=str(role.colour))
@@ -49,4 +43,4 @@ class RoleInfo(commands.Cog):
 
 def setup(bot):
     bot.add_cog(RoleInfo(bot))
-    print('\033[1;32mO comando \033[1;34mROLEINFO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mROLEINFO\033[1;32m foi carregado com sucesso!\33[m')

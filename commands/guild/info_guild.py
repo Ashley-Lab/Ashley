@@ -1,4 +1,3 @@
-import json
 import discord
 import datetime
 
@@ -7,15 +6,10 @@ from resources.check import check_it
 from resources.db import Database
 
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
-
 class ServerInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -32,8 +26,8 @@ class ServerInfo(commands.Cog):
         except KeyError:
             cmds = str(self.bot.guilds_commands[ctx.guild.id]) + "comandos usados desde que fiquei online"
         hour = datetime.datetime.now().strftime("%H:%M:%S")
-        embed = discord.Embed(title="\n", color=color, description="Abaixo está as informaçoes principais do "
-                                                                   "servidor!")
+        embed = discord.Embed(title="\n", color=self.color, description="Abaixo está as informaçoes principais do "
+                                                                        "servidor!")
         embed.set_thumbnail(url=ctx.guild.icon_url)
         embed.set_footer(text="{} • {}".format(ctx.author, hour))
         embed.add_field(name="Nome:", value=ctx.guild.name, inline=True)
@@ -51,4 +45,4 @@ class ServerInfo(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ServerInfo(bot))
-    print('\033[1;32mO comando \033[1;34mSERVERINFO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mSERVERINFO\033[1;32m foi carregado com sucesso!\33[m')

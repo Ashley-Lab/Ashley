@@ -1,20 +1,15 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
-
 
 class InviteClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.url = "https://discordapp.com/oauth2/authorize?client_id=478977311266570242&scope=bot&permissions=8"
+        self.color = self.bot.color
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -26,7 +21,7 @@ class InviteClass(commands.Cog):
                                        "para que você possa entrar!``")
         try:
             embed = discord.Embed(
-                color=color,
+                color=self.color,
                 description=f'<:safada:530029764061298699>│[CLIQUE AQUI PARA ME ADICIONAR NO SEU '
                             f'SERVIDOR]({self.url})')
 
@@ -38,4 +33,4 @@ class InviteClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(InviteClass(bot))
-    print('\033[1;32mO comando \033[1;34mINVITE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mINVITE\033[1;32m foi carregado com sucesso!\33[m')

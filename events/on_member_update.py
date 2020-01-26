@@ -1,17 +1,12 @@
-import json
 import discord
 
 from discord.ext import commands
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color = int(_auth['default_embed'], 16)
 
 
 class MemberUpdate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.color = self.bot.color
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
@@ -26,7 +21,7 @@ class MemberUpdate(commands.Cog):
                                 return
                             to_send = discord.Embed(
                                 title=":star2: **Nome de usuário alterado**",
-                                color=color,
+                                color=self.color,
                                 description=f"**membro:** {before.name}")
                             to_send.add_field(name='Nome Antigo', value=f'**{before.name}**')
                             to_send.add_field(name='Nome Novo', value=f'**{after.name}**')
@@ -47,7 +42,7 @@ class MemberUpdate(commands.Cog):
                                 format_2 = '.webp'
                             to_send = discord.Embed(
                                 title=":star2: **Avatar de usuário alterado**",
-                                color=color,
+                                color=self.color,
                                 description=f"**Membro:** {before.name}")
                             to_send.set_thumbnail(url=f'https://cdn.discordapp.com/avatars/{before.id}/{before.avatar}'
                                                       f'{format_1}?size=1024')
@@ -65,4 +60,4 @@ class MemberUpdate(commands.Cog):
 
 def setup(bot):
     bot.add_cog(MemberUpdate(bot))
-    print('\033[1;32mO evento \033[1;34mMEMBER_UPDATE\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( * ) | O evento \033[1;34mMEMBER_UPDATE\033[1;33m foi carregado com sucesso!\33[m')

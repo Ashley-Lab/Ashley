@@ -17,7 +17,7 @@ class InstagramClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='instagram', aliases=['insta'])
-    async def instagram(self, ctx, *, resp):
+    async def instagram(self, ctx, *, resp=None):
         if resp is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
 
@@ -120,7 +120,7 @@ class InstagramClass(commands.Cog):
             trim.rectangle((0, 0) + big_img, fill=255)  # opacidade
             mascara = mascara.resize(img.size, Image.ANTIALIAS)
             img.putalpha(mascara)
-            exit_img = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
+            exit_img = ImageOps.fit(img, mascara.size, centering=(0.5, 0.5))
             exit_img.putalpha(mascara)
             img = exit_img
 
@@ -152,4 +152,4 @@ class InstagramClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(InstagramClass(bot))
-    print('\033[1;32mO comando \033[1;34mINSTAGRAMCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mINSTAGRAMCLASS\033[1;32m foi carregado com sucesso!\33[m')

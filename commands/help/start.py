@@ -1,14 +1,8 @@
-import json
 import discord
 
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
-color_ = int(_auth['default_embed'], 16)
 
 botmsg = {}
 
@@ -17,10 +11,32 @@ class Helper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.st = []
+        self.color = self.bot.color
+        self.cont = 0
 
     def status(self):
         for v in self.bot.data_cog.values():
             self.st.append(v)
+
+    async def add_reactions(self, user: discord.Member):
+        self.cont += 1
+        await botmsg[user.id].add_reaction('🏛')
+        await botmsg[user.id].add_reaction('🎵')
+        await botmsg[user.id].add_reaction('🎙')
+        await botmsg[user.id].add_reaction('🎲')
+        await botmsg[user.id].add_reaction('🌎')
+        await botmsg[user.id].add_reaction('🌏')
+        await botmsg[user.id].add_reaction('🌍')
+        await botmsg[user.id].add_reaction('💰')
+        await botmsg[user.id].add_reaction('🚓')
+        await botmsg[user.id].add_reaction('🛡')
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.command(name='help_cont', aliases=['ajuda_contador'])
+    async def help_cont(self, ctx):
+        ctx.send(f"**Quantidade de vezes que o ajuda foi paginado:** ``{self.cont}``**!**")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -30,7 +46,7 @@ class Helper(commands.Cog):
         self.status()
         embed = discord.Embed(
             title="Choice Area:",
-            color=color_,
+            color=self.color,
             description=f"- For **Main**: click in :classical_building:\n"
                         f"- For **Music**: click in :musical_note:\n"
                         f"- For **Iterations IA**: click in :microphone2:\n"
@@ -49,28 +65,10 @@ class Helper(commands.Cog):
             botmsg[ctx.author.id] = await ctx.author.send(embed=embed)
             if ctx.message.guild is not None:
                 await ctx.send('<:send:519896817320591385>│``ENVIADO PARA O SEU PRIVADO!``')
-            await botmsg[ctx.author.id].add_reaction('🏛')
-            await botmsg[ctx.author.id].add_reaction('🎵')
-            await botmsg[ctx.author.id].add_reaction('🎙')
-            await botmsg[ctx.author.id].add_reaction('🎲')
-            await botmsg[ctx.author.id].add_reaction('🌎')
-            await botmsg[ctx.author.id].add_reaction('🌏')
-            await botmsg[ctx.author.id].add_reaction('🌍')
-            await botmsg[ctx.author.id].add_reaction('💰')
-            await botmsg[ctx.author.id].add_reaction('🚓')
-            await botmsg[ctx.author.id].add_reaction('🛡')
+            await self.add_reactions(ctx.author)
         except discord.errors.Forbidden:
             botmsg[ctx.author.id] = await ctx.send(embed=embed)
-            await botmsg[ctx.author.id].add_reaction('🏛')
-            await botmsg[ctx.author.id].add_reaction('🎵')
-            await botmsg[ctx.author.id].add_reaction('🎙')
-            await botmsg[ctx.author.id].add_reaction('🎲')
-            await botmsg[ctx.author.id].add_reaction('🌎')
-            await botmsg[ctx.author.id].add_reaction('🌏')
-            await botmsg[ctx.author.id].add_reaction('🌍')
-            await botmsg[ctx.author.id].add_reaction('💰')
-            await botmsg[ctx.author.id].add_reaction('🚓')
-            await botmsg[ctx.author.id].add_reaction('🛡')
+            await self.add_reactions(ctx.author)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -86,7 +84,7 @@ class Helper(commands.Cog):
         if reaction.emoji == "🏛" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Choice Area:",
-                color=color_,
+                color=self.color,
                 description=f"- For **Main**: click in :classical_building:\n"
                             f"- For **Music**: click in :musical_note:\n"
                             f"- For **Iterations IA**: click in :microphone2:\n"
@@ -101,21 +99,12 @@ class Helper(commands.Cog):
             ajuda.set_thumbnail(url="http://sisadm2.pjf.mg.gov.br/imagem/ajuda.png")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🎵" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                             f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -137,21 +126,12 @@ class Helper(commands.Cog):
                                   f"{self.st[31]}│**repeat** ``or`` **repetir**")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🎙" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -164,21 +144,12 @@ class Helper(commands.Cog):
                                   f"{self.st[76]}│**pet** ``or`` **p**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🎲" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -193,21 +164,12 @@ class Helper(commands.Cog):
                                   f"{self.st[77]}│**hangman** ``or`` **forca**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🌎" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -223,28 +185,18 @@ class Helper(commands.Cog):
                                   f"{self.st[22]}│**roleinfo** ``or`` **inforole**\n"
                                   f"{self.st[3]}│**botinfo** ``or`` **infobot**\n"
                                   f"{self.st[13]}│**abraço** ``or`` **hug**\n"
-                                  f"{self.st[25]}│**entrou** ``or`` **entered**\n"
                                   f"{self.st[70]}│**kick** ``or`` **chute**\n"
                                   f"{self.st[71]}│**kiss** ``or`` **beijo**\n"
                                   f"{self.st[72]}│**lick** ``or`` **lambida**\n"
                                   f"{self.st[73]}│**punch** ``or`` **soco**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🌏" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -267,21 +219,12 @@ class Helper(commands.Cog):
                                   f"{self.st[67]}│**top**")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🌍" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -305,21 +248,12 @@ class Helper(commands.Cog):
                                   f"{self.st[46]}│**rank** ``or`` **r**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "💰" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -334,21 +268,12 @@ class Helper(commands.Cog):
                                   f"{self.st[93]}│**shop** ``or`` **loja**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🚓" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -365,21 +290,12 @@ class Helper(commands.Cog):
                                   f"{self.st[32]}│**announce**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
         if reaction.emoji == "🛡" and reaction.message.id == botmsg[user.id].id:
             ajuda = discord.Embed(
                 title="Commands Status",
-                color=color_,
+                color=self.color,
                 description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
                 f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
             ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -401,18 +317,9 @@ class Helper(commands.Cog):
                                   f"{self.st[86]}│**remove_vip**\n")
             ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=ajuda)
-            await botmsg[user.id].add_reaction('🏛')
-            await botmsg[user.id].add_reaction('🎵')
-            await botmsg[user.id].add_reaction('🎙')
-            await botmsg[user.id].add_reaction('🎲')
-            await botmsg[user.id].add_reaction('🌎')
-            await botmsg[user.id].add_reaction('🌏')
-            await botmsg[user.id].add_reaction('🌍')
-            await botmsg[user.id].add_reaction('💰')
-            await botmsg[user.id].add_reaction('🚓')
-            await botmsg[user.id].add_reaction('🛡')
+            await self.add_reactions(user)
 
 
 def setup(bot):
     bot.add_cog(Helper(bot))
-    print('\033[1;32mO comando \033[1;34mAJUDA\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( * ) | O comando \033[1;34mAJUDA\033[1;32m foi carregado com sucesso!\33[m')

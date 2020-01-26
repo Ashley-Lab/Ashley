@@ -1,7 +1,6 @@
 import discord
 import asyncio
 import itertools
-import json
 import math
 import random
 import youtube_dl
@@ -16,11 +15,7 @@ from resources.check import check_it
 from resources.utility import parse_duration
 from collections import Counter
 
-with open("resources/auth.json") as security:
-    _auth = json.loads(security.read())
-
 cont = Counter()
-color = int(_auth['default_embed'], 16)
 opus_libs_dll = ['libopus-0.x86.dll', 'libopus-0.x64.dll', 'libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib']
 youtube_dl.utils.bug_reports_message = lambda: ' '
 last_search = {}
@@ -249,6 +244,7 @@ class MusicDefault(commands.Cog):
         self.bot = bot
         self.players = {}
         self.states = {}
+        self.color = self.bot.color
 
     async def cleanup(self, guild):
         try:
@@ -474,7 +470,7 @@ class MusicDefault(commands.Cog):
                              f'`{parse_duration(int(_["duration"]))}`' for _ in last_search[ctx.guild.id]])
         embed = discord.Embed(title=f'<:queue:519896839332560897>│**Lista de Reprodução**: '
                                     f'``Atualmente há {len(upcoming)} em espera!``', description=fmt,
-                              color=color)
+                              color=self.color)
         embed.set_thumbnail(
             url="http://icons.iconarchive.com/icons/raindropmemory/summer-love-cicadas/256/Music-1-icon.png")
         embed.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -670,4 +666,4 @@ class MusicDefault(commands.Cog):
 
 def setup(bot):
     bot.add_cog(MusicDefault(bot))
-    print('\033[1;32mOs comandos de \033[1;34mMUSICAS\033[1;32m foram carregados com sucesso!\33[m')
+    print('\033[1;36m( * ) | Os comandos de \033[1;31mMUSICAS\033[1;36m foram carregados com sucesso!\33[m')
