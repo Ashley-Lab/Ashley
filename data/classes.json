@@ -1,0 +1,37 @@
+{
+  "paladin": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  },
+  "necromancer": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  },
+  "wizard": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  },
+  "warrior": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  },
+  "priest": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  },
+  "warlock": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  },
+  "assassin": {
+    "status": {"con": 1,"acc": 1,"dex": 1,"atk":1},
+    "skills": {},
+    "rate": {"mana":  5, "life":  5}
+  }
+}

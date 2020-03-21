@@ -16,13 +16,13 @@ class Battle(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='battle', aliases=['batalha'])
     async def battle(self, ctx):
-        db_player = {'Class': 'maga',
+        db_player = {'Class': 'wizard',
                      'Name': ctx.author.name,
                      'Status': {
-                         'con': int(30),
-                         'prec': int(30),
-                         'agi': int(30),
-                         'atk': int(30)
+                         'con': 15,
+                         'prec': 5,
+                         'agi': 5,
+                         'atk': 5
                      },
                      'XP': int(8000),
                      'itens': ['armadura de gurdur']}
@@ -33,24 +33,36 @@ class Battle(commands.Cog):
         while player.status['hp'] > 0 and monster.status['hp'] > 0:
             if turns == 0:
                 atk = await player.turn(monster.status['hp'], self.bot, ctx)
+                await sleep(1)
                 if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
-                    await monster.damage(atk, player.status['atk'], ctx)
+                    await monster.damage(atk, player.status['atk'], ctx, player.name)
+                else:
+                    await ctx.send(f"<:oc_status:519896814225457152>│``{monster.name.upper()} EVADIU``")
                 atk = await monster.turn(monster.status['hp'], self.bot, ctx)
+                await sleep(1)
                 if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
-                    await player.damage(atk, monster.status['atk'], ctx)
-                await sleep(5)
+                    await player.damage(atk, monster.status['atk'], ctx, monster.name)
+                else:
+                    await ctx.send("<:confirmado:519896822072999937>│``VOCÊ EVADIU``")
+                await sleep(2)
             else:
                 atk = await monster.turn(monster.status['hp'], self.bot, ctx)
+                await sleep(1)
                 if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
-                    await player.damage(atk, monster.status['atk'], ctx)
+                    await player.damage(atk, monster.status['atk'], ctx, monster.name)
+                else:
+                    await ctx.send("<:confirmado:519896822072999937>│``VOCÊ EVADIU``")
                 atk = await player.turn(monster.status['hp'], self.bot, ctx)
+                await sleep(1)
                 if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
-                    await monster.damage(atk, player.status['atk'], ctx)
-                await sleep(5)
+                    await monster.damage(atk, player.status['atk'], ctx, player.name)
+                else:
+                    await ctx.send(f"<:oc_status:519896814225457152>│``{monster.name.upper()} EVADIU``")
+                await sleep(2)
         if monster.status['hp'] > 0:
-            await ctx.send('you lose')
+            await ctx.send('<:oc_status:519896814225457152>│``VOCÊ PERDEU!``')
         else:
-            await ctx.send('you win')
+            await ctx.send('<:confirmado:519896822072999937>│``VOCÊ GANHOU!``')
 
 
 def setup(bot):

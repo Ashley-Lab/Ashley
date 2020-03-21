@@ -59,6 +59,8 @@ class Ashley(commands.AutoShardedBot):
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
                            'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
+        self.money = ['<:etherny_amarelo:691015381296480266>', '<:etherny_roxo:691014717761781851>',
+                      '<:etherny_preto:691016493957251152>']
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.data_cog = {}
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash rec': 'ash daily rec',
@@ -250,13 +252,13 @@ class Ashley(commands.AutoShardedBot):
             data = self.db.get_data("guild_id", guild.id, "guilds")
             if data is not None:
                 blacklist = self.get_channel(542134573010518017)
-                msg = f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
+                msg = f"**{guild.id}:** ||{guild.name}|| ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
                 await blacklist.send(msg)
                 self.ban_(guild.id, msg)
             else:
                 blacklist = self.get_channel(542134573010518017)
-                msg = f"{guild.id}: **{guild.name}** ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, ENTÃO" \
-                      f"NÃO ENTROU NA MINHA BLACKLIST!``"
+                msg = f"**{guild.id}:** ||{guild.name}|| ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, " \
+                      f"ENTÃO NÃO ENTROU NA MINHA BLACKLIST!``"
                 await blacklist.send(msg)
 
     async def on_message(self, message):

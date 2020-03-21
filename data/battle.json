@@ -1,19 +1,5 @@
 {
-  "classes": {
-                "maga": {"modificadores": {"con": 30,"prec": 30,"agi": 30,"atk":30}, "atacks":
-                {"primeiro":{"name": "veneno",
-                  "effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}},
-                  "damage": "2d10", "type": "especial", "mana": 2},
-                    "0": {"name": "stun", "effs":{"stun": {"turns": 3}},
-                      "damage": "2d10", "type": "especial", "mana": 2},
-                    "1": {"name": "silencio", "effs":{"silencio": {"turns": 3}},
-                      "damage": "2d10", "type": "especial", "mana": 2},
-                    "2": {"name": "fraquesa", "effs":{"fraquesa": {"turns": 3}},
-                      "damage": "2d10", "type": "especial", "mana": 2},
-                    "3": {"name": "gelo", "effs":{"gelo": {"turns": 3, "damage": 10, "type": "damage"}},
-                      "damage": "2d10", "type": "especial", "mana": 2}}}},
-
-  "monsters": [{"Name": "monsuta", "Status": {"con": 10, "prec": 10, "agi": 10, "atk": 10}, "XP": 8000,
+  "monsters": [{"Name": "Monstro de Teste", "Status": {"con": 20, "prec": 5, "agi": 5, "atk": 5}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "especial", "mana": 2},
@@ -21,6 +7,5 @@
                       "silencio": {"effs":{"silencio": {"turns": 3}}, "damage": "2d10", "type": "especial", "mana": 2},
                       "fraquesa": {"effs":{"fraquesa": {"turns": 3}}, "damage": "2d10", "type": "especial", "mana": 2}
                       }}],
-  "niveis": [10, 20, 30, 40, 50],
-  "itens": {"armadura de gurdur": {"armadura": 50, "modificadores":{"con": 30,"prec": 30,"agi": 30,"atk":30}}}
+  "itens": {"armadura de gurdur": {"armadura": 1, "modifier":{"con": 1,"prec": 1,"agi": 1,"atk":1}}}
 }

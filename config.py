@@ -54,6 +54,10 @@ with open("data/forca.json", encoding="utf-8") as forca:
 with open("data/battle.json", encoding="utf-8") as battle:
     battle = json.load(battle)
 
+with open("data/skills.json", encoding="utf-8") as skills:
+    skills = json.load(skills)
+
 data = {"translations": translations, "items": items, "icons": icons, "pets": pets, "answers": answers, "cards": cards,
         "ctf": ctf, "riddles": riddles, "config": config, "palin": palin, "questions": questions, "reflect": reflect,
-        "salutation": salutation, "staff": staff, "thinker": thinker, "poke": poke, "forca": forca, "battle": battle}
+        "salutation": salutation, "staff": staff, "thinker": thinker, "poke": poke, "forca": forca, "battle": battle,
+        "skills": skills}

@@ -8,7 +8,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 from random import randint
 from collections import Counter
-from resources.utility import parse_duration
+from resources.utility import parse_duration, quant_etherny
 
 with open("data/auth.json") as auth:
     _auth = json.loads(auth.read())
@@ -65,16 +65,12 @@ class Database(object):
         db_name = data.get("db_name", "users")
         data = {
             "user_id": ctx.author.id,
-            "user_name": ctx.author.name,
             "guild_id": ctx.guild.id,
-            "guild_name": ctx.guild.name,
             "config": {
-                "tournament": False,
                 "playing": False,
                 "battle": False,
                 "provinces": None,
                 "vip": False,
-                "vip_class": None,
                 "roles": [],
                 "points": 0
             },
@@ -83,20 +79,18 @@ class Database(object):
                 "level": 1,
                 "ranking": "Bronze",
                 "titling": "Vagabond",
-                "background": data.get("background", None),
                 "married": False,
-                "winner": 0,
+                "stars": 0,
                 "rec": 0
             },
             "status": {
-                "STR": 1,
+                "ATK": 1,
                 "CON": 1,
                 "DEX": 1,
-                "INT": 1,
+                "ACC": 1,
                 "LUC": 1,
                 "PDH": 0,
                 "rpg_class": data.get("rpg_class", None),
-                "attribute_class": 1
             },
             "treasure": {
                 "money": 0,
@@ -115,18 +109,9 @@ class Database(object):
             self.push_data(data, db_name)
 
     def add_guild(self, guild, data):
-        if guild.owner.name is None:
-            owner_name = 'Não Identificado'
-            owner_id = 0
-        else:
-            owner_name = guild.owner.name
-            owner_id = guild.owner.id
         db_name = data.get("db_name", "guilds")
         new_data = {
             "guild_id": guild.id,
-            "guild_name": guild.name,
-            "guild_owner_id": owner_id,
-            "guild_owner_name": owner_name,
             "vip": False,
             "data": {
                 "commands": 0,
@@ -134,7 +119,6 @@ class Database(object):
                 "ranking": "Bronze",
                 "items": dict(),
                 "accounts": 0,
-                "currency": config['default_money'],
                 "total_money": 0,
                 "total_gold": 0,
                 "total_silver": 0,
@@ -170,8 +154,6 @@ class Database(object):
             },
             "ia_config": {
                 "auto_msg": data.get("auto_msg", False),
-                "auto_conversation": data.get("auto_conversation", False),
-                "help_system": data.get("help_system", False)
             },
             "rpg_config": {
                 "rpg": data.get("rpg", False),
@@ -211,59 +193,27 @@ class Database(object):
         if self.get_data("guild_id", guild.id, db_name) is None:
             self.push_data(new_data, db_name)
 
-    async def take_money(self, ctx, coin, amount: int = 0):
+    async def take_money(self, ctx, amount: int = 0):
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        if coin == "bronze":
-            update_user['treasure'][coin] -= amount
-            update_guild_native['data']['total_' + str(coin)] -= amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``RETIRADOS COM SUCESSO!``"
-        elif coin == "silver":
-            update_user['treasure'][coin] -= amount
-            update_guild_native['data']['total_' + str(coin)] -= amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``RETIRADOS COM SUCESSO!``"
-        elif coin == "gold":
-            update_user['treasure'][coin] -= amount
-            update_guild_native['data']['total_' + str(coin)] -= amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``RETIRADOS COM SUCESSO!``"
-        else:
-            return "<:alert_status:519896811192844288>│``OPÇÃO DE MOEDA ERRADA... ESCOLHA ENTRE:`` **gold**, " \
-                   "**silver** ``OU`` **gold**"
+        update_user['treasure']['money'] -= amount
+        update_guild_native['data']['total_money'] -= amount
+        self.bot.db.update_data(data_user, update_user, 'users')
+        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
 
-    async def give_money(self, ctx, coin, amount):
+    async def give_money(self, ctx, amount: int = 0):
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        if coin == "bronze":
-            update_user['treasure'][coin] += amount
-            update_guild_native['data']['total_' + str(coin)] += amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``ADICIONADOS COM SUCESSO!``"
-        elif coin == "silver":
-            update_user['treasure'][coin] += amount
-            update_guild_native['data']['total_' + str(coin)] += amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``ADICIONADOS COM SUCESSO!``"
-        elif coin == "gold":
-            update_user['treasure'][coin] += amount
-            update_guild_native['data']['total_' + str(coin)] += amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **{coin}** ``ADICIONADOS COM SUCESSO!``"
-        else:
-            return "<:alert_status:519896811192844288>│``OPÇÃO DE MOEDA ERRADA... ESCOLHA ENTRE:`` **gold**, " \
-                   "**silver** ``OU`` **gold**"
+        update_user['treasure']['money'] += amount
+        update_guild_native['data']['total_money'] += amount
+        self.bot.db.update_data(data_user, update_user, 'users')
+        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
 
     async def add_money(self, ctx, amount):
 
@@ -271,33 +221,33 @@ class Database(object):
         update_user = data_user
         change = randint(1, 100)
         msg = None
+        answer = quant_etherny(amount)
 
         if data_user is not None:
             if update_user['user']['ranking'] == 'Bronze':
-                await self.add_type(ctx, amount, "bronze")
-                msg = f"**{amount}** ``moedas de bronze``"
+                await self.add_type(ctx, answer['amount'], answer['list'])
+                msg = f"**{answer['amount']}** ``Ethernyas``"
             elif update_user['user']['ranking'] == 'Silver':
                 if change <= 50:
-                    await self.add_type(ctx, amount, "bronze")
-                    msg = f"**{amount}** ``moedas de bronze``"
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    msg = f"**{answer['amount']}** ``Ethernyas``"
                 else:
-                    await self.add_type(ctx, amount, "bronze")
-                    await self.add_type(ctx, amount, "silver")
-                    msg = f"**{amount}** ``moedas de bronze e`` **{amount}** ``moedas de prata``"
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    msg = f"**{answer['amount'] * 2}** ``Ethernyas``"
             elif update_user['user']['ranking'] == 'Gold':
                 if change <= 33:
-                    await self.add_type(ctx, amount, "bronze")
-                    msg = f"**{amount}** ``moedas de bronze``"
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    msg = f"**{answer['amount']}** ``Ethernyas``"
                 elif change <= 66:
-                    await self.add_type(ctx, amount, "bronze")
-                    await self.add_type(ctx, amount, "silver")
-                    msg = f"**{amount}** ``moedas de bronze e`` **{amount}** ``moedas de prata``"
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    msg = f"**{answer['amount'] * 2}** ``Ethernyas``"
                 else:
-                    await self.add_type(ctx, amount, "bronze")
-                    await self.add_type(ctx, amount, "silver")
-                    await self.add_type(ctx, amount, "gold")
-                    msg = f"**{amount}** ``moedas de bronze,`` **{amount}** ``moedas de prata e`` **{amount}** " \
-                          f"``moedas de ouro``"
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    msg = f"**{answer['amount'] * 3}** ``Ethernyas``"
             return msg
 
     async def add_reward(self, ctx, list_):
@@ -315,35 +265,32 @@ class Database(object):
         response += "```Jogue de novo para ganhar mais!```"
         return response
 
-    async def add_type(self, ctx, amount, key: str):
+    async def add_type(self, ctx, amount, etherny):
         # DATA DO MEMBRO
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        update_user['treasure'][key] += amount
-        total = 1 * update_user['treasure']['bronze']
-        total += 10 * update_user['treasure']['silver']
-        total += 100 * update_user['treasure']['gold']
-        update_user['treasure']['money'] = total
+        update_user['treasure']['bronze'] += etherny[0] * 2
+        update_user['treasure']['silver'] += etherny[1] * 2
+        update_user['treasure']['gold'] += etherny[2] * 2
+        update_user['treasure']['money'] += amount * 2
         self.bot.db.update_data(data_user, update_user, 'users')
 
         # DATA NATIVA DO SERVIDOR
         data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        update_guild_native['data'][f'total_{key}'] += amount
-        total = 1 * update_guild_native['data']['total_bronze']
-        total += 10 * update_guild_native['data']['total_silver']
-        total += 100 * update_guild_native['data']['total_gold']
-        update_guild_native['data']['total_money'] = total
+        update_guild_native['data']['total_bronze'] += etherny[0] * 2
+        update_guild_native['data']['total_silver'] += etherny[1] * 2
+        update_guild_native['data']['total_gold'] += etherny[2] * 2
+        update_guild_native['data']['total_money'] += amount * 2
         self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
-        # DATA DO SERVIDOR
+        # DATA DO SERVIDOR ATUAL
         data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update_guild = data_guild
-        update_guild['treasure'][f'total_{key}'] += amount // 2
-        total = 1 * update_guild['treasure']['total_bronze']
-        total += 10 * update_guild['treasure']['total_silver']
-        total += 100 * update_guild['treasure']['total_gold']
-        update_guild['treasure']['total_money'] = total
+        update_guild['treasure']['total_bronze'] += etherny[0]
+        update_guild['treasure']['total_silver'] += etherny[1]
+        update_guild['treasure']['total_gold'] += etherny[2]
+        update_guild['treasure']['total_money'] += amount
         self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
     async def is_registered(self, ctx, **kwargs):

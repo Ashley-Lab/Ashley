@@ -7,6 +7,7 @@ from asyncio import TimeoutError
 responses = config['answers']
 questions = config['questions']
 legend = {"Comum": 0, "Normal": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+color_embed = None
 
 
 def get_content(content):
@@ -16,27 +17,51 @@ def get_content(content):
     return answer
 
 
-def embed_creator(bot, ctx, title, description, img_url, monster, hp_max, hp):
-    color = [0x00cc00, 0xffcc00, 0xff0000]
+def choice_etherny():
+    list_amount = {"yellow": 75, "purple": 20, "black": 5}
+    list_items = []
+    for i_, amount in list_amount.items():
+        list_items += [i_] * amount
+    answer = choice(list_items)
+    return answer
+
+
+def quant_etherny(amount):
+    answer = {"amount": 0, "list": [0, 0, 0]}
+    for _ in range(amount):
+        etherny = choice_etherny()
+        if etherny == "yellow":
+            answer['amount'] = + 1
+            answer['list'][0] = + 1
+        elif etherny == "purple":
+            answer['amount'] = + 10
+            answer['list'][1] = + 1
+        else:
+            answer['amount'] = + 100
+            answer['list'][2] = + 1
+    return answer
+
+
+def embed_creator(ctx, title, description, img_url, monster, hp_max, hp):
+    global color_embed
+    color = [0xff0000, 0xffcc00, 0x00cc00]
     if monster is True:
-        color = 0x990033
+        color_embed = 0xffffff
     else:
-        color_value = (hp/(hp_max/100))
-        checkpoints = [50, 25, 10]
+        color_value = (hp / (hp_max / 100))
+        checkpoints = [1, 31, 71]
         for c in range(0, 3):
             if color_value > checkpoints[c]:
-                color = color[c]
+                color_embed = color[c]
     if img_url is None:
-        img_url = 'https://static.otvfoco.com.br/2019/08/Marcos-Oliveira-o-Beicola-de-A-Grande-Familia.jpg'
+        img_url = "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"
     embed = discord.Embed(
         title=title,
         description=description,
-        color=color
+        color=color_embed
     )
     embed.set_image(url=img_url)
-    embed.set_author(name=bot.user, icon_url=bot.user.avatar_url)
     embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
-    embed.set_footer(text="Ashley ® Todos os direitos reservados.")
     return embed
 
 
@@ -83,10 +108,10 @@ async def paginator(bot, items, inventory, embed, ctx):
             title=embed[0],
             color=embed[1],
             description=descriptions[cont]
-            )
+        )
         Embed.set_author(name=bot.user, icon_url=bot.user.avatar_url)
         Embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
-        Embed.set_footer(text="Ashley ® Todos os direitos reservados.  [Pag {}/{}]".format(cont+1, len(descriptions)))
+        Embed.set_footer(text="Ashley ® Todos os direitos reservados.  [Pag {}/{}]".format(cont + 1, len(descriptions)))
         await msg.edit(embed=Embed, content='')
         try:
             reaction = await bot.wait_for('reaction_add', timeout=60.0)

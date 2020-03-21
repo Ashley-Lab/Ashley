@@ -1,14 +1,16 @@
 import discord
 import asyncio
 
+from asyncio import sleep
 from discord.ext import commands
+from resources.utility import embed_creator
 from random import randint, choice
 from config import data
 
 manatax = 5
 lifetax = 7
-classes = data['battle']['classes']
-niveis = data['battle']['niveis']
+classes = data['skills']
+niveis = [10, 20, 30, 40, 50]
 itens = data['battle']['itens']
 
 
@@ -19,38 +21,39 @@ class Entity(object):
         self.xp = db['XP']
         self.effects = {}
         self.atacks = {}
+        self.atack = None
         self.is_player = is_player
         self.armadura = 0
         # levelatacks = [5, 10, 15, 20]
         levelatacks = [2, 3, 4, 5]
-        if self.is_player is True:
-            self.atacks[classes[db['Class']]['atacks']['primeiro']['name']] = classes[db['Class']]['atacks']['primeiro']
-            for c in range(0, 4):
-                if self.xp > niveis[(levelatacks[c] - 1)]:
-                    self.atacks[classes[db['Class']]['atacks'][str(c)]['name']] = classes[db['Class']]['atacks'][str(c)]
+        if self.is_player:
+            self.atacks[classes[db['Class']]['0']['name']] = classes[db['Class']]['0']
+            for c in range(1, 5):
+                if self.xp > niveis[(levelatacks[c - 1] - 1)]:
+                    self.atacks[classes[db['Class']][str(c)]['name']] = classes[db['Class']][str(c)]
         else:
             self.atacks = db['Atacks']
         self.status['hp'] = self.status['con'] * lifetax
         self.status['mp'] = self.status['con'] * manatax
         if self.is_player:
+            self._ = db['Class']
             for c in db['itens']:
                 self.armadura += itens[c]['armadura']
                 key = self.status.keys()
                 for c2 in key:
                     try:
-                        self.status[c2] += itens[c]['modificadores'][c2]
+                        self.status[c2] += itens[c]['modifier'][c2]
                     except KeyError:
                         pass
         key = self.status.keys()
         for c in key:
             try:
-                self.status[c] += classes[db['Class']]['modificadores'][c]
+                self.status[c] += classes[db['Class']]['modifier'][c]
             except KeyError:
                 pass
 
     async def turn(self, enemy_life, bot, ctx):
         stun = False
-        atack = None
         atacks = eval(str(self.atacks.keys()).replace('dict_keys(', '').replace(')', ''))
         try:
             effects = eval(str(self.effects.keys()).replace('dict_keys(', '').replace(')', ''))
@@ -75,70 +78,116 @@ class Entity(object):
 
         if stun is False:
             if self.is_player is True:
-                emojis = ['🌕', '🌖', '🌗', '🌘', '🌑']
-                title = 'HP: {}\nHP Inimigo:{}'.format(self.status['hp'], enemy_life)
+                emojis = [bot.config['skills'][self._]['0']['icon'], bot.config['skills'][self._]['1']['icon'],
+                          bot.config['skills'][self._]['2']['icon'], bot.config['skills'][self._]['3']['icon'],
+                          bot.config['skills'][self._]['4']['icon']]
+                title = 'YOUR HP:  [{}]  ||  YOUR MP:  [{}]\nENEMY HP:  [{}]' \
+                        ''.format(self.status['hp'] if self.status['hp'] > 0 else 0,
+                                  self.status['mp'] if self.status['mp'] > 0 else 0,
+                                  enemy_life if enemy_life > 0 else 0)
                 description = ''
                 for c in range(0, len(atacks)):
                     c2 = atacks[c]
-                    description += f"{emojis[c]} **{c2.upper()}**: Dano **{self.atacks[c2]['damage']}** " \
-                                   f"Mana **{self.atacks[c2]['mana']}**\n" \
-                                   f"Efeitos **{str(self.atacks[c2]['effs'].keys())}**\n".replace('dict_keys([',
-                                                                                                  '').replace('])', '')
-                description += '😶 Pass turn'
+                    description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{self.atacks[c2]['level']}**\n" \
+                                   f"``Dano:`` **{self.atacks[c2]['damage'][self.atacks[c2]['level'] - 1]}**\n" \
+                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.atacks[c2]['level'] - 1]}**\n" \
+                                   f"``Efeito(s):`` " \
+                                   f"**{str(self.atacks[c2]['effs'][self.atacks[c2]['level'] - 1].keys())}**" \
+                                   f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
+                description += '⏭️ **Pass turn**'.upper()
                 embed = discord.Embed(
                     title=title,
                     description=description,
-                    color=bot.color
+                    color=0xffffff
                 )
                 msg = await ctx.send(embed=embed)
                 for c in range(0, len(atacks)):
                     await msg.add_reaction(emojis[c])
-                await msg.add_reaction('😶')
+                await msg.add_reaction('⏭️')
                 while True:
                     reaction = await bot.wait_for('reaction_add')
                     while reaction[1].id != ctx.author.id:
                         reaction = await bot.wait_for('reaction_add')
-                    if reaction[0].emoji in emojis:
-                        atack = emojis.index(reaction[0].emoji)
-                        atack = atacks[atack]
-                        break
-                    else:
+                    for c in emojis:
+                        emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
+                        try:
+                            if reaction[0].emoji.name == emoji:
+                                self.atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
+                                self.atack = atacks[self.atack]
+                                break
+                        except AttributeError:
+                            pass
+                    if self.atack is not None:
                         break
             else:
-                atack = choice(atacks)
+                self.atack = choice(atacks)
             try:
-                atack = self.atacks[atack]
+                self.atack = self.atacks[self.atack]
             except KeyError:
                 pass
         else:
-            await ctx.send(f'{self.name} esta stunado')
+            description = f'{self.name} esta stunado'
+            hp_max = self.status['con'] * lifetax
+            monster = not self.is_player
+            embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
+            await ctx.send(embed=embed_)
+
+        await sleep(1)
 
         if effects is not None:
             for c in effects:
                 try:
                     if 'damage' in self.effects[c]['type']:
                         self.status['hp'] -= self.effects[c]['damage']
-                        await ctx.send(f"{self.name} sofreu {self.effects[c]['damage']} de dano por efeito")
+                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
+                                      f"por efeito``"
+                        hp_max = self.status['con'] * lifetax
+                        monster = not self.is_player
+                        embed_ = embed_creator(ctx, None, description, None, monster, hp_max,
+                                               self.status['hp'])
+                        await ctx.send(embed=embed_)
                     elif 'manadrain' in effects[c]['type']:
                         self.status['mp'] -= self.effects[c]['damage']
-                        await ctx.send(f"{self.name} teve {self.effects[c]['damage']} de mana drenada por efeito")
+                        description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
+                                      f"drenada por efeito``"
+                        hp_max = self.status['con'] * lifetax
+                        monster = not self.is_player
+                        embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
+                        await ctx.send(embed=embed_)
                 except KeyError:
                     pass
                 if self.effects[c]['turns'] > 0:
                     self.effects[c]['turns'] -= 1
-        return atack
+        return self.atack
 
-    async def damage(self, skill, enemy_atack, ctx):
+    async def damage(self, skill, enemy_atack, ctx, name):
         if skill is not None:
+            print(skill)
             if skill['effs'] is not None:
-                key = skill['effs'].keys()
+                if self.is_player:
+                    key = skill['effs'][skill['level']].keys()
+                else:
+                    key = skill['effs'].keys()
                 for c in key:
                     try:
-                        self.effects[c]['turns'] += skill['effs'][c]['turns']
+                        if self.is_player:
+                            self.effects[c]['turns'] += skill['effs'][skill['level']][c]['turns']
+                        else:
+                            self.effects[c]['turns'] += skill['effs'][c]['turns']
                     except KeyError:
-                        self.effects[c] = skill['effs'][c]
-                    await ctx.send(f'{self.name} recebeu o efeito de {c}')
-            damage = skill['damage']
+                        if self.is_player:
+                            self.effects[c] = skill['effs'][skill['level']][c]
+                        else:
+                            self.effects[c] = skill['effs'][c]
+                    description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
+                    hp_max = self.status['con'] * lifetax
+                    monster = not self.is_player
+                    embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
+                    await ctx.send(embed=embed_)
+            if self.is_player:
+                damage = skill['damage'][skill['level']]
+            else:
+                damage = skill['damage']
             dice1 = int(damage[:damage.find('d')])
             dice2 = int(damage[damage.find('d') + 1:])
             damage = 0
@@ -146,6 +195,17 @@ class Entity(object):
                 damage += randint(0, dice2)
             damage += enemy_atack
             self.status['hp'] -= damage
-            await ctx.send(f'{self.name} recebeu {damage} de dano')
+            description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
+            hp_max = self.status['con'] * lifetax
+            monster = not self.is_player
+            img_url = "https://i.pinimg.com/originals/65/ca/95/65ca95e0d751651cda907c2a031f962b.gif"
+            embed_ = embed_creator(ctx, None, description, img_url, monster, hp_max, self.status['hp'])
+            await ctx.send(embed=embed_)
+
         else:
-            await ctx.send(f'{self.name} não pode atacar')
+            description = f'**{name.upper()}** ``não pode atacar!``'
+            hp_max = self.status['con'] * lifetax
+            monster = not self.is_player
+            img_ = "https://www.nicepng.com/png/full/644-6446344_face-with-symbols-on-mouth-emoji-bad-icon.png"
+            embed_ = embed_creator(ctx, None, description, img_, monster, hp_max, self.status['hp'])
+            await ctx.send(embed=embed_)
