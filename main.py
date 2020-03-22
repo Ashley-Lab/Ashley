@@ -205,7 +205,7 @@ class Ashley(commands.AutoShardedBot):
                         update_user['user']['titling'] = self.titling[key]
                 self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
-                    await self.db.add_money(ctx, 6)
+                    await self.db.add_money(ctx, 6, True)
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")
@@ -228,7 +228,8 @@ class Ashley(commands.AutoShardedBot):
                                    f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
                                    f"**{ctx.channel}** ``e o erro foi:`` **{exception}**")
             else:
-                return print(exception)
+                errors = f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}"
+                return print(f"===============================\nError:\n\n{errors}\n\n===============================")
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:

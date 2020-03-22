@@ -215,7 +215,7 @@ class Database(object):
         self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
 
-    async def add_money(self, ctx, amount):
+    async def add_money(self, ctx, amount, ext=False):
 
         data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
@@ -225,29 +225,39 @@ class Database(object):
 
         if data_user is not None:
             if update_user['user']['ranking'] == 'Bronze':
-                await self.add_type(ctx, answer['amount'], answer['list'])
+                await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
                 msg = f"**{answer['amount']}** ``Ethernyas``"
             elif update_user['user']['ranking'] == 'Silver':
-                if change <= 50:
-                    await self.add_type(ctx, answer['amount'], answer['list'])
+                if change <= 75:
+                    await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
                     msg = f"**{answer['amount']}** ``Ethernyas``"
                 else:
-                    await self.add_type(ctx, answer['amount'], answer['list'])
-                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    answer['list'][0] = (answer['list'][0] * 2)
+                    answer['list'][1] = (answer['list'][1] * 2)
+                    answer['list'][2] = (answer['list'][2] * 2)
+                    await self.add_type(ctx, (answer['amount'] * 2), answer['list'])
                     msg = f"**{answer['amount'] * 2}** ``Ethernyas``"
             elif update_user['user']['ranking'] == 'Gold':
-                if change <= 33:
-                    await self.add_type(ctx, answer['amount'], answer['list'])
+                if change <= 75:
+                    await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
                     msg = f"**{answer['amount']}** ``Ethernyas``"
-                elif change <= 66:
-                    await self.add_type(ctx, answer['amount'], answer['list'])
-                    await self.add_type(ctx, answer['amount'], answer['list'])
+                elif change <= 95:
+                    answer['list'][0] = (answer['list'][0] * 2)
+                    answer['list'][1] = (answer['list'][1] * 2)
+                    answer['list'][2] = (answer['list'][2] * 2)
+                    await self.add_type(ctx, (answer['amount'] * 2), answer['list'])
                     msg = f"**{answer['amount'] * 2}** ``Ethernyas``"
                 else:
-                    await self.add_type(ctx, answer['amount'], answer['list'])
-                    await self.add_type(ctx, answer['amount'], answer['list'])
-                    await self.add_type(ctx, answer['amount'], answer['list'])
+                    answer['list'][0] = (answer['list'][0] * 3)
+                    answer['list'][1] = (answer['list'][1] * 3)
+                    answer['list'][2] = (answer['list'][2] * 3)
+                    await self.add_type(ctx, (answer['amount'] * 3), answer['list'])
                     msg = f"**{answer['amount'] * 3}** ``Ethernyas``"
+            if ext:
+                msg += f"\n``Sendo Elas:``\n" \
+                       f"**{answer['list'][0]}**  {self.bot.money[0]}\n" \
+                       f"**{answer['list'][1]}**  {self.bot.money[1]}\n" \
+                       f"**{answer['list'][2]}**  {self.bot.money[2]}\n"
             return msg
 
     async def add_reward(self, ctx, list_):

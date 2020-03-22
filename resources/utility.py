@@ -31,14 +31,14 @@ def quant_etherny(amount):
     for _ in range(amount):
         etherny = choice_etherny()
         if etherny == "yellow":
-            answer['amount'] = + 1
-            answer['list'][0] = + 1
+            answer['amount'] += 1
+            answer['list'][0] += 1
         elif etherny == "purple":
-            answer['amount'] = + 10
-            answer['list'][1] = + 1
+            answer['amount'] += 10
+            answer['list'][1] += 1
         else:
-            answer['amount'] = + 100
-            answer['list'][2] = + 1
+            answer['amount'] += 100
+            answer['list'][2] += 1
     return answer
 
 

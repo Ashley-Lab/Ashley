@@ -116,7 +116,9 @@ class Entity(object):
                                 self.atack = atacks[self.atack]
                                 break
                         except AttributeError:
-                            pass
+                            break
+                        except TypeError:
+                            break
                     if self.atack is not None:
                         break
             else:
@@ -124,6 +126,8 @@ class Entity(object):
             try:
                 self.atack = self.atacks[self.atack]
             except KeyError:
+                pass
+            except TypeError:
                 pass
         else:
             description = f'{self.name} esta stunado'
@@ -162,20 +166,19 @@ class Entity(object):
 
     async def damage(self, skill, enemy_atack, ctx, name):
         if skill is not None:
-            print(skill)
             if skill['effs'] is not None:
-                if self.is_player:
+                if not self.is_player:
                     key = skill['effs'][skill['level']].keys()
                 else:
                     key = skill['effs'].keys()
                 for c in key:
                     try:
-                        if self.is_player:
+                        if not self.is_player:
                             self.effects[c]['turns'] += skill['effs'][skill['level']][c]['turns']
                         else:
                             self.effects[c]['turns'] += skill['effs'][c]['turns']
                     except KeyError:
-                        if self.is_player:
+                        if not self.is_player:
                             self.effects[c] = skill['effs'][skill['level']][c]
                         else:
                             self.effects[c] = skill['effs'][c]
@@ -184,7 +187,7 @@ class Entity(object):
                     monster = not self.is_player
                     embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
                     await ctx.send(embed=embed_)
-            if self.is_player:
+            if not self.is_player:
                 damage = skill['damage'][skill['level']]
             else:
                 damage = skill['damage']
