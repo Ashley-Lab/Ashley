@@ -11,7 +11,7 @@ manatax = 5
 lifetax = 7
 classes = data['skills']
 niveis = [10, 20, 30, 40, 50]
-itens = data['battle']['itens']
+itens = data['equips']
 
 
 class Entity(object):
@@ -23,7 +23,7 @@ class Entity(object):
         self.atacks = {}
         self.atack = None
         self.is_player = is_player
-        self.armadura = 0
+        self.armor = 0
         # levelatacks = [5, 10, 15, 20]
         levelatacks = [2, 3, 4, 5]
         if self.is_player:
@@ -38,11 +38,11 @@ class Entity(object):
         if self.is_player:
             self._ = db['Class']
             for c in db['itens']:
-                self.armadura += itens[c]['armadura']
+                self.armor += itens[c[1]][c[0]]['armor']
                 key = self.status.keys()
                 for c2 in key:
                     try:
-                        self.status[c2] += itens[c]['modifier'][c2]
+                        self.status[c2] += itens[c[1]][c[0]]['modifier'][c2]
                     except KeyError:
                         pass
         key = self.status.keys()
@@ -139,29 +139,29 @@ class Entity(object):
         await sleep(1)
 
         if effects is not None:
-            for c in effects:
+            for _ in effects:
                 try:
-                    if 'damage' in self.effects[c]['type']:
-                        self.status['hp'] -= self.effects[c]['damage']
-                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
+                    if 'damage' in self.effects['type']:
+                        self.status['hp'] -= self.effects['damage']
+                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects['damage']}** ``de dano " \
                                       f"por efeito``"
                         hp_max = self.status['con'] * lifetax
                         monster = not self.is_player
                         embed_ = embed_creator(ctx, None, description, None, monster, hp_max,
                                                self.status['hp'])
                         await ctx.send(embed=embed_)
-                    elif 'manadrain' in effects[c]['type']:
-                        self.status['mp'] -= self.effects[c]['damage']
-                        description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
+                    elif 'manadrain' in self.effects['type']:
+                        self.status['mp'] -= self.effects['damage']
+                        description = f"**{self.name.upper()}** ``teve`` **{self.effects['damage']}** ``de mana " \
                                       f"drenada por efeito``"
                         hp_max = self.status['con'] * lifetax
                         monster = not self.is_player
                         embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
                         await ctx.send(embed=embed_)
+                    if self.effects['turns'] > 0:
+                        self.effects['turns'] -= 1
                 except KeyError:
                     pass
-                if self.effects[c]['turns'] > 0:
-                    self.effects[c]['turns'] -= 1
         return self.atack
 
     async def damage(self, skill, enemy_atack, ctx, name):
@@ -174,9 +174,9 @@ class Entity(object):
                 for c in key:
                     try:
                         if not self.is_player:
-                            self.effects[c]['turns'] += skill['effs'][skill['level']][c]['turns']
+                            self.effects['turns'] += skill['effs'][skill['level']]['turns']
                         else:
-                            self.effects[c]['turns'] += skill['effs'][c]['turns']
+                            self.effects['turns'] += skill['effs']['turns']
                     except KeyError:
                         if not self.is_player:
                             self.effects[c] = skill['effs'][skill['level']][c]

@@ -205,7 +205,8 @@ class Ashley(commands.AutoShardedBot):
                         update_user['user']['titling'] = self.titling[key]
                 self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
-                    await self.db.add_money(ctx, 6, True)
+                    msg = await self.db.add_money(ctx, 6, True)
+                    await ctx.send(f"``Você ganhou`` {msg}", delete_after=5.0)
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")

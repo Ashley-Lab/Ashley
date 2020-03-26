@@ -57,7 +57,13 @@ with open("data/battle.json", encoding="utf-8") as battle:
 with open("data/skills.json", encoding="utf-8") as skills:
     skills = json.load(skills)
 
+with open("data/equips.json", encoding="utf-8") as equips:
+    equips = json.load(equips)
+
+with open("data/set_equips.json", encoding="utf-8") as set_equips:
+    set_equips = json.load(set_equips)
+
 data = {"translations": translations, "items": items, "icons": icons, "pets": pets, "answers": answers, "cards": cards,
         "ctf": ctf, "riddles": riddles, "config": config, "palin": palin, "questions": questions, "reflect": reflect,
         "salutation": salutation, "staff": staff, "thinker": thinker, "poke": poke, "forca": forca, "battle": battle,
-        "skills": skills}
+        "skills": skills, "equips": equips, "set_equips": set_equips}
