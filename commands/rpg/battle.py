@@ -1,3 +1,5 @@
+import discord
+
 from asyncio import sleep
 from discord.ext import commands
 from random import randint, choice
@@ -34,13 +36,25 @@ class Battle(commands.Cog):
                 if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
                     await monster.damage(atk, player.status['atk'], ctx, player.name)
                 else:
-                    await ctx.send(f"<:oc_status:519896814225457152>│``{monster.name.upper()} EVADIU``")
+                    embed = discord.Embed(
+                        description=f"``{monster.name.upper()} EVADIU``",
+                        color=0x000000
+                    )
+                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    embed.set_thumbnail(url=f"{db_monster['img']}")
+                    await ctx.send(embed=embed)
                 atk = await monster.turn(monster.status['hp'], self.bot, ctx)
                 await sleep(1)
                 if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
                     await player.damage(atk, monster.status['atk'], ctx, monster.name)
                 else:
-                    await ctx.send("<:confirmado:519896822072999937>│``VOCÊ EVADIU``")
+                    embed = discord.Embed(
+                        description=f"``{ctx.author.name.upper()} EVADIU``",
+                        color=0x000000
+                    )
+                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    embed.set_thumbnail(url=f"{db_player['img']}")
+                    await ctx.send(embed=embed)
                 await sleep(2)
             else:
                 atk = await monster.turn(monster.status['hp'], self.bot, ctx)
@@ -48,18 +62,42 @@ class Battle(commands.Cog):
                 if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
                     await player.damage(atk, monster.status['atk'], ctx, monster.name)
                 else:
-                    await ctx.send("<:confirmado:519896822072999937>│``VOCÊ EVADIU``")
+                    embed = discord.Embed(
+                        description=f"``{ctx.author.name.upper()} EVADIU``",
+                        color=0x000000
+                    )
+                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    embed.set_thumbnail(url=f"{db_player['img']}")
+                    await ctx.send(embed=embed)
                 atk = await player.turn(monster.status['hp'], self.bot, ctx)
                 await sleep(1)
                 if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
                     await monster.damage(atk, player.status['atk'], ctx, player.name)
                 else:
-                    await ctx.send(f"<:oc_status:519896814225457152>│``{monster.name.upper()} EVADIU``")
+                    embed = discord.Embed(
+                        description=f"``{monster.name.upper()} EVADIU``",
+                        color=0x000000
+                    )
+                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    embed.set_thumbnail(url=f"{db_monster['img']}")
+                    await ctx.send(embed=embed)
                 await sleep(2)
         if monster.status['hp'] > 0:
-            await ctx.send('<:oc_status:519896814225457152>│``VOCÊ PERDEU!``')
+            embed = discord.Embed(
+                description=f"``{ctx.author.name.upper()} PERDEU!``",
+                color=0x000000
+            )
+            embed.set_image(url="https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908")
+            embed.set_thumbnail(url=f"{db_player['img']}")
+            await ctx.send(embed=embed)
         else:
-            await ctx.send('<:confirmado:519896822072999937>│``VOCÊ GANHOU!``')
+            embed = discord.Embed(
+                description=f"``{ctx.author.name.upper()} GANHOU!``",
+                color=0x000000
+            )
+            embed.set_image(url="https://66.media.tumblr.com/9d7ccd68ebab7c4853684f9c5d7224ce/tumblr_mxphrlHPJA1sbjmhmo1_400.gifv")
+            embed.set_thumbnail(url=f"{db_player['img']}")
+            await ctx.send(embed=embed)
 
 
 def setup(bot):
