@@ -39,4 +39,5 @@ Class_rpg = {'Class': class_,
                  'atk': random.randint(5, 10)
              },
              'XP': int(8000),
+             'img': None,
              'itens': list()}

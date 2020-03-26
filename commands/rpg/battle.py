@@ -18,6 +18,7 @@ class Battle(commands.Cog):
     @commands.command(name='battle', aliases=['batalha'])
     async def battle(self, ctx):
         Class_rpg['Name'] = ctx.author.name
+        Class_rpg['img'] = ctx.author.avatar_url
         list_items = list(choice_equips(self.bot).values())
         for c in range(5):
             Class_rpg['itens'].append(list_items[c])

@@ -24,6 +24,7 @@ class Entity(object):
         self.atack = None
         self.is_player = is_player
         self.armor = 0
+        self.img = db['img']
         # levelatacks = [5, 10, 15, 20]
         levelatacks = [2, 3, 4, 5]
         if self.is_player:
@@ -67,7 +68,7 @@ class Entity(object):
             except KeyError:
                 pass
 
-        for c in [['fraquesa', 'fisico'], ['silencio', 'especial']]:
+        for c in [['fraquesa', 'fisico'], ['silencio', 'magico']]:
             try:
                 if c[0] in effects and self.effects[c[0]]['turns'] > 0:
                     for c2 in atacks:
@@ -98,8 +99,9 @@ class Entity(object):
                 embed = discord.Embed(
                     title=title,
                     description=description,
-                    color=0xffffff
+                    color=0x000000
                 )
+                embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
                 msg = await ctx.send(embed=embed)
                 for c in range(0, len(atacks)):
                     await msg.add_reaction(emojis[c])
@@ -133,35 +135,39 @@ class Entity(object):
             description = f'{self.name} esta stunado'
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
-            embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
+            img_ = self.atack['img']
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img)
             await ctx.send(embed=embed_)
 
         await sleep(1)
 
         if effects is not None:
-            for _ in effects:
+            for c in effects:
                 try:
-                    if 'damage' in self.effects['type']:
-                        self.status['hp'] -= self.effects['damage']
-                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects['damage']}** ``de dano " \
+                    if 'damage' in self.effects[c]['type']:
+                        self.status['hp'] -= self.effects[c]['damage']
+                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
                                       f"por efeito``"
                         hp_max = self.status['con'] * lifetax
                         monster = not self.is_player
-                        embed_ = embed_creator(ctx, None, description, None, monster, hp_max,
-                                               self.status['hp'])
+                        img_ = self.atack['img']
+                        embed_ = embed_creator(description, img_, monster, hp_max,
+                                               self.status['hp'], self.img)
                         await ctx.send(embed=embed_)
-                    elif 'manadrain' in self.effects['type']:
-                        self.status['mp'] -= self.effects['damage']
-                        description = f"**{self.name.upper()}** ``teve`` **{self.effects['damage']}** ``de mana " \
+                    elif 'manadrain' in self.effects[c]['type']:
+                        self.status['mp'] -= self.effects[c]['damage']
+                        description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
                                       f"drenada por efeito``"
                         hp_max = self.status['con'] * lifetax
                         monster = not self.is_player
-                        embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
+                        img_ = self.atack['img']
+                        embed_ = embed_creator(description, img_, monster,
+                                               hp_max, self.status['hp'], self.img)
                         await ctx.send(embed=embed_)
-                    if self.effects['turns'] > 0:
-                        self.effects['turns'] -= 1
                 except KeyError:
                     pass
+                if self.effects[c]['turns'] > 0:
+                    self.effects[c]['turns'] -= 1
         return self.atack
 
     async def damage(self, skill, enemy_atack, ctx, name):
@@ -174,9 +180,9 @@ class Entity(object):
                 for c in key:
                     try:
                         if not self.is_player:
-                            self.effects['turns'] += skill['effs'][skill['level']]['turns']
+                            self.effects['turns'] += skill['effs'][skill['level']][c]['turns']
                         else:
-                            self.effects['turns'] += skill['effs']['turns']
+                            self.effects['turns'] += skill['effs'][c]['turns']
                     except KeyError:
                         if not self.is_player:
                             self.effects[c] = skill['effs'][skill['level']][c]
@@ -185,7 +191,8 @@ class Entity(object):
                     description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
                     hp_max = self.status['con'] * lifetax
                     monster = not self.is_player
-                    embed_ = embed_creator(ctx, None, description, None, monster, hp_max, self.status['hp'])
+                    embed_ = embed_creator(description, skill['img'], monster, hp_max,
+                                           self.status['hp'], self.img)
                     await ctx.send(embed=embed_)
             if not self.is_player:
                 damage = skill['damage'][skill['level']]
@@ -201,14 +208,13 @@ class Entity(object):
             description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
-            img_url = "https://i.pinimg.com/originals/65/ca/95/65ca95e0d751651cda907c2a031f962b.gif"
-            embed_ = embed_creator(ctx, None, description, img_url, monster, hp_max, self.status['hp'])
+            embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img)
             await ctx.send(embed=embed_)
 
         else:
             description = f'**{name.upper()}** ``não pode atacar!``'
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
-            img_ = "https://www.nicepng.com/png/full/644-6446344_face-with-symbols-on-mouth-emoji-bad-icon.png"
-            embed_ = embed_creator(ctx, None, description, img_, monster, hp_max, self.status['hp'])
+            img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img)
             await ctx.send(embed=embed_)

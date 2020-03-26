@@ -42,26 +42,23 @@ def quant_etherny(amount):
     return answer
 
 
-def embed_creator(ctx, title, description, img_url, monster, hp_max, hp):
+def embed_creator(description, img_url, monster, hp_max, hp, monster_img):
     global color_embed
     color = [0xff0000, 0xffcc00, 0x00cc00]
-    if monster is True:
-        color_embed = 0xffffff
+    if monster:
+        color_embed = 0xf15a02
     else:
         color_value = (hp / (hp_max / 100))
         checkpoints = [1, 31, 71]
         for c in range(0, 3):
             if color_value > checkpoints[c]:
                 color_embed = color[c]
-    if img_url is None:
-        img_url = "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"
     embed = discord.Embed(
-        title=title,
         description=description,
         color=color_embed
     )
     embed.set_image(url=img_url)
-    embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
+    embed.set_thumbnail(url=f"{monster_img}")
     return embed
 
 
