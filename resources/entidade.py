@@ -128,19 +128,22 @@ class Entity(object):
                                     embed.set_thumbnail(url=f"{ctx.author.avatar_url}")
                                     await ctx.send(embed=embed)
                         except AttributeError:
+                            self.status['mp'] += int((self.status['mp'] / 100) * 5)
                             break
                         except TypeError:
+                            self.status['mp'] += int((self.status['mp'] / 100) * 5)
                             break
                     if self.atack is not None:
-                        self.status['mp'] += (self.status['mp'] / 100) * 10
                         break
             else:
                 self.atack = choice(atacks)
             try:
                 self.atack = self.atacks[self.atack]
             except KeyError:
+                self.status['mp'] += int((self.status['mp'] / 100) * 2)
                 pass
             except TypeError:
+                self.status['mp'] += int((self.status['mp'] / 100) * 2)
                 pass
         else:
             description = f'{self.name} esta stunado'
