@@ -116,12 +116,23 @@ class Entity(object):
                             if reaction[0].emoji.name == emoji:
                                 self.atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
                                 self.atack = atacks[self.atack]
-                                break
+                                if self.status['mp'] > self.atack['mana'][self.atack['level']]:
+                                    self.status['mp'] -= self.atack['mana'][self.atack['level']]
+                                    break
+                                else:
+                                    embed = discord.Embed(
+                                        description=f"``{ctx.author.name.upper()} VOCÊ NAO TEM MANDA O SUFICIENTE!"
+                                                    f"ESCOLHA OUTRA HABILIDADE! OU ENTAO PASSE A VEZ...``",
+                                        color=0x000000
+                                    )
+                                    embed.set_thumbnail(url=f"{ctx.author.avatar_url}")
+                                    await ctx.send(embed=embed)
                         except AttributeError:
                             break
                         except TypeError:
                             break
                     if self.atack is not None:
+                        self.status['mp'] += (self.status['mp'] / 100) * 10
                         break
             else:
                 self.atack = choice(atacks)
