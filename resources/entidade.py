@@ -60,6 +60,7 @@ class Entity(object):
 
     async def turn(self, enemy_life, bot, ctx):
         stun = False
+        self.atack = None
         atacks = eval(str(self.atacks.keys()).replace('dict_keys(', '').replace(')', ''))
         try:
             effects = eval(str(self.effects.keys()).replace('dict_keys(', '').replace(')', ''))
