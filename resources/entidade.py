@@ -124,12 +124,14 @@ class Entity(object):
                                     break
                                 else:
                                     embed = discord.Embed(
-                                        description=f"``{ctx.author.name.upper()} VOCÊ NAO TEM MANDA O SUFICIENTE!"
-                                                    f"ESCOLHA OUTRA HABILIDADE! OU ENTAO PASSE A VEZ...``",
+                                        description=f"``{ctx.author.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
+                                                    f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
+                                                    f"**Obs:** Passar a vez regenera a mana!",
                                         color=0x000000
                                     )
                                     embed.set_thumbnail(url=f"{ctx.author.avatar_url}")
                                     await ctx.send(embed=embed)
+                                    self.atack = None
                         except AttributeError:
                             self.status['mp'] += int((self.status['mp'] / 100) * 5)
                             break
