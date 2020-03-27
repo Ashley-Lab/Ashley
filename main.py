@@ -172,6 +172,7 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
+            NAME = ctx.author.name.upper()
             if str(ctx.author.id) not in self.blacklist:
                 await self.data.level_up(ctx)
             data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
@@ -187,26 +188,26 @@ class Ashley(commands.AutoShardedBot):
                     quant = randint(1, 3)
                     if chance >= 51:
                         update_user['inventory']['rank_point'] += quant
-                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
+                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{NAME} GANHOU:`` "
                                        f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
                 if (update_user['user']['commands'] % 10) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
-                        await ctx.send("<:negate:520418505993093130>│``SUA GUILDA DE CADASTRO FOI DELETADA, TENTE "
-                                       "USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
+                        await ctx.send(f"<:negate:520418505993093130>│``{NAME} SUA GUILDA DE CADASTRO FOI DELETADA, "
+                                       f"TENTE USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
                     if chance >= 81:
                         update_user['inventory']['medal'] += 1
-                        await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``VOCÊ GANHOU:`` "
-                                       "<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
+                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{NAME} GANHOU:`` "
+                                       f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
                         update_user['user']['titling'] = self.titling[key]
                 self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
-                    await ctx.send(f"``Você ganhou`` {msg}", delete_after=5.0)
+                    await ctx.send(f"``{NAME} ganhou`` {msg}", delete_after=5.0)
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")

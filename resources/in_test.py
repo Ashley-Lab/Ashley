@@ -1,6 +1,8 @@
 import time
 import random
 
+from config import data
+
 
 def id_creator():
     date = time.localtime()
@@ -18,9 +20,19 @@ def id_creator():
     return int(id_)
 
 
-def skill_level():
-    level = random.randint(1, 10)
-    return level
+def skill_level(lvl):
+    nivel = 0
+    if 26 < lvl < 30:
+        nivel = random.randint(1, 2)
+    elif 31 < lvl < 35:
+        nivel = random.randint(3, 4)
+    elif 36 < lvl < 40:
+        nivel = random.randint(5, 6)
+    elif 41 < lvl < 45:
+        nivel = random.randint(7, 8)
+    elif 46 < lvl < 50:
+        nivel = random.randint(9, 10)
+    return nivel
 
 
 def choice_equips(bot):
@@ -34,15 +46,47 @@ def choice_equips(bot):
     return armor
 
 
+def choice_mods():
+    mods = random.choice([random.randint(1, 2), random.randint(3, 4), random.randint(5, 6), random.randint(7, 8),
+                          random.randint(9, 10)])
+    return mods
+
+
+def chance_skill(level_skill):
+    if level_skill <= 1:
+        skill_chance = 100
+    elif level_skill <= 2:
+        skill_chance = 99
+    elif level_skill <= 3:
+        skill_chance = 98
+    elif level_skill <= 4:
+        skill_chance = 97
+    elif level_skill <= 5:
+        skill_chance = 96
+    elif level_skill <= 6:
+        skill_chance = 95
+    elif level_skill <= 7:
+        skill_chance = 94
+    elif level_skill <= 8:
+        skill_chance = 93
+    elif level_skill <= 9:
+        skill_chance = 92
+    else:
+        skill_chance = 91
+    return skill_chance
+
+
 class_ = random.choice(['paladin', 'necromancer', 'wizard', 'warrior', 'priest', 'warlock', 'assassin', 'default'])
 Class_rpg = {'Class': class_,
              'Name': None,
+             'Level': random.randint(26, 50),
              'Status': {
-                 'con': random.randint(14, 18),
-                 'prec': random.randint(4, 8),
-                 'agi': random.randint(4, 8),
-                 'atk': random.randint(5, 10)
+                 'con': data['skills'][class_]['modifier']['con'] + 5 + choice_mods(),
+                 'prec': data['skills'][class_]['modifier']['prec'] + 5 + choice_mods(),
+                 'agi': data['skills'][class_]['modifier']['agi'] + 5 + choice_mods(),
+                 'atk': data['skills'][class_]['modifier']['atk'] + 5 + choice_mods(),
+                 'luk': data['skills'][class_]['modifier']['luk'] + 0 + choice_mods(),
              },
-             'XP': int(8000),
+             'XP': 10000,
              'img': None,
              'itens': list()}

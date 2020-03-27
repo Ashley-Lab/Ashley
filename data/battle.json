@@ -1,6 +1,7 @@
 {
-  "monsters": [{"Name": "Wonder", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487582894638891020/t.g._wonder_magician.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+  "monsters": [
+    {"Name": "Wonder", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487582894638891020/t.g._wonder_magician.jpg",
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -13,7 +14,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Doomstar", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487582898233278464/doomstar_magician.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -26,7 +27,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Sorciere", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487583160838651904/sorciere_de_fleur.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -39,7 +40,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Downerd", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487583170129297408/downerd_magician.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -52,7 +53,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Endymion", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487583547876704256/endymion_the_master_magician.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -65,7 +66,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Arcanite", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487583552469467146/arcanite_magician.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -78,7 +79,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Horn", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487584141324582933/dragon_horn_hunter.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -91,7 +92,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Guru", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487584123884535819/subterror_guru.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -104,7 +105,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Chaos", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487584434489524226/Chaos_Hunter.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -117,7 +118,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Fiendess", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487584451543564298/subterror_fiendess.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -130,7 +131,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Behemoth Speleogeist", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487584691365478420/subterror_behemoth_speleogeist.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -143,7 +144,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Woodland", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487584670473781269/woodland_archer.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -156,7 +157,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Vylon Vanguard", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487586695538147349/Vylon_Vanguard.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -169,7 +170,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Vylon Ohm", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487586702253359104/vylon_ohm.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -182,7 +183,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Shaddoll Zefracore", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487587520322994196/Shaddoll_Zefracore.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -195,7 +196,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Zefraath", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487587530456301598/Zefraath.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -208,7 +209,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Shaddoll Zefranaga", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487587790805139466/shaddoll_zefranaga.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -221,7 +222,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Vylon Omega", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487587785214001152/Vylon_Omega.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -234,7 +235,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Infernity Beast", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487588431732670471/infernity_beast.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -247,7 +248,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Piercing Moray", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487588459993759754/piercing_moray.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -260,7 +261,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Beiige Vanguard", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487588397116948490/Beiige__Vanguard_of_Dark_World.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -273,7 +274,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Theseus", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487588460904054784/sea_monster_of_theseus_by_yugi_master-dbi0lgh.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -286,7 +287,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Daedalus", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487588444374040596/ocean_dragon_lord_daedalus.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -299,7 +300,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Maju Garzett", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487588419472588810/great_maju_garzett.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -312,7 +313,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Volcanic Counter", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487597258116956160/Volcanic_Counter.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -325,7 +326,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Soaring Eagle", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487597265482022922/soaring_eagle_above_the_searing_land.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -338,7 +339,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Flamvell Deity", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487597433145262081/Ancient_Flamvell_Deity.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -351,7 +352,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Lavalval Chain", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487597446705446912/lavalval_chain.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -364,7 +365,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Doomfire", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487597658807205890/volcanic_doomfire.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -377,7 +378,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Mariamne", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487597653954396180/mariamne__the_true_dracophenix.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -390,7 +391,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Pterapenthes", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487598395180056596/predaplant_pterapenthes.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -403,7 +404,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Seed of Flame", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487598403782443028/seed_of_flame.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -416,7 +417,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Gigaplant", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487598600109424640/Gigaplant.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -429,7 +430,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Orea", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487598604396265492/Orea_the_Sylvan_High_Arbiter.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -442,7 +443,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Alsei", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487598746717126656/Alsei_the_Sylvan_High_Protector.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -455,7 +456,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Leo", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487598754497560599/leo__the_keeper_of_the_sacred_tree.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -468,7 +469,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Sardonyx", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487599851920687104/gem-knight_sardonyx.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -481,7 +482,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Iolite", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487599835290271754/gem-knight_iolite.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -494,7 +495,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Diamond Direwolf", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487599816440938497/diamond_direwolf.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -507,7 +508,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Crab King", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487599786208395281/number_52__diamond_crab_king.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -520,7 +521,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Cairngorgon", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487599803224817666/cairngorgon_antiluminescent_knight.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -533,7 +534,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Master Diamond", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487599769032720385/Gem-Knight_Master_Diamond.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -546,7 +547,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Defender", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487600708951212037/defender_of_the_ice_barrier.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -559,7 +560,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Dewloren Tiger King", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487600727573790720/Dewloren_Tiger_King_of_the_Ice_Barrier.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -572,7 +573,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Samurai", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487600671592415233/Samurai_of_the_Ice_Barrier.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -585,7 +586,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Dai Sojo", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487600694275211264/Dai_sojo_of_the_Ice_Barrier.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -598,7 +599,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Brionac", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487600682526965761/brionac_dragon_of_the_ice_barrier.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -611,7 +612,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Gungnir", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487600654731313174/gungnir_dragon_of_the_ice_barrier.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -624,7 +625,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Levionia", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487601618536366080/levionia_the_primordial_chaos_dragon.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -637,7 +638,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Vandalgyon", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487601568900972544/vandalgyon_the_dark_dragon_lord.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -650,7 +651,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Tyrant Red Dragon", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487601562642939906/tyrant_red_dragon_archfiend.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -663,7 +664,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Hot Red Dragon", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487601592108056586/hot_red_dragon_archfiend_king_calamity.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -676,7 +677,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Red Dragon Archfiend", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487601577897754634/hot_red_dragon_archfiend_bane.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -689,7 +690,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Ignister Prominence", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487601602459598858/ignister_prominence_the_blasting_dracoslayer.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -702,7 +703,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Antitopian", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487709114353451008/number_98__antitopian.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -715,7 +716,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "General Freed", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487709097072787457/Dark_General_Freed.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -728,7 +729,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Flare Knight", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487709080379588608/dark_flare_knight.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -741,7 +742,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Dark Crusader", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487709069327466496/dark_crusader.jpg",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -754,7 +755,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Crimson Knight", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487709061840896000/crimson_knight_vampire_bram.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
@@ -767,7 +768,7 @@
                         "img":  "https://static.wixstatic.com/media/a49f9e_0033cd577a154e1da365425008f1ac1b.gif"}
                       }},
     {"Name": "Black Luster Evening Twilight", "img": "https://cdn.discordapp.com/attachments/421862394491437057/487709044744912898/black_luster_soldier_envoy_of_the_evening_twilight.png",
-               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20}, "XP": 8000,
+               "Status": {"con": 150, "prec": 20, "agi": 20, "atk": 20, "luk": 0}, "XP": 8000,
                "Atacks": {
                       "veneno": {"effs":{"veneno": {"turns": 3, "damage": 10, "type": "damage"}}, "damage": "2d10",
                                  "type": "magico", "mana": 2,
