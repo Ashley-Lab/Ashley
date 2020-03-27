@@ -6,6 +6,7 @@ from discord.ext import commands
 from resources.utility import embed_creator
 from random import randint, choice
 from config import data
+from resources.in_test import skill_level
 
 manatax = 5
 lifetax = 7
@@ -25,6 +26,7 @@ class Entity(object):
         self.is_player = is_player
         self.armor = 0
         self.img = db['img']
+        self.level_skill = 0
         # levelatacks = [5, 10, 15, 20]
         levelatacks = [2, 3, 4, 5]
         if self.is_player:
@@ -54,6 +56,7 @@ class Entity(object):
                 pass
 
     async def turn(self, enemy_life, bot, ctx):
+        self.level_skill = skill_level()
         stun = False
         atacks = eval(str(self.atacks.keys()).replace('dict_keys(', '').replace(')', ''))
         try:
@@ -89,11 +92,11 @@ class Entity(object):
                 description = ''
                 for c in range(0, len(atacks)):
                     c2 = atacks[c]
-                    description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{self.atacks[c2]['level']}**\n" \
-                                   f"``Dano:`` **{self.atacks[c2]['damage'][self.atacks[c2]['level'] - 1]}**\n" \
-                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.atacks[c2]['level'] - 1]}**\n" \
+                    description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{self.level_skill}**\n" \
+                                   f"``Dano:`` **{self.atacks[c2]['damage'][self.level_skill - 1]}**\n" \
+                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill - 1]}**\n" \
                                    f"``Efeito(s):`` " \
-                                   f"**{str(self.atacks[c2]['effs'][self.atacks[c2]['level'] - 1].keys())}**" \
+                                   f"**{str(self.atacks[c2]['effs'][self.level_skill - 1].keys())}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
                 description += '⏭️ **Pass turn**'.upper()
                 embed = discord.Embed(
@@ -116,8 +119,8 @@ class Entity(object):
                             if reaction[0].emoji.name == emoji:
                                 self.atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
                                 self.atack = atacks[self.atack]
-                                if self.status['mp'] > self.atack['mana'][self.atack['level']]:
-                                    self.status['mp'] -= self.atack['mana'][self.atack['level']]
+                                if self.status['mp'] > self.atacks[self.atack]['mana'][skill_level() - 1]:
+                                    self.status['mp'] -= self.atacks[self.atack]['mana'][skill_level() - 1]
                                     break
                                 else:
                                     embed = discord.Embed(
@@ -149,7 +152,7 @@ class Entity(object):
             description = f'{self.name} esta stunado'
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
-            img_ = self.atack['img']
+            img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img)
             await ctx.send(embed=embed_)
 
@@ -188,18 +191,18 @@ class Entity(object):
         if skill is not None:
             if skill['effs'] is not None:
                 if not self.is_player:
-                    key = skill['effs'][skill['level']].keys()
+                    key = skill['effs'][self.level_skill - 1].keys()
                 else:
                     key = skill['effs'].keys()
                 for c in key:
                     try:
                         if not self.is_player:
-                            self.effects['turns'] += skill['effs'][skill['level']][c]['turns']
+                            self.effects['turns'] += skill['effs'][self.level_skill - 1][c]['turns']
                         else:
                             self.effects['turns'] += skill['effs'][c]['turns']
                     except KeyError:
                         if not self.is_player:
-                            self.effects[c] = skill['effs'][skill['level']][c]
+                            self.effects[c] = skill['effs'][self.level_skill - 1][c]
                         else:
                             self.effects[c] = skill['effs'][c]
                     description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
@@ -209,7 +212,7 @@ class Entity(object):
                                            self.status['hp'], self.img)
                     await ctx.send(embed=embed_)
             if not self.is_player:
-                damage = skill['damage'][skill['level']]
+                damage = skill['damage'][self.level_skill - 1]
             else:
                 damage = skill['damage']
             dice1 = int(damage[:damage.find('d')])

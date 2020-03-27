@@ -18,6 +18,11 @@ def id_creator():
     return int(id_)
 
 
+def skill_level():
+    level = random.randint(1, 10)
+    return level
+
+
 def choice_equips(bot):
     set_equips = list()
     for c in range(5):
