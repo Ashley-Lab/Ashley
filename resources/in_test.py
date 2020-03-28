@@ -21,16 +21,16 @@ def id_creator():
 
 
 def skill_level(lvl):
-    nivel = 0
-    if 26 < lvl < 30:
+    nivel = 1
+    if 26 <= lvl <= 30:
         nivel = random.randint(1, 2)
-    elif 31 < lvl < 35:
+    elif 31 <= lvl <= 35:
         nivel = random.randint(3, 4)
-    elif 36 < lvl < 40:
+    elif 36 <= lvl <= 40:
         nivel = random.randint(5, 6)
-    elif 41 < lvl < 45:
+    elif 41 <= lvl <= 45:
         nivel = random.randint(7, 8)
-    elif 46 < lvl < 50:
+    elif 46 <= lvl <= 50:
         nivel = random.randint(9, 10)
     return nivel
 

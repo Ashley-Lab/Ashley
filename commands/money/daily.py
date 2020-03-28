@@ -122,11 +122,11 @@ class DailyClass(commands.Cog):
         if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)
             if chance >= 80:
-                update_user['user']['winner'] += 1
+                update_user['user']['stars'] += 1
                 await ctx.send('<:rank:519896825411665930>│``VOCÊ GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
                                '**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
                                '``ASH RANK``')
-                if update_user['user']['winner'] >= 10:
+                if update_user['user']['stars'] >= 10:
                     data_guild = self.db.get_data("guild_id", ctx.guild.id, "guilds")
                     update_guilda = data_guild
                     if data_guild['vip'] is False and ctx.author.id == ctx.guild.owner.id:

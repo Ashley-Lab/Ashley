@@ -58,7 +58,7 @@ class RankingClass(commands.Cog):
         data = self.bot.db.get_data("user_id", user.id, "users")
         update = data
         if data is not None:
-            update['user']['winner'] = valor
+            update['user']['stars'] = valor
             self.bot.db.update_data(data, update, "users")
             await ctx.send(f'<:confirmado:519896822072999937>│**{valor}** ``Estrelas Registradas!``',
                            delete_after=10.0)
@@ -135,8 +135,8 @@ class RankingClass(commands.Cog):
         # champion image
         champion = dict()
         for n in range(1, 21):
-            if data['user']['winner']:
-                if data['user']['winner'] == 0:
+            if data['user']['stars']:
+                if data['user']['stars'] == 0:
                     star_ = 'star_default'
                     champion[n - 1] = Image.open(f'images/elements/{star_}.png').convert('RGBA')
                     champion[n - 1] = champion[n - 1].resize((130, 90))
@@ -153,7 +153,7 @@ class RankingClass(commands.Cog):
                         star_ = "star_pink"
                     if user.id in self.bot.staff:
                         star_ = "star_blue"
-                    if n <= data['user']['winner']:
+                    if n <= data['user']['stars']:
                         star = star_
                     else:
                         star = 'star_default'
