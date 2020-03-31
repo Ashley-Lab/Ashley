@@ -6,11 +6,11 @@ from resources.db import Database
 from asyncio import TimeoutError
 from random import choice
 
-git = ["https://media.giphy.com/media/2djU0ypmLqqsjHKEnM/giphy.gif",
-       "https://media.giphy.com/media/69xjQSxBEeiJ2nfTZU/giphy.gif",
-       "https://media.giphy.com/media/wZP7BxvpdCxxRWXtqf/giphy.gif",
-       "https://media.giphy.com/media/1dMo2z3pippL3vzO6s/giphy.gif",
-       "https://media.giphy.com/media/67SVlMevO3Zoo95d8P/giphy.gif"]
+git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
+       "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
+       "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
+       "https://media1.tenor.com/images/17e1414f1dc91bc1f76159d7c3fa03ea/tenor.gif?itemid=15744166",
+       "https://media1.tenor.com/images/39c363015f2ae22f212f9cd8df2a1063/tenor.gif?itemid=15894886"]
 
 
 class MarriedSystem(commands.Cog):

@@ -51,7 +51,7 @@ class HeadsOrTails(commands.Cog):
                     change = randint(1, 100)
                     answer_ = await self.bot.db.add_money(ctx, 5)
                     await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
-                                   '``você GANHOU:`` <:coin:519896843388452864> {}'.format(answer_))
+                                   '``você GANHOU:``\n {}'.format(answer_))
                     if change < 50:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
@@ -68,7 +68,7 @@ class HeadsOrTails(commands.Cog):
                     change = randint(1, 100)
                     answer_ = await self.bot.db.add_money(ctx, 5)
                     await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
-                                   '``você GANHOU:`` <:coin:519896843388452864> {}'.format(answer_))
+                                   '``você GANHOU:``\n {}'.format(answer_))
                     if change < 50:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',

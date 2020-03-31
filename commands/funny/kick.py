@@ -17,11 +17,11 @@ class KickClass(commands.Cog):
     @commands.command(name='kick', aliases=['chute'])
     async def kick(self, ctx):
         try:
-            kickimg = ['https://media.giphy.com/media/28dP8puMEC1iVGgUtY/giphy.gif',
-                       'https://media.giphy.com/media/28DOzqSFj5RbODIeu8/giphy.gif',
-                       'https://media.giphy.com/media/1eEDH9ib0DpJ48F1oF/giphy.gif',
-                       'https://media.giphy.com/media/mMCXkn2YIFUdGcthIa/giphy.gif',
-                       'https://media.giphy.com/media/5kFQ3Dt7dEmlrUduSR/giphy.gif']
+            kickimg = ['https://media1.tenor.com/images/cc217519af48fe13bea6004afb36f1f2/tenor.gif?itemid=5738223',
+                       'https://media1.tenor.com/images/2427d33c1c97a12b5ed4eda5ca2c63b7/tenor.gif?itemid=16733357',
+                       'https://media1.tenor.com/images/fb2a19c9b689123e6254ad9ac6719e96/tenor.gif?itemid=4922649',
+                       'https://media1.tenor.com/images/ea2c3b49edf2080e0ef2a2325ddb4381/tenor.gif?itemid=14835708',
+                       'https://media1.tenor.com/images/a3fdbd8e26ad73a0fa410c6c04e15714/tenor.gif?itemid=16022961']
 
             chance = randint(1, 100)
 
@@ -32,7 +32,7 @@ class KickClass(commands.Cog):
                 return await ctx.send('<:negate:520418505993093130>│``Você quer me bater com meu proprio recurso?``')
 
             if chance <= 10:
-                kick = 'https://media.giphy.com/media/C9U5DgKIde7fjOWHf6/giphy.gif'
+                kick = 'https://media1.tenor.com/images/9494639a2ffe5afef9d045d949bf35ee/tenor.gif?itemid=12960265'
                 text = "Ele(a) iria levar um chute de"
                 end = 'Mas ele(a) falhou miseravelmente...'
             elif chance <= 90:

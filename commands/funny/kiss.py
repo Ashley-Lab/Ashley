@@ -17,11 +17,11 @@ class KissClass(commands.Cog):
     @commands.command(name='kiss', aliases=['beijo'])
     async def kiss(self, ctx):
         try:
-            kissimg = ['https://media.giphy.com/media/xTDsoOpxyc0mfD5kRL/giphy.gif',
-                       'https://media.giphy.com/media/YFI5F1DGueggFIwjFQ/giphy.gif',
-                       'https://media.giphy.com/media/NRensrTKS7couFakNT/giphy.gif',
-                       'https://media.giphy.com/media/8cj4Ir95UFQGEiphsV/giphy.gif',
-                       'https://media.giphy.com/media/yvBl6HeIYNjiiKTw3W/giphy.gif']
+            kissimg = ['https://media1.tenor.com/images/ef4a0bcb6e42189dc12ee55e0d479c54/tenor.gif?itemid=12143127',
+                       'https://media1.tenor.com/images/b8d0152fbe9ecc061f9ad7ff74533396/tenor.gif?itemid=5372258',
+                       'https://media1.tenor.com/images/778d51aca07848160ad9b52e6df37b30/tenor.gif?itemid=16737083',
+                       'https://media1.tenor.com/images/693602b39a071644cebebdce7c459142/tenor.gif?itemid=6206552',
+                       'https://media1.tenor.com/images/e76e640bbbd4161345f551bb42e6eb13/tenor.gif?itemid=4829336']
             kiss = choice(kissimg)
             kissemb = discord.Embed(title='Beijo :heart:',
                                     description='**{}** Ele(a) recebeu um beijo de **{}**! Que casal fofo! '

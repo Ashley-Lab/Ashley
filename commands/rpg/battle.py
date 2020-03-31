@@ -17,7 +17,7 @@ class Battle(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='battle', aliases=['batalha'])
+    @commands.command(name='battle', aliases=['batalha', 'duel', 'duelo'])
     async def battle(self, ctx):
         Class_rpg['Name'] = ctx.author.name
         Class_rpg['img'] = ctx.author.avatar_url
@@ -95,7 +95,7 @@ class Battle(commands.Cog):
                 description=f"``{ctx.author.name.upper()} GANHOU!``",
                 color=0x000000
             )
-            embed.set_image(url="https://66.media.tumblr.com/9d7ccd68ebab7c4853684f9c5d7224ce/tumblr_mxphrlHPJA1sbjmhmo1_400.gifv")
+            embed.set_image(url="https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532")
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
 

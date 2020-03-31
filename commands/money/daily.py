@@ -58,24 +58,24 @@ class DailyClass(commands.Cog):
     @daily.group(name='work', aliases=['trabalho'])
     async def _work(self, ctx):
         if self.bot.guilds_commands[ctx.guild.id] > 50:
-            if self.bot.user_commands[ctx.author.id] > 10:
+            if self.bot.user_commands[ctx.author.id] > 20:
                 global money
                 min_ = 0
                 max_ = 0
                 for n in range(self.bot.user_commands[ctx.author.id]):
                     min_ += 1
-                    max_ += 1
+                    max_ += randint(1, 3)
                 data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
                 if data_user['user']['ranking'] == "Bronze":
                     money = randint(120 + min_, 1200 + max_)
                 elif data_user['user']['ranking'] == "Silver":
-                    money = randint(80 + min_, 800 + max_)
+                    money = randint(200 + min_, 2000 + max_)
                 elif data_user['user']['ranking'] == "Gold":
-                    money = randint(40 + min_, 400 + max_)
-                await self.bot.db.add_money(ctx, money)
-                await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar`` '
-                               f'**{money}** ``em dinheiro do seu rank atual. Obs:`` **{max_}** ``de dinheiro a '
-                               f'mais por usar essa mesma quantidade de comandos.``')
+                    money = randint(240 + min_, 2400 + max_)
+                msg = await self.bot.db.add_money(ctx, money)
+                await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar: \n``'
+                               f'**{msg}** ``\n'
+                               f'``Obs:`` **{max_ + min_}** ``de ETHERNYAS a mais por usar {min_} comandos.``')
             else:
                 try:
                     data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")

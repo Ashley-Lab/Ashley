@@ -46,8 +46,8 @@ class GameThinker(commands.Cog):
                     change = randint(1, 100)
                     answer_ = await self.bot.db.add_money(ctx, 15)
                     await ctx.send("<:rank:519896825411665930>│``O numero que eu pensei foi`` **{}** "
-                                   "``e o número que vc falou foi`` **{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                   "<:coin:519896843388452864> {}".format(number, resposta.content, answer_))
+                                   "``e o número que vc falou foi`` **{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
+                                   "{}".format(number, resposta.content, answer_))
                     if change < 50:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',

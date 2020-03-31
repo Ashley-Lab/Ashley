@@ -66,9 +66,8 @@ class JoKenPo(commands.Cog):
                     answer_ = await self.bot.db.add_money(ctx, 10)
                     await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``ganha de`` "
-                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                   "<:coin:519896843388452864> {}".format(ctx.author, player_, jkp,
-                                                                          player_, jkp, answer_))
+                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
+                                   "{}".format(ctx.author, player_, jkp, player_, jkp, answer_))
                     if change < 50:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
@@ -87,9 +86,8 @@ class JoKenPo(commands.Cog):
                     answer_ = await self.bot.db.add_money(ctx, 10)
                     await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``ganha de`` "
-                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                   "<:coin:519896843388452864> {}".format(ctx.author, player_, jkp,
-                                                                          player_, jkp, answer_))
+                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
+                                   "{}".format(ctx.author, player_, jkp, player_, jkp, answer_))
                     if change < 50:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',
@@ -116,9 +114,8 @@ class JoKenPo(commands.Cog):
                     answer_ = await self.bot.db.add_money(ctx, 10)
                     await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``ganha de`` "
-                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``"
-                                   "<:coin:519896843388452864> {}".format(ctx.author, player_, jkp,
-                                                                          player_, jkp, answer_))
+                                   "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
+                                   "{}".format(ctx.author, player_, jkp, player_, jkp, answer_))
                     if change < 50:
                         response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
                                                                       'crystal_fragment_enery',

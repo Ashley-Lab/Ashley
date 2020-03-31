@@ -17,11 +17,11 @@ class DanceClass(commands.Cog):
     @commands.command(name='dance', aliases=['dançar'])
     async def dance(self, ctx):
         try:
-            dance_img = ['https://media.giphy.com/media/1woCaEQvSvKMODsyEA/giphy.gif',
-                         'https://media.giphy.com/media/xWfS0QepPvL3iYViCY/giphy.gif',
-                         'https://media.giphy.com/media/5kFckUFIHb5W07fpmJ/giphy.gif',
-                         'https://media.giphy.com/media/1X8U0exkuqAMMKAQ3Y/giphy.gif',
-                         'https://media.giphy.com/media/58FpXQi6fKXrQcZPba/giphy.gif']
+            dance_img = ['https://media1.tenor.com/images/56350dfdcd3a5fa4fd66e9e87f9574bb/tenor.gif?itemid=4718162',
+                         'https://media1.tenor.com/images/9ee571803fdbea520d723280a6c2c573/tenor.gif?itemid=15054962',
+                         'https://media1.tenor.com/images/d119cd830e553054eadc9aa7f05ef888/tenor.gif?itemid=14040294',
+                         'https://media1.tenor.com/images/dc24029de47091555c2ecd8ac91d2069/tenor.gif?itemid=13048072',
+                         'https://media1.tenor.com/images/42803ed59f21b034f440243557ff2736/tenor.gif?itemid=11049076']
             dance = choice(dance_img)
             dance_embed = discord.Embed(title='Dance <a:dyno:541775159460102167>',
                                         description='**{}** Ele(a) esta dançando com **{}**! Alguem tira foto! EU '

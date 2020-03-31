@@ -84,6 +84,7 @@ class OnMemberJoin(commands.Cog):
                         description="<a:blue:525032762256785409>│``USE O COMANDO`` **ash cargos** ``PARA VOCE VER OS "
                                     "CARGOS DISPONIVEIS``")
                     await channel_.send(embed=embed)
+                    await channel_.send(f"**OBS:** ``SE VOCÊ VEIO AQUI ATRAS DO VIP É SÓ USAR O COMANDO`` **ASH VIP**")
             except discord.Forbidden:
                 pass
 

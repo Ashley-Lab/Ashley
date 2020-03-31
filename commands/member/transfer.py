@@ -35,8 +35,8 @@ class TransferClass(commands.Cog):
             return False
 
         await ctx.send(f'{ctx.guild.owner.mention} ``o membro`` {ctx.author.mention} ``quer associar sua conta do meu '
-                       f'sistema na sua guilda.``\n ``A conta dele contem exatos`` **R${d} de Money** ``você deseja '
-                       f'recebe-lo? Responsta com`` **[S/N]**', delete_after=60.0)
+                       f'sistema na sua guilda.``\n ``A conta dele contem exatos`` **R${d} de Ethernyas** ``você deseja'
+                       f' recebe-lo? Responsta com`` **[S/N]**', delete_after=60.0)
 
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=60.0)

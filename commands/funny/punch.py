@@ -18,16 +18,17 @@ class PunchClass(commands.Cog):
     @commands.command(name='punch', aliases=['soco'])
     async def punch(self, ctx):
         try:
-            punchimg = ['https://media.giphy.com/media/loMkSw7gyB5FKOK7mR/giphy.gif',
-                        'https://media.giphy.com/media/8JW411NAN3yAT5dYst/giphy.gif',
-                        'https://media.giphy.com/media/bwPqXlNEDvT3URFBIa/giphy.gif',
-                        'https://media.giphy.com/media/YVrv6Z9gdfqkHl4mHa/giphy.gif',
-                        'https://media.giphy.com/media/l0HlLFVBqUVwxSOzu/giphy.gif',
-                        'https://media.giphy.com/media/3oEhn4mIrTuCf0bn1u/giphy.gif',
-                        'https://media.giphy.com/media/DViGV8rfVjw6Q/giphy.gif']
+            punchimg = ['https://media1.tenor.com/images/0d0afe2df6c9ff3499a81bf0dab1d27c/tenor.gif?itemid=15580060',
+                        'https://media1.tenor.com/images/fb449fd335e73798806747062e2a8af7/tenor.gif?itemid=16733847',
+                        'https://media1.tenor.com/images/c621075def6ca41785ef4aaea20cc3a2/tenor.gif?itemid=7679409',
+                        'https://media1.tenor.com/images/5511a8309a1719987a27aa7b1ee7da04/tenor.gif?itemid=12303482',
+                        'https://media1.tenor.com/images/517f63ce5ffc6426bddd17d7413ebaca/tenor.gif?itemid=5247335',
+                        'https://media1.tenor.com/images/b2db2a7fe0b9f68f2869b4e0d11a9490/tenor.gif?itemid=8932977',
+                        'https://media1.tenor.com/images/ee3f2a6939a68df9563a7374f131fd96/tenor.gif?itemid=14210784']
 
-            fail = ['https://media.giphy.com/media/1H84T9Cm1SF15uFca4/giphy.gif',
-                    'https://media.giphy.com/media/nyjEMeiIK7n9APuzrv/giphy.gif']
+            fail = ['https://media1.tenor.com/images/bb51940fa340c5a4e1b3f2d94496a756/tenor.gif?itemid=16700275',
+                    'https://media1.tenor.com/images/cff010b188084e1faed2905c0f1634c2/tenor.gif?itemid=10161883',
+                    'https://media1.tenor.com/images/e2b232138773393ac3d5acd58936da83/tenor.gif?itemid=5003092']
 
             chance = randint(1, 100)
 

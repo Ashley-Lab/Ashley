@@ -10,8 +10,16 @@ class Economy(commands.Cog):
         self.gold = 0
         self.silver = 0
         self.bronze = 0
-        self.global_ranking = list()
-        self.all_account = list()
+        self.global_ranking = {"Bronze": 0, "Silver": 0, "Gold": 0}
+        self.all_account = 0
+
+    @staticmethod
+    def format_num(num):
+        a = '{:,.0f}'.format(float(num))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+        return d
 
     def get_all_guilds_atr(self, atr, qnt=0):
         for guild in self.bot.guilds:
@@ -21,50 +29,45 @@ class Economy(commands.Cog):
                 qnt += qnt_total
         return qnt
 
-    def get_all_list(self,  atr, t_list: list):
+    def get_all_list(self,  atr):
+        self.global_ranking = {"Bronze": 0, "Silver": 0, "Gold": 0}
+        self.all_account = 0
+        t_list = list()
         for guild in self.bot.guilds:
             guild_id = guild.id
             data = self.bot.db.get_data("guild_id", guild_id, "guilds")
             if data is not None:
                 t_list.append(data['data'][atr])
-            else:
-                t_list = list()
         return t_list
 
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='economy', aliases=['economia'])
-    async def economy(self, ctx, atr: str = ''):
-        if atr == 'money':
-            self.money = self.get_all_guilds_atr('total_money')
-            a = '{:,.2f}'.format(float(self.money))
-            b = a.replace(',', 'v')
-            c = b.replace('.', ',')
-            d = c.replace('v', '.')
-            await ctx.send(f'<:coins:519896825365528596>│ No total há **R$ {d}** de ``MONEY`` geral em '
-                           f'todos os servidores')
-        elif atr == 'gold':
-            self.gold = self.get_all_guilds_atr('total_gold')
-            await ctx.send(f'<:coins:519896825365528596>│ No total há **{self.gold}** de ``GOLD`` geral em todos '
-                           f'os servidores')
-        elif atr == 'silver':
-            self.silver = self.get_all_guilds_atr('total_silver')
-            await ctx.send(f'<:coins:519896825365528596>│ No total há **{self.silver}** de ``SILVER`` geral em todos '
-                           f'os servidores')
-        elif atr == 'bronze':
-            self.bronze = self.get_all_guilds_atr('total_bronze')
-            await ctx.send(f'<:coins:519896825365528596>│ No total há **{self.bronze}** de ``BRONZE`` geral em todos '
-                           f'os servidores')
-        elif atr == 'ranking':
-            self.global_ranking = self.get_all_list('ranking', list())
-            await ctx.send(self.global_ranking)
-        elif atr == 'account':
-            self.all_account = len(self.get_all_list('accounts', list()))
-            await ctx.send(self.all_account)
-        else:
-            await ctx.send('<:oc_status:519896814225457152>│``Você precisa dizer um atributo, que pode ser:`` \n'
-                           '**money**, **gold**, **silver**, **bronze**, **ranking** ou **account**')
+    async def economy(self, ctx):
+        self.money = self.get_all_guilds_atr('total_money')
+        a = '{:,.2f}'.format(float(self.money))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+        await ctx.send(f'<:coins:519896825365528596>│ No total há **R$ {d}** de ``ETHERNYAS`` geral em '
+                       f'todos os servidores')
+        self.gold = self.get_all_guilds_atr('total_gold')
+        await ctx.send(f'{self.bot.money[2]} **{self.format_num(self.gold)}**')
+        self.silver = self.get_all_guilds_atr('total_silver')
+        await ctx.send(f'{self.bot.money[1]} **{self.format_num(self.silver)}**')
+        self.bronze = self.get_all_guilds_atr('total_bronze')
+        await ctx.send(f'{self.bot.money[0]} **{self.format_num(self.bronze)}**')
+        for ranking in self.get_all_list('ranking'):
+            self.global_ranking[ranking] += 1
+        tot_guild = self.global_ranking['Bronze'] + self.global_ranking['Silver'] + self.global_ranking['Gold']
+        await ctx.send(f"Tenho **{self.format_num(tot_guild)}** Guildas\n"
+                       f"**{self.format_num(self.global_ranking['Bronze'])}** ``no ranking Bronze`` | "
+                       f"**{self.format_num(self.global_ranking['Silver'])}** ``no ranking Silver`` | "
+                       f"**{self.format_num(self.global_ranking['Gold'])}** ``no ranking Gold``")
+        for accounts in self.get_all_list('accounts'):
+            self.all_account += accounts
+        await ctx.send(f'Tendo ``{self.format_num(self.all_account)}`` Contas no total!')
 
 
 def setup(bot):

@@ -53,8 +53,8 @@ class Ashley(commands.AutoShardedBot):
                               ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
                               ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!']
         self.languages = ("pt", "en")
-        self.progress = "V.6 -> 20.3%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 6.1.0 | PROGRESS: " + str(self.progress)
+        self.progress = "V.6 -> 55.8%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 6.5.5 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
