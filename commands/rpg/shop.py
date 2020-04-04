@@ -65,15 +65,10 @@ class ShopClass(commands.Cog):
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="https://icon-library.net/images/shop-icon-png/shop-icon-png-6.jpg")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-            try:
-                await botmsg[user.id].clear_reactions()
-                await botmsg[user.id].edit(embed=embed)
-                await botmsg[user.id].add_reaction('<:gold_box:546019944211415040>')
-                await botmsg[user.id].add_reaction('<:coin:546019942936608778>')
-            except discord.errors.Forbidden:
-                await botmsg[user.id].delete()
-                botmsg[user.id] = await channel.send(embed=embed)
-                await botmsg[user.id].add_reaction('<:gold_box:546019944211415040>')
+            await botmsg[user.id].delete()
+            botmsg[user.id] = await channel.send(embed=embed)
+            await botmsg[user.id].add_reaction('<:gold_box:546019944211415040>')
+            await botmsg[user.id].add_reaction('<:coin:546019942936608778>')
 
         if str(reaction.emoji) == "<:gold_box:546019944211415040>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
@@ -85,18 +80,11 @@ class ShopClass(commands.Cog):
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="https://icon-library.net/images/shop-icon-png/shop-icon-png-6.jpg")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-            try:
-                await botmsg[user.id].clear_reactions()
-                await botmsg[user.id].edit(embed=embed)
-                await botmsg[user.id].add_reaction('🎫')
-                await botmsg[user.id].add_reaction('💳')
-                await botmsg[user.id].add_reaction('↩')
-            except discord.errors.Forbidden:
-                await botmsg[user.id].delete()
-                botmsg[user.id] = await channel.send(embed=embed)
-                await botmsg[user.id].add_reaction('🎫')
-                await botmsg[user.id].add_reaction('💳')
-                await botmsg[user.id].add_reaction('↩')
+            await botmsg[user.id].delete()
+            botmsg[user.id] = await channel.send(embed=embed)
+            await botmsg[user.id].add_reaction('🎫')
+            await botmsg[user.id].add_reaction('💳')
+            await botmsg[user.id].add_reaction('↩')
 
         if str(reaction.emoji) == "<:coin:546019942936608778>" and reaction.message.id == botmsg[user.id].id:
             embed = discord.Embed(
@@ -107,16 +95,10 @@ class ShopClass(commands.Cog):
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="https://icon-library.net/images/shop-icon-png/shop-icon-png-6.jpg")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-            try:
-                await botmsg[user.id].clear_reactions()
-                await botmsg[user.id].edit(embed=embed)
-                await botmsg[user.id].add_reaction('💵')
-                await botmsg[user.id].add_reaction('↩')
-            except discord.errors.Forbidden:
-                await botmsg[user.id].delete()
-                botmsg[user.id] = await channel.send(embed=embed)
-                await botmsg[user.id].add_reaction('💵')
-                await botmsg[user.id].add_reaction('↩')
+            await botmsg[user.id].delete()
+            botmsg[user.id] = await channel.send(embed=embed)
+            await botmsg[user.id].add_reaction('💵')
+            await botmsg[user.id].add_reaction('↩')
 
         if reaction.emoji == "🎫" and reaction.message.id == botmsg[user.id].id:
             await channel.send("<:alert_status:519896811192844288>│``Comprando box...``")

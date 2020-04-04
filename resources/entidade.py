@@ -101,7 +101,8 @@ class Entity(object):
                                    f"``Efeito(s):`` " \
                                    f"**{str(self.atacks[c2]['effs'][self.level_skill - 1].keys())}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
-                description += '<:pass:692967573649752194> **Pass turn**'.upper()
+                description += f'<:pass:692967573649752194> **{"Pass turn".upper()}**\n' \
+                               f'``Mana Recovery:`` **15% da Mana Total**'
                 embed = discord.Embed(
                     title=title,
                     description=description,

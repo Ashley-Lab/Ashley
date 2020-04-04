@@ -1,0 +1,4 @@
+{
+  "nome_do_recipe_1": {"custo": [{"item": "quantidade"}, {"item": "quantidade"}, {"item": "quantidade"}], "recompeça": [{"item": "quantidade"}]},
+  "nome_do_recipe_2": {"custo": [{"item": "quantidade"}, {"item": "quantidade"}, {"item": "quantidade"}], "recompeça": [{"item": "quantidade"}]}
+}

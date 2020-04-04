@@ -14,6 +14,8 @@ class SystemMessage(commands.Cog):
         self.msg = {}
         self.ping_test = {}
         self.time = None
+        self.user_cont_msg = {}
+        self.user_cont_word = {}
         self.letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                         't', 'u', 'v', 'w', 'x', 'y', 'z')
 
@@ -130,6 +132,33 @@ class SystemMessage(commands.Cog):
                         self.ping_test[message.author.id]['p'] = False
                     except discord.Forbidden:
                         self.ping_test[message.author.id]['p'] = False
+
+                try:
+                    if message.guild.id == 643936732236087306:
+                        author = message.guild.get_member(message.author.id)
+                        if self.user_cont_word[author.id] < 20 and self.user_cont_msg[author.id] < 10:
+                            newbie = True
+                            self.user_cont_msg[author.id] += 1
+                            self.user_cont_word[author.id] += int(len(message.content.split()))
+                            if self.user_cont_word[author.id] >= 20 or self.user_cont_msg[author.id] >= 10:
+                                for role in author.roles:
+                                    if 'Membro' == role.name:
+                                        newbie = False
+                                if newbie:
+                                    role = discord.utils.find(lambda r: r.name == 'Membro', message.guild.roles)
+                                    await author.add_roles(role)
+                        else:
+                            self.user_cont_word[author.id] = int(len(message.content.split()))
+                            self.user_cont_msg[author.id] = 1
+                        for role in author.roles:
+                            if 'Membro' == role.name:
+                                role = discord.utils.find(lambda r: r.name == 'Membro Ativo', message.guild.roles)
+                                await author.add_roles(role)
+                except KeyError:
+                    self.user_cont_word[message.author.id] = int(len(message.content.split()))
+                    self.user_cont_msg[message.author.id] = 1
+                except AttributeError:
+                    pass
 
 
 def setup(bot):

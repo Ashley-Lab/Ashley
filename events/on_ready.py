@@ -1,5 +1,6 @@
 import io
 import discord
+import time as date
 
 from asyncio import sleep
 from random import choice, randint
@@ -28,7 +29,6 @@ class OnReady(commands.Cog):
         self.time_ready = None
         self.color = self.bot.color
         self.task_chance = self.bot.loop.create_task(self.change_status())
-        self.task_temporizer_draw_member = self.bot.loop.create_task(self.draw_member_in_server())
         self.url = 'https://www.twitch.tv/d3nkyt0'
         self.details = ['Yu-gi-oh!', 'RPG', 'Magic', 'Ashley Project']
         self.state = ['online', 'idle', 'dnd']
@@ -53,58 +53,22 @@ class OnReady(commands.Cog):
             await self.bot.change_presence(activity=discord.Game(name=current_status), status=current_state)
             await sleep(10)
 
-    async def draw_member_in_server(self):
-        await self.bot.wait_until_ready()
+    async def remove_role_zdd(self):
         while not self.bot.is_closed():
-            list_ = list()
-            for guild in self.bot.guilds:
-                data = self.bot.db.get_data("guild_id", guild.id, "guilds")
-                if data is not None:
-                    if data['bot_config']['ash_news']:
-                        list_.append(1)
-            premium = list()
-            for c in range(len(self.bot.guilds)):
-                min__ = localtime()
-                if str(min__[4]) in ["00", "10", "20", "30", "40", "50"]:
-                    for guild in self.bot.guilds:
-                        data = self.bot.db.get_data("guild_id", guild.id, "guilds")
-                        if data is not None:
-                            if data['bot_config']['ash_news']:
-                                channel__ = self.bot.get_channel(data['bot_config']['ash_news_id'])
-                                if channel__ is None:
-                                    continue
-                                if len(guild.members) < 50:
-                                    continue
-                                draw_member = choice(list(guild.members))
-                                member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
-                                data_member = self.bot.db.get_data("user_id", member.id, "users")
-                                update_member = data_member
-                                if data_member is None:
-                                    await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
-                                                         f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
-                                    premium.append(c)
-                                    continue
-                                coins = randint(2, 10)
-                                embed = discord.Embed(
-                                    title="``Fiz o sorteio de um membro``",
-                                    colour=self.color,
-                                    description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│"
-                                                "``Parabens você acaba de ganhar`` **{}** "
-                                                "``coins!!``".format(member.mention, coins))
-                                embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                                embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-                                embed.set_thumbnail(url=member.avatar_url)
-                                await channel__.send(embed=embed)
-                                update_member['inventory']['coins'] += coins
-                                self.bot.db.update_data(data_member, update_member, 'users')
-                                premium.append(c)
-                        await sleep(60)
+            date_ = date.localtime()
+            # existe uma diferença de hora de +3 para o servidor da ashley
+            if date_[3] == 3 and 0 >= date_[4] >= 5:
+                guild = self.bot.get_guild(643936732236087306)
+                for member in guild.members:
+                    member_ = guild.get_member(member.id)
+                    for role in member_.roles:
+                        if 'Membro Ativo' == role.name:
+                            role = discord.utils.find(lambda r: r.name == 'Membro Ativo', guild.roles)
+                            await member_.remove_roles(role)
+            if date_[3] == 3:
                 await sleep(60)
-            if len(premium) == len(list_):
-                time = 3600
             else:
-                time = 10
-            await sleep(time)
+                await sleep(3600)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -146,6 +110,8 @@ class OnReady(commands.Cog):
         print(cor['azul'], '▍ PrivateC ⠿', cor['clear'], cor['amar'], '{}'.format(str(chann).rjust(50)), cor['clear'])
         print(cor['azul'], '▍ Uptime   ⠿', cor['clear'], cor['amar'], '{}s'.format(str(time).rjust(49)), cor['clear'])
         print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])
+
+        self.bot.loop.create_task(self.remove_role_zdd())
 
 
 def setup(bot):
