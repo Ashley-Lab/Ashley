@@ -387,25 +387,26 @@ class DataInteraction(object):
                         if 10 < update['user']['level'] < 20 and update['user']['ranking'] is not None:
                             if change == 200 and update['user']['ranking'] == "Bronze":
                                 update['user']['ranking'] = "Silver"
-                                update['inventory']['coins'] += 20
+                                update['inventory']['coins'] += 100
                                 if not message.guild.id == 425864977996578816:
                                     try:
                                         await message.channel.send(
                                             '🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou a``'
-                                            ' **chance** ``de garimpar prata a partir de agora e`` **+20** ``Fichas '
-                                            'para jogar``'.format(message.author, "Silver"))
+                                            ' **chance** ``de garimpar mais ethernyas a partir de agora e`` **+100** '
+                                            '``Fichas para jogar``'.format(message.author, "Silver"))
                                     except discord.errors.Forbidden:
                                         pass
                         elif 20 < update['user']['level'] < 30 and update['user']['ranking'] is not None:
                             if change == 200 and update['user']['ranking'] == "Silver":
                                 update['user']['ranking'] = "Gold"
-                                update['inventory']['coins'] += 20
+                                update['inventory']['coins'] += 200
                                 if not message.guild.id == 425864977996578816:
                                     try:
                                         await message.channel.send(
                                             '🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou a``'
-                                            ' **chance** ``de garimpar ouro a partir de agora e`` **+20** ``Fichas para'
-                                            ' jogar``'.format(message.author, "Gold"))
+                                            ' **chance** ``de garimpar mais eternyas do que o ranking passado a partir '
+                                            'de agora e`` **+200** ``Fichas para '
+                                            'jogar``'.format(message.author, "Gold"))
                                     except discord.errors.Forbidden:
                                         pass
                         if message.guild.id == update['guild_id']:
@@ -431,12 +432,12 @@ class DataInteraction(object):
                 if lvl_anterior < lvl_now:
                     update['user']['level'] = lvl_now
                     update['status']['PDH'] += 1
-                    update['inventory']['coins'] += 10
+                    update['inventory']['coins'] += 20
                     self.db.update_data(data, update, "users")
                     if not message.guild.id == 425864977996578816:
                         try:
                             await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e '
-                                                       'ganhou`` **1** ``ponto de habilidade e`` **+10** ``Fichas para '
+                                                       'ganhou`` **1** ``ponto de habilidade e`` **+20** ``Fichas para '
                                                        'jogar``'.format(message.author, lvl_now))
                         except discord.errors.Forbidden:
                             pass

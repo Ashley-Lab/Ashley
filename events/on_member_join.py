@@ -68,9 +68,10 @@ class OnMemberJoin(commands.Cog):
                         return
                     text = str(member.guild.member_count)
                     list_ = list()
-                    for l in text:
-                        list_.append(numbers[int(l)])
-                    await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:** " + str(list_))
+                    for letter in text:
+                        list_.append(numbers[int(letter)])
+                    list_ = str(list_).replace('[', '').replace(']', '').replace(',', '.')
+                    await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:**  " + list_)
                 except discord.errors.Forbidden:
                     pass
 

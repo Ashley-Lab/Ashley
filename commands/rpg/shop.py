@@ -131,6 +131,8 @@ class ShopClass(commands.Cog):
             if num > 10:
                 return await channel.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 booster"
                                           " de uma vez...``")
+            elif num == 0:
+                return await channel.send("<:negate:520418505993093130>│``Você não pode comprar 0 booster``")
             try:
                 if data['box']:
                     num_ = self.verify_money(data, num)
@@ -142,7 +144,8 @@ class ShopClass(commands.Cog):
                         await sleep(1)
                     await channel.send("<:on_status:519896814799945728>│``Obrigado pelas compras, volte sempre!``")
             except KeyError:
-                await channel.send("<:negate:520418505993093130>│``Você ainda não tem uma box...``")
+                await channel.send("<:negate:520418505993093130>│``Você ainda não tem uma box...``\n"
+                                   "``Para conseguir sua box use o comando:`` **ash box buy** ``ou`` **ash shop**")
 
 
 def setup(bot):

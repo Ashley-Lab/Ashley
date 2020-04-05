@@ -151,6 +151,12 @@ class Entity(object):
                         break
             else:
                 self.atack = choice(atacks)
+                embed = discord.Embed(
+                    description=f"**{self.name.upper()}** ``ESCOLHEU O ATAQUE:`` **{self.atack.upper()}**",
+                    color=0xf15a02
+                )
+                embed.set_thumbnail(url=f"{self.img}")
+                await ctx.send(embed=embed)
             try:
                 self.atack = self.atacks[self.atack]
             except KeyError:
@@ -200,9 +206,9 @@ class Entity(object):
         if skill is not None:
             if skill['effs'] is not None:
                 if not self.is_player:
-                    key = skill['effs'][self.level_skill - 1].keys()
+                    key = [k for k, v in skill['effs'][self.level_skill - 1].items()]
                 else:
-                    key = skill['effs'].keys()
+                    key = [k for k, v in skill['effs'].items()]
                 for c in key:
                     try:
                         if not self.is_player:

@@ -24,7 +24,7 @@ class OnMemberRemove(commands.Cog):
                     canal = self.bot.get_channel(data['func_config']['member_remove_id'])
                     msg = discord.Embed(title='O membro {} Saiu do servidor {}!'.format(member, member.guild),
                                         color=self.color, description="Adeus {}, qualquer coisa é a mesma coisa e "
-                                                                 "tudo é nenhuma!".format(member.name))
+                                                                      "tudo é nenhuma!".format(member.name))
                     msg.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                     msg.set_thumbnail(url="{}".format(member.avatar_url))
                     msg.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -45,9 +45,10 @@ class OnMemberRemove(commands.Cog):
                         return
                     text = str(member.guild.member_count)
                     list_ = list()
-                    for l in text:
-                        list_.append(numbers[int(l)])
-                    await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:** " + str(list_))
+                    for letter in text:
+                        list_.append(numbers[int(letter)])
+                    list_ = str(list_).replace('[', '').replace(']', '').replace(',', '.')
+                    await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:**  " + list_)
             except discord.Forbidden:
                 pass
 
