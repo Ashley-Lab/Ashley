@@ -41,14 +41,14 @@ class BoxClass(commands.Cog):
                         ur = data['box']['status']['ur']
                         sr = data['box']['status']['sr']
                         r = data['box']['status']['r']
-                        n = data['box']['status']['n']
+                        i = data['box']['status']['i']
                         c = data['box']['status']['c']
                         size = data['box']['status']['size']
                         images = {'Secret': 'https://i.imgur.com/qjenk0j.png',
                                   'Ultra Raro': 'https://i.imgur.com/fdudP2k.png',
                                   'Super Raro': 'https://i.imgur.com/WYebgvF.png',
                                   'Raro': 'https://i.imgur.com/7LnlnDA.png',
-                                  'Normal': 'https://i.imgur.com/TnoC2j1.png',
+                                  'Incomum': 'https://i.imgur.com/TnoC2j1.png',
                                   'Comum': 'https://i.imgur.com/ma5tHvK.png'}
                         description = '''
 Raridade da Box:
@@ -61,9 +61,9 @@ ITEMS:
 <UR: {}>
 <SR: {}>
 <R: {}>
-<N: {}>
+<I: {}>
 <C: {}>
-<SIZE: {}/{}>```'''.format(rarity, status, secret, ur, sr, r, n, c, size, num)
+<SIZE: {}/{}>```'''.format(rarity, status, secret, ur, sr, r, i, c, size, num)
                         box = discord.Embed(
                             title="{}'s box:".format(ctx.author.name),
                             color=self.color,

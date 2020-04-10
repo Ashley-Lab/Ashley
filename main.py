@@ -34,9 +34,7 @@ class Ashley(commands.AutoShardedBot):
         self.guilds_commands = Counter()
         self.guilds_messages = Counter()
         self.user_commands = Counter()
-        self.announcements = ['ANUNCIE COMIGO: ENTRE NO MEU SERVIDOR E SAIBA COMO ANUNCIAR!',
-                              'SISTEMA DE LINGAGUEM: O IDIOMA INGLES SERÁ LIBERADO EM BREVE...',
-                              'VIP: VOCÊ SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
+        self.announcements = ['VIP: VOCÊ SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
                               'O COMANDO "ASH RANK" ESTÁ FINALIZADO, AGORA VOCÊ PODERÁ OLHAR SEU RANK A QUALQUER'
                               ' MOMENTO!',
                               'O COMANDO "ASH REC" SERVE PARA VOCÊ ADIQUIRIR ESTRELAS NO SEU RANK, POREM VOCÊ APENAS'
@@ -51,7 +49,11 @@ class Ashley(commands.AutoShardedBot):
                               '"ASH DAILY REC", "ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
                               'AGORA SEU SERVIDOR TAMBEM SE TORNA VIP, COM ISSO O DONO DO SERVIDOR PODE CADASTRAR SEUS'
                               ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
-                              ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!']
+                              ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!',
+                              'PEÇO QUE TODOS OS DONOS OU ADMINISTRADORES DOS SERVIDORES QUE TEM A ASHLEY, ATIVEM A '
+                              'FUNÇÃO DO ASH NEWS, VOCÊS CONSEGUEM FAZER ISSO NO COMANDO (ASH CONFIG GUILD), POIS A '
+                              'PARTIR DE AGORA TODAS NOVIDADES DO BOT VAO SER INSERIDAS NO CANAL EM DESTAQUE QUE VOCÊS'
+                              ' DEFINIREM! OBRIGADO A TODOS PELA ATENÇÃO.\n ASS: DENKY (DEVELOPER MASTER)']
         self.languages = ("pt", "en")
         self.progress = "V.6 -> 55.8%"
         self.version = "API: " + str(discord.__version__) + " | BOT: 6.5.5 | PROGRESS: " + str(self.progress)

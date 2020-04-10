@@ -3,7 +3,7 @@ import discord
 
 from config import data as config
 from random import choice
-from asyncio import TimeoutError
+from asyncio import TimeoutError, sleep
 from discord.ext import commands
 from resources.utility import get_response
 
@@ -159,6 +159,32 @@ class SystemMessage(commands.Cog):
                     self.user_cont_msg[message.author.id] = 1
                 except AttributeError:
                     pass
+
+                if message.guild.id == self.bot.config['config']['default_guild']:
+                    if message.channel.id == 543589223467450398:
+                        all_data = self.bot.db.get_all_data("guilds")
+                        for data in all_data:
+                            try:
+                                if data['bot_config']['ash_news']:
+                                    channel_ = self.bot.get_channel(data['bot_config']['ash_news_id'])
+                                    if channel_ is not None:
+                                        await channel_.send(message.content)
+                            except discord.Forbidden:
+                                pass
+                            await sleep(0.5)
+
+                if message.guild.id == self.bot.config['config']['default_guild']:
+                    if message.channel.id == 525360987373699073:
+                        all_data = self.bot.db.get_all_data("guilds")
+                        for data in all_data:
+                            try:
+                                if data['bot_config']['ash_git']:
+                                    channel_ = self.bot.get_channel(data['bot_config']['ash_git_id'])
+                                    if channel_ is not None:
+                                        await channel_.send(message.content)
+                            except discord.Forbidden:
+                                pass
+                            await sleep(0.5)
 
 
 def setup(bot):

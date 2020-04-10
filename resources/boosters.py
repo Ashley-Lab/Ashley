@@ -10,25 +10,25 @@ class Booster(object):
         self.key_item = None
 
         # box configs
-        self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "n": 0, "c": 0}}
-        self.legend = {"Comum": 0, "Normal": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
-        self.bl = {"Comum": "c", "Normal": "n", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur", "Secret": "secret"}
-        self.rarity = {"Comum": 500, "Normal": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
+        self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}
+        self.legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+        self.bl = {"Comum": "c", "Incomum": "n", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur", "Secret": "secret"}
+        self.rarity = {"Comum": 500, "Incomum": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
 
         # booster configs
         self.booster_choice = None
-        self.booster_bronze = {"Comum": 95, "Normal": 1, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_silver = {"Comum": 60, "Normal": 36, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_gold = {"Comum": 50, "Normal": 46, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_vip = {"Comum": 50, "Normal": 30, "Raro": 15, "Super Raro": 3, "Ultra Raro": 1, "Secret": 1}
-        self.booster_secret = {"Comum": 40, "Normal": 30, "Raro": 20, "Super Raro": 7, "Ultra Raro": 2, "Secret": 1}
+        self.booster_bronze = {"Comum": 95, "Incomum": 1, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
+        self.booster_silver = {"Comum": 60, "Incomum": 36, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
+        self.booster_gold = {"Comum": 50, "Incomum": 46, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
+        self.booster_vip = {"Comum": 50, "Incomum": 30, "Raro": 15, "Super Raro": 3, "Ultra Raro": 1, "Secret": 1}
+        self.booster_secret = {"Comum": 40, "Incomum": 30, "Raro": 20, "Super Raro": 7, "Ultra Raro": 2, "Secret": 1}
 
         # contadores de itens
         self.secret = 0
         self.ur = 0
         self.sr = 0
         self.r = 0
-        self.n = 0
+        self.i = 0
         self.c = 0
 
         # contador de itens por box
@@ -39,17 +39,17 @@ class Booster(object):
         self.l_ur = 2 * len([x for x in self.items.keys() if self.items[x][3] == 4])
         self.l_sr = 3 * len([x for x in self.items.keys() if self.items[x][3] == 3])
         self.l_r = 6 * len([x for x in self.items.keys() if self.items[x][3] == 2])
-        self.l_n = 28 * len([x for x in self.items.keys() if self.items[x][3] == 1])
+        self.l_i = 28 * len([x for x in self.items.keys() if self.items[x][3] == 1])
         self.l_c = 60 * len([x for x in self.items.keys() if self.items[x][3] == 0])
 
     def reset_counts(self):
-        self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "n": 0, "c": 0}}
+        self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}
         self.box_count = 0
         self.secret = 0
         self.ur = 0
         self.sr = 0
         self.r = 0
-        self.n = 0
+        self.i = 0
         self.c = 0
 
     def create_box(self):
@@ -99,14 +99,14 @@ class Booster(object):
                     self.r += 1
                     self.box_count += 1
             elif self.items[item][3] == 1:
-                if self.n < self.l_n:
+                if self.i < self.l_i:
                     if item not in self.box['items']:
                         self.box['items'][item] = {"size": 1, "data": self.items[item]}
-                        self.box['status']['n'] += 1
+                        self.box['status']['i'] += 1
                     else:
                         self.box['items'][item]['size'] += 1
-                        self.box['status']['n'] += 1
-                    self.n += 1
+                        self.box['status']['i'] += 1
+                    self.i += 1
                     self.box_count += 1
             elif self.items[item][3] == 0:
                 if self.c < self.l_c:

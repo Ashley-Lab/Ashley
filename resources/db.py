@@ -83,14 +83,21 @@ class Database(object):
                 "stars": 0,
                 "rec": 0
             },
-            "status": {
-                "ATK": 1,
-                "CON": 1,
-                "DEX": 1,
-                "ACC": 1,
-                "LUC": 1,
-                "PDH": 0,
-                "rpg_class": data.get("rpg_class", None),
+            "rpg": {
+                "Name": None,
+                "Level": 1,
+                "XP": 0,
+                "Status": {
+                    "con": 5,
+                    "prec": 5,
+                    "agi": 5,
+                    "atk": 5,
+                    "luk": 0,
+                    "pdh": 0
+                },
+                "Class": 'Default',
+                "itens": list(),
+                "img": None
             },
             "treasure": {
                 "money": 0,
@@ -170,7 +177,9 @@ class Database(object):
                 "ash_news": data.get("ash_news", False),
                 "ash_news_id": data.get("log", None),
                 "ash_git": data.get("ash_news_id", False),
-                "ash_git_id": data.get("ash_git_id", None)
+                "ash_git_id": data.get("ash_git_id", None),
+                "ash_draw": data.get("ash_draw", False),
+                "ash_draw_id": data.get("ash_draw_id", None),
             },
             "func_config": {
                 "cont_users": data.get("cont_users", False),
@@ -342,6 +351,16 @@ class Database(object):
                 if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
                     self.bot.db.update_data(data_user, update_user, 'users')
 
+                if kwargs.get("g_vip") and data_guild['vip']:
+                    return True
+                elif kwargs.get("g_vip") and data_guild['vip'] is False:
+                    raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS SERVIDORES COM VIP ATIVO PODEM "
+                                                "USAR ESSE COMANDO``\n **Para ganhar seu vip ATIVO DE SERVIDOR, O LIDER"
+                                                " DA GUILDA precisa alcançar pelo menos 10 das 20 estrelas de "
+                                                "recomendação**\n **OBS:** ``para ganhar recomendação é necessário usar"
+                                                " o comando`` **ash daily rec** ``na pessoa que você deseja "
+                                                "recomendar``")
+
                 if kwargs.get("vip") and data_user['config']['vip']:
                     return True
                 elif kwargs.get("vip") and data_user['config']['vip'] is False:
@@ -431,13 +450,12 @@ class DataInteraction(object):
                 lvl_now = int(experience ** (1 / 5))
                 if lvl_anterior < lvl_now:
                     update['user']['level'] = lvl_now
-                    update['status']['PDH'] += 1
                     update['inventory']['coins'] += 20
                     self.db.update_data(data, update, "users")
                     if not message.guild.id == 425864977996578816:
                         try:
                             await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e '
-                                                       'ganhou`` **1** ``ponto de habilidade e`` **+20** ``Fichas para '
+                                                       'ganhou`` **+20** ``Fichas para '
                                                        'jogar``'.format(message.author, lvl_now))
                         except discord.errors.Forbidden:
                             pass

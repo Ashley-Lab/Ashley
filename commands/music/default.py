@@ -288,7 +288,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='connect', aliases=['join', 'entrar'])
     async def _connect(self, ctx, *, channel: discord.VoiceChannel = None):
         if not channel:
@@ -319,7 +319,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='play', aliases=['sing', 'tocar'])
     async def play_(self, ctx, *, search: str = "Ashley escape the fate"):
         await ctx.trigger_typing()
@@ -347,7 +347,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='pause', aliases=['pausar'])
     async def pause_(self, ctx):
         vc = ctx.voice_client
@@ -373,7 +373,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='resume', aliases=['voltar', 'retornar'])
     async def resume_(self, ctx):
         vc = ctx.voice_client
@@ -400,7 +400,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='skip', aliases=['pular', 'passar'])
     async def skip_(self, ctx):
         vc = ctx.voice_client
@@ -436,7 +436,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='queue', aliases=['q', 'playlist', 'lista'])
     async def queue_info(self, ctx):
         vc = ctx.voice_client
@@ -478,7 +478,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='shuffle', aliases=['embaralhar'])
     async def _shuffle(self, ctx):
         state = self.get_player(ctx)
@@ -501,7 +501,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='remove', aliases=['remover'])
     async def _remove(self, ctx, index=-1):
         state = self.get_player(ctx)
@@ -531,7 +531,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='clear', aliases=['limpar'])
     async def _clear(self, ctx):
         state = self.get_player(ctx)
@@ -555,7 +555,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='repeat', aliases=['repetir'])
     async def _repeat(self, ctx):
         try:
@@ -576,7 +576,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='now_playing', aliases=['np', 'current', 'currentsong', 'playing', 'tocando'])
     async def now_playing_(self, ctx):
         vc = ctx.voice_client
@@ -601,7 +601,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='volume', aliases=['vol'])
     async def change_volume(self, ctx, *, vol: float = 100.0):
         vc = ctx.voice_client
@@ -634,7 +634,7 @@ class MusicDefault(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='stop', aliases=['parar'])
     async def stop_(self, ctx):
         vc = ctx.voice_client
