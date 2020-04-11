@@ -157,4 +157,4 @@ Dica: **{}**'''.format(senha, dica))
 
 def setup(bot):
     bot.add_cog(ForceCass(bot))
-    print('\033[1;32m( * ) | O comando de \033[1;34mFORCECLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando de \033[1;34mFORCECLASS\033[1;32m foi carregado com sucesso!\33[m')

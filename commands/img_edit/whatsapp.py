@@ -155,4 +155,4 @@ chamado de mobrau''', (147, 216), 7], ['''pare com as drogas''', (177, 237), 7]]
 
 def setup(bot):
     bot.add_cog(WhatsappClass(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mWHATSAPPCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mWHATSAPPCLASS\033[1;32m foi carregado com sucesso!\33[m')

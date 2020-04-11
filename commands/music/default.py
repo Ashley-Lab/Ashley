@@ -666,4 +666,4 @@ class MusicDefault(commands.Cog):
 
 def setup(bot):
     bot.add_cog(MusicDefault(bot))
-    print('\033[1;36m( * ) | Os comandos de \033[1;31mMUSICAS\033[1;36m foram carregados com sucesso!\33[m')
+    print('\033[1;36m( 🔶 ) | Os comandos de \033[1;31mMUSICAS\033[1;36m foram carregados com sucesso!\33[m')

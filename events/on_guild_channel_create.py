@@ -34,4 +34,4 @@ class ChannelCreate(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ChannelCreate(bot))
-    print('\033[1;33m( * ) | O evento \033[1;34mCHANNEL_CREATE\033[1;33m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( 🔶 ) | O evento \033[1;34mCHANNEL_CREATE\033[1;33m foi carregado com sucesso!\33[m')

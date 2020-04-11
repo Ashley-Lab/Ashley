@@ -135,6 +135,7 @@ class SystemMessage(commands.Cog):
 
                 try:
                     if message.guild.id == 643936732236087306:
+                        channel_ = self.bot.get_channel(698371042199994388)
                         author = message.guild.get_member(message.author.id)
                         if self.user_cont_word[author.id] < 20 and self.user_cont_msg[author.id] < 10:
                             newbie = True
@@ -147,6 +148,8 @@ class SystemMessage(commands.Cog):
                                 if newbie:
                                     role = discord.utils.find(lambda r: r.name == 'Membro', message.guild.roles)
                                     await author.add_roles(role)
+                                    await channel_.send(f'``O usuário`` **{author.name}** ``recebeu o cargo de`` '
+                                                        f'**MEMBRO**\n ``Na Data e Hora:`` **{time.localtime()}**')
                         else:
                             self.user_cont_word[author.id] = int(len(message.content.split()))
                             self.user_cont_msg[author.id] = 1
@@ -154,6 +157,8 @@ class SystemMessage(commands.Cog):
                             if 'Membro' == role.name:
                                 role = discord.utils.find(lambda r: r.name == 'Membro Ativo', message.guild.roles)
                                 await author.add_roles(role)
+                                await channel_.send(f'``O membro`` **{author.name}** ``recebeu o cargo de`` '
+                                                    f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{time.localtime()}**')
                 except KeyError:
                     self.user_cont_word[message.author.id] = int(len(message.content.split()))
                     self.user_cont_msg[message.author.id] = 1
@@ -189,4 +194,4 @@ class SystemMessage(commands.Cog):
 
 def setup(bot):
     bot.add_cog(SystemMessage(bot))
-    print('\033[1;33m( * ) | O evento \033[1;34mON_MESSAGE\033[1;33m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( 🔶 ) | O evento \033[1;34mON_MESSAGE\033[1;33m foi carregado com sucesso!\33[m')

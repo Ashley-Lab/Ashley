@@ -55,8 +55,8 @@ class Ashley(commands.AutoShardedBot):
                               'PARTIR DE AGORA TODAS NOVIDADES DO BOT VAO SER INSERIDAS NO CANAL EM DESTAQUE QUE VOCÊS'
                               ' DEFINIREM! OBRIGADO A TODOS PELA ATENÇÃO.\n ASS: DENKY (DEVELOPER MASTER)']
         self.languages = ("pt", "en")
-        self.progress = "V.6 -> 55.8%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 6.5.5 | PROGRESS: " + str(self.progress)
+        self.progress = "V.6 -> 79.9%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 6.7.9 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
@@ -325,8 +325,8 @@ if __name__ == "__main__":
     bot.remove_command('help')
 
     try:
-        print("\033[1;35m( # ) | Iniciando...\033[m")
-        print("\033[1;35m( * ) | Iniciando carregamento de extensões...\033[m")
+        print("\033[1;35m( >> ) | Iniciando...\033[m")
+        print("\033[1;35m( 🔶 ) | Iniciando carregamento de extensões...\033[m")
         f = open("modulos.txt", "r")
         for name in f.readlines():
             if len(name.strip()) > 0:
@@ -339,16 +339,16 @@ if __name__ == "__main__":
                             bot.data_cog[name.strip()] = "<:stream_status:519896814825242635>"
                     else:
                         if '#' not in name.strip():
-                            print(f'\033[1;36m( X ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
+                            print(f'\033[1;36m( 🛑 ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
                             bot.data_cog[name.strip()] = "<:oc_status:519896814225457152>"
                 except Exception as e:
                     if '#' not in name.strip():
-                        print(f"\033[1;31m( E ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
+                        print(f"\033[1;31m( ❌ ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
                         bot.data_cog[name.strip()] = "<:alert_status:519896811192844288>"
                     continue
         f.close()
     except Exception as e:
         print('[Erro] : {}'.format(e))
 
-    print(f"\033[1;35m( # ) | {len(bot.data_cog.keys())} extensões foram carregadas!\033[m")
+    print(f"\033[1;35m( ✔ ) | {len(bot.data_cog.keys())} extensões foram carregadas!\033[m")
     bot.run(_auth['_t__ashley'])

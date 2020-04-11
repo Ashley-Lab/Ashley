@@ -23,8 +23,8 @@ class WebHook:
         headers = {"Content-Type": "application/json"}
         req = requests.post(self.url, headers=headers, data=self.converter_json())
         if not req.ok:
-            print(f"\033[1;30m( X ) | {self.tempo} \033[1;34mErro\033[1;30m ao enviar dados para o Webhook \033[1;31m"
-                  f"{self.url[:50]}...\33[m")
+            print(f"\n\033[1;30m( ❌ ) | {self.tempo} \033[1;34mErro\033[1;30m ao enviar dados para o Webhook "
+                  f"\033[1;31m{self.url[:50]}...\33[m\n")
         else:
-            print(f"\033[1;32m( * ) | {self.tempo} \033[1;34mDados enviados\033[1;32m para o "
-                  f"Webhook\n\033[1;33m{self.url[:50]}...\33[m")
+            print(f"\n\033[1;32m( 🔶 ) | {self.tempo} \033[1;34mDados enviados\033[1;32m para o "
+                  f"Webhook\n\033[1;33m{self.url[:50]}...\33[m\n")

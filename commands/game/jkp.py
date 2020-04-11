@@ -140,4 +140,4 @@ class JoKenPo(commands.Cog):
 
 def setup(bot):
     bot.add_cog(JoKenPo(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mJOKENPO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mJOKENPO\033[1;32m foi carregado com sucesso!\33[m')

@@ -21,15 +21,16 @@ class LogClass(commands.Cog):
     async def logger(self, ctx):
         if ctx.invoked_subcommand is None:
             data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-            description = ''
+            description = '```Markdown\n'
             for log in self.logs:
-                description += '{}:\nStatus: <{}>\n\n'.format(log, data['log_config'][log])
+                description += '[>>]: {}\n<Status: {}>\n\n'.format(log, data['log_config'][log])
+            description += '```'
             embed = discord.Embed(
                 title='Logs Disponíveis',
                 description=description,
                 color=self.bot.color
             )
-            ctx.send(embed=embed)
+            await ctx.send(embed=embed)
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -62,4 +63,4 @@ class LogClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(LogClass(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mLOG\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mLOG\033[1;32m foi carregado com sucesso!\33[m')

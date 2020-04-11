@@ -80,4 +80,4 @@ class PokemonClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(PokemonClass(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mPOKEMONCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mPOKEMONCLASS\033[1;32m foi carregado com sucesso!\33[m')

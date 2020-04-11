@@ -42,14 +42,14 @@ class ProfileSystem(commands.Cog):
             update['user']['married'] = False
             married = "Solteiro(a)"
         try:
-            if data['user']['achievements'] is None:
+            if len(data['user']['achievements']) <= 0:
                 global achievements
                 achievements = "```Sem Conquistas```"
             else:
                 answer = "".join(data['user']['achievements'])
                 achievements = f"```{answer}```"
         except KeyError:
-            update['user']['achievements'] = None
+            update['user']['achievements'] = list()
             achievements = "```Sem Conquistas```"
         try:
             if data['user']['strikes'] == 0:
@@ -98,15 +98,13 @@ class ProfileSystem(commands.Cog):
             else:
                 status = "<:negate:520418505993093130> - **Seu VIP Diário Acabou** & " \
                          "**VIP do Servidor Inativo**"
-            if time_left is not None:
-                status += f"\n **Tempo restante para o fim do seu VIP:** {time_left}"
         if data['user']['titling'] is None:
             titling = 'Vagabond'
         else:
             titling = data['user']['titling']
 
         try:
-            rec = f"{data['user']['rec']} recomendações & {data['user']['winner']} estrelas adiquidiras"
+            rec = f"{data['user']['rec']} recomendações & {data['user']['stars']} estrelas adiquidiras"
         except KeyError:
             rec = "0 recomendações & 0 estrelas adiquidiras"
 
@@ -162,4 +160,4 @@ class ProfileSystem(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ProfileSystem(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mPROFILE_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mPROFILE_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')

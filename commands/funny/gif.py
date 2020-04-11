@@ -41,4 +41,4 @@ class GetGif(commands.Cog):
 
 def setup(bot):
     bot.add_cog(GetGif(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mGIF\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mGIF\033[1;32m foi carregado com sucesso!\33[m')

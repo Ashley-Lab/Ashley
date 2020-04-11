@@ -390,4 +390,4 @@ class ConfigClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ConfigClass(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mCONFIG\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mCONFIG\033[1;32m foi carregado com sucesso!\33[m')

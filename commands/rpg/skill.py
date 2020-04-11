@@ -111,4 +111,4 @@ class SkillClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(SkillClass(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mSKILLCLASS\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mSKILLCLASS\033[1;32m foi carregado com sucesso!\33[m')

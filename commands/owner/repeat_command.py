@@ -22,4 +22,4 @@ class RepeatCommand(commands.Cog):
 
 def setup(bot):
     bot.add_cog(RepeatCommand(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mREPEAT_COMMAND\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mREPEAT_COMMAND\033[1;32m foi carregado com sucesso!\33[m')

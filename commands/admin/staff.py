@@ -231,4 +231,4 @@ class StaffAdmin(commands.Cog):
 
 def setup(bot):
     bot.add_cog(StaffAdmin(bot))
-    print('\033[1;36m( * ) | O  grupo de comandos \033[1;31mSTAFFS\033[1;36m foram carregados com sucesso!\33[m')
+    print('\033[1;36m( 🔶 ) | O  grupo de comandos \033[1;31mSTAFFS\033[1;36m foram carregados com sucesso!\33[m')

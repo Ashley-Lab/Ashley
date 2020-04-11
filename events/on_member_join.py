@@ -104,4 +104,4 @@ class OnMemberJoin(commands.Cog):
 
 def setup(bot):
     bot.add_cog(OnMemberJoin(bot))
-    print('\033[1;33m( * ) | O evento \033[1;34mMEMBER_JOIN\033[1;33m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( 🔶 ) | O evento \033[1;34mMEMBER_JOIN\033[1;33m foi carregado com sucesso!\33[m')

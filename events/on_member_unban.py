@@ -34,4 +34,4 @@ class UnBanClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(UnBanClass(bot))
-    print('\033[1;33m( * ) | O evento \033[1;34mUN_BAN_CLASS\033[1;33m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( 🔶 ) | O evento \033[1;34mUN_BAN_CLASS\033[1;33m foi carregado com sucesso!\33[m')

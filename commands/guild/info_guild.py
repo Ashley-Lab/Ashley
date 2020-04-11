@@ -45,4 +45,4 @@ class ServerInfo(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ServerInfo(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mSERVERINFO\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mSERVERINFO\033[1;32m foi carregado com sucesso!\33[m')

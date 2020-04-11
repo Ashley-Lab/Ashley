@@ -60,4 +60,4 @@ class Pet(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Pet(bot))
-    print('\033[1;32m( * ) | O comando \033[1;34mPET\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mPET\033[1;32m foi carregado com sucesso!\33[m')

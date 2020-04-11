@@ -64,13 +64,16 @@ class OnReady(commands.Cog):
                                 if channel__ is None:
                                     continue
                                 draw_member = choice(list(guild.members))
-                                member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
+                                premium.append(1)
+                                try:
+                                    member = discord.utils.get(guild.members, id=draw_member.id)
+                                except TypeError:
+                                    continue
                                 data_member = self.bot.db.get_data("user_id", member.id, "users")
                                 update_member = data_member
                                 if data_member is None:
                                     await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
                                                          f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
-                                    premium.append(1)
                                     continue
                                 coins = randint(10, 15)
                                 embed = discord.Embed(
@@ -85,7 +88,6 @@ class OnReady(commands.Cog):
                                 await channel__.send(embed=embed)
                                 update_member['inventory']['coins'] += coins
                                 self.bot.db.update_data(data_member, update_member, 'users')
-                                premium.append(1)
                 await sleep(30)
             print(f'Lista Premium{premium}, Lista Comum {list_}')
             if len(premium) == len(list_):
@@ -112,7 +114,7 @@ class OnReady(commands.Cog):
         while not self.bot.is_closed():
             date_ = date.localtime()
             # existe uma diferença de hora de +3 para o servidor da ashley
-            if date_[3] == 3 and 0 >= date_[4] >= 5:
+            if date_[3] == 3 and 0 >= date_[4] >= 30:
                 guild = self.bot.get_guild(643936732236087306)
                 for member in guild.members:
                     member_ = guild.get_member(member.id)
@@ -120,8 +122,11 @@ class OnReady(commands.Cog):
                         if 'Membro Ativo' == role.name:
                             role = discord.utils.find(lambda r: r.name == 'Membro Ativo', guild.roles)
                             await member_.remove_roles(role)
+                            channel_ = self.bot.get_channel(698371042199994388)
+                            await channel_.send(f'``O membro`` **{member_.name}** ``perdeu o cargo de`` '
+                                                f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{date.localtime()}**')
             if date_[3] == 3:
-                await sleep(60)
+                await sleep(10)
             else:
                 await sleep(3600)
 
@@ -147,11 +152,6 @@ class OnReady(commands.Cog):
             update['config']['battle'] = False
             update['config']['tournament'] = False
             update['user']['marrieding'] = False
-            rpg = {"Name": None, "Level": 1, "XP": 0, "Status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0,
-                   "pdh": 0}, "Class": 'Default', "itens": list(), "img": None}
-            update['rpg'] = rpg
-            del update['status']
-            del update['box']
             self.bot.db.update_data(data, update, "users")
 
         self.time_ready = dt.utcnow()
@@ -172,15 +172,16 @@ class OnReady(commands.Cog):
         print(cor['azul'], '▍ Uptime   ⠿', cor['clear'], cor['amar'], '{}s'.format(str(time).rjust(49)), cor['clear'])
         print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])
 
-        print("\033[1;35m( * ) | Iniciando carregamento dos loops internos...\033[m")
+        print("\n\033[1;35m( >> ) | Iniciando carregamento dos loops internos...\033[m")
         self.bot.loop.create_task(self.remove_role_zdd())
-        print('\033[1;32m( * ) | O loop \033[1;34mZONA_DE_DUELOS\033[1;32m foi carregado com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | O loop \033[1;34mZONA_DE_DUELOS\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.change_status())
-        print('\033[1;32m( * ) | O loop \033[1;34mSTATUS_DA_ASHLEY\033[1;32m foi carregado com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | O loop \033[1;34mSTATUS_DA_ASHLEY\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.draw_member())
-        print('\033[1;32m( * ) | O loop \033[1;34mDRAW_MEMBERS\033[1;32m foi carregado com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_MEMBERS\033[1;32m foi carregado com sucesso!\33[m')
+        print("\033[1;35m( ✔✔ ) | Bot Totalmente Carregado Com Sucesso!\033[m\n")
 
 
 def setup(bot):
     bot.add_cog(OnReady(bot))
-    print('\033[1;33m( * ) | O evento \033[1;34mON_READY\033[1;33m foi carregado com sucesso!\33[m')
+    print('\033[1;33m( 🔶 ) | O evento \033[1;34mON_READY\033[1;33m foi carregado com sucesso!\33[m')

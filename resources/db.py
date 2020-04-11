@@ -81,7 +81,8 @@ class Database(object):
                 "titling": "Vagabond",
                 "married": False,
                 "stars": 0,
-                "rec": 0
+                "rec": 0,
+                "achievements": list()
             },
             "rpg": {
                 "Name": None,
