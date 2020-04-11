@@ -1,4 +1,6 @@
 import discord
+from datetime import datetime
+from pytz import timezone
 
 from config import data as config
 from random import choice
@@ -184,6 +186,12 @@ def parse_duration(duration: int):
         else:
             duration.append(f'{seconds} segundo')
     return ', '.join(duration)
+
+
+def date_format(date):
+    date_timezone = timezone("America/Recife")
+    date_ = date.astimezone(date_timezone)
+    return date_.strftime("%d/%m/%Y %H:%M")
 
 
 PROVINCES = [542406551923720202,

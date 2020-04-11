@@ -1,3 +1,4 @@
+pytz
 discord.py[voice]
 bson
 pymongo

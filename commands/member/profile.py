@@ -15,6 +15,14 @@ class ProfileSystem(commands.Cog):
         self.bot = bot
         self.color = self.bot.color
 
+    @staticmethod
+    def number_convert(number):
+        a = '{:,.0f}'.format(float(number))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+        return d
+
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
@@ -109,7 +117,7 @@ class ProfileSystem(commands.Cog):
             rec = "0 recomendações & 0 estrelas adiquidiras"
 
         try:
-            cmds = data['user']['commands']
+            cmds = self.number_convert(data['user']['commands'])
         except KeyError:
             cmds = 0
 
@@ -120,11 +128,11 @@ class ProfileSystem(commands.Cog):
         embed.add_field(name="Entitulação:", value=titling)
         embed.add_field(name="Total de Comandos:", value=cmds)
         embed.add_field(name='Bot Staff Notes :notepad_spiral:', value=str(strikes), inline=True)
-        embed.add_field(name='Fichas <:coin:546019942936608778>:', value=str(data['inventory']['coins']), inline=True)
-        embed.add_field(name="Ethernya Black <:etherny_preto:691016493957251152>:", value=str(data['treasure']['gold']), inline=True)
-        embed.add_field(name="Ethernya Purple <:etherny_roxo:691014717761781851>:", value=str(data['treasure']['silver']), inline=True)
-        embed.add_field(name="Ethernya Yellow <:etherny_amarelo:691015381296480266>:", value=str(data['treasure']['bronze']), inline=True)
-        embed.add_field(name="XP:", value=str(data['user']['experience']), inline=True)
+        embed.add_field(name='Fichas <:coin:546019942936608778>:', value=str(self.number_convert(data['inventory']['coins'])), inline=True)
+        embed.add_field(name="Ethernya Black <:etherny_preto:691016493957251152>:", value=str(self.number_convert(data['treasure']['gold'])), inline=True)
+        embed.add_field(name="Ethernya Purple <:etherny_roxo:691014717761781851>:", value=str(self.number_convert(data['treasure']['silver'])), inline=True)
+        embed.add_field(name="Ethernya Yellow <:etherny_amarelo:691015381296480266>:", value=str(self.number_convert(data['treasure']['bronze'])), inline=True)
+        embed.add_field(name="XP:", value=str(self.number_convert(data['user']['experience'])), inline=True)
         embed.add_field(name="Level:", value=str(data['user']['level']), inline=True)
         embed.add_field(name="Ranking <:rank:519896825411665930>:", value=str(data['user']['ranking']), inline=True)
         embed.add_field(name="Recomendações:", value=rec)

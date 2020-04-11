@@ -8,6 +8,7 @@ from itertools import cycle
 from time import localtime
 from datetime import datetime as dt
 from discord.ext import commands
+from resources.utility import date_format
 
 cor = {
         'clear': '\033[m',
@@ -113,6 +114,7 @@ class OnReady(commands.Cog):
     async def remove_role_zdd(self):
         while not self.bot.is_closed():
             date_ = date.localtime()
+            data = date_format(dt.now())
             # existe uma diferença de hora de +3 para o servidor da ashley
             if date_[3] == 3 and 0 >= date_[4] >= 30:
                 guild = self.bot.get_guild(643936732236087306)
@@ -124,9 +126,9 @@ class OnReady(commands.Cog):
                             await member_.remove_roles(role)
                             channel_ = self.bot.get_channel(698371042199994388)
                             await channel_.send(f'``O membro`` **{member_.name}** ``perdeu o cargo de`` '
-                                                f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{date.localtime()}**')
+                                                f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{data}**')
             if date_[3] == 3:
-                await sleep(10)
+                await sleep(30)
             else:
                 await sleep(3600)
 
