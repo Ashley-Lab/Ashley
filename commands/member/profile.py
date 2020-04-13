@@ -6,7 +6,9 @@ from resources.check import check_it
 from resources.db import Database
 from resources.utility import parse_duration
 
-married, achievements, strikes = None, None, None
+married = None
+achievements = None
+strikes = None
 time_left = None
 
 
@@ -128,10 +130,14 @@ class ProfileSystem(commands.Cog):
         embed.add_field(name="Entitulação:", value=titling)
         embed.add_field(name="Total de Comandos:", value=cmds)
         embed.add_field(name='Bot Staff Notes :notepad_spiral:', value=str(strikes), inline=True)
-        embed.add_field(name='Fichas <:coin:546019942936608778>:', value=str(self.number_convert(data['inventory']['coins'])), inline=True)
-        embed.add_field(name="Ethernya Black <:etherny_preto:691016493957251152>:", value=str(self.number_convert(data['treasure']['gold'])), inline=True)
-        embed.add_field(name="Ethernya Purple <:etherny_roxo:691014717761781851>:", value=str(self.number_convert(data['treasure']['silver'])), inline=True)
-        embed.add_field(name="Ethernya Yellow <:etherny_amarelo:691015381296480266>:", value=str(self.number_convert(data['treasure']['bronze'])), inline=True)
+        embed.add_field(name='Fichas <:coin:546019942936608778>:',
+                        value=str(self.number_convert(data['inventory']['coins'])), inline=True)
+        embed.add_field(name="Ethernya Black <:etherny_preto:691016493957251152>:",
+                        value=str(self.number_convert(data['treasure']['gold'])), inline=True)
+        embed.add_field(name="Ethernya Purple <:etherny_roxo:691014717761781851>:",
+                        value=str(self.number_convert(data['treasure']['silver'])), inline=True)
+        embed.add_field(name="Ethernya Yellow <:etherny_amarelo:691015381296480266>:",
+                        value=str(self.number_convert(data['treasure']['bronze'])), inline=True)
         embed.add_field(name="XP:", value=str(self.number_convert(data['user']['experience'])), inline=True)
         embed.add_field(name="Level:", value=str(data['user']['level']), inline=True)
         embed.add_field(name="Ranking <:rank:519896825411665930>:", value=str(data['user']['ranking']), inline=True)

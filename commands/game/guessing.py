@@ -44,7 +44,7 @@ class GameThinker(commands.Cog):
                 self.bot.db.update_data(data, update, 'users')
                 if resposta.content == number:
                     change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 15)
+                    answer_ = await self.bot.db.add_money(ctx, 15, True)
                     await ctx.send("<:rank:519896825411665930>│``O numero que eu pensei foi`` **{}** "
                                    "``e o número que vc falou foi`` **{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
                                    "{}".format(number, resposta.content, answer_))

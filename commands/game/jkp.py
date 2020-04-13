@@ -63,7 +63,7 @@ class JoKenPo(commands.Cog):
                                    "**{}** ``EMPATAMOS.``".format(ctx.author, player_, jkp, player_, jkp))
                 elif jkp == "Tesoura":
                     change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 10)
+                    answer_ = await self.bot.db.add_money(ctx, 10, True)
                     await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``ganha de`` "
                                    "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
@@ -83,7 +83,7 @@ class JoKenPo(commands.Cog):
 
                 if jkp == "Pedra":
                     change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 10)
+                    answer_ = await self.bot.db.add_money(ctx, 10, True)
                     await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``ganha de`` "
                                    "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
@@ -111,7 +111,7 @@ class JoKenPo(commands.Cog):
                                    "**{}** ``VOCÊ PERDEU!!``".format(ctx.author, player_, jkp, player_, jkp))
                 elif jkp == "Papel":
                     change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 10)
+                    answer_ = await self.bot.db.add_money(ctx, 10, True)
                     await ctx.send("<:rank:519896825411665930>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``ganha de`` "
                                    "**{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"

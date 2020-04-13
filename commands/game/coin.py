@@ -49,7 +49,7 @@ class HeadsOrTails(commands.Cog):
                 await sleep(1)
                 if answer.content == choice_:
                     change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 5)
+                    answer_ = await self.bot.db.add_money(ctx, 5, True)
                     await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
                                    '``você GANHOU:``\n {}'.format(answer_))
                     if change < 50:
@@ -66,7 +66,7 @@ class HeadsOrTails(commands.Cog):
                 await sleep(1)
                 if answer.content == choice_:
                     change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 5)
+                    answer_ = await self.bot.db.add_money(ctx, 5, True)
                     await ctx.send('<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 '
                                    '``você GANHOU:``\n {}'.format(answer_))
                     if change < 50:

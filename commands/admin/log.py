@@ -1,9 +1,7 @@
 import discord
 
-from asyncio import sleep
 from discord.ext import commands
 from resources.check import check_it
-from resources.utility import ERRORS
 from resources.db import Database
 
 
@@ -17,6 +15,7 @@ class LogClass(commands.Cog):
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='logger', aliases=['log'])
     async def logger(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -34,6 +33,7 @@ class LogClass(commands.Cog):
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @logger.command(name='edit')
     async def _edit(self, ctx, *, log=None):
         if log is None:

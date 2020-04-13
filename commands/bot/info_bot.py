@@ -46,7 +46,7 @@ class BotInfo(commands.Cog):
         embed_bot.add_field(name='‍💻 | Servidores', value=str(len(self.bot.guilds)))
         embed_bot.add_field(name='👥 | Usuarios', value='{} ({} online)'.format(total_members, total_online))
         embed_bot.add_field(name='‍⚙ | Programador', value=str(owner))
-        embed_bot.add_field(name='🐍 Python  | Version', value="`3.6.6`")
+        embed_bot.add_field(name='🐍 Python  | Version', value="`3.6.10`")
         embed_bot.add_field(name='<:ashley:525348179734953995> Bot  | Version', value=str(ver_))
         embed_bot.add_field(name="<a:loading:520418506567843860> | Tempo Online",
                             value=f"{dt.utcnow() - self.bot.start_time}")

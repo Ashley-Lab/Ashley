@@ -97,7 +97,7 @@ Dica: **{}**'''.format(senha, dica))
                             update = data
                             update['config']['playing'] = False
                             self.bot.db.update_data(data, update, 'users')
-                            msg = await self.bot.db.add_money(ctx, 20)
+                            msg = await self.bot.db.add_money(ctx, 20, True)
                             return await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
                                                   "{}".format(msg))
                         elif self.trying[ctx.author.id] == 2:

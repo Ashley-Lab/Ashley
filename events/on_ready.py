@@ -1,4 +1,3 @@
-import io
 import discord
 import time as date
 
@@ -26,7 +25,6 @@ class OnReady(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot = bot
-        self.reflect = self.bot.config['reflect']['list']
         self.time_ready = None
         self.color = self.bot.color
         self.url = 'https://www.twitch.tv/d3nkyt0'
@@ -41,57 +39,58 @@ class OnReady(commands.Cog):
                        'meu feitiço na sua vida!', '😢 + 💸 = 😍 & 🍫']
 
     async def draw_member(self):
-        while not self.bot.is_closed():
-            list_ = list()
+        while True:
+            cont_c = 0
+            for guild_ in self.bot.guilds:
+                data_ = self.bot.db.get_data("guild_id", guild_.id, "guilds")
+                if data_ is not None:
+                    if data_['bot_config']['ash_draw']:
+                        cont_c += 1
+            cont_p = 0
+            all_users = self.bot.db.get_all_data("users")
             for guild in self.bot.guilds:
-                data = self.bot.db.get_data("guild_id", guild.id, "guilds")
-                if data is not None:
-                    if data['bot_config']['ash_draw']:
-                        list_.append(1)
-            premium = list()
-            all_data = self.bot.db.get_all_data("users")
-            for c in range(len(self.bot.guilds)):
                 min__ = localtime()
-                if min__[4] in [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]:
-                    for guild in self.bot.guilds:
-                        data = self.bot.db.get_data("guild_id", guild.id, "guilds")
-                        member_ = 0
-                        for data in all_data:
-                            if data['guild_id'] == guild.id:
-                                member_ += 1
-                        if data is not None and len(guild.members) >= 50 and member_ >= 10:
-                            if data['bot_config']['ash_draw']:
-                                channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
-                                if channel__ is None:
-                                    continue
-                                draw_member = choice(list(guild.members))
-                                premium.append(1)
-                                try:
-                                    member = discord.utils.get(guild.members, id=draw_member.id)
-                                except TypeError:
-                                    continue
-                                data_member = self.bot.db.get_data("user_id", member.id, "users")
-                                update_member = data_member
-                                if data_member is None:
-                                    await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
-                                                         f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
-                                    continue
-                                coins = randint(10, 15)
-                                embed = discord.Embed(
-                                    title="``Fiz o sorteio de um membro``",
-                                    colour=self.color,
-                                    description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│"
-                                                "``Parabens você acaba de ganhar`` **{}** "
-                                                "``coins!!``".format(member.mention, coins))
-                                embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                                embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-                                embed.set_thumbnail(url=member.avatar_url)
-                                await channel__.send(embed=embed)
-                                update_member['inventory']['coins'] += coins
-                                self.bot.db.update_data(data_member, update_member, 'users')
-                await sleep(30)
-            print(f'Lista Premium{premium}, Lista Comum {list_}')
-            if len(premium) == len(list_):
+                if min__[4] % 2 == 0:
+                    data = self.bot.db.get_data("guild_id", guild.id, "guilds")
+                    member_ = 0
+                    for user in all_users:
+                        if user['guild_id'] == guild.id:
+                            member_ += 1
+                    if data is not None and len(guild.members) >= 50 and member_ >= 10:
+                        print("terceira ação do draw member")
+                        if data['bot_config']['ash_draw']:
+                            cont_p += 1
+                            channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
+                            if channel__ is None:
+                                continue
+                            draw_member = choice(list(guild.members))
+                            try:
+                                member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
+                            except TypeError:
+                                print('Deu erro de tipo no looping do draw member!', str(draw_member))
+                                continue
+                            data_member = self.bot.db.get_data("user_id", member.id, "users")
+                            update_member = data_member
+                            if data_member is None:
+                                await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
+                                                     f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
+                                continue
+                            coins = randint(10, 15)
+                            embed = discord.Embed(
+                                title="``Fiz o sorteio de um membro``",
+                                colour=self.color,
+                                description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│"
+                                            "``Parabens você acaba de ganhar`` **{}** "
+                                            "``coins!!``".format(member.mention, coins))
+                            embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+                            embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+                            embed.set_thumbnail(url=member.avatar_url)
+                            await channel__.send(embed=embed)
+                            update_member['inventory']['coins'] += coins
+                            self.bot.db.update_data(data_member, update_member, 'users')
+                await sleep(10)
+            print(f'Cortador Comumn: {cont_c}, Contador Premiado: {cont_p}')
+            if cont_p == cont_c:
                 await sleep(3600)
             else:
                 await sleep(60)
@@ -100,7 +99,7 @@ class OnReady(commands.Cog):
         status = cycle(self.status)
         details = cycle(self.details)
         state = cycle(self.state)
-        while not self.bot.is_closed():
+        while True:
             current_status = next(status)
             current_details = next(details)
             await self.bot.change_presence(activity=discord.Streaming(name=current_status, url=self.url,
@@ -112,21 +111,23 @@ class OnReady(commands.Cog):
             await sleep(10)
 
     async def remove_role_zdd(self):
-        while not self.bot.is_closed():
+        while True:
             date_ = date.localtime()
             data = date_format(dt.now())
             # existe uma diferença de hora de +3 para o servidor da ashley
-            if date_[3] == 3 and 0 >= date_[4] >= 30:
+            if date_[3] == 3 and date_[4] in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]:
                 guild = self.bot.get_guild(643936732236087306)
                 for member in guild.members:
                     member_ = guild.get_member(member.id)
+                    if member_.bot:
+                        continue
                     for role in member_.roles:
                         if 'Membro Ativo' == role.name:
                             role = discord.utils.find(lambda r: r.name == 'Membro Ativo', guild.roles)
                             await member_.remove_roles(role)
                             channel_ = self.bot.get_channel(698371042199994388)
-                            await channel_.send(f'``O membro`` **{member_.name}** ``perdeu o cargo de`` '
-                                                f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{data}**')
+                            await channel_.send(f'```O membro {member_.name.upper()} perdeu o cargo de '
+                                                f'MEMBRO ATIVO\nNa Data e Hora: {data}```')
             if date_[3] == 3:
                 await sleep(30)
             else:

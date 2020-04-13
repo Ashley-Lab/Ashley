@@ -87,7 +87,8 @@ class Battle(commands.Cog):
                 description=f"``{ctx.author.name.upper()} PERDEU!``",
                 color=0x000000
             )
-            embed.set_image(url="https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908")
+            img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
+            embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
         else:
@@ -95,7 +96,8 @@ class Battle(commands.Cog):
                 description=f"``{ctx.author.name.upper()} GANHOU!``",
                 color=0x000000
             )
-            embed.set_image(url="https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532")
+            img = "https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532"
+            embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
 

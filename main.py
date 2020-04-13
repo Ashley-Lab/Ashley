@@ -7,8 +7,6 @@ import psutil
 import json
 import os
 import copy
-import traceback
-import sys
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
 from random import choice, randint
 from datetime import datetime as dt
@@ -17,7 +15,6 @@ from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import WebHook
 from bson.json_util import dumps
-from resources.translation import t_
 from resources.utility import ERRORS
 from resources.db import Database, DataInteraction
 from resources.boosters import Booster
@@ -55,8 +52,8 @@ class Ashley(commands.AutoShardedBot):
                               'PARTIR DE AGORA TODAS NOVIDADES DO BOT VAO SER INSERIDAS NO CANAL EM DESTAQUE QUE VOCÊS'
                               ' DEFINIREM! OBRIGADO A TODOS PELA ATENÇÃO.\n ASS: DENKY (DEVELOPER MASTER)']
         self.languages = ("pt", "en")
-        self.progress = "V.6 -> 79.9%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 6.7.9 | PROGRESS: " + str(self.progress)
+        self.progress = "V.6 -> 82.1%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 6.8.21 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
@@ -174,7 +171,7 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
-            NAME = ctx.author.name.upper()
+            _name = ctx.author.name.upper()
             if str(ctx.author.id) not in self.blacklist:
                 await self.data.level_up(ctx)
             data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
@@ -190,18 +187,18 @@ class Ashley(commands.AutoShardedBot):
                     quant = randint(1, 3)
                     if chance >= 51:
                         update_user['inventory']['rank_point'] += quant
-                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{NAME} GANHOU:`` "
+                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                        f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
                 if (update_user['user']['commands'] % 10) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
-                        await ctx.send(f"<:negate:520418505993093130>│``{NAME} SUA GUILDA DE CADASTRO FOI DELETADA, "
+                        await ctx.send(f"<:negate:520418505993093130>│``{_name} SUA GUILDA DE CADASTRO FOI DELETADA, "
                                        f"TENTE USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
                     if chance >= 81:
                         update_user['inventory']['medal'] += 1
-                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{NAME} GANHOU:`` "
+                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                        f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
@@ -209,7 +206,7 @@ class Ashley(commands.AutoShardedBot):
                 self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
-                    await ctx.send(f"``{NAME} ganhou`` {msg}", delete_after=5.0)
+                    await ctx.send(f"``{_name} ganhou`` {msg}", delete_after=5.0)
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")

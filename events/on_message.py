@@ -139,29 +139,30 @@ class SystemMessage(commands.Cog):
                         channel_ = self.bot.get_channel(698371042199994388)
                         author = message.guild.get_member(message.author.id)
                         data = date_format(datetime.now())
-                        if self.user_cont_word[author.id] < 20 and self.user_cont_msg[author.id] < 10:
-                            newbie = True
-                            self.user_cont_msg[author.id] += 1
-                            self.user_cont_word[author.id] += int(len(message.content.split()))
-                            if self.user_cont_word[author.id] >= 20 or self.user_cont_msg[author.id] >= 10:
-                                for role in author.roles:
-                                    if 'Membro' == role.name:
-                                        newbie = False
-                                if newbie:
-                                    role = discord.utils.find(lambda r: r.name == 'Membro', message.guild.roles)
-                                    await author.add_roles(role)
-                                    await channel_.send(f'``O usuário`` **{author.name}** ``recebeu o cargo de`` '
-                                                        f'**MEMBRO**\n ``Na Data e Hora:`` **{data}**')
-                        else:
-                            self.user_cont_word[author.id] = int(len(message.content.split()))
-                            self.user_cont_msg[author.id] = 1
-                        for role in author.roles:
-                            if 'Membro' == role.name:
-                                role = discord.utils.find(lambda r: r.name == 'Membro Ativo', message.guild.roles)
-                                if role not in author.roles:
-                                    await author.add_roles(role)
-                                    await channel_.send(f'``O membro`` **{author.name}** ``recebeu o cargo de`` '
-                                                        f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{data}**')
+                        if not author.bot:
+                            if self.user_cont_word[author.id] < 20 and self.user_cont_msg[author.id] < 10:
+                                newbie = True
+                                self.user_cont_msg[author.id] += 1
+                                self.user_cont_word[author.id] += int(len(message.content.split()))
+                                if self.user_cont_word[author.id] >= 20 or self.user_cont_msg[author.id] >= 10:
+                                    for role in author.roles:
+                                        if 'Membro' == role.name:
+                                            newbie = False
+                                    if newbie:
+                                        role = discord.utils.find(lambda r: r.name == 'Membro', message.guild.roles)
+                                        await author.add_roles(role)
+                                        await channel_.send(f'``O usuário`` **{author.name}** ``recebeu o cargo de`` '
+                                                            f'**MEMBRO**\n ``Na Data e Hora:`` **{data}**')
+                            else:
+                                self.user_cont_word[author.id] = int(len(message.content.split()))
+                                self.user_cont_msg[author.id] = 1
+                            for role in author.roles:
+                                if 'Membro' == role.name:
+                                    role = discord.utils.find(lambda r: r.name == 'Membro Ativo', message.guild.roles)
+                                    if role not in author.roles:
+                                        await author.add_roles(role)
+                                        await channel_.send(f'``O membro`` **{author.name}** ``recebeu o cargo de`` '
+                                                            f'**MEMBRO ATIVO**\n ``Na Data e Hora:`` **{data}**')
                 except KeyError:
                     self.user_cont_word[message.author.id] = int(len(message.content.split()))
                     self.user_cont_msg[message.author.id] = 1

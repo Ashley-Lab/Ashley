@@ -1,4 +1,5 @@
 import discord
+from datetime import datetime
 
 from discord.ext import commands
 from resources.check import check_it
@@ -13,7 +14,7 @@ class UserInfo(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='userinfo', aliases=['infouser'])
+    @commands.command(name='userinfo', aliases=['infouser', 'ui', 'iu'])
     async def userinfo(self, ctx):
         if ctx.message.guild is not None:
             try:

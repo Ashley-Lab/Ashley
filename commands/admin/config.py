@@ -19,29 +19,30 @@ class ConfigClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='config', aliases=['configuração'])
     async def config(self, ctx):
         if ctx.invoked_subcommand is None:
             self.status()
             top = discord.Embed(title="Commands Status", color=self.color,
                                 description=f"<:on_status:519896814799945728>│On\n"
-                                f"<:alert_status:519896811192844288>│Alert\n"
-                                f"<:oc_status:519896814225457152>│Off\n"
-                                f"<:stream_status:519896814825242635>│Vip")
+                                            f"<:alert_status:519896811192844288>│Alert\n"
+                                            f"<:oc_status:519896814225457152>│Off\n"
+                                            f"<:stream_status:519896814825242635>│Vip")
             top.add_field(name="Configs Commands:",
                           value=f"``PREFIX:`` **config** ``+``\n"
-                          f"{self.st[0]}│**guild** ``or`` **server**\n"
-                          f"{self.st[0]}│**report** ``or`` **reportar**\n"
-                          f"{self.st[0]}│**language** ``or`` **idioma**\n"
-                          f"{self.st[0]}│**log**")
+                                f"{self.st[0]}│**guild** ``or`` **server**\n"
+                                f"{self.st[0]}│**report** ``or`` **reportar**\n"
+                                f"{self.st[0]}│**language** ``or`` **idioma**\n"
+                                f"{self.st[0]}│**log**")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=top)
 
+    @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @check_it(no_pm=True, manage_guild=True)
     @config.command(name='language', aliases=['idioma'])
     async def _language(self, ctx, language=None):
         if language is not None:
@@ -61,6 +62,7 @@ class ConfigClass(commands.Cog):
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @config.command(name='log')
     async def _log(self, ctx):
         changes = {}
@@ -107,6 +109,7 @@ class ConfigClass(commands.Cog):
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @config.command(name='guild', aliases=['server'])
     async def _guild(self, ctx):
         data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
@@ -179,8 +182,8 @@ class ConfigClass(commands.Cog):
                     channel_ = self.bot.get_channel(resp_6.channel_mentions[0].id)
                     text = str(ctx.guild.member_count)
                     list_ = list()
-                    for l in text:
-                        list_.append(numbers[int(l)])
+                    for letter in text:
+                        list_.append(numbers[int(letter)])
                     await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:** " + str(list_))
 
                     msg = await ctx.send('<:confirmado:519896822072999937>│``Contador de membros ativado!``')
@@ -287,6 +290,7 @@ class ConfigClass(commands.Cog):
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @config.command(name='report', aliases=['reportar'])
     async def _report(self, ctx):
         data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")

@@ -27,8 +27,8 @@ class CardsClass(commands.Cog):
             def check(m):
                 return m.author == ctx.author
 
-            CARDS = self.bot.config['cards']['list']
-            card = CARDS[randint(0, 399)]
+            cards = self.bot.config['cards']['list']
+            card = cards[randint(0, 399)]
             embed = discord.Embed(
                 title='QUAL O NOME DESSA CARTA?',
                 color=self.color,

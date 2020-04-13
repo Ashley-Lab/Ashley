@@ -12,7 +12,8 @@ class Booster(object):
         # box configs
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}
         self.legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
-        self.bl = {"Comum": "c", "Incomum": "n", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur", "Secret": "secret"}
+        self.bl = {"Comum": "c", "Incomum": "n", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur",
+                   "Secret": "secret"}
         self.rarity = {"Comum": 500, "Incomum": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
 
         # booster configs
