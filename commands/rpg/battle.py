@@ -18,7 +18,13 @@ class Battle(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='battle', aliases=['batalha', 'duel', 'duelo'])
-    async def battle(self, ctx):
+    async def battle(self, ctx, lower_net="nl"):
+        if lower_net == 'ln':
+            Class_rpg['lower_net'] = True
+            await ctx.send(f"**MODO LOWER NET ATIVADO:** \n"
+                           f"``Esse modo retira as imagens para melhorar a experiencia de quem tem internet lenta.``")
+        else:
+            Class_rpg['lower_net'] = False
         Class_rpg['Name'] = ctx.author.name
         Class_rpg['img'] = ctx.author.avatar_url
         list_items = list(choice_equips(self.bot).values())
@@ -26,6 +32,10 @@ class Battle(commands.Cog):
             Class_rpg['itens'].append(list_items[c])
         db_player = Class_rpg
         db_monster = choice(self.monsters)
+        if lower_net == 'ln':
+            db_monster['lower_net'] = True
+        else:
+            db_monster['lower_net'] = False
         player = Entity(db_player, True)
         monster = Entity(db_monster, False)
         turns = choice([0, 1])
@@ -40,7 +50,8 @@ class Battle(commands.Cog):
                         description=f"``{monster.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    if lower_net != 'ln':
+                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_monster['img']}")
                     await ctx.send(embed=embed)
                 atk = await monster.turn(monster.status['hp'], self.bot, ctx)
@@ -52,7 +63,8 @@ class Battle(commands.Cog):
                         description=f"``{ctx.author.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    if lower_net != 'ln':
+                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_player['img']}")
                     await ctx.send(embed=embed)
                 await sleep(2)
@@ -66,7 +78,8 @@ class Battle(commands.Cog):
                         description=f"``{ctx.author.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    if lower_net != 'ln':
+                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_player['img']}")
                     await ctx.send(embed=embed)
                 atk = await player.turn(monster.status['hp'], self.bot, ctx)
@@ -78,7 +91,8 @@ class Battle(commands.Cog):
                         description=f"``{monster.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                    if lower_net != 'ln':
+                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_monster['img']}")
                     await ctx.send(embed=embed)
                 await sleep(2)
@@ -88,7 +102,8 @@ class Battle(commands.Cog):
                 color=0x000000
             )
             img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
-            embed.set_image(url=img)
+            if lower_net != 'ln':
+                embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
         else:
@@ -97,7 +112,8 @@ class Battle(commands.Cog):
                 color=0x000000
             )
             img = "https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532"
-            embed.set_image(url=img)
+            if lower_net != 'ln':
+                embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
 

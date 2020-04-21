@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-from resources.utility import paginator
 from asyncio import TimeoutError, sleep
 
 legend = {"Comum": 500, "Normal": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}

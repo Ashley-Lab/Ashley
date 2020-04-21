@@ -440,6 +440,7 @@ class MusicDefault(commands.Cog):
     @commands.command(name='queue', aliases=['q', 'playlist', 'lista'])
     async def queue_info(self, ctx):
         vc = ctx.voice_client
+        global cont
 
         if not vc or not vc.is_connected():
             return await ctx.send('<:alert_status:519896811192844288>│``Atualmente não estou conectado à nenhum canal '
@@ -458,7 +459,6 @@ class MusicDefault(commands.Cog):
             pass
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 

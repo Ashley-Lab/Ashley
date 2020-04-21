@@ -9,5 +9,5 @@ requests
 pillow
 psutil
 youtube_dl
-websockets==6.0
+websockets
 pyfiglet

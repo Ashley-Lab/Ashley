@@ -496,6 +496,7 @@ class DataInteraction(object):
         await pending.send(msg)
 
     async def get_rank_xp(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -511,7 +512,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 
@@ -521,6 +521,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_level(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -536,7 +537,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 
@@ -546,6 +546,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_money(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -571,6 +572,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_gold(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -586,7 +588,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 
@@ -596,6 +597,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_silver(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -611,7 +613,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 
@@ -621,6 +622,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_bronze(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -636,7 +638,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 
@@ -646,6 +647,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_point(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -662,7 +664,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 
@@ -672,6 +673,7 @@ class DataInteraction(object):
         return rank
 
     async def get_rank_commands(self, limit):
+        global cont
         data = self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
@@ -687,7 +689,6 @@ class DataInteraction(object):
             return d
 
         def counter():
-            global cont
             cont['list'] += 1
             return cont['list']
 

@@ -1,5 +1,4 @@
 import discord
-from datetime import datetime
 
 from discord.ext import commands
 from resources.check import check_it

@@ -53,7 +53,9 @@ class RegisterClass(commands.Cog):
 
                 await register.delete()
 
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o ActionLog?`` '
+                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o ActionLog?`` \n'
+                                     '```O ActionLog serve para você verificar tudo o que ocorre no seu servidor '
+                                     'atravez de um canal de registro de ações.```\n'
                                      '**1** para ``SIM`` ou **0** para ``NÃO``')
 
                 resp_1 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
@@ -71,7 +73,9 @@ class RegisterClass(commands.Cog):
                 else:
                     values.append(-1)
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o BotNews?`` '
+                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o BotNews?`` \n'
+                                     '```O BotNews é um canal onde vc vai receber em primeira mao todas as novidades '
+                                     'da ashley```\n'
                                      '**1** para ``SIM`` ou **0** para ``NÃO``')
 
                 resp_3 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
@@ -89,26 +93,34 @@ class RegisterClass(commands.Cog):
                 else:
                     values.append(-1)
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o MemberCont?`` '
-                                     '**1** para ``SIM`` ou **0** para ``NÃO``')
+                msg = await ctx.send(
+                    '<:stream_status:519896814825242635>│``Você deseja ativar o Contador de membros?`` \n'
+                    '```O Contador de membros é um recurso onde a ashley edita um canal para mostrar '
+                    'quantos membros existem em seu servidor, em tempo real.```\n'
+                    '**1** para ``SIM`` ou **0** para ``NÃO``')
 
                 resp_5 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
                 values.append(resp_5.content)
                 if resp_5.content == '1':
                     await msg.delete()
-                    msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do MemberCont!``')
+                    msg = await ctx.send(
+                        '<:stream_status:519896814825242635>│``Marque o canal do Contador de membros!``')
 
                     resp_6 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
                     values.append(resp_6.channel_mentions[0].id)
                     await msg.delete()
 
                     try:
-                        numbers = ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
+                        numbers = ['<:0_:578615675182907402>', '<:1_:578615669487304704>', '<:2_:578615674109165568>',
+                                   '<:3_:578615683424976916>', '<:4_:578615679406833685>', '<:5_:578615684708171787>',
+                                   '<:6_:578617070309343281>', '<:7_:578615679041798144>', '<:8_:578617071521497088>',
+                                   '<:9_:578617070317469708>']
                         channel_ = self.bot.get_channel(resp_6.channel_mentions[0].id)
                         text = str(ctx.guild.member_count)
-                        for n in range(0, 10):
-                            text = text.replace(str(n), numbers[n])
-                        await channel_.edit(topic="Membros: " + text)
+                        list_ = list()
+                        for letter in text:
+                            list_.append(numbers[int(letter)])
+                        await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:** " + str(list_))
 
                         msg = await ctx.send('<:confirmado:519896822072999937>│``Contador de membros ativado!``')
                         await sleep(2)
@@ -119,53 +131,114 @@ class RegisterClass(commands.Cog):
                 else:
                     values.append(-1)
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o MemberJoin?`` '
-                                     '**1** para ``SIM`` ou **0** para ``NÃO``')
+                msg = await ctx.send(
+                    '<:stream_status:519896814825242635>│``Você deseja ativar o Registro de entrada de '
+                    'membros?`` \n'
+                    '```Esse recurso registra em um canal a entrada de novos membros, quando ele entrou, '
+                    'etc```\n'
+                    '**1** para ``SIM`` ou **0** para ``NÃO``')
 
                 resp_7 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
                 values.append(resp_7.content)
                 if resp_7.content == '1':
                     await msg.delete()
-                    msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do MemberJoin!``')
+                    msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Registro de Entrada '
+                                         'de Membros!``')
 
                     resp_8 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
                     values.append(resp_8.channel_mentions[0].id)
                     await msg.delete()
 
-                    msg = await ctx.send('<:confirmado:519896822072999937>│``MemberJoin ativado!``')
+                    msg = await ctx.send('<:confirmado:519896822072999937>│``Registro de entrada de Membros ativado!``')
                     await sleep(2)
                 else:
                     values.append(-1)
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o '
-                                     'MemberRemove?`` **1** para ``SIM`` ou **0** para ``NÃO``')
+                                     'Registro de Saida de membros?``\n'
+                                     '```Esse recurso registra em um canal a sainda de membros, quando ele saiu, '
+                                     'etc```\n'
+                                     ' **1** para ``SIM`` ou **0** para ``NÃO``')
 
                 resp_9 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
                 values.append(resp_9.content)
                 if resp_9.content == '1':
                     await msg.delete()
                     msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do '
-                                         'MemberRemove!``')
+                                         'Registro de Sainda de Membros!``')
 
                     resp_10 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
                     values.append(resp_10.channel_mentions[0].id)
                     await msg.delete()
 
-                    msg = await ctx.send('<:confirmado:519896822072999937>│``MemberRemove ativado!``')
+                    msg = await ctx.send('<:confirmado:519896822072999937>│``Registro de Saida de Membros ativado!``')
                     await sleep(2)
                 else:
                     values.append(-1)
                 await msg.delete()
-
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o '
-                                     'AutoResponse da Ashley?`` **1** para ``SIM`` ou **0** para ``NÃO``')
+                msg = await ctx.send(
+                    '<:stream_status:519896814825242635>│``Você deseja ativar o Sorteio de Membros?`` \n'
+                    '```O Sorteio de Membros serve para escolher um dos seus membros para receber premios '
+                    'da ashley, todo aqueles registrados em nossos sistemas vao ter muitas regalias.\n'
+                    'OBS: essa função apenas entrará em vigor em servidores com 50 ou mais membros e 10 '
+                    'ou mais membros cadastrados na ashley```\n'
+                    '**1** para ``SIM`` ou **0** para ``NÃO``')
 
                 resp_11 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
                 values.append(resp_11.content)
                 if resp_11.content == '1':
                     await msg.delete()
+                    msg = await ctx.send(
+                        '<:stream_status:519896814825242635>│``Marque o canal do Sorteio de Membros!``')
 
-                    msg = await ctx.send('<:confirmado:519896822072999937>│``AutoResponse ativado!``')
+                    resp_12 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                    values.append(resp_12.channel_mentions[0].id)
+                    await msg.delete()
+
+                    msg = await ctx.send('<:confirmado:519896822072999937>│``ActionLog ativado!``')
+                    await sleep(2)
+                else:
+                    values.append(-1)
+                await msg.delete()
+                msg = await ctx.send(
+                    '<:stream_status:519896814825242635>│``Você deseja ativar o Log de Programação de Ashley?`` \n'
+                    '```O Log de Programação de Ashley serve para que voce veja como ela foi programada, o codigo'
+                    ' de Ashley é aberto e todos podem ter a certeza de que nosso bot não tem nenhum codigo malicioso'
+                    ' presamos muito pela nossa imagem, alem de sempre queremos contribuir de alguma forma para a '
+                    'comunidade de bots do discord.```\n'
+                    '**1** para ``SIM`` ou **0** para ``NÃO``')
+
+                resp_13 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+                values.append(resp_13.content)
+                if resp_13.content == '1':
+                    await msg.delete()
+                    msg = await ctx.send(
+                        '<:stream_status:519896814825242635>│``Marque o canal do Log de Programação de Ashley!``')
+
+                    resp_14 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                    values.append(resp_14.channel_mentions[0].id)
+                    await msg.delete()
+
+                    msg = await ctx.send('<:confirmado:519896822072999937>│``Log de Programação de Ashley ativado!``')
+                    await sleep(2)
+                else:
+                    values.append(-1)
+                await msg.delete()
+
+                msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o meu '
+                                     'Serviço de Interação com Membros?``\n'
+                                     '```Esse serviço ativa as minhas interações com Inteligencia Artifical,'
+                                     'meu sistema de perguntas e respostas alem de varias outras coisas legais e '
+                                     'divertidas que eu posso fazer.```\n'
+                                     ' **1** para ``SIM`` ou **0** para ``NÃO``')
+
+                resp_15 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+                values.append(resp_15.content)
+                if resp_15.content == '1':
+                    await msg.delete()
+
+                    msg = await ctx.send(
+                        '<:confirmado:519896822072999937>│``Serviço de Interação com Membros ativado!``')
                     await sleep(2)
 
                 await msg.delete()
@@ -174,7 +247,9 @@ class RegisterClass(commands.Cog):
                 await register.delete()
 
             keys = ['log', 'log_channel_id', 'ash_news', 'ash_news_id', 'cont_users', 'cont_users_id',
-                    'member_join', 'member_join_id', 'member_remove', 'member_remove_id', 'auto_msg']
+                    'member_join', 'member_join_id', 'member_remove', 'member_remove_id', 'ash_draw', 'ash_draw_id',
+                    'ash_git', 'ash_git_id', 'auto_msg']
+
             data = {}
             c = 0
 

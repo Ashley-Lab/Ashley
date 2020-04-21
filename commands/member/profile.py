@@ -34,6 +34,8 @@ class ProfileSystem(commands.Cog):
         if member is None:
             member = ctx.author
 
+        global married, achievements, strikes, time_left
+
         data = self.bot.db.get_data("user_id", member.id, "users")
         update = data
 
@@ -42,7 +44,7 @@ class ProfileSystem(commands.Cog):
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
 
         try:
-            global married
+
             if data['user']['married'] is False:
                 married = "Solteiro(a)"
             else:
@@ -53,7 +55,6 @@ class ProfileSystem(commands.Cog):
             married = "Solteiro(a)"
         try:
             if len(data['user']['achievements']) <= 0:
-                global achievements
                 achievements = "```Sem Conquistas```"
             else:
                 answer = "".join(data['user']['achievements'])
@@ -62,8 +63,7 @@ class ProfileSystem(commands.Cog):
             update['user']['achievements'] = list()
             achievements = "```Sem Conquistas```"
         try:
-            if data['user']['strikes'] == 0:
-                global strikes
+            if data['user']['strikes'] is None:
                 strikes = "Ficha Limpa"
         except KeyError:
             update['user']['strikes'] = 0
@@ -75,7 +75,6 @@ class ProfileSystem(commands.Cog):
             update['user']['about'] = "Sou um membro cadastrado"
 
         try:
-            global time_left
             epoch = dt.utcfromtimestamp(0)
             cooldown = data["cooldown"]["daily vip"]
             time_diff = cooldown - (dt.utcnow() - epoch).total_seconds()

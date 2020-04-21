@@ -1,5 +1,3 @@
-import discord
-
 from resources.color import random_color
 from discord import Embed
 from discord.ext import commands

@@ -1,5 +1,4 @@
 import re
-import json
 import pymongo
 import discord
 import requests

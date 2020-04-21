@@ -1,5 +1,3 @@
-import discord
-
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database

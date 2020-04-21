@@ -127,11 +127,11 @@ class DailyClass(commands.Cog):
                                f'**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
                                f'``ASH RANK``')
                 if update_user['user']['stars'] >= 10:
-                    data_guild = self.db.get_data("guild_id", ctx.guild.id, "guilds")
-                    update_guilda = data_guild
+                    data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+                    update_guild = data_guild
                     if data_guild['vip'] is False and ctx.author.id == ctx.guild.owner.id:
-                        update_guilda['vip'] = True
-                        self.db.update_data(data_guild, update_guild, 'guilds')
+                        update_guild['vip'] = True
+                        self.bot.db.update_data(data_guild, update_guild, 'guilds')
                         await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
                                        '**VOCÊ LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
                                        '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '

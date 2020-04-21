@@ -1,8 +1,6 @@
 import discord
-import asyncio
 
 from asyncio import sleep
-from discord.ext import commands
 from resources.utility import embed_creator
 from random import randint, choice
 from config import data
@@ -27,6 +25,7 @@ class Entity(object):
         self.armor = 0
         self.img = db['img']
         self.chance = False
+        self.ln = db['lower_net']
         if self.is_player:
             self.level_skill = skill_level(db['Level'])
         else:
@@ -168,7 +167,7 @@ class Entity(object):
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
-            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img)
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)
 
         await sleep(1)
@@ -184,7 +183,7 @@ class Entity(object):
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/md78DFkpIIzzW/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max,
-                                               self.status['hp'], self.img)
+                                               self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
                     elif 'manadrain' in self.effects[c]['type']:
                         self.status['mp'] -= self.effects[c]['damage']
@@ -194,7 +193,7 @@ class Entity(object):
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/pDLxcNa1r3QA0/source.gif"
                         embed_ = embed_creator(description, img_, monster,
-                                               hp_max, self.status['hp'], self.img)
+                                               hp_max, self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
                 except KeyError:
                     pass
@@ -237,7 +236,7 @@ class Entity(object):
                         hp_max = self.status['con'] * lifetax
                         monster = not self.is_player
                         embed_ = embed_creator(description, skill['img'], monster, hp_max,
-                                               self.status['hp'], self.img)
+                                               self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
                     else:
                         description = f'**{self.name.upper()}** ``não recebeu o efeito de`` **{c.upper()}**'
@@ -245,7 +244,7 @@ class Entity(object):
                         monster = not self.is_player
                         img_ = "https://uploads1.yugioh.com/card_images/2383/detail/110.jpg?1385098437"
                         embed_ = embed_creator(description, img_, monster, hp_max,
-                                               self.status['hp'], self.img)
+                                               self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
             if not self.is_player:
                 damage = skill['damage'][self.level_skill - 1]
@@ -261,12 +260,12 @@ class Entity(object):
             description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
-            embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img)
+            embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)
         else:
             description = f'**{name.upper()}** ``não pode atacar!``'
             hp_max = self.status['con'] * lifetax
             monster = not self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
-            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img)
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)

@@ -95,7 +95,7 @@ class UserBank(commands.Cog):
                                   f'PARA {member.name} COM SUCESSO!``')
         else:
             return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
-                                  f"{currency.upper()}!``")
+                                  f"ETHERNYAS!``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

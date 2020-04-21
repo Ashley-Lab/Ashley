@@ -1,5 +1,4 @@
 import discord
-from datetime import datetime
 from pytz import timezone
 
 from config import data as config
@@ -44,7 +43,7 @@ def quant_etherny(amount):
     return answer
 
 
-def embed_creator(description, img_url, monster, hp_max, hp, monster_img):
+def embed_creator(description, img_url, monster, hp_max, hp, monster_img, lower_net):
     global color_embed
     color = [0xff0000, 0xffcc00, 0x00cc00]
     if monster:
@@ -59,7 +58,8 @@ def embed_creator(description, img_url, monster, hp_max, hp, monster_img):
         description=description,
         color=color_embed
     )
-    embed.set_image(url=img_url)
+    if not lower_net:
+        embed.set_image(url=img_url)
     embed.set_thumbnail(url=f"{monster_img}")
     return embed
 
