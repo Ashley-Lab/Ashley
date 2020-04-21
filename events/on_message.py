@@ -190,7 +190,7 @@ class SystemMessage(commands.Cog):
                                 if data['bot_config']['ash_git']:
                                     channel_ = self.bot.get_channel(data['bot_config']['ash_git_id'])
                                     if channel_ is not None:
-                                        await channel_.send(message.embeds[0])
+                                        await channel_.send(embed=message.embeds[0])
                             except discord.Forbidden:
                                 pass
                             await sleep(0.5)
