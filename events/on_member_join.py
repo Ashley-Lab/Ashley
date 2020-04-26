@@ -1,18 +1,6 @@
 import discord
 
-from random import choice
 from discord.ext import commands
-
-gif = ['https://media.giphy.com/media/bAmQn1R4V3owE/giphy.gif',
-       'https://media.giphy.com/media/skVEP0BeduG4/giphy.gif',
-       'https://media.giphy.com/media/3o7TKsJEd0lp7GNUpq/giphy.gif',
-       'https://media.giphy.com/media/138CCLzEja7I3e/giphy.gif',
-       'https://media.giphy.com/media/l3V0uEmPgKpjZH6ve/giphy.gif',
-       'https://media.giphy.com/media/nRPxv0FVLQBJm/giphy.gif',
-       'https://media.giphy.com/media/papraODOQ51yE/giphy.gif',
-       'https://media.giphy.com/media/GncBDxr7YxsuQ/giphy.gif',
-       'https://media.giphy.com/media/3ZZeiFwplAGlLxHNvQ/giphy.gif',
-       'https://media.giphy.com/media/lq2WK9kzLTLos/giphy.gif']
 
 
 class OnMemberJoin(commands.Cog):
@@ -36,7 +24,6 @@ class OnMemberJoin(commands.Cog):
                                         "muito prazer!".format(member.name, member.guild))
                         to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                         to_send.set_thumbnail(url="{}".format(member.avatar_url))
-                        to_send.set_image(url=choice(gif))
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                         await member.guild.system_channel.send(embed=to_send)
                     else:
@@ -48,7 +35,6 @@ class OnMemberJoin(commands.Cog):
                                         "muito prazer!".format(member.name, member.guild))
                         to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                         to_send.set_thumbnail(url="{}".format(member.avatar_url))
-                        to_send.set_image(url=choice(gif))
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                         channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
                         await channel_.send(embed=to_send)

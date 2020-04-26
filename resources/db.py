@@ -57,6 +57,26 @@ class Database(object):
         data = db.find()
         return data
 
+    def update_all_db(self, db_users, db_guilds):
+        all_users = self.get_all_data("users")
+        for data in all_users:
+            update = data
+            try:
+                for k, v in db_users:
+                    update[k] = v
+                self.update_data(data, update, "users")
+            except KeyError:
+                pass
+        all_guilds = self.get_all_data("guilds")
+        for data in all_guilds:
+            update = data
+            try:
+                for k, v in db_guilds:
+                    update[k] = v
+                self.update_data(data, update, "guilds")
+            except KeyError:
+                pass
+
     def get_announcements(self):
         db = self._conn.get_collection("announcements")
         return db.find()
@@ -73,6 +93,19 @@ class Database(object):
                 "vip": False,
                 "roles": [],
                 "points": 0
+            },
+            "moderation": {
+                "credibility": {"ashley": 100, "guilds": [{"id": 0, "points": 100}]},
+                "warns": [{"status": False, "author": None, "reason": None, "date": None, "point": 0}],
+                "behavior": {"guild_id": 0, "historic": {"input": [], "output": []}},
+                "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
+            },
+            "pet": {
+                "status": False,
+                "pet_equipped": None,
+                "pet_bag": list(),
+                "pet_skin_status": None,
+                "pet_skin": None
             },
             "user": {
                 "experience": 0,
@@ -194,10 +227,21 @@ class Database(object):
                 "join_system_role": data.get("join_system_role", None),
                 "join_system_member_state": dict()
             },
-            "warn_config": {
-                "warn": data.get("warn", False),
-                "warn_channel_id": data.get("warn_channel_id", None),
-                "bad_word": data.get("bad_word", False)
+            "moderation": {
+                "status": False,
+                "moderation_log": data.get("moderation_log", False),
+                "moderation_channel_id": data.get("moderation_channel_id", None),
+                "bad_word": data.get("bad_word", False),
+                "bad_word_list": list(),
+                "flood": data.get("flood", False),
+                "flood_channels": list(),
+                "ping": data.get("ping", False),
+                "ping_channels": list(),
+                "link": data.get("link", False),
+                "link_channels": list(),
+                "img": data.get("img", False),
+                "img_channels": list(),
+                "moderation_member_state": dict()
             }
         }
         if self.get_data("guild_id", guild.id, db_name) is None:

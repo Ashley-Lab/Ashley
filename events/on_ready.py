@@ -127,14 +127,20 @@ class OnReady(commands.Cog):
         users = len(self.bot.users)
         chann = len(self.bot.private_channels)
 
+        print("\n\033[1;35m( >> ) | Iniciando reestruturação de variaveis internas...\033[m")
         all_data = self.bot.db.get_all_data("users")
         for data in all_data:
             update = data
+            print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita sucesso!\33[m')
             update['config']['playing'] = False
+            print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita sucesso!\33[m')
             update['config']['battle'] = False
+            print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita sucesso!\33[m')
             update['config']['tournament'] = False
+            print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita sucesso!\33[m')
             update['user']['marrieding'] = False
             self.bot.db.update_data(data, update, "users")
+        print("\033[1;35m( ✔ ) | Reestruturação de variaveis internas Finalizadas!\033[m\n")
 
         self.time_ready = dt.utcnow()
         time = self.time_ready - self.bot.start_time

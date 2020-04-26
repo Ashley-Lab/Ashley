@@ -223,7 +223,7 @@ class RankingClass(commands.Cog):
         img.paste(champion[19], (2030, top), champion[19])
         img.save('rank.png')
         await msg.delete()
-        await ctx.channel.send(file=discord.File('rank.png'))
+        await ctx.send(file=discord.File('rank.png'))
 
 
 def setup(bot):

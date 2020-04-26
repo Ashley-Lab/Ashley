@@ -15,7 +15,7 @@ from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import WebHook
 from bson.json_util import dumps
-from resources.utility import ERRORS
+from resources.utility import ERRORS, date_format
 from resources.db import Database, DataInteraction
 from resources.boosters import Booster
 from config import data as config
@@ -170,6 +170,7 @@ class Ashley(commands.AutoShardedBot):
                                                "INVITE**")
 
     async def on_command_completion(self, ctx):
+        # await ctx.send(file=discord.File('raiz/caminho.png'))
         if ctx.guild is not None:
             _name = ctx.author.name.upper()
             if str(ctx.author.id) not in self.blacklist:
@@ -207,6 +208,10 @@ class Ashley(commands.AutoShardedBot):
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
                     await ctx.send(f"``{_name} ganhou`` {msg}", delete_after=5.0)
+                    commands_log = self.get_channel(575688812068339717)
+                    await commands_log.send(f"``O membro`` **{ctx.author.name.upper()}**: ``acabou de usar o comando`` "
+                                            f"**{ctx.command}** ``dentro da guilda`` **{ctx.guild.name.upper()}** "
+                                            f"``na data e hora`` **{date_format(dt.now())}**")
 
     async def on_command_error(self, ctx, exception):
         logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")
@@ -273,8 +278,6 @@ class Ashley(commands.AutoShardedBot):
                 msg = copy.copy(message)
                 msg.content = self.shortcut[message.content.lower()]
                 await self.process_commands(msg)
-                shortcut = self.get_channel(575688812068339717)
-                await shortcut.send(f"**{message.content.lower()}**: ``atalho usado com sucesso!``")
             else:
                 await self.process_commands(message)
 

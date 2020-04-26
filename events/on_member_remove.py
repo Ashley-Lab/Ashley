@@ -2,12 +2,6 @@ import discord
 
 from discord.ext import commands
 
-gif = ['https://media.giphy.com/media/fDO2Nk0ImzvvW/giphy.gif',
-       'https://media.giphy.com/media/UrcXN0zTfzTPi/giphy.gif',
-       'https://media.giphy.com/media/kGCuRgmbnO9EI/giphy.gif',
-       'https://media.giphy.com/media/7DzlajZNY5D0I/giphy.gif',
-       'https://media.giphy.com/media/KcHXmesyPXg6Q/giphy.gif']
-
 
 class OnMemberRemove(commands.Cog):
     def __init__(self, bot):

@@ -46,7 +46,7 @@ commands.utility.avatar
 commands.utility.draw
 commands.utility.rank
 commands.utility.roll
-@ disponivel 3
+commands.guild.door
 events.on_guild_channel_create
 events.on_guild_channel_delete
 events.on_guild_channel_pins_update
@@ -92,4 +92,5 @@ commands.img_edit.instagram
 commands.img_edit.twitter
 commands.img_edit.whatsapp
 commands.rpg.shop
+commands.guild.receptions
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1
