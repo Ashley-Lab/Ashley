@@ -193,6 +193,8 @@ class SystemMessage(commands.Cog):
                                         await channel_.send(embed=message.embeds[0])
                             except discord.Forbidden:
                                 pass
+                            except IndexError:
+                                pass
                             await sleep(0.5)
 
 

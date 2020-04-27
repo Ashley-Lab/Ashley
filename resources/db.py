@@ -415,9 +415,13 @@ class Database(object):
 
                 return True
             else:
-                raise commands.CheckFailure(t_(ctx, f'<:negate:520418505993093130>│``Você ainda não está registrado, '
-                                                    f'por favor use`` **ash register**.',
-                                                    "guilds"))
+                try:
+                    if ctx.message.webhook_id:
+                        return True
+                except AttributeError:
+                    pass
+                raise commands.CheckFailure(t_(ctx, f'<:negate:520418505993093130>│``Você ainda não está '
+                                                    f'registrado, por favor use`` **ash register**.', "guilds"))
         else:
             return True
 
