@@ -58,6 +58,9 @@ def check_it(**kwargs):
 
     def predicate(ctx):
 
+        if ctx.message.webhook_id is not None:
+            return True
+
         if isinstance(ctx.message.channel, (discord.DMChannel, discord.GroupChannel)):
             if ctx.command.name == "help" or ctx.command.name == "ajuda":
                 return True

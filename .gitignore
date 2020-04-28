@@ -1,6 +1,5 @@
 # Ashley Git Ignore
 data/auth.json
-discord.log
 
 # Python Configs
 *.idea/

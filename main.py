@@ -2,10 +2,8 @@
 # CRIADO POR: DANIEL AMARAL -> Denky#5960
 # SEGUE ABAIXO OS IMPORTS COMPLETOS
 import discord
-import logging
 import psutil
 import json
-import os
 import copy
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
 from random import choice, randint
@@ -15,7 +13,7 @@ from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import WebHook
 from bson.json_util import dumps
-from resources.utility import ERRORS, date_format
+from resources.utility import date_format
 from resources.db import Database, DataInteraction
 from resources.boosters import Booster
 from config import data as config
@@ -70,13 +68,6 @@ class Ashley(commands.AutoShardedBot):
                         'commands.member.transfer', 'commands.rpg.inventory', 'commands.rpg.shop']
         self.titling = {"10": "Vassal", "25": "Heir", "50": "Knight", "100": "Elder", "200": "Baron", "300": "Viscount",
                         "400": "Count", "500": "Marquis", "1000": "Duke", "1500": "Grand Duke"}
-
-        self.ld = os.path.dirname(__file__)
-        self.logger = logging.getLogger('discord')
-        self.logger.setLevel(logging.INFO)
-        self.handler = logging.FileHandler(filename=os.path.join(self.ld, 'discord.log'), encoding='utf-8', mode='w')
-        self.handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-        self.logger.addHandler(self.handler)
 
         self.db: Database = Database(self)
         self.data: DataInteraction = DataInteraction(self)
@@ -168,8 +159,13 @@ class Ashley(commands.AutoShardedBot):
                                 await ctx.send("<:alert_status:519896811192844288>**│** ``Agora você pode ganhar "
                                                "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
                                                "INVITE**")
+                commands_log = self.get_channel(575688812068339717)
+                await commands_log.send(f"``O membro`` {ctx.author.name} ``acabou de usar o comando`` "
+                                        f"**{str(ctx.command).upper()}** ``dentro da guilda`` {ctx.guild.name} ``na "
+                                        f"data e hora`` **{date_format(dt.now())}**")
 
     async def on_command_completion(self, ctx):
+        # Novo evento em caminho...
         # await ctx.send(file=discord.File('raiz/caminho.png'))
         if ctx.guild is not None:
             _name = ctx.author.name.upper()
@@ -208,34 +204,6 @@ class Ashley(commands.AutoShardedBot):
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
                     await ctx.send(f"``{_name} ganhou`` {msg}", delete_after=5.0)
-                    commands_log = self.get_channel(575688812068339717)
-                    await commands_log.send(f"``O membro`` **{ctx.author.name.upper()}**: ``acabou de usar o comando`` "
-                                            f"**{ctx.command}** ``dentro da guilda`` **{ctx.guild.name.upper()}** "
-                                            f"``na data e hora`` **{date_format(dt.now())}**")
-
-    async def on_command_error(self, ctx, exception):
-        logging.info(f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}")
-        if isinstance(exception, commands.CheckFailure):
-            if exception.__str__() == 'The check functions for command register guild failed.':
-                await ctx.send(f"<:negate:520418505993093130>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE COMANDO!``")
-            elif exception.__str__() not in ERRORS:
-                await ctx.send(f"{exception}")
-        elif isinstance(exception, commands.CommandOnCooldown):
-            await ctx.send(f"<:negate:520418505993093130>│**Aguarde**: `Você deve esperar` **{{:.2f}}** "
-                           f"`segundos` `para mandar outro comando!`".format(exception.retry_after),
-                           delete_after=float("{:.2f}".format(exception.retry_after)))
-        else:
-            if isinstance(exception, commands.errors.DiscordException):
-                if not isinstance(exception, commands.CommandNotFound):
-                    return print(exception)
-            elif exception.__str__() not in ERRORS and not isinstance(exception, commands.CommandNotFound):
-                channel = self.get_channel(530419409311760394)
-                await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
-                                   f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
-                                   f"**{ctx.channel}** ``e o erro foi:`` **{exception}**")
-            else:
-                errors = f"Exception in {ctx.command}, {ctx.guild}: {ctx.channel}. With error: {exception}"
-                return print(f"===============================\nError:\n\n{errors}\n\n===============================")
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
@@ -271,6 +239,10 @@ class Ashley(commands.AutoShardedBot):
     async def on_message(self, message):
         if message.author.id == self.user.id:
             return
+
+        if message.webhook_id is not None:
+            ctx = await self.get_context(message)
+            await self.invoke(ctx)
 
         if message.guild is not None and str(message.author.id) not in self.blacklist:
             await self.data.add_experience(message, 5)
@@ -323,10 +295,11 @@ if __name__ == "__main__":
 
     bot = Ashley(command_prefix=prefix, description=description_ashley, pm_help=True, case_insensitive=True)
     bot.remove_command('help')
+    cont = 0
 
     try:
         print("\033[1;35m( >> ) | Iniciando...\033[m")
-        print("\033[1;35m( 🔶 ) | Iniciando carregamento de extensões...\033[m")
+        print("\033[1;35m( > ) | Iniciando carregamento de extensões...\033[m")
         f = open("modulos.txt", "r")
         for name in f.readlines():
             if len(name.strip()) > 0:
@@ -337,9 +310,10 @@ if __name__ == "__main__":
                             bot.data_cog[name.strip()] = "<:on_status:519896814799945728>"
                         else:
                             bot.data_cog[name.strip()] = "<:stream_status:519896814825242635>"
+                        cont += 1
                     else:
                         if '#' not in name.strip():
-                            print(f'\033[1;36m( 🛑 ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
+                            print(f'\033[1;36m( ☢️ ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
                             bot.data_cog[name.strip()] = "<:oc_status:519896814225457152>"
                 except Exception as e:
                     if '#' not in name.strip():
@@ -350,5 +324,5 @@ if __name__ == "__main__":
     except Exception as e:
         print('[Erro] : {}'.format(e))
 
-    print(f"\033[1;35m( ✔ ) | {len(bot.data_cog.keys())} extensões foram carregadas!\033[m")
+    print(f"\033[1;35m( ✔ ) | {cont}/{len(bot.data_cog.keys())} extensões foram carregadas!\033[m")
     bot.run(_auth['_t__ashley'])

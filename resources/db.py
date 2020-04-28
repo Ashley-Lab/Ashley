@@ -358,6 +358,10 @@ class Database(object):
         self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
     async def is_registered(self, ctx, **kwargs):
+
+        if ctx.message.webhook_id is not None:
+            return True
+
         if ctx.guild is not None:
             data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -415,11 +419,6 @@ class Database(object):
 
                 return True
             else:
-                try:
-                    if ctx.message.webhook_id:
-                        return True
-                except AttributeError:
-                    pass
                 raise commands.CheckFailure(t_(ctx, f'<:negate:520418505993093130>│``Você ainda não está '
                                                     f'registrado, por favor use`` **ash register**.', "guilds"))
         else:
