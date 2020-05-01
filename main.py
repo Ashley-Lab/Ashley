@@ -269,9 +269,10 @@ class Ashley(commands.AutoShardedBot):
         else:
             format_1 = '.webp'
         web_hook = WebHook(url=web_hook_.url)
+        content = f"{quest_name} do {ctx.author.name} disse:\n```{msg}```"
         web_hook.embed = discord.Embed(
             colour=random_color(),
-            description=f"{quest_name} do {ctx.author.name} disse:\n```{msg}```",
+            description=f"{content if quest_name != 'Ashley' else msg}",
             timestamp=dt.utcnow()
         ).set_author(
             name=ctx.author.name,

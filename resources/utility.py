@@ -167,6 +167,9 @@ async def get_response(message):
                 elif questions['perg_qual'][c] == "onde":
                     response = choice(responses['resposta_onde'])
                     return response
+                elif questions['perg_qual'][c] == "vamos":
+                    response = choice(responses['resposta_vamos'])
+                    return response
                 else:
                     response = choice(responses['resposta_outras'])
                     return response
