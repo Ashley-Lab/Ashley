@@ -140,6 +140,51 @@ class OnReady(commands.Cog):
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita sucesso!\33[m')
+
+        db_p = {
+            "moderation": {
+                "credibility": {"ashley": 100, "guilds": [{"id": 0, "points": 100}]},
+                "warns": [{"status": False, "author": None, "reason": None, "date": None, "point": 0}],
+                "behavior": {"guild_id": 0, "historic": {"input": [], "output": []}},
+                "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
+            },
+            "pet": {
+                "status": False,
+                "pet_equipped": None,
+                "pet_bag": list(),
+                "pet_skin_status": None,
+                "pet_skin": None
+            }
+        }
+
+        db_g = {
+            "moderation": {
+                "status": False,
+                "moderation_log": False,
+                "moderation_channel_id": None,
+                "bad_word": False,
+                "bad_word_list": list(),
+                "flood": False,
+                "flood_channels": list(),
+                "ping": False,
+                "ping_channels": list(),
+                "moderation_member_state": dict(),
+                "join_system": {
+                    "join_system": False,
+                    "join_system_channel_door": None,
+                    "join_system_channel_log": None,
+                    "join_system_role": None,
+                    "join_system_member_state": dict()
+                },
+                "prison": {
+                    "status": False,
+                    "prison_channel": None,
+                    "prison_role": None,
+                    "prisoners": {"id": {"time": 0, "reason": None, "roles": list()}}
+                }
+            }
+        }
+
         print("\033[1;35m( ✔ ) | Reestruturação de variaveis internas Finalizadas!\033[m\n")
 
         self.time_ready = dt.utcnow()

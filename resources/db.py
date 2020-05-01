@@ -84,29 +84,10 @@ class Database(object):
     def add_user(self, ctx, **data):
         db_name = data.get("db_name", "users")
         data = {
+            # dados basicos do usuario
             "user_id": ctx.author.id,
             "guild_id": ctx.guild.id,
-            "config": {
-                "playing": False,
-                "battle": False,
-                "provinces": None,
-                "vip": False,
-                "roles": [],
-                "points": 0
-            },
-            "moderation": {
-                "credibility": {"ashley": 100, "guilds": [{"id": 0, "points": 100}]},
-                "warns": [{"status": False, "author": None, "reason": None, "date": None, "point": 0}],
-                "behavior": {"guild_id": 0, "historic": {"input": [], "output": []}},
-                "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
-            },
-            "pet": {
-                "status": False,
-                "pet_equipped": None,
-                "pet_bag": list(),
-                "pet_skin_status": None,
-                "pet_skin": None
-            },
+            # dados de usuario para uso do bot comum
             "user": {
                 "experience": 0,
                 "level": 1,
@@ -115,8 +96,33 @@ class Database(object):
                 "married": False,
                 "stars": 0,
                 "rec": 0,
+                "background": "default",
                 "achievements": list()
             },
+            # dados da parte financeira
+            "treasure": {
+                "money": 0,
+                "gold": 0,
+                "silver": 0,
+                "bronze": 0
+            },
+            # dados de configuração de recursos do bot
+            "config": {
+                "playing": False,
+                "battle": False,
+                "provinces": None,
+                "vip": False,
+                "roles": [],
+                "points": 0
+            },
+            # dados de moderações globais e locais
+            "moderation": {
+                "credibility": {"ashley": 100, "guilds": [{"id": 0, "points": 100}]},
+                "warns": [{"status": False, "author": None, "reason": None, "date": None, "point": 0}],
+                "behavior": {"guild_id": 0, "historic": {"input": [], "output": []}},
+                "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
+            },
+            # dados do rpg do bot
             "rpg": {
                 "Name": None,
                 "Level": 1,
@@ -130,20 +136,27 @@ class Database(object):
                     "pdh": 0
                 },
                 "Class": 'Default',
-                "itens": list(),
-                "img": None
+                "artifacts": dict(),
+                "relics": dict(),
+                "img": None,
             },
-            "treasure": {
-                "money": 0,
-                "gold": 0,
-                "silver": 0,
-                "bronze": 0
+            # dados do sistema de pets
+            "pet": {
+                "status": False,
+                "pet_equipped": None,
+                "pet_bag": list(),
+                "pet_skin_status": None,
+                "pet_skin": None
             },
+            # dados do invetario de itens (tando rpg quanto outros itens importantes para o bot
             "inventory": {
                 "medal": 0,
                 "rank_point": 0,
                 "coins": 10
             },
+            # dados do inventario de quests do bot (voltado para o rpg)
+            "inventory_quest": dict(),
+            # dados do cooldown dos comandos especificos (diarios)
             "cooldown": {}
         }
         if self.get_data("user_id", ctx.author.id, db_name) is None:
@@ -222,26 +235,29 @@ class Database(object):
                 "member_join_id": data.get("member_join_id", None),
                 "member_remove": data.get("member_remove", False),
                 "member_remove_id": data.get("member_remove_id", None),
-                "join_system": data.get("join_system", False),
-                "join_system_id": data.get("join_system_id", None),
-                "join_system_role": data.get("join_system_role", None),
-                "join_system_member_state": dict()
             },
             "moderation": {
                 "status": False,
-                "moderation_log": data.get("moderation_log", False),
-                "moderation_channel_id": data.get("moderation_channel_id", None),
-                "bad_word": data.get("bad_word", False),
+                "moderation_log": False,
+                "moderation_channel_id": None,
+                "bad_word": False,
                 "bad_word_list": list(),
-                "flood": data.get("flood", False),
+                "flood": False,
                 "flood_channels": list(),
-                "ping": data.get("ping", False),
+                "ping": False,
                 "ping_channels": list(),
-                "link": data.get("link", False),
-                "link_channels": list(),
-                "img": data.get("img", False),
-                "img_channels": list(),
-                "moderation_member_state": dict()
+                "join_system": {
+                    "join_system": False,
+                    "join_system_channel_door": None,
+                    "join_system_channel_log": None,
+                    "join_system_role": None,
+                },
+                "prison": {
+                    "status": False,
+                    "prison_channel": None,
+                    "prison_role": None,
+                    "prisoners": {"id": {"time": 0, "reason": None, "roles": list()}}
+                }
             }
         }
         if self.get_data("guild_id", guild.id, db_name) is None:

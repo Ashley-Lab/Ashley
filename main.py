@@ -5,6 +5,8 @@ import discord
 import psutil
 import json
 import copy
+import sys
+import traceback
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
 from random import choice, randint
 from datetime import datetime as dt
@@ -319,6 +321,7 @@ if __name__ == "__main__":
                     if '#' not in name.strip():
                         print(f"\033[1;31m( ❌ ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
                         bot.data_cog[name.strip()] = "<:alert_status:519896811192844288>"
+                        traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
                     continue
         f.close()
     except Exception as e:
