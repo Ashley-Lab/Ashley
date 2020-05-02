@@ -20,6 +20,7 @@ class IaInteractions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.msg = {}
+        self.num = 0
         self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses]
         self.heart = ChatBot('Guardians', read_only=True)
         self.trainer = ListTrainer(self.heart)
@@ -54,19 +55,27 @@ class IaInteractions(commands.Cog):
                     self.msg[message.author.id] = [message.content]
 
                 # sistema de chance
-                num_i = 1
-                if '?' in self.msg[message.author.id][-1] and '?' in self.msg[message.author.id][-2]:
-                    num_i = randint(71, 99)
-                elif 'ashley' in self.msg[message.author.id][-1].lower():
-                    num_i = 99
-                chance = randint(num_i, 100)
+                self.num = 1
+                try:
+                    if '?' in self.msg[message.author.id][-1] and '?' in self.msg[message.author.id][-2]:
+                        self.num = randint(71, 99)
+                except IndexError:
+                    pass
+                if 'ashley' in self.msg[message.author.id][-1].lower():
+                    self.num = 99
+                chance = randint(self.num, 100)
 
                 # filtro de repetição de perguntas e mensagens
-                if self.msg[message.author.id][-1] == self.msg[message.author.id][-2]:
-                    if self.msg[message.author.id][-1] == self.msg[message.author.id][-3]:
-                        content = choice(['Você so sabe falar isso, é?', 'Não tem outra coisa pra falar não?',
-                                          'Para de falar a mesma coisa...', 'Você tem problema? Fica se repetindo...'])
-                        return await self.send_message(message, content)
+                try:
+                    if self.msg[message.author.id][-1] == self.msg[message.author.id][-2]:
+                        if self.msg[message.author.id][-1] == self.msg[message.author.id][-3]:
+                            content = choice(['Você so sabe falar isso, é?',
+                                              'Não tem outra coisa pra falar não?',
+                                              'Para de falar a mesma coisa...',
+                                              'Você tem problema é? Fica se repetindo...'])
+                            return await self.send_message(message, content)
+                except IndexError:
+                    pass
 
                 # sistema de IA
                 if '?' in message.content and len(message.content) > 2:
