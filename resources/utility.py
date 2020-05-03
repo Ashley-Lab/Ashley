@@ -11,6 +11,13 @@ legend = {"Comum": 0, "Normal": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, 
 color_embed = None
 
 
+def include(string_, list_):
+    for i in list_:
+        if i.lower() in string_.lower():
+            return True
+    return False
+
+
 def get_permissions(bot, ctx):
     rm = bot.get_channel(ctx.channel.id).permissions_for(ctx.me).read_messages
     s = bot.get_channel(ctx.channel.id).permissions_for(ctx.me).speak
@@ -149,7 +156,7 @@ async def paginator(bot, items, inventory, embed, ctx):
 
 async def get_response(message):
     if len(message.content) > 10:
-        if 'denky' in message.content.lower():
+        if include(message.content, ['denky', 'pai', 'criador']):
             if message.author.id != 300592580381376513:
                 response = choice(responses['denky_f'])
                 return response

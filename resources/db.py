@@ -62,7 +62,7 @@ class Database(object):
         for data in all_users:
             update = data
             try:
-                for k, v in db_users:
+                for k, v in db_users.items():
                     update[k] = v
                 self.update_data(data, update, "users")
             except KeyError:
@@ -71,7 +71,7 @@ class Database(object):
         for data in all_guilds:
             update = data
             try:
-                for k, v in db_guilds:
+                for k, v in db_guilds.items():
                     update[k] = v
                 self.update_data(data, update, "guilds")
             except KeyError:
@@ -97,6 +97,7 @@ class Database(object):
                 "stars": 0,
                 "rec": 0,
                 "background": "default",
+                "ia_response": True,
                 "achievements": list()
             },
             # dados da parte financeira

@@ -1,12 +1,10 @@
 import discord
-import time as date
 
 from asyncio import sleep
 from random import choice, randint
 from itertools import cycle
 from datetime import datetime as dt
 from discord.ext import commands
-from resources.utility import date_format
 
 cor = {
         'clear': '\033[m',
@@ -89,29 +87,6 @@ class OnReady(commands.Cog):
                 await self.bot.change_presence(activity=discord.Game(name=current_status), status=current_state)
             await sleep(30)
 
-    async def remove_role_zdd(self):
-        while True:
-            date_ = date.localtime()
-            data = date_format(dt.now())
-            # existe uma diferença de hora de +3 para o servidor da ashley
-            if date_[3] == 3 and date_[4] <= 30:
-                guild = self.bot.get_guild(643936732236087306)
-                for member in guild.members:
-                    member_ = guild.get_member(member.id)
-                    if member_.bot:
-                        continue
-                    for role in member_.roles:
-                        if 'Membro Ativo' == role.name:
-                            role = discord.utils.find(lambda r: r.name == 'Membro Ativo', guild.roles)
-                            await member_.remove_roles(role)
-                            channel_ = self.bot.get_channel(698371042199994388)
-                            await channel_.send(f'```O membro {member_.name.upper()} perdeu o cargo de '
-                                                f'MEMBRO ATIVO\nNa Data e Hora: {data}```')
-            if date_[3] == 3:
-                await sleep(30)
-            else:
-                await sleep(3600)
-
     @commands.Cog.listener()
     async def on_ready(self):
 
@@ -140,51 +115,6 @@ class OnReady(commands.Cog):
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita sucesso!\33[m')
-
-        db_p = {
-            "moderation": {
-                "credibility": {"ashley": 100, "guilds": [{"id": 0, "points": 100}]},
-                "warns": [{"status": False, "author": None, "reason": None, "date": None, "point": 0}],
-                "behavior": {"guild_id": 0, "historic": {"input": [], "output": []}},
-                "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
-            },
-            "pet": {
-                "status": False,
-                "pet_equipped": None,
-                "pet_bag": list(),
-                "pet_skin_status": None,
-                "pet_skin": None
-            }
-        }
-
-        db_g = {
-            "moderation": {
-                "status": False,
-                "moderation_log": False,
-                "moderation_channel_id": None,
-                "bad_word": False,
-                "bad_word_list": list(),
-                "flood": False,
-                "flood_channels": list(),
-                "ping": False,
-                "ping_channels": list(),
-                "moderation_member_state": dict(),
-                "join_system": {
-                    "join_system": False,
-                    "join_system_channel_door": None,
-                    "join_system_channel_log": None,
-                    "join_system_role": None,
-                    "join_system_member_state": dict()
-                },
-                "prison": {
-                    "status": False,
-                    "prison_channel": None,
-                    "prison_role": None,
-                    "prisoners": {"id": {"time": 0, "reason": None, "roles": list()}}
-                }
-            }
-        }
-
         print("\033[1;35m( ✔ ) | Reestruturação de variaveis internas Finalizadas!\033[m\n")
 
         self.time_ready = dt.utcnow()
@@ -206,8 +136,6 @@ class OnReady(commands.Cog):
         print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])
 
         print("\n\033[1;35m( >> ) | Iniciando carregamento dos loops internos...\033[m")
-        self.bot.loop.create_task(self.remove_role_zdd())
-        print('\033[1;32m( 🔶 ) | O loop \033[1;34mZONA_DE_DUELOS\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.change_status())
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mSTATUS_DA_ASHLEY\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.draw_member())

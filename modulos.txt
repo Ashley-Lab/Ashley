@@ -93,6 +93,7 @@ commands.img_edit.twitter
 commands.img_edit.whatsapp
 commands.rpg.shop
 commands.guild.receptions
+commands.member.ia_response
+# O NUMERO DO INDICE É O NUMERO DA LINHA -1
 handler.on_command_error
 ia.interactions
-# O NUMERO DO INDICE É O NUMERO DA LINHA -1
