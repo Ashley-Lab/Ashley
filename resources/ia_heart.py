@@ -14,30 +14,27 @@ def clear_content(string):
 class HeartIA(object):
     def __init__(self, scripts, percent):
         self.scripts = scripts
-        self.percent = percent
-        self.confidence = float(0.0)
+        self.perc = percent
+        self.conf = [0.0, 0.0]
+        self.chance = False
 
     def calc_confidence(self, content, response):
-        r_1 = len([name for name in content.upper().split() if name in response.upper().split()])
-        r_2 = len(response.upper().split())
-        self.confidence = float(r_1 / r_2)
+        for n in range(len(content)):
+            r_1 = len([name for name in set(content[n].lower().split()) if name in response.lower().split()])
+            r_2 = len(response.lower().split())
+            self.conf[n] = r_1 / r_2
 
-    def get_response(self, content):
-        response = clear_content(content)
-        chance = False
+    def get_response(self, c):
+        r = clear_content(c)
+        self.chance = False
         for script in self.scripts:
             for i in script:
-                if content == i or response == i:
-                    chance = True
-                self.calc_confidence(content, i)
-                if self.confidence >= self.percent:
-                    chance = True
-                self.calc_confidence(response, i)
-                if self.confidence >= self.percent:
-                    chance = True
-                if chance:
+                self.calc_confidence([c, r], i)
+                if c == i or r == i or self.conf[0] >= self.perc or self.conf[1] >= self.perc:
+                    self.chance = True
+                if self.chance:
                     try:
                         return script[script.index(i) + 1]
                     except IndexError:
                         return None
-                return None
+        return None
