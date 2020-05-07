@@ -15,7 +15,7 @@ class Inverse(commands.Cog):
     async def palin(self, ctx):
         palin = self.bot.config['palin']['list']
         answer = choice(palin)
-        await ctx.channel.send('''```Markdown\n [>]: {}```'''.format(answer.upper()))
+        await ctx.send('''```Markdown\n [>]: {}```'''.format(answer.upper()))
 
 
 def setup(bot):

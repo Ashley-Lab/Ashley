@@ -22,7 +22,7 @@ class Avatar(commands.Cog):
                 color=self.color)
             embed.set_image(url=user.avatar_url)
             embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
-            await ctx.channel.send(embed=embed)
+            await ctx.send(embed=embed)
         except IndexError:
             user2 = ctx.author
             embed2 = discord.Embed(
@@ -30,7 +30,7 @@ class Avatar(commands.Cog):
                 color=self.color)
             embed2.set_image(url=user2.avatar_url)
             embed2.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
-            await ctx.channel.send(embed=embed2)
+            await ctx.send(embed=embed2)
 
 
 def setup(bot):

@@ -7,9 +7,7 @@ asyncio
 aiohttp
 requests
 pyfiglet
-chatterbot
 websockets
 youtube_dl
 async_timeout
 discord.py[voice]
-chatterbot_corpus

@@ -43,7 +43,7 @@ class UserInfo(commands.Cog):
                 embed.add_field(name="Vip: ", value=status)
                 embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
                 embed.set_thumbnail(url=user.avatar_url)
-                await ctx.channel.send(embed=embed)
+                await ctx.send(embed=embed)
             except IndexError:
                 data = self.bot.db.get_data("user_id", ctx.author.id, "users")
                 if data['config']['vip']:
@@ -71,7 +71,7 @@ class UserInfo(commands.Cog):
                 embed2.add_field(name="Vip: ", value=status)
                 embed2.set_footer(text="Pedido por {}#{}".format(ctx.author, ctx.author.discriminator))
                 embed2.set_thumbnail(url=ctx.author.avatar_url)
-                await ctx.channel.send(embed=embed2)
+                await ctx.send(embed=embed2)
             finally:
                 pass
 

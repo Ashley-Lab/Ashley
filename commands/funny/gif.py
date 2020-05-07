@@ -6,7 +6,6 @@ from random import randrange
 from resources.db import Database
 from discord.ext import commands
 from resources.check import check_it
-from resources.translation import t_
 
 
 def gif_api(tag):
@@ -36,7 +35,7 @@ class GetGif(commands.Cog):
             embed_gif.set_footer(text=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             await ctx.send(embed=embed_gif)
         except None:
-            await ctx.send(t_(ctx, 'Não encontrei nenhuma gif para essa tag!', "guilds"))
+            await ctx.send('Não encontrei nenhuma gif para essa tag!')
 
 
 def setup(bot):

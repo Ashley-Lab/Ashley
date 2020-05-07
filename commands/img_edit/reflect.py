@@ -36,7 +36,7 @@ class Reflection(commands.Cog):
 
         draw.rectangle([x1, y1, x2, y2])
         image.save('reflita.png')
-        await ctx.channel.send(file=discord.File('reflita.png'))
+        await ctx.send(file=discord.File('reflita.png'))
 
 
 def setup(bot):

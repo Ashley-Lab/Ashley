@@ -15,7 +15,7 @@ class Thinkers(commands.Cog):
     async def thinker(self, ctx):
         thinker = self.bot.config['thinker']['list']
         answer = choice(thinker)
-        await ctx.message.channel.send("Assim diz o **pensador**: ``{}``".format(answer))
+        await ctx.send("Assim diz o **pensador**: ``{}``".format(answer))
 
 
 def setup(bot):

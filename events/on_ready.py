@@ -5,6 +5,7 @@ from random import choice, randint
 from itertools import cycle
 from datetime import datetime as dt
 from discord.ext import commands
+from time import localtime
 
 cor = {
         'clear': '\033[m',
@@ -41,34 +42,36 @@ class OnReady(commands.Cog):
                 data = self.bot.db.get_data("guild_id", guild.id, "guilds")
                 if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:
                     if data['bot_config']['ash_draw']:
-                        channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
-                        if channel__ is None:
-                            continue
-                        draw_member = choice(list(guild.members))
-                        try:
-                            member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
-                        except TypeError:
-                            continue
-                        data_member = self.bot.db.get_data("user_id", member.id, "users")
-                        update_member = data_member
-                        if data_member is None:
-                            await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
-                                                 f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
-                            continue
-                        coins = randint(10, 15)
-                        embed = discord.Embed(
-                            title="``Fiz o sorteio de um membro``",
-                            colour=self.color,
-                            description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│"
-                                        "``Parabens você acaba de ganhar`` **{}** "
-                                        "``coins!!``".format(member.mention, coins))
-                        embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                        embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-                        embed.set_thumbnail(url=member.avatar_url)
-                        await channel__.send(embed=embed)
-                        update_member['inventory']['coins'] += coins
-                        self.bot.db.update_data(data_member, update_member, 'users')
-            await sleep(3600)
+                        date = localtime()
+                        if date[4] == 0 or date[4] == 30:
+                            channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
+                            if channel__ is None:
+                                continue
+                            draw_member = choice(list(guild.members))
+                            try:
+                                member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
+                            except TypeError:
+                                continue
+                            data_member = self.bot.db.get_data("user_id", member.id, "users")
+                            update_member = data_member
+                            if data_member is None:
+                                await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
+                                                     f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
+                                continue
+                            coins = randint(10, 15)
+                            embed = discord.Embed(
+                                title="``Fiz o sorteio de um membro``",
+                                colour=self.color,
+                                description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│"
+                                            "``Parabens você acaba de ganhar`` **{}** "
+                                            "``coins!!``".format(member.mention, coins))
+                            embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+                            embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+                            embed.set_thumbnail(url=member.avatar_url)
+                            await channel__.send(embed=embed)
+                            update_member['inventory']['coins'] += coins
+                            self.bot.db.update_data(data_member, update_member, 'users')
+            await sleep(300)
 
     async def change_status(self):
         status = cycle(self.status)

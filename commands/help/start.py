@@ -36,7 +36,7 @@ class Helper(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='help_cont', aliases=['ajuda_contador'])
     async def help_cont(self, ctx):
-        ctx.send(f"**Quantidade de vezes que o ajuda foi paginado:** ``{self.cont}``**!**")
+        await ctx.send(f"**Quantidade de vezes que o ajuda foi paginado:** ``{self.cont}``**!**")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

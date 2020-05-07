@@ -88,6 +88,13 @@ class Ashley(commands.AutoShardedBot):
 
         self.booster: Booster = Booster(self.items)
 
+    async def check(self, ctx):
+        perms = ctx.channel.permissions_for(ctx.me)
+        if not perms.send_messages:
+            raise commands.CommandNotFound()
+        if not perms.read_messages:
+            raise commands.CommandNotFound()
+
     def shutdown(self, reason):
         date = dt(*dt.utcnow().timetuple()[:6])
         data = {"_id": date, "reason": reason}
@@ -262,6 +269,12 @@ class Ashley(commands.AutoShardedBot):
 
     @staticmethod
     async def web_hook_rpg(ctx, avatar_dir, web_hook_name, msg, quest_name):
+
+        perms = ctx.channel.permissions_for(ctx.me)
+        if not perms.manage_webhooks:
+            return await ctx.send(f'<:negate:520418505993093130>│``Eu não tenho a permissão de:`` '
+                                  f'**Gerenciar Webhooks**')
+
         avatar = open(avatar_dir, 'rb')
         web_hook_ = await ctx.channel.create_webhook(name=web_hook_name, avatar=avatar.read())
         if 'a_' in web_hook_.avatar:

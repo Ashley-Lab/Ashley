@@ -16,7 +16,7 @@ class InviteClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='invite', aliases=['convite'])
     async def invite(self, ctx):
-        await ctx.message.channel.send("<:send:519896817320591385>│``Obrigado por querer participar da`` "
+        await ctx.send("<:send:519896817320591385>│``Obrigado por querer participar da`` "
                                        "**MINHA COMUNIDADE** ``irei enviar para seu privado um convite "
                                        "para que você possa entrar!``")
         try:

@@ -53,6 +53,7 @@ class Booster(object):
         self.i = 0
         self.c = 0
 
+    @property
     def create_box(self):
         self.reset_counts()
         rarity = choice(list(self.rarity.keys()))
@@ -130,7 +131,7 @@ class Booster(object):
                                   "A BOX!\nVOCÊ PRECISA DE 1.000 ETHERNYAS PARA COMPRAR OU RESETAR UMA BOX.``")
         data = bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        box = self.create_box()
+        box = self.create_box
         update['box'] = box
         bot.db.update_data(data, update, 'users')
         await ctx.send(answer)

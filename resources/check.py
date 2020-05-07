@@ -3,48 +3,11 @@ import discord.utils
 
 from config import data
 from discord.ext import commands
-from .translation import t_
-
 
 staff = [235937029106434048, 300592580381376513]
 
 
-class NumberConverter(commands.Converter):
-    async def convert(self, ctx, argument):
-        argument = argument.replace(",", "").strip("$")
-        if not argument.strip("-").replace(".", "").isdigit():
-            raise commands.BadArgument(t_(ctx, "That is not a number!", "guilds"))
-        if len(argument) > 10:
-            raise commands.BadArgument(t_(ctx, "That number is much too big! Must be less than 999,999,999", "guilds"))
-        return round(float(argument), 2)
-
-
-class IntConverter(commands.Converter):
-    async def convert(self, ctx, argument):
-        argument = argument.replace(",", "").strip("$")
-        if not argument.strip("-").replace(".", "").isdigit():
-            raise commands.BadArgument(t_(ctx, "That is not a number!", "guilds"))
-        if len(argument) > 10:
-            raise commands.BadArgument(t_(ctx, "That number is much too big! Must be less than 999,999,999", "guilds"))
-        return int(argument)
-
-
-class ItemOrNumber(commands.Converter):
-    async def convert(self, ctx, argument):
-        f_argument = argument.replace(",", "").strip("$")
-        if not f_argument.strip("-").replace(".", "").isdigit():
-            if "x" in argument:
-                item, n = argument.split("x")
-                if n.isdigit():
-                    return item, int(n)
-            return argument
-        if len(f_argument) > 10:
-            raise commands.BadArgument(t_(ctx, "That number is much too big! Must be less than 999,999,999", "guilds"))
-        return round(float(f_argument), 2)
-
-
 def check_it(**kwargs):
-
     permissions = ('add_reactions', 'administrator', 'attach_files', 'ban_members', 'change_nickname' 'connect',
                    'create_instant_invite' 'deafen_members', 'embed_links', 'external_emojis', 'kick_members',
                    'manage_channels', 'manage_emojis', 'manage_guild', 'manage_messages', 'manage_nicknames',
@@ -65,28 +28,26 @@ def check_it(**kwargs):
             if ctx.command.name == "help" or ctx.command.name == "ajuda":
                 return True
             else:
-                raise commands.NoPrivateMessage(
-                    t_(ctx, '<:negate:520418505993093130>│``Você não pode mandar comandos em '
-                            'mensagens privadas!``', "guilds"))
+                raise commands.NoPrivateMessage('<:negate:520418505993093130>│``Você não pode mandar comandos em '
+                                                'mensagens privadas!``')
 
         if not (isinstance(ctx.channel, (discord.DMChannel, discord.GroupChannel))) and kwargs.get('is_nsfw', False):
             if ctx.channel.is_nsfw() is False:
-                raise commands.CheckFailure(t_(ctx, "<:negate:520418505993093130>│``Esse comando apenas pode ser usado"
-                                                    " em um canal`` **nsfw!!**", "guilds"))
+                raise commands.CheckFailure("<:negate:520418505993093130>│``Esse comando apenas pode ser usado"
+                                            " em um canal`` **nsfw!!**")
 
         if ctx.message.author.id == data['config']['owner_id'] and kwargs.get('is_owner', False):
             pass
         elif ctx.message.author.id in staff and kwargs.get('is_owner', False):
             pass
         elif ctx.message.author.id != data['config']['owner_id'] and kwargs.get('is_owner', False):
-            raise commands.CheckFailure(t_(ctx, "<:negate:520418505993093130>│``Apenas meu criador pode usar esse "
-                                                "comando!``", "guilds"))
+            raise commands.CheckFailure("<:negate:520418505993093130>│``Apenas meu criador pode usar esse comando!``")
 
         if kwargs.get("check_role", False):
             role = discord.utils.find(lambda r: r.name in kwargs.get("roles", []), ctx.author.roles)
             if role is None:
-                raise commands.CheckFailure(t_(ctx, "<:negate:520418505993093130>│``Você precisa de um cargo "
-                                                    "específico para usar esse comando!``", "guilds"))
+                raise commands.CheckFailure("<:negate:520418505993093130>│``Você precisa de um cargo "
+                                            "específico para usar esse comando!``")
 
         if kwargs.get('no_pm', False) or kwargs.get('is_owner', False) or kwargs.get('is_nsfw', False):
             perms = dict()

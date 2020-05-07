@@ -3,7 +3,6 @@ import discord
 import datetime
 import operator
 
-from resources.translation import t_
 from discord.ext import commands
 from pymongo import MongoClient
 from random import randint
@@ -436,8 +435,8 @@ class Database(object):
 
                 return True
             else:
-                raise commands.CheckFailure(t_(ctx, f'<:negate:520418505993093130>│``Você ainda não está '
-                                                    f'registrado, por favor use`` **ash register**.', "guilds"))
+                raise commands.CheckFailure(f'<:negate:520418505993093130>│``Você ainda não está registrado, '
+                                            f'por favor use`` **ash register**.')
         else:
             return True
 

@@ -16,7 +16,8 @@ class IaResponseClass(commands.Cog):
     async def ia(self, ctx):
         data = self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        update['user']['ia_response'], response = not update['user']['ia_response']
+        update['user']['ia_response'] = not update['user']['ia_response']
+        response = update['user']['ia_response']
         self.bot.db.update_data(data, update, "users")
         if response:
             embed = discord.Embed(

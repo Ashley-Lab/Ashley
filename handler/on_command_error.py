@@ -14,6 +14,7 @@ class CommandErrorHandler(commands.Cog):
 
         # Isso evita que quaisquer comandos com manipuladores locais sejam manipulados aqui em on_command_error.
         if hasattr(ctx.command, 'on_error'):
+            print(f"Erro desabilitado: {error}")
             return
 
         # Todos os eventos de erros ignorados, qualquer coisa ignorada retornará e impedirá que algo aconteça.
@@ -29,19 +30,20 @@ class CommandErrorHandler(commands.Cog):
         # dentro dos comandos para fins pessoais, ignorando totalmente os padroes comuns.
         if isinstance(error, commands.CheckFailure):
             if error.__str__() == 'The check functions for command register guild failed.':
-                await ctx.send(f"<:negate:520418505993093130>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE COMANDO!``")
+                return await ctx.send(
+                    f"<:negate:520418505993093130>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE COMANDO!``")
             elif error.__str__() not in ERRORS:
-                await ctx.send(f"{error}")
+                return await ctx.send(f"{error}")
         elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(f"<:negate:520418505993093130>│**Aguarde**: `Você deve esperar` **{{:.2f}}** "
-                           f"`segundos` `para mandar outro comando!`".format(error.retry_after),
-                           delete_after=float("{:.2f}".format(error.retry_after)))
+            return await ctx.send(f"<:negate:520418505993093130>│**Aguarde**: `Você deve esperar` **{{:.2f}}** "
+                                  f"`segundos` `para mandar outro comando!`".format(error.retry_after),
+                                  delete_after=float("{:.2f}".format(error.retry_after)))
         else:
             if error.__str__() not in ERRORS and not isinstance(error, commands.CommandNotFound):
                 channel = self.bot.get_channel(530419409311760394)
-                await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
-                                   f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
-                                   f"**{ctx.channel}** ``e o erro foi:`` **{error}**")
+                return await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
+                                          f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
+                                          f"**{ctx.channel}** ``e o erro foi:`` **{error}**")
 
         # Permite verificar exceções originais geradas e enviadas para CommandInvokeError.
         # Se nada for encontrado. Mantemos a exceção passada para on_command_error.

@@ -18,7 +18,7 @@ class AutoDelete(commands.Cog):
             await ctx.message.delete()
         except discord.errors.Forbidden:
             pass
-        await ctx.channel.send(f'```Markdown\n [>]: {msg.upper()}```', delete_after=5.0)
+        await ctx.send(f'```Markdown\n [>]: {msg.upper()}```', delete_after=5.0)
 
 
 def setup(bot):

@@ -7,7 +7,7 @@ from asyncio import TimeoutError
 
 responses = config['answers']
 questions = config['questions']
-legend = {"Comum": 0, "Normal": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
 color_embed = None
 
 
@@ -16,23 +16,6 @@ def include(string_, list_):
         if i.lower() in string_.lower():
             return True
     return False
-
-
-def get_permissions(bot, ctx):
-    rm = bot.get_channel(ctx.channel.id).permissions_for(ctx.me).read_messages
-    s = bot.get_channel(ctx.channel.id).permissions_for(ctx.me).speak
-    if rm and s:
-        # o bot pode ler e falar no canal
-        return 0
-    elif rm and not s:
-        # o bot pode ler mais nao pode falar
-        return 1
-    elif not rm and s:
-        # o bot nao pode nem ler, mas pode falar
-        return 2
-    else:
-        # o bot nao pode ler e nao pode falar
-        return 3
 
 
 def get_content(content):
@@ -162,6 +145,9 @@ async def get_response(message):
                 return response
             else:
                 return "Eu não consigo falar nada contra o senhor!"
+        if include(message.content, questions['denky_r']) and include(message.content, ['ashley', 'ash']):
+            response = choice(responses['resposta_ashley'])
+            return response
         for c in range(0, len(questions['perg_pq'])):
             if questions['perg_pq'][c] in message.content.lower():
                 response = choice(responses['resposta_pq'])
@@ -243,12 +229,6 @@ ERRORS = ['The check functions for command staff ban failed.',
           'The check functions for command staff slowmode failed.',
           'The check functions for command staff delete failed.',
           'The check functions for command logger failed.']
-
-goodbye = ['tchau', 'xau', 'adeus', 'ate mais', 'ate a proxima', 'fim', 'finalizar', 'desliga', 'logoff', 'bye',
-           'goodbye']
-
-negate = ['desculpe eu nao conseguir entender!', 'sinto muito, mas não tenho essa informação!',
-          'isso nao consta no meu banco de dados.', 'não sei, ainda preciso aprender sobre isso!']
 
 enforcado = ['''
 ```
