@@ -12,13 +12,8 @@ class CommandErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
-        # Isso evita que quaisquer comandos com manipuladores locais sejam manipulados aqui em on_command_error.
-        if hasattr(ctx.command, 'on_error'):
-            print(f"Erro desabilitado: {error}")
-            return
-
         # Todos os eventos de erros ignorados, qualquer coisa ignorada retornará e impedirá que algo aconteça.
-        ignored = (commands.CommandNotFound, commands.UserInputError)
+        ignored = (commands.UserInputError,  commands.CommandNotFound)
         if isinstance(error, ignored):
             return
 

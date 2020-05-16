@@ -10,8 +10,8 @@ class LogClass(commands.Cog):
         self.bot = bot
         self.logs = ['msg_delete', 'msg_edit', 'channel_edit_topic', 'channel_edit_name', 'channel_created',
                      'channel_deleted', 'channel_edit', 'role_created', 'role_deleted', 'role_edit', 'guild_update',
-                     'guild_update', 'member_edit_nickname', 'member_voice_entered', 'member_voice_exit', 'member_ban',
-                     'member_unBan', 'emoji_update']
+                     'member_edit_avatar', 'member_edit_nickname', 'member_voice_entered', 'member_voice_exit',
+                     'member_ban', 'member_unBan', 'emoji_update']
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -34,7 +34,7 @@ class LogClass(commands.Cog):
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @logger.command(name='edit')
+    @logger.command(name='edit', aliases=['e'])
     async def _edit(self, ctx, *, log=None):
         if log is None:
             return await ctx.send(f'Você necessita dizer o log a qual deseja alterar seu estado!')

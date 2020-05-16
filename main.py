@@ -272,6 +272,8 @@ class Ashley(commands.AutoShardedBot):
 
         perms = ctx.channel.permissions_for(ctx.me)
         if not perms.manage_webhooks:
+            if not perms.send_messages:
+                return
             return await ctx.send(f'<:negate:520418505993093130>│``Eu não tenho a permissão de:`` '
                                   f'**Gerenciar Webhooks**')
 

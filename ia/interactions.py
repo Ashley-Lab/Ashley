@@ -11,7 +11,8 @@ class IaInteractions(commands.Cog):
         self.bot = bot
         self.msg = {}
         self.num = 1
-        self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses, ia.commands]
+        self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses, ia.commands, ia.common,
+                        ia.yugioh]
         self.heart = HeartIA(self.scripts, 0.9)
 
     async def send_message(self, message, content=None):
@@ -38,14 +39,6 @@ class IaInteractions(commands.Cog):
                 if ctx.command is not None:
                     return
 
-                # filtro de quantidade de mensagens salvas por usuario
-                try:
-                    self.msg[message.author.id].append(message.content)
-                    if len(self.msg[message.author.id]) >= 22:
-                        self.msg[message.author.id] = [message.content]
-                except KeyError:
-                    self.msg[message.author.id] = [message.content]
-
                 # sistema de chance da ashley  responder a um usuario
 
                 # ---======---
@@ -53,16 +46,19 @@ class IaInteractions(commands.Cog):
                 # ---======---
 
                 # -----------======================-----------
-                if '?' in self.msg[message.author.id][-1]:
-                    num = 1
-                    for msg in self.msg[message.author.id]:
-                        if '?' in msg:
-                            num += 4
-                    self.num = randint(num, 95)
+                try:
+                    if '?' in self.msg[message.author.id][-1]:
+                        num = 1
+                        for msg in self.msg[message.author.id]:
+                            if '?' in msg:
+                                num += 4
+                        self.num = randint(num, 95)
+                except KeyError:
+                    pass
                 # -----------======================-----------
 
                 # --------------============================--------------
-                if include(self.msg[message.author.id][-1].lower(), ['ash', 'ashley']):
+                if include(message.content, ['ash', 'ashley']):
                     self.num = 95
                 # --------------============================--------------
 
@@ -73,6 +69,24 @@ class IaInteractions(commands.Cog):
                     and_num = 5
                 chance_not = randint(1, and_num)
                 # -------=================-------
+
+                # filtro de quantidade de mensagens salvas por usuario
+                try:
+                    # filtro de pergunta repetida a longo prazo
+                    if len(self.msg[message.author.id]) >= 11:
+                        for msg in self.msg[message.author.id]:
+                            if message.content == msg:
+                                content = choice(['Eu acho que ja respondi isso pra você!',
+                                                  'Voce ja tem essa resposta',
+                                                  'Eu nao vou te responder isso de novo!',
+                                                  'Quantas vezes eu vou ter que falar a mesma coisa?'])
+                                if chance >= 95:
+                                    return await self.send_message(message, content)
+                    self.msg[message.author.id].append(message.content)
+                    if len(self.msg[message.author.id]) >= 22:
+                        self.msg[message.author.id] = [message.content]
+                except KeyError:
+                    self.msg[message.author.id] = [message.content]
 
                 # filtro de repetição de perguntas e mensagens
                 try:
@@ -87,22 +101,16 @@ class IaInteractions(commands.Cog):
                 except IndexError:
                     pass
 
-                # filtro de pergunta repetida a longo prazo
-                if len(self.msg[message.author.id]) >= 11:
-                    for msg in self.msg[message.author.id]:
-                        if message.content == msg:
-                            content = choice(['Eu acho que ja respondi isso pra você!',
-                                              'Voce ja tem essa resposta',
-                                              'Eu nao vou te responder isso de novo!',
-                                              'Quantas vezes eu vou ter que falar a mesma coisa?'])
-                            if chance >= 95:
-                                return await self.send_message(message, content)
+                # remoção do codi-name "ash" ou "ashley"
+                content_ = message.content.lower()
+                content_ = content_.replace("ashley", "").replace("ash", "")
+                content_ = content_.replace(" ?", "?").replace("  ", " ").strip()
 
                 # sistema de IA
                 if '?' in message.content and len(message.content) > 2:
-                    response = self.heart.get_response(message.content)
-                    if response is not None:
 
+                    response = self.heart.get_response(content_)
+                    if response is not None:
                         # sistema de log de perguntas de respostas
                         channel = self.bot.get_channel(706571512550785045)
                         await channel.send(f'> **Mensagem enviada pelo usuario:**\n'
@@ -123,7 +131,7 @@ class IaInteractions(commands.Cog):
                                                   'Você é muito chato...'])
                                 return await  self.send_message(message, content)
                 else:
-                    response = self.heart.get_response(message.content)
+                    response = self.heart.get_response(content_)
                     if response is not None:
 
                         # sistema de log de perguntas de respostas

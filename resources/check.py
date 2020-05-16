@@ -20,8 +20,9 @@ def check_it(**kwargs):
         return check(getattr(resolved, name, None) == value for name, value in perms_.items())
 
     def predicate(ctx):
-
         if ctx.message.webhook_id is not None:
+            return True
+        if ctx.guild.owner.id == ctx.author.id:
             return True
 
         if isinstance(ctx.message.channel, (discord.DMChannel, discord.GroupChannel)):
@@ -56,7 +57,6 @@ def check_it(**kwargs):
                     perms[perm_] = kwargs[perm_]
             return check_permissions(ctx, perms)
         return True
-
     return commands.check(predicate)
 
 
