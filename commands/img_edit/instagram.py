@@ -18,6 +18,8 @@ class InstagramClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='instagram', aliases=['insta'])
     async def instagram(self, ctx, *, resp=None):
+        """Comando totalmente demente de instagram
+        Use ash instagram <mensagem desejada>"""
         if resp is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
 

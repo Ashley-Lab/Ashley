@@ -16,6 +16,8 @@ class HugClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='hug', aliases=['abraço'])
     async def hug(self, ctx):
+        """Comando de gifs de abraço
+        Use ash hug <@usuario a sua escolha>"""
         try:
             hug_img = ['http://media1.tenor.com/images/e58eb2794ff1a12315665c28d5bc3f5e/tenor.gif?itemid=10195705',
                        'http://media1.tenor.com/images/949d3eb3f689fea42258a88fa171d4fc/tenor.gif?itemid=4900166',

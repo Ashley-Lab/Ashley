@@ -16,7 +16,8 @@ class ServerInfo(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='serverinfo', aliases=['infoserver', 'si', 'is', 'guildinfo', 'infoguild', 'gi', 'ig'])
     async def serverinfo(self, ctx):
-
+        """comando que gera uma lista de informações da sua guild
+        Use ash serverinfo"""
         online = 0
         idle = 0
         dont_disturb = 0
@@ -54,7 +55,7 @@ class ServerInfo(commands.Cog):
 
         verification = verification_level.get(str(ctx.guild.verification_level))
 
-        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         if data['vip']:
             status = "<:vip_guild:546020055440425016>"
         else:

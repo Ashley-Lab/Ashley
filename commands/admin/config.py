@@ -22,6 +22,8 @@ class ConfigClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='config', aliases=['configuração'])
     async def config(self, ctx):
+        """Comando usado pra configurar alguns settings da ashley
+        Use ash config pra ver as configurações disponiveis"""
         if ctx.invoked_subcommand is None:
             self.status()
             top = discord.Embed(title="Commands Status", color=self.color,
@@ -65,12 +67,14 @@ class ConfigClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @config.command(name='log')
     async def _log(self, ctx):
+        """Comando usado pra configurar os logs da ashley
+        Use ash config log e siga as instruções do comando"""
         changes = {}
         configs = ['log', 'log_channel_id', 'msg_delete', 'msg_edit', 'channel_edit_topic', 'channel_edit_name',
                    'channel_created', 'channel_deleted', 'channel_edit', 'role_created', 'role_deleted',
                    'role_edit', 'guild_update', 'member_edit_avatar', 'member_edit_nickname',
                    'member_voice_entered', 'member_voice_exit', 'member_ban', 'member_unBan', 'emoji_update']
-        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update = data
         if data is not None:
             for config in configs:
@@ -103,7 +107,7 @@ class ConfigClass(commands.Cog):
                 else:
                     update['log_config']['log'] = False
 
-            self.bot.db.update_data(data, update, "guilds")
+            await self.bot.db.update_data(data, update, "guilds")
             await ctx.send('<:confirmado:519896822072999937>│**PARABENS** : '
                            '``CONFIGURAÇÃO REALIZADA COM SUCESSO!``', delete_after=5.0)
 
@@ -112,7 +116,9 @@ class ConfigClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @config.command(name='guild', aliases=['server'])
     async def _guild(self, ctx):
-        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        """Comando usado pra configurar sua guilda/server na Ashley
+        Use ash config guild e siga as instruções do comando(use # pra marcar canais)"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update = data
         if data is not None:
             values = list()
@@ -346,7 +352,7 @@ class ConfigClass(commands.Cog):
                             update['func_config'][key] = values[c]
                     c += 1
 
-            self.bot.db.update_data(data, update, "guilds")
+            await self.bot.db.update_data(data, update, "guilds")
             await sleep(2)
             await msg.delete()
 
@@ -358,7 +364,9 @@ class ConfigClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @config.command(name='report', aliases=['reportar'])
     async def _report(self, ctx):
-        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        """Comando usado pra configurar o report da Ashley
+        Use ash config report e siga as instruções do comando(use # pra marcar os canais)"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update = data
         if data is not None:
             values = list()
@@ -410,7 +418,7 @@ class ConfigClass(commands.Cog):
                             update['func_config'][key] = values[c]
                     c += 1
 
-            self.bot.db.update_data(data, update, "guilds")
+            await self.bot.db.update_data(data, update, "guilds")
             await sleep(2)
             await msg.delete()
 

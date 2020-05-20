@@ -291,6 +291,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='connect', aliases=['join', 'entrar'])
     async def _connect(self, ctx, *, channel: discord.VoiceChannel = None):
+        """Comando usado pra fazer a Ashley se conectar a um canal de voz
+        use ash conneect"""
         if not channel:
             try:
                 channel = ctx.author.voice.channel
@@ -322,6 +324,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='play', aliases=['sing', 'tocar'])
     async def play_(self, ctx, *, search: str = "Ashley escape the fate"):
+        """Comando usado pra fazer a Ashley tocar musica/adicionar uma musica na queue
+        Use ash play"""
         await ctx.trigger_typing()
         vc = ctx.voice_client
 
@@ -350,6 +354,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='pause', aliases=['pausar'])
     async def pause_(self, ctx):
+        """Comando usado pra fazer a Ashley pausar as musicas
+        Use ash pause"""
         vc = ctx.voice_client
 
         try:
@@ -376,6 +382,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='resume', aliases=['voltar', 'retornar'])
     async def resume_(self, ctx):
+        """Comando usado pra fazer a Ashley voltar a tocar as musicas pausadas
+        Use ash resume"""
         vc = ctx.voice_client
 
         try:
@@ -403,6 +411,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='skip', aliases=['pular', 'passar'])
     async def skip_(self, ctx):
+        """Comando usado pra pular uma musica
+        Use ash skip"""
         vc = ctx.voice_client
 
         try:
@@ -439,6 +449,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='queue', aliases=['q', 'playlist', 'lista'])
     async def queue_info(self, ctx):
+        """Comando usado pra ver a situação atual da queue
+        Use ash queue"""
         vc = ctx.voice_client
         global cont
 
@@ -481,6 +493,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='shuffle', aliases=['embaralhar'])
     async def _shuffle(self, ctx):
+        """Comando usado pra misturar a ordem das musicas
+        Use ash shuffle"""
         state = self.get_player(ctx)
 
         try:
@@ -504,6 +518,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='remove', aliases=['remover'])
     async def _remove(self, ctx, index=-1):
+        """Comando usado pra remover uma musica da queue
+        Use ash remove <numero da musica no queue>"""
         state = self.get_player(ctx)
 
         try:
@@ -534,6 +550,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='clear', aliases=['limpar'])
     async def _clear(self, ctx):
+        """Comando usado pra limpar a queue
+        Use ash clear"""
         state = self.get_player(ctx)
 
         try:
@@ -558,6 +576,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='repeat', aliases=['repetir'])
     async def _repeat(self, ctx):
+        """Comando usado pra repetir a queue atual
+        Use ash repeat"""
         try:
             channel = ctx.author.voice.channel
             if channel:
@@ -579,6 +599,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='now_playing', aliases=['np', 'current', 'currentsong', 'playing', 'tocando'])
     async def now_playing_(self, ctx):
+        """Comando usado pra ver que musica esta tocando no momento
+        Use ash nowplaying"""
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
@@ -604,6 +626,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='volume', aliases=['vol'])
     async def change_volume(self, ctx, *, vol: float = 100.0):
+        """Comando usado pra mudar o volume da Ashley
+        Use ash volume <numero de 1 a 100>"""
         vc = ctx.voice_client
 
         try:
@@ -637,6 +661,8 @@ class MusicDefault(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True))
     @commands.command(name='stop', aliases=['parar'])
     async def stop_(self, ctx):
+        """Comando usado pra fazer a ashley parar de tocar musica
+        Use ash stop"""
         vc = ctx.voice_client
 
         try:

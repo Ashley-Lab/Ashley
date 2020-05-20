@@ -14,7 +14,8 @@ class ReceptionClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='reception', aliases=['recepção', 'rp'])
     async def reception(self, ctx):
-
+        """comando pra configurar o welcome
+        Use ash reception ou ash rp e siga as instruções no comando(use # pra marcar os canais)"""
         def check(m):
             return m.author == ctx.author
 

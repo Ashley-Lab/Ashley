@@ -30,6 +30,8 @@ class RoleInfo(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='roleinfo', aliases=['inforole', 'ri', 'ir'])
     async def roleinfo(self, ctx, *, role: commands.RoleConverter = None):
+        """comando que gera uma lista de informações sobre certo cargo
+        Use ash roleinfo <@cargo_em_questão>"""
         if not role:
             await ctx.send('<:negate:520418505993093130>│``Você precisa colocar um cargo para ver as informações!``')
 

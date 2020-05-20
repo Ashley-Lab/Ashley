@@ -14,7 +14,7 @@ class OnMessageEdit(commands.Cog):
             return
 
         if after.guild is not None:
-            data = self.bot.db.get_data("guild_id", after.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", after.guild.id, "guilds")
             if data is not None:
 
                 try:

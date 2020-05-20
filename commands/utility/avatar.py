@@ -15,6 +15,8 @@ class Avatar(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='avatar', aliases=['a'])
     async def avatar(self, ctx):
+        """Comando usado pra ter uma imagem ampliada do avatar de um usuario
+        Use ash avatar <usuario em questão>"""
         try:
             user = ctx.message.mentions[0]
             embed = discord.Embed(

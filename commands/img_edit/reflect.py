@@ -18,6 +18,7 @@ class Reflection(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='reflect', aliases=['reflita'])
     async def reflect(self, ctx):
+        """use ash reflita e apressie uma frase pra refletir"""
         image = Image.open('images/memes/reflita.png')
         draw = ImageDraw.Draw(image)
         message = choice(self.reflect)

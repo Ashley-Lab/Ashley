@@ -13,6 +13,8 @@ class AsciiText(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     async def ascii(self, ctx, *, msg="Digite Algo"):
+        """Usado pra gerar um texto ascii
+        Use ash ascii <texto desejado>"""
         f = Figlet(font='slant')
         text = f.renderText(msg)
         await ctx.send("```{}```".format(text))

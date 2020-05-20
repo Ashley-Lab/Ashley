@@ -16,6 +16,8 @@ class SourceGit(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command()
     async def source(self, ctx, command: str = None):
+        """Usado pra enviar codigos da ashley
+        Use ash source <comando desejado>"""
         source_url = "https://github.com/Ashley-Lab/Ashley"
         if command is None:
             await ctx.send(source_url)

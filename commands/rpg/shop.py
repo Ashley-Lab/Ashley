@@ -29,6 +29,8 @@ class ShopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='shop', aliases=['loja'])
     async def shop(self, ctx):
+        """Comando de loja da ashley
+        Use ash shop e siga as instruções do comando"""
         embed = discord.Embed(
             title="Choice Category:",
             color=self.color,
@@ -102,7 +104,7 @@ class ShopClass(commands.Cog):
 
         if reaction.emoji == "🎫" and reaction.message.id == botmsg[user.id].id:
             await channel.send("<:alert_status:519896811192844288>│``Comprando box...``")
-            data = self.bot.db.get_data("user_id", user.id, "users")
+            data = await self.bot.db.get_data("user_id", user.id, "users")
             try:
                 if data['box']:
                     await channel.send("<:negate:520418505993093130>│``Você ja tem uma box...``")
@@ -126,7 +128,7 @@ class ShopClass(commands.Cog):
                 return await channel.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                           ' CANCELADO**')
 
-            data = self.bot.db.get_data("user_id", user.id, "users")
+            data = await self.bot.db.get_data("user_id", user.id, "users")
             num = int(answer.content)
             if num > 10:
                 return await channel.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 booster"

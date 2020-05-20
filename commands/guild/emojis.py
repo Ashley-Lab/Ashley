@@ -15,6 +15,8 @@ class AllEmoji(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.command(name='emojis', aliases=['emoji'])
     async def emojis(self, ctx):
+        """comando usado pra gerar uma lista dos emojis da sua guild
+        Use ash emojis"""
         try:
             emojis_list = [str(x) for x in ctx.message.guild.emojis]
             num = len(emojis_list)

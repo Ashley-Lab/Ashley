@@ -18,8 +18,10 @@ class LogClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='logger', aliases=['log'])
     async def logger(self, ctx):
+        """Usado pra mostrar os logs
+        Use ash logger"""
         if ctx.invoked_subcommand is None:
-            data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             description = '```Markdown\n'
             for log in self.logs:
                 description += '[>>]: {}\n<Status: {}>\n\n'.format(log, data['log_config'][log])
@@ -36,17 +38,19 @@ class LogClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @logger.command(name='edit', aliases=['e'])
     async def _edit(self, ctx, *, log=None):
+        """Usado pra ativar ou desativar logs
+        Use ash logger edit <log desejado> e siga as instruções do comando"""
         if log is None:
             return await ctx.send(f'Você necessita dizer o log a qual deseja alterar seu estado!')
         if log in self.logs:
-            data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             if data['log_config'][log]:
                 msg = f'Você acaba de desativar o log {log}'
             else:
                 msg = f'Você acaba de ativar o log {log}'
             update = data
             update['log_config'][log] = not ['log_config'][log]
-            self.bot.db.update_data(data, update, 'guilds')
+            await self.bot.db.update_data(data, update, 'guilds')
             await ctx.send(msg)
         return await ctx.send(f"O log {log} não está dentro da lista do logs disponiveis!")
 

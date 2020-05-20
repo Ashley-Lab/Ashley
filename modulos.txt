@@ -94,6 +94,7 @@ commands.img_edit.whatsapp
 commands.rpg.shop
 commands.guild.receptions
 commands.member.ia_response
+commands.guild.open
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1
 handler.on_command_error
 ia.interactions

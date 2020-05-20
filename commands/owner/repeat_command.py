@@ -3,6 +3,7 @@ import copy
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from asyncio import sleep
 
 
 class RepeatCommand(commands.Cog):
@@ -14,10 +15,12 @@ class RepeatCommand(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def repeat_command(self, ctx, times: int, *, command):
+        """apenas desenvolvedores"""
         msg = copy.copy(ctx.message)
         msg.content = command
         for i in range(times):
             await self.bot.process_commands(msg)
+            await sleep(10)
 
 
 def setup(bot):

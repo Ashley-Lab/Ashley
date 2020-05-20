@@ -19,7 +19,8 @@ class BotInfo(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='botinfo', aliases=['infobot', 'info'])
     async def botinfo(self, ctx):
-
+        """Comando para ter informações sobre a Ashley
+        Use ash botinfo"""
         total_members = sum(len(s.members) for s in self.bot.guilds)
         total_online = sum(1 for m in self.bot.get_all_members() if m.status != discord.Status.offline)
         channel_types = Counter(isinstance(c, discord.TextChannel) for c in self.bot.get_all_channels())

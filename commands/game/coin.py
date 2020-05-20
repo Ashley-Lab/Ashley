@@ -14,12 +14,12 @@ class HeadsOrTails(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='hot', aliases=['moeda'])
     async def hot(self, ctx):
-
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """use ash hot ou ash moeda, cara ou coroa, acho que não preciso explicar"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             await ctx.send("<:game:519896830230790157>│``Vamos brincar de`` **CARA** ``ou`` **COROA**"
                            " ``Escolha uma dessas opções abaixo:`` \n"
@@ -33,15 +33,15 @@ class HeadsOrTails(commands.Cog):
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:
-                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
                 update['config']['playing'] = False
-                self.bot.db.update_data(data, update, 'users')
+                await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
             update['inventory']['coins'] -= 1
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             if choice_ == '1':
                 msg_r = await ctx.send("Cara!")
@@ -77,10 +77,10 @@ class HeadsOrTails(commands.Cog):
                                        '{}'.format(response))
                 else:
                     await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
             update['config']['playing'] = False
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
                 await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')

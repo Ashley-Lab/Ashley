@@ -14,12 +14,12 @@ class GameThinker(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='guess', aliases=['advinhe', 'adivinhe'])
     async def guess(self, ctx):
-
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Use ash guess ou ash adivinhe, e tente acertar o numero que ela pensou"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             number = choice(['0', '1', '2', '3', '4', '5'])
             await ctx.send("<:game:519896830230790157>│``Acabei de pensar em um numero entre`` **0** ``até`` "
@@ -31,17 +31,17 @@ class GameThinker(commands.Cog):
             try:
                 resposta = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:
-                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
                 update['config']['playing'] = False
-                self.bot.db.update_data(data, update, 'users')
+                await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito, o número que eu '
                                       'tinha escolhido era`` **{}**.'.format(number))
 
             update['inventory']['coins'] -= 1
             if resposta.content in ["0", "1", "2", "3", "4", "5"]:
                 update['inventory']['coins'] -= 1
-                self.bot.db.update_data(data, update, 'users')
+                await self.bot.db.update_data(data, update, 'users')
                 if resposta.content == number:
                     change = randint(1, 100)
                     answer_ = await self.bot.db.add_money(ctx, 15, True)
@@ -61,10 +61,10 @@ class GameThinker(commands.Cog):
             else:
                 await ctx.send("<:oc_status:519896814225457152>│``Você não digitou um número válido!`` "
                                "**Tente Novamente!**")
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
             update['config']['playing'] = False
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
                 await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')

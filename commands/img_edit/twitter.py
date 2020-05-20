@@ -18,6 +18,8 @@ class TwitterClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='twitter', aliases=['tt'])
     async def twitter(self, ctx, *, resp=None):
+        """Comando totalmente demente de twitter
+        Use ash twitter <mensagem desejada>"""
         if resp is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
 

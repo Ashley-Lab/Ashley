@@ -17,7 +17,7 @@ class EmojiUpdate(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_emojis_update(self, guild, before, after):
 
-        data = self.bot.db.get_data("guild_id", guild.id, "guilds")
+        data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
         if data is not None:
 
             if data['log_config']['emoji_update'] and data['log_config']['log_channel_id'] is not None:

@@ -20,6 +20,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='top', aliases=['tops'])
     async def top(self, ctx):
+        """Comando usado pra retornar a lista de subcomandos de top
+        Use ash top"""
         if ctx.invoked_subcommand is None:
             self.status()
             top = discord.Embed(title="Commands Status", color=self.color,
@@ -47,6 +49,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='xp', aliases=['exp'])
     async def _xp(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de xp da Ashley
+        Use ash top xp"""
         top = await self.bot.data.get_rank_xp(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -55,6 +59,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='level', aliases=['nivel'])
     async def _level(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de level da Ashley
+        Use ash top level"""
         top = await self.bot.data.get_rank_level(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -63,6 +69,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='ethernia', aliases=['dinheiro'])
     async def _ethernia(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de ethernia da Ashley
+        Use ash top ethernia"""
         top = await self.bot.data.get_rank_money(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -71,6 +79,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='black', aliases=['preto', 'Ethernia Black'])
     async def _black(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de ethernia negra da Ashley
+        Use ash top preto"""
         top = await self.bot.data.get_rank_gold(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -79,6 +89,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='purple', aliases=['roxo', 'Ethernia Purple'])
     async def _purple(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de ethernia roxa da Ashley
+        Use ash top roxo"""
         top = await self.bot.data.get_rank_silver(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -87,6 +99,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='yellow', aliases=['amarelo', 'Ethernia Yellow'])
     async def _yellow(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de ethernia amarela da Ashley
+        Use ash top amarelo"""
         top = await self.bot.data.get_rank_bronze(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -95,6 +109,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='point', aliases=['ponto'])
     async def _point(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de pontos da Ashley
+        Use ash top point"""
         top = await self.bot.data.get_rank_point(20)
         await ctx.send(f'```py\n{top}```')
 
@@ -103,6 +119,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='command', aliases=['comando'])
     async def _command(self, ctx):
+        """Comando usado pra retornar o top 20 em questão de comandos usados
+        Use ash top command"""
         top = await self.bot.data.get_rank_commands(20)
         await ctx.send(f'```py\n{top}```')
 

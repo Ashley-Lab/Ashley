@@ -14,6 +14,8 @@ class AutoDelete(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.command(name='gossip', aliases=['fofoca'])
     async def gossip(self, ctx, *, msg: str = "coloque uma fofoca aqui"):
+        """envia uma mensagem a sua escolha que é apagada 5 segundos depois
+        Use ash gossip <mensagem desejada>"""
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:

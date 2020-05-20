@@ -16,6 +16,8 @@ class LickClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='lick', aliases=['lambida'])
     async def lick(self, ctx):
+        """Comando de gifs de lambida
+        Use ash lick <@usuario a sua escolha>"""
         try:
             lickimg = ['https://media1.tenor.com/images/5f73f2a7b302a3800b3613095f8a5c40/tenor.gif?itemid=10005495',
                        'https://media1.tenor.com/images/0c608b33607b4e92350198b53c8940c7/tenor.gif?itemid=16735374',

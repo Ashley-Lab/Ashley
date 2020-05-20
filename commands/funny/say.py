@@ -14,6 +14,8 @@ class SaySomething(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.group(name='say', aliases=['diga'], invoke_without_command=True)
     async def say(self, ctx, *, msg: str = None):
+        """comando usado pra ash enviar uma mensagem
+        Use ash say <mensagem desejada>"""
         if ctx.invoked_subcommand is None:
             if msg is None:
                 return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU FALAR``')
@@ -29,6 +31,7 @@ class SaySomething(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @say.command(name='channel', aliases=['canal'])
     async def _channel(self, ctx, channel: commands.TextChannelConverter, *, text: str = None):
+        """apenas desenvolvedores"""
         if text is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU FALAR``')
         try:

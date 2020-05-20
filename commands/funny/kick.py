@@ -16,6 +16,8 @@ class KickClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='kick', aliases=['chute'])
     async def kick(self, ctx):
+        """Comando de gifs de chute
+        Use ash kick <@usuario a sua escolha>"""
         try:
             kickimg = ['https://media1.tenor.com/images/cc217519af48fe13bea6004afb36f1f2/tenor.gif?itemid=5738223',
                        'https://media1.tenor.com/images/2427d33c1c97a12b5ed4eda5ca2c63b7/tenor.gif?itemid=16733357',

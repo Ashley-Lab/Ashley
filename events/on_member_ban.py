@@ -11,7 +11,7 @@ class MemberBanClass(commands.Cog):
     @commands.Cog.listener()
     async def on_member_ban(self, guild, user):
         if guild is not None:
-            data = self.bot.db.get_data("guild_id", guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
             if data is not None:
                 try:
                     if data['log_config']['log'] and data['log_config']['member_ban']:

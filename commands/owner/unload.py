@@ -15,6 +15,7 @@ class UnloadCog(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def unload(self, ctx, cog):
+        """apenas desenvolvedores"""
         try:
             self.bot.unload_extension('{}'.format(cog))
             embed = discord.Embed(

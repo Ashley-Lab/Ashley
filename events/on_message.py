@@ -49,7 +49,7 @@ class SystemMessage(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild is not None and str(message.author.id) not in self.bot.blacklist:
-            data_guild = self.bot.db.get_data("guild_id", message.guild.id, "guilds")
+            data_guild = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             if data_guild is not None:
 
                 # filtro de comandos ( para nao haver iteração em cima de comandos
@@ -67,7 +67,7 @@ class SystemMessage(commands.Cog):
                                                                   'PAPAI```'.format(message.author.mention))
 
                 try:
-                    user_data = self.bot.db.get_data("user_id", message.author.id, "users")
+                    user_data = await self.bot.db.get_data("user_id", message.author.id, "users")
                     if user_data is not None:
                         if user_data['config']['vip'] is True and 'pet ' in message.content.lower():
                             if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
@@ -167,7 +167,7 @@ class SystemMessage(commands.Cog):
 
                 if message.guild.id == self.bot.config['config']['default_guild']:
                     if message.channel.id == 543589223467450398:
-                        all_data = self.bot.db.get_all_data("guilds")
+                        all_data = await self.bot.db.get_all_data("guilds")
                         for data in all_data:
                             try:
                                 if data['bot_config']['ash_news']:
@@ -181,7 +181,7 @@ class SystemMessage(commands.Cog):
 
                 if message.guild.id == self.bot.config['config']['default_guild']:
                     if message.channel.id == 525360987373699073:
-                        all_data = self.bot.db.get_all_data("guilds")
+                        all_data = await self.bot.db.get_all_data("guilds")
                         for data in all_data:
                             try:
                                 if data['bot_config']['ash_git']:

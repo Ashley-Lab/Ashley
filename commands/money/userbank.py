@@ -22,8 +22,8 @@ class UserBank(commands.Cog):
         d = c.replace('v', '.')
         return d
 
-    def get_atr(self, user_id, atr):
-        data = self.bot.db.get_data("user_id", user_id, "users")
+    async def get_atr(self, user_id, atr):
+        data = await self.bot.db.get_data("user_id", user_id, "users")
         result = data['treasure'][atr]
         if result is not None:
             return result
@@ -35,18 +35,20 @@ class UserBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='wallet', aliases=['carteira'])
     async def wallet(self, ctx):
-        self.money = self.get_atr(ctx.author.id, 'money')
+        """Comando usado para verificar quanto dinheiro você tem
+        Use ash wallet"""
+        self.money = await self.get_atr(ctx.author.id, 'money')
         a = '{:,.2f}'.format(float(self.money))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')
         d = c.replace('v', '.')
         await ctx.send(f'<:coins:519896825365528596>│ No total você tem **R$ {d}** de ``ETHERNYAS`` na sua '
                        f'carteira!')
-        self.gold = self.get_atr(ctx.author.id, 'gold')
+        self.gold = await self.get_atr(ctx.author.id, 'gold')
         await ctx.send(f'{self.bot.money[2]} **{self.format_num(self.gold)}**')
-        self.silver = self.get_atr(ctx.author.id, 'silver')
+        self.silver = await self.get_atr(ctx.author.id, 'silver')
         await ctx.send(f'{self.bot.money[1]} **{self.format_num(self.silver)}**')
-        self.bronze = self.get_atr(ctx.author.id, 'bronze')
+        self.bronze = await self.get_atr(ctx.author.id, 'bronze')
         await ctx.send(f'{self.bot.money[0]} **{self.format_num(self.bronze)}**')
 
     @check_it(no_pm=True)
@@ -61,8 +63,8 @@ class UserBank(commands.Cog):
         if member.id == ctx.author.id:
             return await ctx.send("<:oc_status:519896814225457152>│``Você não pode pagar a si mesmo.``")
 
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-        data_member = self.bot.db.get_data("user_id", member.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_member = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
         update_member = data_member
         if data_member is None:
@@ -72,8 +74,8 @@ class UserBank(commands.Cog):
             return await ctx.send("<:alert_status:519896811192844288>│``O membro está jogando, aguarde para quando"
                                   " ele estiver livre!``")
 
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
-        data_guild_native_member = self.bot.db.get_data("guild_id", data_member['guild_id'], "guilds")
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        data_guild_native_member = await self.bot.db.get_data("guild_id", data_member['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_guild_native_member = data_guild_native_member
 
@@ -87,10 +89,10 @@ class UserBank(commands.Cog):
             update_guild_native['data'][f'total_money'] -= amount
             update_member['treasure']['money'] += amount
             update_guild_native_member['data'][f'total_money'] += amount
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_member, update_member, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
+            await self.bot.db.update_data(data_user, update_user, 'users')
+            await self.bot.db.update_data(data_member, update_member, 'users')
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            await self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
             return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} DE ETHERNYAS '
                                   f'PARA {member.name} COM SUCESSO!``')
         else:
@@ -117,8 +119,8 @@ class UserBank(commands.Cog):
         if item_key in self.bot.bl_item:
             return await ctx.send("<:oc_status:519896814225457152>│``Você não pode dar esse tipo de item.``")
 
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-        data_member = self.bot.db.get_data("user_id", member.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_member = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
         update_member = data_member
 
@@ -138,8 +140,8 @@ class UserBank(commands.Cog):
                     update_member['inventory'][item_key] += amount
                 except KeyError:
                     update_member['inventory'][item_key] = amount
-                self.bot.db.update_data(data_user, update_user, 'users')
-                self.bot.db.update_data(data_member, update_member, 'users')
+                await self.bot.db.update_data(data_user, update_user, 'users')
+                await self.bot.db.update_data(data_member, update_member, 'users')
                 return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC DEU {amount} DE {item_name.upper()} '
                                       f'PARA {member.name} COM SUCESSO!``')
             else:

@@ -28,8 +28,10 @@ class BoxClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='box', aliases=['caixa'])
     async def box(self, ctx):
+        """Comando usado pra comprar e abrir booster boxes
+        Use ash box e siga as instruções"""
         if ctx.invoked_subcommand is None:
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             if ctx.author.id == data["user_id"]:
                 try:
                     if data['box']:
@@ -82,7 +84,7 @@ ITEMS:
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
         await ctx.send("<:alert_status:519896811192844288>│``Comprando box...``")
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         try:
             if data['box']:
                 await ctx.send("<:negate:520418505993093130>│``Você ja tem uma box...``")
@@ -114,7 +116,7 @@ ITEMS:
             return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                   ' CANCELADO**')
 
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         num = int(answer.content)
         if num > 10:
             return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 booster"

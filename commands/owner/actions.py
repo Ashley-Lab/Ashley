@@ -15,13 +15,15 @@ class ActionsClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def add_vip(self, ctx, id_: int = None, target: str = "guild"):
+        """apenas desenvolvedores
+        exemplo: ash add_vip <id> <user or guild 'default guild'>"""
         if target == "guild":
-            guild = self.bot.db.get_data("guild_id", id_, "guilds")
+            guild = await self.bot.db.get_data("guild_id", id_, "guilds")
             if guild is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
             self.bot.data.add_vip(target="guilds", guild_id=id_, state=True)
         elif target == "user":
-            user = self.bot.db.get_data("user_id", id_, "users")
+            user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
             self.bot.data.add_vip(target="users", user_id=id_, state=True)
@@ -37,13 +39,15 @@ class ActionsClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def remove_vip(self, ctx, id_: int = None, target: str = "guild"):
+        """apenas desenvolvedores
+        exemplo: ash remove_vip <id> <user or guild 'default guild'>"""
         if target == "guild":
-            guild = self.bot.db.get_data("guild_id", id_, "guilds")
+            guild = await self.bot.db.get_data("guild_id", id_, "guilds")
             if guild is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
             self.bot.data.add_vip(target="guilds", guild_id=id_, state=False)
         elif target == "user":
-            user = self.bot.db.get_data("user_id", id_, "users")
+            user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
             self.bot.data.add_vip(target="users", user_id=id_, state=False)
@@ -59,11 +63,13 @@ class ActionsClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def add_ban(self, ctx, id_: int = None, *, reason: str = "SEM REGISTRAR O MOTIVO!"):
+        """apenas desenvolvedores
+        exemplo: ash add_ban <id> <reason>"""
         if id_ is None:
             return await ctx.send("<:oc_status:519896814225457152>│``O ID NÃO PODE SER VAZIO!``")
-        guild = self.bot.db.get_data("guild_id", id_, "guilds")
+        guild = await self.bot.db.get_data("guild_id", id_, "guilds")
         if guild is None:
-            user = self.bot.db.get_data("user_id", id_, "users")
+            user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``ID INVALIDO!``")
         answer = self.bot.ban_(id_, reason)
@@ -83,11 +89,13 @@ class ActionsClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def remove_ban(self, ctx, id_: int = None):
+        """apenas desenvolvedores
+        exemplo: ash add_ban <id>"""
         if id_ is None:
             return await ctx.send("<:oc_status:519896814225457152>│``O ID NÃO PODE SER VAZIO!``")
-        guild = self.bot.db.get_data("guild_id", id_, "guilds")
+        guild = await self.bot.db.get_data("guild_id", id_, "guilds")
         if guild is None:
-            user = self.bot.db.get_data("user_id", id_, "users")
+            user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``ID INVALIDO!``")
         answer = self.bot.un_ban_(id_)

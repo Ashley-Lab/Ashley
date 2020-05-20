@@ -15,6 +15,7 @@ class LogoutCog(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def logout(self, ctx, *, reason: str = None):
+        """apenas desenvolvedores"""
         if reason is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGA UM MOTIVO PARA ME DESLIGAR!``')
         self.bot.shutdown(reason)

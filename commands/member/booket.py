@@ -18,9 +18,11 @@ class Booket(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='bok', aliases=['booket'])
     async def bok(self, ctx, member: discord.Member = None):
+        """eu não vou explicar oq isso faz
+        Use ash bok <@pessoa que vc é casado/a>"""
         if member is not None:
-            data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-            data_member = self.bot.db.get_data("user_id", member.id, "users")
+            data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data_member = await self.bot.db.get_data("user_id", member.id, "users")
             if data_member is None:
                 return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
                                       '``esse usuário não está cadastrado!``', delete_after=5.0)

@@ -16,8 +16,10 @@ class SkillClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='skill', aliases=['habilidade', 'status'])
     async def skill(self, ctx):
+        """Comando usado pra ver seus status no rpg da Ashley
+        Use ash skill"""
         if ctx.invoked_subcommand is None:
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             if ctx.author.id == data["user_id"]:
                 resposta = discord.Embed(
                     title='Escolha onde você quer adiconar seu ponto de habilidade:',
@@ -42,7 +44,9 @@ class SkillClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @skill.command(name='add', aliases=['adicionar'])
     async def _add(self, ctx):
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Comando usado pra distribuir seus status no rpg da Ashley
+        Use ash skill add e siga as instruções do comando"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if ctx.author.id == data["user_id"]:
             resposta = discord.Embed(
@@ -85,7 +89,7 @@ class SkillClass(commands.Cog):
                     update['rpg']['status']['pdh'] -= 1
                 else:
                     return await ctx.send('<:negate:520418505993093130>│``Opção Invalida!``', delete_after=5.0)
-                self.bot.db.update_data(data, update, "users")
+                await self.bot.db.update_data(data, update, "users")
                 await ctx.send('<:confirmado:519896822072999937>│``Ponto adicionado com sucesso!``', delete_after=5.0)
             else:
                 await ctx.send('<:negate:520418505993093130>│``Você não tem pontos de habilidades disponiveis!``',
@@ -96,7 +100,9 @@ class SkillClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @skill.command(name='reset', aliases=['resetar'])
     async def _reset(self, ctx):
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Comando usado pra resetar seus status
+        Use ash skill reset"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if ctx.author.id == data["user_id"]:
             update['rpg']['status']['con'] = 1
@@ -105,7 +111,7 @@ class SkillClass(commands.Cog):
             update['rpg']['status']['atk'] = 1
             update['rpg']['status']['luk'] = 1
             update['rpg']['status']['pdh'] = update['rpg']['Level'] - 1
-            self.bot.db.update_data(data, update, "users")
+            await self.bot.db.update_data(data, update, "users")
             await ctx.send('<:confirmado:519896822072999937>│``Status resetados com sucesso!``', delete_after=5.0)
 
 

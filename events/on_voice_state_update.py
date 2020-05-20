@@ -11,7 +11,7 @@ class VoiceClass(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if member.guild is not None:
-            data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
             if data is not None:
                 try:
                     if data['log_config']['log'] and data['log_config']['member_voice_entered']:

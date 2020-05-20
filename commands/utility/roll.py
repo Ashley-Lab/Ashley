@@ -16,6 +16,8 @@ class DadoClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='roll', aliases=['rolar'])
     async def roll(self, ctx, dice: str = 'none'):
+        """Comando usado pra rolar um dado
+        Use ash roll xdy, x sendo o numero de dados e y o numero do dado"""
         if dice == 'none':
             return await ctx.send('<:alert_status:519896811192844288>│`` Você precisa dizer: quantos e qual tipo de '
                                   'dado você quer rolar!``')

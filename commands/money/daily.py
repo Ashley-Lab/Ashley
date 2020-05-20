@@ -23,6 +23,8 @@ class DailyClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='daily', aliases=['diario', 'd'])
     async def daily(self, ctx):
+        """Comando usado pra retornar uma lista de todos os subcomandos de daily
+        Use ash daily"""
         if ctx.invoked_subcommand is None:
             self.status()
             daily = discord.Embed(title="Commands Status", color=self.color,
@@ -45,11 +47,13 @@ class DailyClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='coin', aliases=['ficha'])
     async def _coin(self, ctx):
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Comando usado pra ganhar coins de jogo da Ashley
+        Use ash daily coin"""
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         coin = randint(15, 35)
         update_user['inventory']['coins'] += coin
-        self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                        f'<:coin:519896843388452864> **{coin}** ``fichas!``')
 
@@ -57,6 +61,8 @@ class DailyClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='work', aliases=['trabalho'])
     async def _work(self, ctx):
+        """Comando usado pra ganhar o dinheiro da Ashley diariamente
+        Use ash daily work"""
         if self.bot.guilds_commands[ctx.guild.id] > 50:
             if self.bot.user_commands[ctx.author.id] > 20:
                 global money
@@ -65,7 +71,7 @@ class DailyClass(commands.Cog):
                 for n in range(self.bot.user_commands[ctx.author.id]):
                     min_ += 1
                     max_ += randint(1, 3)
-                data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 if data_user['user']['ranking'] == "Bronze":
                     money = randint(120 + min_, 1200 + max_)
                 elif data_user['user']['ranking'] == "Silver":
@@ -78,20 +84,20 @@ class DailyClass(commands.Cog):
                                f'``Obs:`` **{max_ + min_}** ``de ETHERNYAS a mais por usar {min_} comandos.``')
             else:
                 try:
-                    data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                     update_ = data_
                     del data_['cooldown'][str(ctx.command)]
-                    self.bot.db.update_data(data_, update_, 'users')
+                    await self.bot.db.update_data(data_, update_, 'users')
                 except KeyError:
                     pass
                 await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 20 COMANDOS DA '
                                'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
         else:
             try:
-                data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update_ = data_
                 del data_['cooldown'][str(ctx.command)]
-                self.bot.db.update_data(data_, update_, 'users')
+                await self.bot.db.update_data(data_, update_, 'users')
             except KeyError:
                 pass
             await ctx.send('<:negate:520418505993093130>│``O SERVIDOR ATUAL AINDA NÃO USOU + DE 50 COMANDOS DA '
@@ -101,19 +107,21 @@ class DailyClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='rec', aliases=['recomendação'])
     async def _rec(self, ctx, member: discord.Member = None):
+        """Comando usado pra dar um rec da Ashley pra algum usuario
+        Use ash daily rec <usuario desejado>"""
         if member is None:
-            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update_ = data_
             del data_['cooldown'][str(ctx.command)]
-            self.bot.db.update_data(data_, update_, 'users')
+            await self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
         if member.id == ctx.author.id:
-            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update_ = data_
             del data_['cooldown'][str(ctx.command)]
-            self.bot.db.update_data(data_, update_, 'users')
+            await self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
-        data_user = self.bot.db.get_data("user_id", member.id, "users")
+        data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
         try:
             update_user['user']['rec'] += 1
@@ -127,16 +135,16 @@ class DailyClass(commands.Cog):
                                f'**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
                                f'``ASH RANK``')
                 if update_user['user']['stars'] >= 10:
-                    data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+                    data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
                     update_guild = data_guild
                     if data_guild['vip'] is False and ctx.author.id == ctx.guild.owner.id:
                         update_guild['vip'] = True
-                        self.bot.db.update_data(data_guild, update_guild, 'guilds')
+                        await self.bot.db.update_data(data_guild, update_guild, 'guilds')
                         await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
                                        '**VOCÊ LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
                                        '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '
                                        '"ASH ANNOUNCE"``')
-        self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')
 
@@ -144,12 +152,14 @@ class DailyClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='vip')
     async def _vip(self, ctx):
-        data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
+        Use ash daily vip"""
+        data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if data_['config']['vip']:
-            data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update_ = data_
             update_['config']['vip'] = True
-            self.bot.db.update_data(data_, update_, 'users')
+            await self.bot.db.update_data(data_, update_, 'users')
             await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
                            f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
         else:
@@ -157,15 +167,15 @@ class DailyClass(commands.Cog):
                 await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro do'
                                ' meu servidor de suporte, para isso use o comando ASH INVITE para receber no seu '
                                'privado o link do meu servidor.``')
-                data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update_ = data_
                 del data_['cooldown'][str(ctx.command)]
-                self.bot.db.update_data(data_, update_, 'users')
+                await self.bot.db.update_data(data_, update_, 'users')
             else:
-                data_ = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update_ = data_
                 update_['config']['vip'] = True
-                self.bot.db.update_data(data_, update_, 'users')
+                await self.bot.db.update_data(data_, update_, 'users')
                 await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
                                f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
 

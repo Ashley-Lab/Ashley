@@ -15,6 +15,7 @@ class TotComandos(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command()
     async def total_de_comandos(self, ctx):
+        """apenas desenvolvedores"""
         embed = discord.Embed(color=self.color)
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
         for val in self.bot.commands_used.most_common(25):

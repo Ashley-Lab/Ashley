@@ -16,12 +16,13 @@ class JoKenPo(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='jkp', aliases=['jokenpo'])
     async def jkp(self, ctx):
-
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Use ash jkp ou ash jokenpo
+        Escolha pedra papel ou tesoura e torça pela sua sorte"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             global player_
             jkp = choice(["Pedra", "Papel", "Tesoura"])
@@ -38,15 +39,15 @@ class JoKenPo(commands.Cog):
             try:
                 resposta = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:
-                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
                 update['config']['playing'] = False
-                self.bot.db.update_data(data, update, 'users')
+                await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito, eu tinha '
                                       'escolhido:`` **{}**.'.format(jkp))
 
             update['inventory']['coins'] -= 1
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             if resposta.content == "1":
                 player_ = "Pedra"
@@ -127,10 +128,10 @@ class JoKenPo(commands.Cog):
                                    "escolhi`` **{}, {}** ``empata com`` "
                                    "**{}** ``EMPATAMOS.``".format(ctx.author, player_, jkp, player_, jkp))
 
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
             update['config']['playing'] = False
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
                 await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')

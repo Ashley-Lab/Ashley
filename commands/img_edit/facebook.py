@@ -18,6 +18,8 @@ class FacebookClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='facebook', aliases=['fb', 'face'])
     async def facebook(self, ctx, *, resp=None):
+        """Comando totalmente demente de facebook
+        Use ash facebook <mensagem desejada>"""
         if resp is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
 

@@ -19,15 +19,16 @@ class ForceCass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='hangman', aliases=['forca'])
     async def hangman(self, ctx):
-
+        """Use ash hangman ou ash forca pra começar o jogo
+        Siga as instruções do comando e tente adivinhar"""
         global resp, errors
 
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
             update['inventory']['coins'] -= 1
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             self.trying[ctx.author.id] = 0
 
@@ -59,10 +60,10 @@ Dica: **{}**'''.format(senha, dica))
                     try:
                         resp = await self.bot.wait_for('message', check=check_response, timeout=60.0)
                     except TimeoutError:
-                        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
                         update['config']['playing'] = False
-                        self.bot.db.update_data(data, update, 'users')
+                        await self.bot.db.update_data(data, update, 'users')
                         return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
                                               '**COMANDO CANCELADO**')
 
@@ -84,27 +85,27 @@ Dica: **{}**'''.format(senha, dica))
                         try:
                             resp = await self.bot.wait_for('message', check=check, timeout=60.0)
                         except TimeoutError:
-                            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                             update = data
                             update['config']['playing'] = False
-                            self.bot.db.update_data(data, update, 'users')
+                            await self.bot.db.update_data(data, update, 'users')
                             return await ctx.send(
                                 '<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                 ' CANCELADO**')
 
                         if resp.content.lower() == palavra.lower():
-                            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                             update = data
                             update['config']['playing'] = False
-                            self.bot.db.update_data(data, update, 'users')
+                            await self.bot.db.update_data(data, update, 'users')
                             msg = await self.bot.db.add_money(ctx, 20, True)
                             return await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
                                                   "{}".format(msg))
                         elif self.trying[ctx.author.id] == 2:
-                            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                             update = data
                             update['config']['playing'] = False
-                            self.bot.db.update_data(data, update, 'users')
+                            await self.bot.db.update_data(data, update, 'users')
                             return await ctx.send("<:oc_status:519896814225457152>│``Infelizmente você perdeu`` "
                                                   "**Tente Novamente!**")
                         elif senha.count('_') > 0:
@@ -120,10 +121,10 @@ Dica: **{}**'''.format(senha, dica))
                         tentativa = await self.bot.wait_for('message', check=check)
                         tentativa = tentativa.content.lower()
                     except TimeoutError:
-                        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
                         update['config']['playing'] = False
-                        self.bot.db.update_data(data, update, 'users')
+                        await self.bot.db.update_data(data, update, 'users')
                         return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
                                               '**COMANDO CANCELADO**')
 
@@ -141,10 +142,10 @@ Dica: **{}**'''.format(senha, dica))
                     await ctx.send(enforcado[errors[ctx.author.id]])
 
                     if errors[ctx.author.id] == 6:
-                        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
                         update['config']['playing'] = False
-                        self.bot.db.update_data(data, update, 'users')
+                        await self.bot.db.update_data(data, update, 'users')
                         return await ctx.send(f"<:oc_status:519896814225457152>│``INFORCADO`` **Tente Novamente!**"
                                               f"\n A palavra era **{palavra.upper()}**")
 

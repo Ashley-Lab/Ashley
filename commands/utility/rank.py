@@ -54,11 +54,11 @@ class RankingClass(commands.Cog):
         except ValueError:
             return await ctx.send("<:negate:520418505993093130>│``Digite apenas Números!``")
 
-        data = self.bot.db.get_data("user_id", user.id, "users")
+        data = await self.bot.db.get_data("user_id", user.id, "users")
         update = data
         if data is not None:
             update['user']['stars'] = valor
-            self.bot.db.update_data(data, update, "users")
+            await self.bot.db.update_data(data, update, "users")
             await ctx.send(f'<:confirmado:519896822072999937>│**{valor}** ``Estrelas Registradas!``',
                            delete_after=10.0)
         else:
@@ -69,12 +69,14 @@ class RankingClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='rank', aliases=['r'])
     async def rank(self, ctx):
+        """Mostra seu rank da Ashley
+        Use ash rank"""
         try:
             user = ctx.message.mentions[0]
         except IndexError:
             user = ctx.author
-        data = self.bot.db.get_data("user_id", user.id, "users")
-        data_guild = self.bot.db.get_data("guild_id", user.guild.id, "guilds")
+        data = await self.bot.db.get_data("user_id", user.id, "users")
+        data_guild = await self.bot.db.get_data("guild_id", user.guild.id, "guilds")
 
         if data is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
@@ -83,7 +85,7 @@ class RankingClass(commands.Cog):
         star_ = "star_default"
         medal = data['inventory']['medal']
         rank_point = data['inventory']['rank_point']
-        data_ = self.bot.db.get_all_data("users")
+        data_ = await self.bot.db.get_all_data("users")
         rank = [x.get("user_id") for x in data_.limit(int(data_.count())).sort("user", pymongo.DESCENDING)]
 
         position = int(rank.index(user.id)) + 1

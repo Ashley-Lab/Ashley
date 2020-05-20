@@ -20,26 +20,28 @@ class FarmClass(commands.Cog):
         self.ctf = self.bot.config['ctf']['areas_ctf']
 
     async def add_role(self, ctx, roles, province):
-        record = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        record = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         updates = record
         updates['config']['roles'] = roles
         updates['config']['provinces'] = province
-        self.bot.db.update_data(record, updates, "users")
+        await self.bot.db.update_data(record, updates, "users")
 
     async def add_hell(self, ctx, roles):
-        record = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        record = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         updates = record
         updates['config']['roles'] = roles
-        self.bot.db.update_data(record, updates, "users")
+        await self.bot.db.update_data(record, updates, "users")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='respawn', aliases=['return'])
     async def respawn(self, ctx):
+        """Comando usado pra voltar pras areas normais do servidor da asheley
+        Use ash respawn"""
         if ctx.guild.id == self.bot.config['config']['default_guild']:
             cargos = ctx.author.roles
-            record = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            record = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             updates = record
             if ctx.author.id == record["user_id"]:
                 roles = record['config']['roles']
@@ -56,7 +58,7 @@ class FarmClass(commands.Cog):
                         await sleep(1)
                     updates['config']['roles'] = []
                     updates['config']['provinces'] = None
-                    self.bot.db.update_data(record, updates, "users")
+                    await self.bot.db.update_data(record, updates, "users")
                 else:
                     await ctx.send("<:alert_status:519896811192844288>│``VOCE NAO TEM CARGOS NO BANCO DE "
                                    "DADOS!``")
@@ -70,7 +72,9 @@ class FarmClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='hell', aliases=['inferno'])
     async def hell(self, ctx):
-        record = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Comando usado pra ir pro canal hell do server da ashley
+        Use ash hell"""
+        record = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if ctx.author.id == record["user_id"]:
             if record['config']['provinces'] is None:
                 if ctx.channel.id != 576795574783705104:
@@ -106,7 +110,9 @@ class FarmClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='teleport', aliases=['teletransportar'])
     async def teleport(self, ctx):
-        record = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Comando usado pra acessar certas areas do servidor da ashley
+        Use ash teleport e reaja pra no emoji correspondente"""
+        record = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if ctx.author.id == record["user_id"]:
             if ctx.channel.id != 576795574783705104:
                 if record['config']['provinces'] is None:

@@ -18,6 +18,8 @@ class WhatsappClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='whatsapp', aliases=['zap'])
     async def whatsapp(self, ctx, *, resp=None):
+        """Comando totalmente demente de whatsapp
+        Use ash whatsapp <mensagem desejada>"""
         if resp is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
 

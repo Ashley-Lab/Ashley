@@ -13,9 +13,11 @@ class TransferClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='transfer', aliases=['trans'])
     async def transfer(self, ctx):
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
-        data_guild_future = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        """comando usado pra transferir sua conta da ashley de um server pro outro
+        Use ash transfer"""
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        data_guild_future = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update_user = data_user
         update_guild_native = data_guild_native
         update_guild_future = data_guild_future
@@ -58,9 +60,9 @@ class TransferClass(commands.Cog):
             update_guild_future['data']['total_bronze'] += update_user['treasure']['bronze']
             update_user["guild_id"] = ctx.guild.id
             update_user["guild_name"] = ctx.guild.name
-            self.bot.db.update_data(data_user, update_user, 'users')
-            self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-            self.bot.db.update_data(data_guild_future, update_guild_future, 'guilds')
+            await self.bot.db.update_data(data_user, update_user, 'users')
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+            await self.bot.db.update_data(data_guild_future, update_guild_future, 'guilds')
             await ctx.send(f'<:confirmado:519896822072999937>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
                            f' aceito com sucesso, você agora faz parte da guilda`` **{ctx.guild.name}**')
         else:

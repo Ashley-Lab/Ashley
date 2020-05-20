@@ -22,6 +22,8 @@ class StaffAdmin(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(hidden=True)
     async def staff(self, ctx):
+        """Comando usado pra retornar a lista de comandos pra staff
+        Use ash staff"""
         if ctx.invoked_subcommand is None:
             self.status()
             embed = discord.Embed(
@@ -48,6 +50,8 @@ class StaffAdmin(commands.Cog):
     @check_it(no_pm=True, manage_messages=True)
     @staff.command(name='delete', aliases=["limpar", "purge", "apagar"])
     async def _delete(self, ctx, number: int):
+        """Comando usado pra apagar varias mensagens em um canal
+        Use ash staff delete <numero de mensagens a se apagar>"""
         if number > 100:
             return await ctx.send(t_(ctx, "<:negate:520418505993093130>│``Você nao pode apagar mais do que 100 "
                                           "mensagens``", "guild"))
@@ -62,6 +66,8 @@ class StaffAdmin(commands.Cog):
     @check_it(no_pm=True, ban_members=True)
     @staff.command(name='ban', aliases=['banir'])
     async def _ban(self, ctx, member=None, *, reason: str = None):
+        """Comando usado pra banir usuarios
+        Use ash staff ban <@usario a ser banido>"""
         try:
             user = ctx.message.mentions[0]
             if reason is None or member is None:
@@ -83,6 +89,8 @@ class StaffAdmin(commands.Cog):
     @check_it(no_pm=True, kick_members=True)
     @staff.command(name='kick', aliases=['expulsar'])
     async def _kick(self, ctx, member=None, *, reason: str = None):
+        """Comando usado pra kickar usuarios
+        Use ash staff kick <@usuario a ser kickado>"""
         try:
             user = ctx.message.mentions[0]
             if reason is None or member is None:
@@ -104,6 +112,8 @@ class StaffAdmin(commands.Cog):
     @check_it(no_pm=True, manage_channels=True)
     @staff.command(name='slowmode', aliases=['modolento'])
     async def _slowmode(self, ctx, timer: str = None):
+        """Comando usado pra ligar o slowmode em um canal
+        Use ash staff slowmode"""
         try:
             if timer is None:
                 if ctx.channel.slowmode_delay == 0:
@@ -142,8 +152,10 @@ class StaffAdmin(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @staff.command(name='report', aliases=['denuncia'])
     async def _report(self, ctx):
+        """Comando usado pra reportar algo pra staff do servidor
+        use ash staff report <report>"""
         try:
-            data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             if data['func_config']['report']:
                 await ctx.send('<:send:519896817320591385>│``ESTAREI ENVIANDO PARA SEU PRIVADO O FORMULARIO!``',
                                delete_after=5.0)

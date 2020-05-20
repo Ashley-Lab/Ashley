@@ -14,7 +14,7 @@ class OnMessageDelete(commands.Cog):
             return
 
         if message.guild is not None:
-            data = self.bot.db.get_data("guild_id", message.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             if data is not None:
 
                 try:

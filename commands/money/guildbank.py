@@ -19,8 +19,8 @@ class GuildBank(commands.Cog):
         d = c.replace('v', '.')
         return d
 
-    def get_atr(self, guild_id, atr):
-        data = self.bot.db.get_data("guild_id", guild_id, "guilds")
+    async def get_atr(self, guild_id, atr):
+        data = await self.bot.db.get_data("guild_id", guild_id, "guilds")
         if data is not None:
             return data['data'][atr] + data['treasure'][atr]
         else:
@@ -31,7 +31,9 @@ class GuildBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='treasure', aliases=['tesouro'])
     async def treasure(self, ctx):
-        self.money = self.get_atr(ctx.guild.id, 'total_money')
+        """Comando usado pra ver a quantia de dinheiro de um server
+        Use ash treasure"""
+        self.money = await self.get_atr(ctx.guild.id, 'total_money')
         a = '{:,.2f}'.format(float(self.money))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')

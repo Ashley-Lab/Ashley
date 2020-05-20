@@ -12,6 +12,7 @@ class DoorClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='door', aliases=['porta'])
     async def door(self, ctx):
+        """Esse nem eu sei..."""
         pass
 
 

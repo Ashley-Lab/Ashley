@@ -19,6 +19,8 @@ class Battle(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='battle', aliases=['batalha', 'duel', 'duelo'])
     async def battle(self, ctx, lower_net="nl"):
+        """Comando usado pra batalhar no rpg da ashley
+        Use ash battle"""
         if lower_net == 'ln':
             Class_rpg['lower_net'] = True
             await ctx.send(f"**MODO LOWER NET ATIVADO:** \n"

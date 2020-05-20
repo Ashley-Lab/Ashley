@@ -16,6 +16,8 @@ class DrawUsers(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.command(name='draw', aliases=['sorteio'])
     async def draw(self, ctx):
+        """Comando de sorteio pro server inteiro
+        Use ash draw"""
         draw_member = choice(list(ctx.guild.members))
         member = discord.utils.get(ctx.guild.members, name="{}".format(draw_member.name))
         embed = discord.Embed(

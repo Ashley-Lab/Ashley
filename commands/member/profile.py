@@ -30,13 +30,14 @@ class ProfileSystem(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='profile', aliases=['perfil'])
     async def profile(self, ctx, member: discord.Member = None):
-
+        """Comando usado pra ver o seu perfil da ashley
+        Use ash profile <@usuario em questão se não colocar vera seu proprio perfil>"""
         if member is None:
             member = ctx.author
 
         global married, achievements, strikes, time_left
 
-        data = self.bot.db.get_data("user_id", member.id, "users")
+        data = await self.bot.db.get_data("user_id", member.id, "users")
         update = data
 
         if data is None:
@@ -82,8 +83,8 @@ class ProfileSystem(commands.Cog):
         except KeyError:
             time_left = None
 
-        self.bot.db.update_data(data, update, 'users')
-        data = self.bot.db.get_data("user_id", member.id, "users")
+        await self.bot.db.update_data(data, update, 'users')
+        data = await self.bot.db.get_data("user_id", member.id, "users")
 
         a = '{:,.2f}'.format(float(data['treasure']['money']))
         b = a.replace(',', 'v')
@@ -91,7 +92,7 @@ class ProfileSystem(commands.Cog):
         d = c.replace('v', '.')
 
         if data['config']['vip']:
-            data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_ = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             if data_['vip']:
                 status = "<:vip_full:546020055478042644> - **VIP Diario Ativo + VIP do Servidor Ativo**"
             else:
@@ -100,7 +101,7 @@ class ProfileSystem(commands.Cog):
             if time_left is not None:
                 status += f"\n **Tempo restante para o fim do seu VIP:** {time_left}"
         else:
-            data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_ = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             if data_['vip']:
                 status = "<:vip_guild:546020055440425016> - **VIP do Servidor Ativo** & " \
                          "<:negate:520418505993093130> - **Seu VIP Diário Acabou**"
@@ -152,7 +153,7 @@ class ProfileSystem(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='about', aliases=['sobre'])
     async def about(self, ctx, *, text: str = None):
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if text is None:
             return await ctx.send("<:alert_status:519896811192844288>│``DIGITE ALGO PARA COLOCAR NO SEU PERFIL, "
@@ -163,7 +164,7 @@ class ProfileSystem(commands.Cog):
         try:
             if data['user']['about'] and len(text) < 2000:
                 update['user']['about'] = text
-                self.bot.db.update_data(data, update, 'users')
+                await self.bot.db.update_data(data, update, 'users')
                 await ctx.send("<:confirmado:519896822072999937>│``TEXTO SOBRE VOCÊ ATUALIZADO COM SUCESSO!``")
             else:
                 return await ctx.send("<:alert_status:519896811192844288>│``TEXTO MUITO GRANDE``")

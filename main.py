@@ -36,13 +36,9 @@ class Ashley(commands.AutoShardedBot):
                               ' MOMENTO!',
                               'O COMANDO "ASH REC" SERVE PARA VOCÊ ADIQUIRIR ESTRELAS NO SEU RANK, POREM VOCÊ APENAS'
                               ' PODE DAR RECOMENDAÇÃO PARA OUTRAS PESSOAS!',
-                              'A COR DAS ESTRELAS VARIA PELO SEU RANKING ATUAL (BRONZE, PRATA OU OURO) OU DO SEU STATUS'
-                              ' QUE PODE SER: MEMBRO DE SERVIDOR VIP, DONO DE SERVIDOR (GUILD) OU MEU DESENVOLVEDOR!',
                               'PARA SUBIR DE PATENTE, VC PRECISA USAR OS MEUS COMANDOS E ADQUIRIR RANKPOINTS E'
                               ' MEDALHAS!',
-                              'QUANTO MAIS COMANDOS DIFERENTES VC USAR, MAIS CHANCES DE VC SUBIR O SEU NIVEL DE '
-                              'RANKING',
-                              'VC ADQUIRE DINHEIRO USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO:'
+                              'VOCE ADQUIRE ETHERNYAS USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO:'
                               '"ASH DAILY REC", "ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
                               'AGORA SEU SERVIDOR TAMBEM SE TORNA VIP, COM ISSO O DONO DO SERVIDOR PODE CADASTRAR SEUS'
                               ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
@@ -71,13 +67,18 @@ class Ashley(commands.AutoShardedBot):
         self.titling = {"10": "Vassal", "25": "Heir", "50": "Knight", "100": "Elder", "200": "Baron", "300": "Viscount",
                         "400": "Count", "500": "Marquis", "1000": "Duke", "1500": "Grand Duke"}
 
+        self.boxes = ['https://i.imgur.com/YcfbVH8.png', 'https://i.imgur.com/RvWFG1H.png',
+                      'https://i.imgur.com/SUdzwlM.png', 'https://i.imgur.com/1EEO1YV.png']
+        self.boxes_l = {'0': "Blue Common", '1': "Blue Uncommon", '2': "Pink Common", '3': "Pink Uncommon"}
+        self.box = {}
+
         self.db: Database = Database(self)
         self.data: DataInteraction = DataInteraction(self)
 
         self.staff = [235937029106434048, 300592580381376513, 299273939614564363]
         self.bl_item = ['medal', 'rank_point']
-        self.blacklist = dumps(self.db.get_all_data("blacklist"))
-        self.shutdowns = dumps(self.db.get_all_data("shutdown"))
+        self.blacklist = list()
+        self.shutdowns = list()
         self.config = config
 
         self.translations = self.config['translations']
@@ -88,6 +89,10 @@ class Ashley(commands.AutoShardedBot):
 
         self.booster: Booster = Booster(self.items)
 
+    async def atr_initialize(self):
+        self.blacklist = dumps(await self.db.get_all_data("blacklist"))
+        self.shutdowns = dumps(await self.db.get_all_data("shutdown"))
+
     async def check(self, ctx):
         perms = ctx.channel.permissions_for(ctx.me)
         if not perms.send_messages:
@@ -95,34 +100,34 @@ class Ashley(commands.AutoShardedBot):
         if not perms.read_messages:
             raise commands.CommandNotFound()
 
-    def shutdown(self, reason):
+    async def shutdown(self, reason):
         date = dt(*dt.utcnow().timetuple()[:6])
         data = {"_id": date, "reason": reason}
-        self.db.push_data(data, "shutdown")
-        self.shutdowns = dumps(self.db.get_all_data("shutdown"))
+        await self.db.push_data(data, "shutdown")
+        self.shutdowns = dumps(await self.db.get_all_data("shutdown"))
 
-    def ban_(self, id_, reason: str):
+    async def ban_(self, id_, reason: str):
         date = dt(*dt.utcnow().timetuple()[:6])
         data = {"_id": id_, str(date): reason}
         if str(id_) not in self.blacklist:
-            self.db.push_data(data, "blacklist")
-            self.blacklist = dumps(self.db.get_all_data("blacklist"))
+            await self.db.push_data(data, "blacklist")
+            self.blacklist = dumps(await self.db.get_all_data("blacklist"))
             return True
         else:
             return False
 
-    def un_ban_(self, id_):
+    async def un_ban_(self, id_):
         if str(id_) not in self.blacklist:
             return False
         else:
-            self.db.delete_data({"_id": int(id_)}, "blacklist")
-            self.blacklist = dumps(self.db.get_all_data("blacklist"))
+            await self.db.delete_data({"_id": int(id_)}, "blacklist")
+            self.blacklist = dumps(await self.db.get_all_data("blacklist"))
             return True
 
     async def on_command(self, ctx):
         if ctx.guild is not None:
-            data_guild = self.db.get_data("guild_id", ctx.guild.id, "guilds")
-            data_user = self.db.get_data("user_id", ctx.author.id, "users")
+            data_guild = await self.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data_guild is not None:
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
@@ -132,10 +137,10 @@ class Ashley(commands.AutoShardedBot):
                     update_guild['data']['commands'] += 1
                 except KeyError:
                     update_guild['data']['commands'] = 1
-                self.db.update_data(data_guild, update_guild, 'guilds')
+                await self.db.update_data(data_guild, update_guild, 'guilds')
                 if data_user is not None:
                     if (self.guilds_commands[ctx.guild.id] % 10) == 0:
-                        for data in self.db.get_announcements():
+                        for data in await self.db.get_announcements():
                             if data['data']['status']:
                                 self.announcements.append(data["data"]["announce"])
                         announce = choice(self.announcements)
@@ -150,11 +155,11 @@ class Ashley(commands.AutoShardedBot):
                             cooldown = data_user["cooldown"]["daily vip"]
                             time_diff = (dt.utcnow() - epoch).total_seconds() - cooldown
                             if time_diff >= 86400:
-                                data_ = self.db.get_data("user_id", ctx.author.id, "users")
+                                data_ = await self.db.get_data("user_id", ctx.author.id, "users")
                                 update_ = data_
                                 if update_['config']['vip']:
                                     update_['config']['vip'] = False
-                                    self.db.update_data(data_, update_, 'users')
+                                    await self.db.update_data(data_, update_, 'users')
                                     await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
                                                    f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
                                                    f' para receber seu proximo dia de vip!**')
@@ -174,14 +179,12 @@ class Ashley(commands.AutoShardedBot):
                                         f"data e hora`` **{date_format(dt.now())}**")
 
     async def on_command_completion(self, ctx):
-        # Novo evento em caminho...
-        # await ctx.send(file=discord.File('raiz/caminho.png'))
         if ctx.guild is not None:
             _name = ctx.author.name.upper()
             if str(ctx.author.id) not in self.blacklist:
                 await self.data.level_up(ctx)
-            data = self.db.get_data("guild_id", ctx.guild.id, "guilds")
-            data_user = self.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data_user is not None:
                 update_user = data_user
                 try:
@@ -209,10 +212,32 @@ class Ashley(commands.AutoShardedBot):
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
                         update_user['user']['titling'] = self.titling[key]
-                self.db.update_data(data_user, update_user, 'users')
+                await self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
                     await ctx.send(f"``{_name} ganhou`` {msg}", delete_after=5.0)
+                _chance = randint(1, 1000)
+                if _chance <= 5:
+
+                    BOX = choice(self.boxes)
+                    box_type = self.boxes.index(BOX)
+                    if ctx.guild.id not in self.box:
+                        self.box[ctx.guild.id] = {"status": True, "quant": 1, "boxes": [box_type]}
+                    else:
+                        self.box[ctx.guild.id]['quant'] += 1
+                        self.box[ctx.guild.id]['boxes'].append(box_type)
+
+                    embed = discord.Embed(
+                        title="**Presente Liberado**",
+                        colour=self.color,
+                        description=f"Esse servidor foi gratificado com uma box **{self.boxes_l[str(box_type)]}**!\n"
+                                    f"Para abri-la é so usar o comando ``ash open``\n"
+                                    f"**qualquer membro pode abrir uma box**\n"
+                                    f"**Obs:** Essa guilda tem {self.box[ctx.guild.id]['quant']} box(es) disponiveis!")
+                    embed.set_author(name=self.user.name, icon_url=self.user.avatar_url)
+                    embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+                    embed.set_thumbnail(url=BOX)
+                    await ctx.send(embed=embed)
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
@@ -233,12 +258,12 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_guild_remove(self, guild):
         if str(guild.id) not in self.blacklist:
-            data = self.db.get_data("guild_id", guild.id, "guilds")
+            data = await self.db.get_data("guild_id", guild.id, "guilds")
             if data is not None:
                 blacklist = self.get_channel(542134573010518017)
                 msg = f"**{guild.id}:** ||{guild.name}|| ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
                 await blacklist.send(msg)
-                self.ban_(guild.id, msg)
+                await self.ban_(guild.id, msg)
             else:
                 blacklist = self.get_channel(542134573010518017)
                 msg = f"**{guild.id}:** ||{guild.name}|| ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, " \

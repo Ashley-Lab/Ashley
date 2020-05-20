@@ -23,6 +23,8 @@ class Panel(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='roles', aliases=['cargos'])
     async def roles(self, ctx):
+        """comando usado pra dar acesso a certos canais do servidor da ashley
+        Use ash roles e reaja no emoji correspondente"""
         if ctx.guild.id == self.bot.config['config']['default_guild']:
             embed = discord.Embed(
                 title="Escolha a área que você deseja ver:",

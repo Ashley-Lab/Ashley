@@ -12,9 +12,12 @@ class CommandErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
+        # Isso evita que quaisquer comandos com manipuladores locais sejam manipulados aqui em on_command_error.
+        if hasattr(ctx.command, 'on_error'):
+            return
+
         # Todos os eventos de erros ignorados, qualquer coisa ignorada retornará e impedirá que algo aconteça.
-        ignored = (commands.UserInputError,  commands.CommandNotFound)
-        if isinstance(error, ignored):
+        if isinstance(error, commands.CommandNotFound) or isinstance(error, commands.UserInputError):
             return
 
         # Qualquer comando desabilitado retornará uma mensagem de aviso
@@ -25,20 +28,23 @@ class CommandErrorHandler(commands.Cog):
         # dentro dos comandos para fins pessoais, ignorando totalmente os padroes comuns.
         if isinstance(error, commands.CheckFailure):
             if error.__str__() == 'The check functions for command register guild failed.':
-                return await ctx.send(
-                    f"<:negate:520418505993093130>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE COMANDO!``")
+                return await ctx.send(f"<:negate:520418505993093130>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE "
+                                      f"COMANDO!``")
             elif error.__str__() not in ERRORS:
                 return await ctx.send(f"{error}")
-        elif isinstance(error, commands.CommandOnCooldown):
+
+        # aqui faço as verificações dos cooldowns dos comandos padroes
+        # obs: existem comandos com cooldowns personalizados que nao entram nesse contexto
+        if isinstance(error, commands.CommandOnCooldown):
             return await ctx.send(f"<:negate:520418505993093130>│**Aguarde**: `Você deve esperar` **{{:.2f}}** "
                                   f"`segundos` `para mandar outro comando!`".format(error.retry_after),
                                   delete_after=float("{:.2f}".format(error.retry_after)))
-        else:
-            if error.__str__() not in ERRORS and not isinstance(error, commands.CommandNotFound):
-                channel = self.bot.get_channel(530419409311760394)
-                return await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
-                                          f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
-                                          f"**{ctx.channel}** ``e o erro foi:`` **{error}**")
+
+        # aqui quando um erro nao é tratado eu registro sua ocorrencia para averiguar sua origem
+        channel = self.bot.get_channel(530419409311760394)
+        await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
+                           f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
+                           f"**{ctx.channel}** ``e o erro foi:`` **{error}**")
 
         # Permite verificar exceções originais geradas e enviadas para CommandInvokeError.
         # Se nada for encontrado. Mantemos a exceção passada para on_command_error.
@@ -52,6 +58,7 @@ class CommandErrorHandler(commands.Cog):
                 print(f"\033[1;31m( ❌ ) | error in command: \033[1;34m{ctx.command}\033[1;31m, in Guild: "
                       f"\033[1;34m{ctx.guild}\033[1;31m, in Channel: \033[1;34m{ctx.channel}\033[1;31m. "
                       f"With error:\n \033[1;35m{error}\33[m\n")
+                # o print do traceback é para ver os erros mais detalhadamente
                 traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 

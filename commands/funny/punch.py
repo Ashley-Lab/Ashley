@@ -17,6 +17,8 @@ class PunchClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='punch', aliases=['soco'])
     async def punch(self, ctx):
+        """Comando de gifs de soco
+        Use ash punch <@usuario a sua escolha>"""
         try:
             punchimg = ['https://media1.tenor.com/images/0d0afe2df6c9ff3499a81bf0dab1d27c/tenor.gif?itemid=15580060',
                         'https://media1.tenor.com/images/fb449fd335e73798806747062e2a8af7/tenor.gif?itemid=16733847',

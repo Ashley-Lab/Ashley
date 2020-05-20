@@ -15,6 +15,7 @@ class LoadCog(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def load(self, ctx, cog):
+        """apenas desenvolvedores"""
         try:
             self.bot.load_extension('{}'.format(cog))
             embed = discord.Embed(

@@ -13,6 +13,8 @@ class Thinkers(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='thinker', aliases=['pensador'])
     async def thinker(self, ctx):
+        """comando usado pra enviar uma frase do pensador
+        Use ash thinker"""
         thinker = self.bot.config['thinker']['list']
         answer = choice(thinker)
         await ctx.send("Assim diz o **pensador**: ``{}``".format(answer))

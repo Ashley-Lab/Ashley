@@ -16,6 +16,8 @@ class KissClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='kiss', aliases=['beijo'])
     async def kiss(self, ctx):
+        """Comando de gifs de beijo
+        Use ash kiss <@usuario a sua escolha>"""
         try:
             kissimg = ['https://media1.tenor.com/images/ef4a0bcb6e42189dc12ee55e0d479c54/tenor.gif?itemid=12143127',
                        'https://media1.tenor.com/images/b8d0152fbe9ecc061f9ad7ff74533396/tenor.gif?itemid=5372258',

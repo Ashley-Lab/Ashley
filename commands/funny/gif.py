@@ -26,6 +26,8 @@ class GetGif(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.command(name='gif', aliases=['giphy'])
     async def gif(self, ctx, *, tag: str = None):
+        """comando usado pra pesquizar gifs
+        Use ash gif <palavra chave>"""
         if tag is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE UMA TAG PARA O GIF``')
         try:

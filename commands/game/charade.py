@@ -18,12 +18,12 @@ class CharadeClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='whats', aliases=['charada'])
     async def whats(self, ctx):
-
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """Use ash whats ou ash charada e tente adivinhar a resposta certa. foco em tente"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
             def check(m):
                 return m.author == ctx.author
@@ -46,10 +46,10 @@ class CharadeClass(commands.Cog):
             try:
                 answer = await self.bot.wait_for('message', check=check, timeout=60.0)
             except TimeoutError:
-                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
                 update['config']['playing'] = False
-                self.bot.db.update_data(data, update, 'users')
+                await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
@@ -91,7 +91,7 @@ class CharadeClass(commands.Cog):
                     update['config']['points'] = 0
 
             update['config']['playing'] = False
-            self.bot.db.update_data(data, update, 'users')
+            await self.bot.db.update_data(data, update, 'users')
 
         else:
             if data['config']['playing']:

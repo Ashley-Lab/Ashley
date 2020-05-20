@@ -14,16 +14,17 @@ class RegisterClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.group(name='register', aliases=['registro'])
     async def register(self, ctx):
+        """ Usado pra registrar um usuario na ashley Exemplo: "ash register" """
         if ctx.invoked_subcommand is None:
             user = ctx.message.author
             guild = ctx.message.guild
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
-            data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             update_guild = data_guild
             if data is None and user.id in [r.id for r in guild.members if not r.bot]:
-                self.bot.db.add_user(ctx)
+                await self.bot.db.add_user(ctx)
                 update_guild['data']['accounts'] += 1
-                self.bot.db.update_data(data_guild, update_guild, 'guilds')
+                await self.bot.db.update_data(data_guild, update_guild, 'guilds')
                 await ctx.send('<:confirmado:519896822072999937>│``Cadastro feito com sucesso!``')
             else:
                 await ctx.send('<:negate:520418505993093130>│``Você já está registrado em meu banco de dados!``')
@@ -32,7 +33,9 @@ class RegisterClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @register.command(name='guild')
     async def _guild(self, ctx):
-        data = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        """Usado pra registrar seu servidor na ashley
+        Use ash register guild e siga as instruções do comando(use # pra marcar os canais)"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         if data is None:
             values = list()
             await ctx.send('<:send:519896817320591385>│``PRECISO QUE VOCÊ RESPONDA A ALGUMAS PERGUNTAS!``',
@@ -42,7 +45,11 @@ class RegisterClass(commands.Cog):
                 return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
             def check_channel(m):
-                return m.author == ctx.author and m.channel_mentions[0].id
+                while True:
+                    try:
+                        return m.author == ctx.author and m.channel_mentions[0].id
+                    except IndexError:
+                        pass
 
             register = await ctx.send('<:stream_status:519896814825242635>│``VOCÊ DESEJA CONFIGURAR O SERVIDOR '
                                       'AGORA?!`` **1** para ``SIM`` ou **0** para ``NÃO``')
@@ -267,7 +274,7 @@ class RegisterClass(commands.Cog):
                             data[key] = values[c]
                         c += 1
 
-            self.bot.db.add_guild(ctx.guild, data)
+            await self.bot.db.add_guild(ctx.guild, data)
             await sleep(2)
             await msg.delete()
 

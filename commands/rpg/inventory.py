@@ -15,8 +15,10 @@ class InventoryClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='inventory', aliases=['inventario', 'i'])
     async def inventory(self, ctx):
+        """Comando usado pra ver seu inventario
+        Use ash i ou ash inventory"""
         if ctx.invoked_subcommand is None:
-            data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             if ctx.author.id == data["user_id"]:
                 embed = ['Inventário:', self.color, 'Items: \n']
                 await paginator(self.bot, self.i, data['inventory'], embed, ctx)

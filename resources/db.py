@@ -4,7 +4,7 @@ import datetime
 import operator
 
 from discord.ext import commands
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient as Client
 from random import randint
 from collections import Counter
 from resources.utility import parse_duration, quant_etherny
@@ -22,65 +22,70 @@ cont = Counter()
 class Database(object):
     def __init__(self, bot):
         self.bot = bot
-        self._data_brute = MongoClient(_auth['db_url'] + "?retryWrites=false", connectTimeoutMS=30000)
-        self._conn = self._data_brute.get_database(_auth['db_name'])
+        self._connect = Client(_auth['db_url'] + "?retryWrites=false", connectTimeoutMS=30000)
+        self._database = self._connect[_auth['db_name']]
 
-    def push_data(self, data, db_name):
-        db = self._conn.get_collection(db_name)
-        db.insert_one(data)
+    async def push_data(self, data, db_name):
+        db = self._database[db_name]
+        await db.insert_one(data)
 
-    def delete_data(self, data, db_name):
-        db = self._conn.get_collection(db_name)
-        db.delete_one(data)
+    async def delete_data(self, data, db_name):
+        db = self._database[db_name]
+        await db.delete_one(data)
 
-    def update_data(self, data, update, db_name):
-        db = self._conn.get_collection(db_name)
-        db.update_one({'_id': data['_id']}, {
+    async def update_data(self, data, update, db_name):
+        db = self._database[db_name]
+        await db.update_one({'_id': data['_id']}, {
             '$set': update
         }, upsert=False)
 
-    def update_all_data(self, search, update, db_name):
-        db = self._conn.get_collection(db_name)
-        db.update_many(search, {'$set': update})
+    async def update_all_data(self, search, update, db_name):
+        db = self._database[db_name]
+        await db.update_many(search, {'$set': update})
 
-    def get_data(self, key, value, db_name):
-        db = self._conn.get_collection(db_name)
-        data = db.find_one({key: value})
+    async def get_data(self, key, value, db_name):
+        db = self._database[db_name]
+        data = await db.find_one({key: value})
         if data is None:
             return None
         else:
             return data
 
-    def get_all_data(self, db_name):
-        db = self._conn.get_collection(db_name)
-        data = db.find()
-        return data
+    async def get_all_data(self, db_name):
+        db = self._database[db_name]
+        all_data = [data async for data in db.find()]
+        return all_data
 
-    def update_all_db(self, db_users, db_guilds):
-        all_users = self.get_all_data("users")
+    async def update_all_db(self, db_users, db_guilds):
+        all_users = await self.get_all_data("users")
         for data in all_users:
             update = data
             try:
                 for k, v in db_users.items():
                     update[k] = v
-                self.update_data(data, update, "users")
+                await self.update_data(data, update, "users")
             except KeyError:
                 pass
-        all_guilds = self.get_all_data("guilds")
+        all_guilds = await self.get_all_data("guilds")
         for data in all_guilds:
             update = data
             try:
                 for k, v in db_guilds.items():
                     update[k] = v
-                self.update_data(data, update, "guilds")
+                await self.update_data(data, update, "guilds")
             except KeyError:
                 pass
 
-    def get_announcements(self):
-        db = self._conn.get_collection("announcements")
-        return db.find()
+    async def get_announcements(self):
+        db = self._database["announcements"]
+        all_data = [data async for data in db.find()]
+        return all_data
 
-    def add_user(self, ctx, **data):
+    # ----------------------------------- ============================ -----------------------------------
+    #                               ITERAÇÕES DIRETAS COM O BANCO DE DADOS
+    # ---------------------------------- ============================ -----------------------------------
+
+    async def add_user(self, ctx, **data):
         db_name = data.get("db_name", "users")
         data = {
             # dados basicos do usuario
@@ -159,10 +164,10 @@ class Database(object):
             # dados do cooldown dos comandos especificos (diarios)
             "cooldown": {}
         }
-        if self.get_data("user_id", ctx.author.id, db_name) is None:
-            self.push_data(data, db_name)
+        if await self.get_data("user_id", ctx.author.id, db_name) is None:
+            await self.push_data(data, db_name)
 
-    def add_guild(self, guild, data):
+    async def add_guild(self, guild, data):
         db_name = data.get("db_name", "guilds")
         new_data = {
             "guild_id": guild.id,
@@ -260,34 +265,34 @@ class Database(object):
                 }
             }
         }
-        if self.get_data("guild_id", guild.id, db_name) is None:
-            self.push_data(new_data, db_name)
+        if await self.get_data("guild_id", guild.id, db_name) is None:
+            await self.push_data(new_data, db_name)
 
     async def take_money(self, ctx, amount: int = 0):
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_user['treasure']['money'] -= amount
         update_guild_native['data']['total_money'] -= amount
-        self.bot.db.update_data(data_user, update_user, 'users')
-        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        await self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
 
     async def give_money(self, ctx, amount: int = 0):
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_user['treasure']['money'] += amount
         update_guild_native['data']['total_money'] += amount
-        self.bot.db.update_data(data_user, update_user, 'users')
-        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        await self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
 
     async def add_money(self, ctx, amount, ext=False):
 
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         change = randint(1, 100)
         msg = None
@@ -331,7 +336,7 @@ class Database(object):
             return msg
 
     async def add_reward(self, ctx, list_):
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         response = '``Caiu pra você:`` \n'
         for item in list_:
@@ -341,37 +346,37 @@ class Database(object):
             except KeyError:
                 update_user['inventory'][item] = amount
             response += f"**{amount}**: ``{self.bot.items[item][1]}``\n"
-        self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_user, update_user, 'users')
         response += "```Jogue de novo para ganhar mais!```"
         return response
 
     async def add_type(self, ctx, amount, etherny):
         # DATA DO MEMBRO
-        data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         update_user['treasure']['bronze'] += etherny[0] * 2
         update_user['treasure']['silver'] += etherny[1] * 2
         update_user['treasure']['gold'] += etherny[2] * 2
         update_user['treasure']['money'] += amount * 2
-        self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_user, update_user, 'users')
 
         # DATA NATIVA DO SERVIDOR
-        data_guild_native = self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_guild_native['data']['total_bronze'] += etherny[0] * 2
         update_guild_native['data']['total_silver'] += etherny[1] * 2
         update_guild_native['data']['total_gold'] += etherny[2] * 2
         update_guild_native['data']['total_money'] += amount * 2
-        self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         # DATA DO SERVIDOR ATUAL
-        data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update_guild = data_guild
         update_guild['treasure']['total_bronze'] += etherny[0]
         update_guild['treasure']['total_silver'] += etherny[1]
         update_guild['treasure']['total_gold'] += etherny[2]
         update_guild['treasure']['total_money'] += amount
-        self.bot.db.update_data(data_guild, update_guild, 'guilds')
+        await self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
     async def is_registered(self, ctx, **kwargs):
 
@@ -379,8 +384,8 @@ class Database(object):
             return True
 
         if ctx.guild is not None:
-            data_guild = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-            data_user = self.bot.db.get_data("user_id", ctx.author.id, "users")
+            data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
 
             update_user = data_user
 
@@ -393,7 +398,7 @@ class Database(object):
                 try:
                     if kwargs.get("cooldown"):
                         time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() \
-                                     - update_user["cooldown"][str(ctx.command)]
+                                    - update_user["cooldown"][str(ctx.command)]
 
                         time_left = kwargs.get("time") - time_diff
 
@@ -414,7 +419,7 @@ class Database(object):
                                                                           epoch).total_seconds()}
 
                 if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
-                    self.bot.db.update_data(data_user, update_user, 'users')
+                    await self.bot.db.update_data(data_user, update_user, 'users')
 
                 if kwargs.get("g_vip") and data_guild['vip']:
                     return True
@@ -446,20 +451,20 @@ class DataInteraction(object):
         self.bot = bot
         self.db = self.bot.db
 
-    def get_language(self, guild: str):
-        data = self.db.get_data("guild_id", guild, "guilds")
+    async def get_language(self, guild: str):
+        data = await self.db.get_data("guild_id", guild, "guilds")
         lang = data["data"].get("lang", "pt")
         return lang
 
-    def set_language(self, guild: str, language):
-        data = self.db.get_data("guild_id", guild, "guilds")
+    async def set_language(self, guild: str, language):
+        data = await self.db.get_data("guild_id", guild, "guilds")
         update = data
         update['data'].__delitem__("lang")
         update["data"].__setitem__("lang", language)
-        self.db.update_data(data, update, "guilds")
+        await self.db.update_data(data, update, "guilds")
 
     async def add_experience(self, message, exp):
-        record = self.db.get_data("user_id", message.author.id, "users")
+        record = await self.db.get_data("user_id", message.author.id, "users")
         update = record
         if record is not None:
             try:
@@ -498,14 +503,14 @@ class DataInteraction(object):
                         update["user_name"] = message.author.name
                         update['user']['experience'] += exp * update['user']['level']
                         update["user"]['xp_time'] = (datetime.datetime.utcnow() - epoch).total_seconds()
-                        self.db.update_data(record, update, "users")
+                        await self.db.update_data(record, update, "users")
             except KeyError:
                 if message.author.id == record["user_id"]:
                     update["user"]['xp_time'] = (datetime.datetime.utcnow() - epoch).total_seconds()
-                    self.db.update_data(record, update, "users")
+                    await self.db.update_data(record, update, "users")
 
     async def level_up(self, message):
-        data = self.db.get_data("user_id", message.author.id, "users")
+        data = await self.db.get_data("user_id", message.author.id, "users")
         update = data
         if data is not None:
             if message.author.id == data["user_id"]:
@@ -515,7 +520,7 @@ class DataInteraction(object):
                 if lvl_anterior < lvl_now:
                     update['user']['level'] = lvl_now
                     update['inventory']['coins'] += 20
-                    self.db.update_data(data, update, "users")
+                    await self.db.update_data(data, update, "users")
                     if not message.guild.id == 425864977996578816:
                         try:
                             await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e '
@@ -525,22 +530,22 @@ class DataInteraction(object):
                             pass
 
     async def add_battle(self, ctx):
-        data = self.db.get_data("user_id", ctx.author.id, "users")
+        data = await self.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data is not None:
             if ctx.author.id == data["user_id"]:
                 update['config']['battle'] = True
                 update['config']['provinces'] = str(ctx.channel)
-                self.db.update_data(data, update, "users")
+                await self.db.update_data(data, update, "users")
 
     async def remove_battle(self, ctx):
-        data = self.db.get_data("user_id", ctx.author.id, "users")
+        data = await self.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data is not None:
             if ctx.author.id == data["user_id"]:
                 update['config']['battle'] = False
                 update['config']['provinces'] = None
-                self.db.update_data(data, update, "users")
+                await self.db.update_data(data, update, "users")
 
     async def add_announcement(self, ctx, announce):
         date = datetime.datetime(*datetime.datetime.utcnow().timetuple()[:6])
@@ -552,7 +557,7 @@ class DataInteraction(object):
                 "date": "{}".format(date)
             }
         }
-        self.db.push_data(data, "announcements")
+        await self.db.push_data(data, "announcements")
         await ctx.send('<:confirmado:519896822072999937>│``Anuncio cadastrado com sucesso!``\n```AGUARDE APROVAÇÃO```')
         pending = self.bot.get_channel(619969149791240211)
         msg = f"{ctx.author.id}: **{ctx.author.name}** ``ADICIONOU UM NOVO ANUNCIO PARA APROVAÇÃO!``"
@@ -560,7 +565,7 @@ class DataInteraction(object):
 
     async def get_rank_xp(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('experience')
@@ -585,7 +590,7 @@ class DataInteraction(object):
 
     async def get_rank_level(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('level')
@@ -610,7 +615,7 @@ class DataInteraction(object):
 
     async def get_rank_money(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('money')
@@ -636,7 +641,7 @@ class DataInteraction(object):
 
     async def get_rank_gold(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('gold')
@@ -661,7 +666,7 @@ class DataInteraction(object):
 
     async def get_rank_silver(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('silver')
@@ -686,7 +691,7 @@ class DataInteraction(object):
 
     async def get_rank_bronze(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('bronze')
@@ -711,7 +716,7 @@ class DataInteraction(object):
 
     async def get_rank_point(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             if _['config'].get('points') is not None:
@@ -737,7 +742,7 @@ class DataInteraction(object):
 
     async def get_rank_commands(self, limit):
         global cont
-        data = self.db.get_all_data("users")
+        data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('commands', 0)
@@ -760,20 +765,20 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
 
-    def add_vip(self, **kwargs):
+    async def add_vip(self, **kwargs):
         if kwargs.get("target") == "users":
-            data = self.db.get_data("user_id", kwargs.get("user_id"), "users")
+            data = await self.db.get_data("user_id", kwargs.get("user_id"), "users")
             update = data
             if kwargs.get("state"):
                 update['config']['vip'] = True
             else:
                 update['config']['vip'] = False
-            self.db.update_data(data, update, "users")
+            await self.db.update_data(data, update, "users")
         elif kwargs.get("target") == "guilds":
-            data = self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
+            data = await self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
             update = data
             if kwargs.get("state"):
                 update['vip'] = True
             else:
                 update['vip'] = False
-            self.db.update_data(data, update, "guilds")
+            await self.db.update_data(data, update, "guilds")

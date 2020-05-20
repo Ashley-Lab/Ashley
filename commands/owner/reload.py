@@ -16,6 +16,7 @@ class ReloadCog(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def reload(self, ctx, cog):
+        """apenas desenvolvedores"""
         try:
             self.bot.unload_extension('{}'.format(cog))
             await sleep(1)

@@ -1,3 +1,4 @@
+import copy
 import discord
 
 from discord.ext import commands
@@ -42,33 +43,45 @@ class Helper(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='help', aliases=['ajuda'])
-    async def help(self, ctx):
-        self.status()
-        embed = discord.Embed(
-            title="Choice Area:",
-            color=self.color,
-            description=f"- For **Main**: click in :classical_building:\n"
-                        f"- For **Music**: click in :musical_note:\n"
-                        f"- For **Iterations IA**: click in :microphone2:\n"
-                        f"- For **Games**: click in :game_die:\n"
-                        f"- For **General Pt1**: click in :earth_americas:\n"
-                        f"- For **General Pt2**: click in :earth_asia:\n"
-                        f"- For **General Pt3**: click in :earth_africa:\n"
-                        f"- For **Economy**: click in :moneybag:\n"
-                        f"- For **Staffs**: click in :police_car:\n"
-                        f"- For **Owner**: click in :shield:")
-        embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-        embed.set_thumbnail(url="http://sisadm2.pjf.mg.gov.br/imagem/ajuda.png")
-        embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-        global botmsg
-        try:
-            botmsg[ctx.author.id] = await ctx.author.send(embed=embed)
-            if ctx.message.guild is not None:
-                await ctx.send('<:send:519896817320591385>│``ENVIADO PARA O SEU PRIVADO!``')
-            await self.add_reactions(ctx.author)
-        except discord.errors.Forbidden:
-            botmsg[ctx.author.id] = await ctx.send(embed=embed)
-            await self.add_reactions(ctx.author)
+    async def help(self, ctx, *, command_help=None):
+        """há fala serio!"""
+        if command_help is None:
+            self.status()
+            embed = discord.Embed(
+                title="-==Choice Area==-\n"
+                      "Obs, para detalhar o comando use: ash help <command>\n"
+                      "Exemplo: <ash help say> ou <ash help top xp>",
+                color=self.color,
+                description=f"- For **Main**: click in :classical_building:\n"
+                            f"- For **Music**: click in :musical_note:\n"
+                            f"- For **Iterations IA**: click in :microphone2:\n"
+                            f"- For **Games**: click in :game_die:\n"
+                            f"- For **General Pt1**: click in :earth_americas:\n"
+                            f"- For **General Pt2**: click in :earth_asia:\n"
+                            f"- For **General Pt3**: click in :earth_africa:\n"
+                            f"- For **Economy**: click in :moneybag:\n"
+                            f"- For **Staffs**: click in :police_car:\n"
+                            f"- For **Owner**: click in :shield:")
+            embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+            embed.set_thumbnail(url="http://sisadm2.pjf.mg.gov.br/imagem/ajuda.png")
+            embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+            global botmsg
+            try:
+                botmsg[ctx.author.id] = await ctx.author.send(embed=embed)
+                if ctx.message.guild is not None:
+                    await ctx.send('<:send:519896817320591385>│``ENVIADO PARA O SEU PRIVADO!``')
+                await self.add_reactions(ctx.author)
+            except discord.errors.Forbidden:
+                botmsg[ctx.author.id] = await ctx.send(embed=embed)
+                await self.add_reactions(ctx.author)
+        else:
+            msg = copy.copy(ctx.message)
+            msg.content = 'ash ' + command_help
+            ctx_ = await self.bot.get_context(msg)
+            if ctx_.command is not None:
+                await ctx.send(f"```{ctx_.command.help}```")
+            else:
+                await ctx.send("<:alert_status:519896811192844288>│``Comando Inválido``")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

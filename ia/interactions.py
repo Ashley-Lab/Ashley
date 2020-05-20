@@ -28,8 +28,8 @@ class IaInteractions(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild is not None and str(message.author.id) not in self.bot.blacklist:
-            data_guild = self.bot.db.get_data("guild_id", message.guild.id, "guilds")
-            user_data = self.bot.db.get_data("user_id", message.author.id, "users")
+            data_guild = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
+            user_data = await self.bot.db.get_data("user_id", message.author.id, "users")
             dg = data_guild
             ud = user_data
             if dg is not None and ud is not None and dg['ia_config']['auto_msg'] and ud['user']['ia_response']:

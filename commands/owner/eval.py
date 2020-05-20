@@ -34,6 +34,7 @@ class EvalSintax(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def eval(self, ctx, *, body: str):
+        """apenas desenvolvedores"""
         env = {
             'bot': self.bot,
             'ctx': ctx,

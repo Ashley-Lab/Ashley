@@ -16,6 +16,8 @@ class PushClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='push', aliases=['empurrao'])
     async def push(self, ctx):
+        """Comando de gifs de empurrão
+        Use ash push <@usuario a sua escolha>"""
         try:
             pushimg = ['https://media1.tenor.com/images/a8e2bfdbf0d3e4fb8c52fab9e4cb249e/tenor.gif?itemid=16131433',
                        'https://media1.tenor.com/images/b7f788f5b4c5cf79df1bbe9a421e4826/tenor.gif?itemid=5634617',

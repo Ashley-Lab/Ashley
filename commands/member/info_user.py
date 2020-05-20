@@ -15,11 +15,13 @@ class UserInfo(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='userinfo', aliases=['infouser', 'ui', 'iu'])
     async def userinfo(self, ctx):
+        """comando que da uma lista de informações sobre o usuario
+        Use ash userinfo <@usuario em questão>"""
         if ctx.message.guild is not None:
             try:
-                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 if data['config']['vip']:
-                    data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+                    data_ = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
                     if data_['vip']:
                         status = "<:vip_full:546020055478042644>"
                     else:
@@ -45,9 +47,9 @@ class UserInfo(commands.Cog):
                 embed.set_thumbnail(url=user.avatar_url)
                 await ctx.send(embed=embed)
             except IndexError:
-                data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 if data['config']['vip']:
-                    data_ = self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+                    data_ = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
                     if data_['vip']:
                         status = "<:vip_full:546020055478042644>"
                     else:

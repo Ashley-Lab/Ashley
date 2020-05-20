@@ -11,7 +11,7 @@ class OnMemberRemove(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
 
-        data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+        data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
         if data is not None:
             try:
                 if data['func_config']['member_remove']:
@@ -50,13 +50,13 @@ class OnMemberRemove(commands.Cog):
                 if data['func_config']['join_system']:
                     pass
             except KeyError:
-                data = self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+                data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
                 update = data
                 update['func_config']['join_system'] = False
                 update['func_config']['join_system_id'] = None
                 update['func_config']['join_system_role'] = None
                 update['func_config']['join_system_member_state'] = dict()
-                self.bot.db.update_data(data, update, 'guilds')
+                await self.bot.db.update_data(data, update, 'guilds')
 
 
 def setup(bot):

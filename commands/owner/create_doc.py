@@ -16,6 +16,7 @@ class CreateDoc(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(hidden=True)
     async def make_doc(self, ctx):
+        """apenas desenvolvedores"""
         cogs = {name: {} for name in ctx.bot.cogs.keys()}
 
         all_commands = []

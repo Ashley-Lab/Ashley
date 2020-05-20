@@ -12,6 +12,8 @@ class PingMS(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='ping', aliases=['latency'])
     async def ping(self, ctx):
+        """comando pra verificar a latencia do bot
+        Use ash ping"""
         if ctx.message.guild is not None:
             ping = round(self.bot.latency * 1000)
             await ctx.send("🏓 ``Pong:`` **{}ms**".format(ping))

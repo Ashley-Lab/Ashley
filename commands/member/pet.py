@@ -22,6 +22,8 @@ class Pet(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='pet', aliases=['p'])
     async def pet(self, ctx, *, msg: str = "Oiiiii"):
+        """Comando usado pra se comunicar com pet
+        Use ash pet <pergunta ou qualquer besteira>"""
         try:
             pet_n = choice(list(self.bot.pets.keys()))
             pet = self.bot.pets[pet_n]

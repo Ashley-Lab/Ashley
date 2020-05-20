@@ -1,11 +1,10 @@
 import discord
 
-from asyncio import sleep
 from random import choice, randint
 from itertools import cycle
 from datetime import datetime as dt
 from discord.ext import commands
-from time import localtime
+from resources.verify_cooldown import verify_cooldown
 
 cor = {
         'clear': '\033[m',
@@ -26,6 +25,7 @@ class OnReady(commands.Cog):
         self.time_ready = None
         self.color = self.bot.color
         self.url = 'https://www.twitch.tv/d3nkyt0'
+        self.time = [0, 1]
         self.details = ['Yu-gi-oh!', 'RPG', 'Magic', 'Pokemon']
         self.state = [discord.Status.online, discord.Status.idle, discord.Status.dnd]
         self.status = ['minha equipe nos pensamentos!', '😢 + 💸 = 😍 & 🍫',
@@ -38,21 +38,21 @@ class OnReady(commands.Cog):
 
     async def draw_member(self):
         while True:
-            for guild in self.bot.guilds:
-                data = self.bot.db.get_data("guild_id", guild.id, "guilds")
-                if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:
-                    if data['bot_config']['ash_draw']:
-                        date = localtime()
-                        if date[4] == 0 or date[4] == 30:
+            if await verify_cooldown(self.bot, "draw_member", 7200):
+                for guild in self.bot.guilds:
+                    data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
+                    if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:
+                        if data['bot_config']['ash_draw']:
                             channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
                             if channel__ is None:
                                 continue
+
                             draw_member = choice(list(guild.members))
                             try:
                                 member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
                             except TypeError:
                                 continue
-                            data_member = self.bot.db.get_data("user_id", member.id, "users")
+                            data_member = await self.bot.db.get_data("user_id", member.id, "users")
                             update_member = data_member
                             if data_member is None:
                                 await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
@@ -70,28 +70,69 @@ class OnReady(commands.Cog):
                             embed.set_thumbnail(url=member.avatar_url)
                             await channel__.send(embed=embed)
                             update_member['inventory']['coins'] += coins
-                            self.bot.db.update_data(data_member, update_member, 'users')
-            await sleep(300)
+                            await self.bot.db.update_data(data_member, update_member, 'users')
+
+    async def draw_gift(self):
+        time = randint(3600, 7200)
+        while True:
+            if await verify_cooldown(self.bot, "draw_gift", time):
+                for guild in self.bot.guilds:
+                    data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
+                    if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:
+                        if data['bot_config']['ash_draw']:
+                            channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
+                            if channel__ is None:
+                                continue
+
+                            BOX = choice(self.bot.boxes)
+                            boxt = self.bot.boxes.index(BOX)
+                            if guild.id not in self.bot.box:
+                                self.bot.box[guild.id] = {"status": True, "quant": 1, "boxes": [boxt]}
+                            else:
+                                self.bot.box[guild.id]['quant'] += 1
+                                self.bot.box[guild.id]['boxes'].append(boxt)
+
+                            embed = discord.Embed(
+                                title="**Presente Liberado**",
+                                colour=self.color,
+                                description=f"Esse servidor foi gratificado com uma box "
+                                            f"**{self.bot.boxes_l[str(boxt)]}**!\n"
+                                            f"Para abri-la é so usar o comando ``ash open``\n"
+                                            f"**qualquer membro pode abrir uma box**\n"
+                                            f"**Obs:** Essa guilda tem {self.bot.box[guild.id]['quant']} box(es)"
+                                            f"disponiveis!")
+                            embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+                            embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+                            embed.set_thumbnail(url=BOX)
+                            await channel__.send(embed=embed)
 
     async def change_status(self):
         status = cycle(self.status)
         details = cycle(self.details)
         state = cycle(self.state)
+        time = cycle(self.time)
         while True:
-            current_status = next(status)
-            current_details = next(details)
-            if not self.bot.is_closed():
-                await self.bot.change_presence(activity=discord.Streaming(name=current_status, url=self.url,
-                                                                          details=current_details))
-            await sleep(30)
-            current_status = next(status)
-            current_state = next(state)
-            if not self.bot.is_closed():
-                await self.bot.change_presence(activity=discord.Game(name=current_status), status=current_state)
-            await sleep(30)
+            if await verify_cooldown(self.bot, "change_status", 60):
+                current_time = next(time)
+                if current_time == 0:
+                    current_status = next(status)
+                    current_details = next(details)
+                    if not self.bot.is_closed():
+                        await self.bot.change_presence(activity=discord.Streaming(name=current_status,
+                                                                                  url=self.url,
+                                                                                  details=current_details))
+                else:
+                    current_status = next(status)
+                    current_state = next(state)
+                    if not self.bot.is_closed():
+                        await self.bot.change_presence(activity=discord.Game(name=current_status),
+                                                       status=current_state)
 
     @commands.Cog.listener()
     async def on_ready(self):
+
+        # inicializar os atributos awaits
+        await self.bot.atr_initialize()
 
         owner = str(self.bot.get_user(self.bot.owner_id))
         ver_ = self.bot.version
@@ -106,14 +147,14 @@ class OnReady(commands.Cog):
         chann = len(self.bot.private_channels)
 
         print("\n\033[1;35m( >> ) | Iniciando reestruturação de variaveis internas...\033[m")
-        all_data = self.bot.db.get_all_data("users")
+        all_data = await self.bot.db.get_all_data("users")
         for data in all_data:
             update = data
             update['config']['playing'] = False
             update['config']['battle'] = False
             update['config']['tournament'] = False
             update['user']['marrieding'] = False
-            self.bot.db.update_data(data, update, "users")
+            await self.bot.db.update_data(data, update, "users")
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita sucesso!\33[m')
@@ -143,6 +184,8 @@ class OnReady(commands.Cog):
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mSTATUS_DA_ASHLEY\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.draw_member())
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_MEMBERS\033[1;32m foi carregado com sucesso!\33[m')
+        self.bot.loop.create_task(self.draw_gift())
+        print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_GIFT\033[1;32m foi carregado com sucesso!\33[m')
         print("\033[1;35m( ✔✔ ) | Bot Totalmente Carregado Com Sucesso!\033[m\n")
 
 

@@ -15,6 +15,8 @@ class FeedBackClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='feedback', aliases=['sugestao', 'report', 'suggestion', 'retorno'])
     async def feedback(self, ctx, *, msg: str = None):
+        """Comando usado pra dar feedback direto pros desenvolvedores
+        Use ash feedback <mensagem desejada>"""
         if msg is None:
             return await ctx.send('<:negate:520418505993093130>│``SEU FEEDBACK NÃO PODE SER VAZIO!``')
         try:

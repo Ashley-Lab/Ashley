@@ -14,11 +14,13 @@ class IaResponseClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='ia', aliases=['ai'])
     async def ia(self, ctx):
-        data = self.bot.db.get_data("user_id", ctx.author.id, "users")
+        """comando para habilitar/desabilitar a iteração com a IA da ashley
+        use ash ia ou ash ai"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         update['user']['ia_response'] = not update['user']['ia_response']
         response = update['user']['ia_response']
-        self.bot.db.update_data(data, update, "users")
+        await self.bot.db.update_data(data, update, "users")
         if response:
             embed = discord.Embed(
                 color=discord.Color.green(),

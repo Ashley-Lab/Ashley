@@ -11,7 +11,7 @@ class RoleCreate(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_role_create(self, role):
         if role.guild is not None:
-            data = self.bot.db.get_data("guild_id", role.guild.id, "guilds")
+            data = await self.bot.db.get_data("guild_id", role.guild.id, "guilds")
             if data is not None:
                 try:
                     if data['log_config']['log'] and data['log_config']['role_created']:

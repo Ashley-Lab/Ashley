@@ -13,6 +13,8 @@ class Inverse(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='palin', aliases=['palindromo'])
     async def palin(self, ctx):
+        """comando usado pra enviar palindromos
+        Use ash palin"""
         palin = self.bot.config['palin']['list']
         answer = choice(palin)
         await ctx.send('''```Markdown\n [>]: {}```'''.format(answer.upper()))

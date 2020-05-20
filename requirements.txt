@@ -2,6 +2,7 @@ pytz
 bson
 pillow
 psutil
+motor
 pymongo
 asyncio
 aiohttp

@@ -16,6 +16,8 @@ class DanceClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='dance', aliases=['dançar'])
     async def dance(self, ctx):
+        """Comando de gifs de dança
+        Use ash dance <@usuario a sua escolha>"""
         try:
             dance_img = ['https://media1.tenor.com/images/56350dfdcd3a5fa4fd66e9e87f9574bb/tenor.gif?itemid=4718162',
                          'https://media1.tenor.com/images/9ee571803fdbea520d723280a6c2c573/tenor.gif?itemid=15054962',
