@@ -21,7 +21,7 @@ class OpenClass(commands.Cog):
             del(self.bot.box[ctx.guild.id]['boxes'][I_BOX])
             self.bot.box[ctx.guild.id]['quant'] -= 1
             time = randint(60, 600)
-            GIFT = register_gift(self.bot, time)
+            GIFT = await register_gift(self.bot, time)
             await ctx.send(f"Caixa aberta com sucesso! **COMANDO EM FASE TE TESTES**\n"
                            f"VOCÊ GANHOU UM GIFT: {GIFT}\n"
                            f"COM O TEMPO DE ATIVAÇÃO DE: {time} SEGUNDOS!")
@@ -36,7 +36,7 @@ class OpenClass(commands.Cog):
         """Evento de Caixas..."""
         if gift_t is None:
             return await ctx.send("Você precisa gigitar um numero de GIFT!")
-        gift = open_gift(self.bot, gift_t)
+        gift = await open_gift(self.bot, gift_t)
         if gift is None:
             return await ctx.send("Você precisa gigitar um numero de GIFT VALIDO!")
         else:

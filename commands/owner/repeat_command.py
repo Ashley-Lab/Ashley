@@ -13,14 +13,15 @@ class RepeatCommand(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True)
+    @commands.command(hidden=True, aliases=['rc'])
     async def repeat_command(self, ctx, times: int, *, command):
         """apenas desenvolvedores"""
         msg = copy.copy(ctx.message)
         msg.content = command
+        ctx_ = await self.bot.get_context(msg)
         for i in range(times):
-            await self.bot.process_commands(msg)
-            await sleep(10)
+            await self.bot.invoke(ctx_)
+            await sleep(7)
 
 
 def setup(bot):

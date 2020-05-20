@@ -23,21 +23,21 @@ def generate_gift():
     return fgift, gift
 
 
-def register_gift(bot, time):
+async def register_gift(bot, time):
     while True:
         gift_t, _id = generate_gift()
-        data = bot.db.get_data("_id", _id, "gift")
+        data = await bot.db.get_data("_id", _id, "gift")
         if data is None:
             data = {"_id": _id, "gift_t": gift_t, "validity": time}
-            bot.db.push_data(data, "cooldown")
+            await bot.db.push_data(data, "cooldown")
             return gift_t
 
 
-def open_gift(bot, gift_t):
-    data = bot.db.get_data("gift_t", gift_t, "gift")
+async def open_gift(bot, gift_t):
+    data = await bot.db.get_data("gift_t", gift_t, "gift")
     if data is not None:
         _id = data['_id']
-        bot.db.delete_data({"_id": _id}, "gift")
+        await bot.db.delete_data({"_id": _id}, "gift")
         return [0]
     else:
         return None
