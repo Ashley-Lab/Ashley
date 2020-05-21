@@ -2,10 +2,8 @@ import discord
 
 from discord.ext import commands
 from asyncio import sleep
-from resources.translation import t_
 from resources.check import check_it
 from resources.db import Database
-
 
 _list = ['</Shop>', '</Lore>']
 msg_id = None
@@ -39,9 +37,8 @@ class Panel(commands.Cog):
             global msg_user
             msg_user = ctx.author
         else:
-            await ctx.send(
-                t_(ctx, "<:negate:520418505993093130>│``Desculpe, mas apenas os`` **Membros do meu servidor** ``"
-                        "podem usar esse comando!``", "guilds"))
+            await ctx.send("<:negate:520418505993093130>│``Desculpe, mas apenas os`` **Membros do meu servidor** ``"
+                           "podem usar esse comando!``")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

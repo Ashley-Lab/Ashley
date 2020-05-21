@@ -1,9 +1,9 @@
 from config import data as config
 
 
-def t_(ctx, translation, db_name="guilds"):
+async def t_(ctx, translation, db_name="guilds"):
     if ctx.guild is not None:
-        data = ctx.bot.db.get_data("guild_id", ctx.guild.id, db_name)
+        data = await ctx.bot.db.get_data("guild_id", ctx.guild.id, db_name)
         if data is not None:
             lang = data["data"].get("lang", "pt")
             currency = data["data"].get("currency", config['config']['default_money'])

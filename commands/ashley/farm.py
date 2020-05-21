@@ -3,7 +3,6 @@ import discord
 from resources.check import check_it
 from discord.ext import commands
 from asyncio import sleep
-from resources.translation import t_
 from resources.db import Database
 
 
@@ -63,9 +62,8 @@ class FarmClass(commands.Cog):
                     await ctx.send("<:alert_status:519896811192844288>│``VOCE NAO TEM CARGOS NO BANCO DE "
                                    "DADOS!``")
         else:
-            await ctx.send(
-                t_(ctx, "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu servidor** "
-                        "``podem usar esse comando!``", "guilds"))
+            await ctx.send("<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu servidor** "
+                           "``podem usar esse comando!``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -94,10 +92,8 @@ class FarmClass(commands.Cog):
                         await ctx.author.add_roles(role)
 
                     else:
-                        await ctx.send(
-                            t_(ctx,
-                               "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
-                               "servidor** ``podem usar esse comando!``", "guilds"))
+                        await ctx.send("<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
+                                       "servidor** ``podem usar esse comando!``")
                 else:
                     await ctx.send(f'<:oc_status:519896814225457152>│``Você já está no inferno!``')
             else:
@@ -172,10 +168,8 @@ class FarmClass(commands.Cog):
                             await ctx.author.add_roles(role)
                         await botmsg.delete()
                     else:
-                        await ctx.send(
-                            t_(ctx,
-                               "<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
-                               "servidor** ``podem usar esse comando!``", "guilds"))
+                        await ctx.send("<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
+                                       "servidor** ``podem usar esse comando!``")
                 else:
                     await ctx.send(f'<:oc_status:519896814225457152>│``Você já está numa provincia! '
                                    f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '

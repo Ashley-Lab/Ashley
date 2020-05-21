@@ -87,7 +87,7 @@ class OnReady(commands.Cog):
                             BOX = choice(self.bot.boxes)
                             boxt = self.bot.boxes.index(BOX)
                             if guild.id not in self.bot.box:
-                                self.bot.box[guild.id] = {"status": True, "quant": 1, "boxes": [boxt]}
+                                self.bot.box[guild.id] = {"quant": 1, "boxes": [boxt]}
                             else:
                                 self.bot.box[guild.id]['quant'] += 1
                                 self.bot.box[guild.id]['boxes'].append(boxt)
@@ -130,9 +130,6 @@ class OnReady(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-
-        # inicializar os atributos awaits
-        await self.bot.atr_initialize()
 
         owner = str(self.bot.get_user(self.bot.owner_id))
         ver_ = self.bot.version

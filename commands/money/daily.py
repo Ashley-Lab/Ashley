@@ -4,6 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from random import randint
+from time import localtime
 
 money = 0
 
@@ -36,7 +37,6 @@ class DailyClass(commands.Cog):
                             value=f"``PREFIX:`` **daily** ``or`` **diario** ``+``\n"
                                   f"{self.st[66]}│**coin** ``or`` **ficha**\n"
                                   f"{self.st[66]}│**work** ``or`` **trabalho**\n"
-                                  f"{self.st[66]}│**rec** ``or`` **recomendação**\n"
                                   f"{self.st[66]}│**vip**")
             daily.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             daily.set_thumbnail(url=self.bot.user.avatar_url)
@@ -105,31 +105,85 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
-    @daily.group(name='rec', aliases=['recomendação'])
-    async def _rec(self, ctx, member: discord.Member = None):
+    @daily.group(name='vip')
+    async def _vip(self, ctx):
+        """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
+        Use ash daily vip"""
+        data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        if not data_['config']['vip']:
+            if ctx.guild.id != self.bot.config['config']['default_guild']:
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                del data_['cooldown'][str(ctx.command)]
+                await self.bot.db.update_data(data_, update_, 'users')
+                return await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro '
+                                      'do meu servidor de suporte, para isso use o comando ASH INVITE para receber no '
+                                      'seu privado o link do meu servidor.``')
+
+        data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_ = data_
+        update_['config']['vip'] = True
+        await self.bot.db.update_data(data_, update_, 'users')
+        await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
+                       f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.command(name='rec', aliases=['recomendação'])
+    async def rec(self, ctx, member: discord.Member = None):
         """Comando usado pra dar um rec da Ashley pra algum usuario
-        Use ash daily rec <usuario desejado>"""
-        if member is None:
-            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update_ = data_
-            del data_['cooldown'][str(ctx.command)]
-            await self.bot.db.update_data(data_, update_, 'users')
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
-        if member.id == ctx.author.id:
-            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update_ = data_
-            del data_['cooldown'][str(ctx.command)]
-            await self.bot.db.update_data(data_, update_, 'users')
-            return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
+        Use ash rec <usuario desejado>"""
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
+
+        if member is None:
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
+        if member.id == ctx.author.id:
+            return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
+        if data_user is None:
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem cadastrado no meu '
+                                  'banco de dados!``')
+
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        try:
+            if member.id in update['cooldown']['rec']['list']:
+                return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje``")
+
+            update['cooldown']['rec']['cont'] += 1
+            update['cooldown']['rec']['date'] = localtime()
+            update['cooldown']['rec']['list'].append(member.id)
+            await self.bot.db.update_data(data, update, 'users')
+        except KeyError:
+            update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
+            await self.bot.db.update_data(data, update, 'users')
+
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        if update['cooldown']['rec']['cont'] > 5:
+            date_now = localtime()
+            date_old = update['cooldown']['rec']['date']
+            if date_now[0] == date_old[0]:
+                if date_now[1] == date_old[1]:
+                    if date_now[2] > date_old[2]:
+                        update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
+                        await self.bot.db.update_data(data, update, 'users')
+                    else:
+                        return await ctx.send(f"<:oc_status:519896814225457152>│``Você ultrapassou suas recomendações "
+                                              f"diárias``")
+            if date_now[0] > date_old[0] or date_now[1] > date_old[1]:
+                update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
+                await self.bot.db.update_data(data, update, 'users')
+
         try:
             update_user['user']['rec'] += 1
         except KeyError:
             update_user['user']['rec'] = 1
+
         if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)
-            if chance >= 80:
+            if chance <= 20:
                 update_user['user']['stars'] += 1
                 await ctx.send(f'<:rank:519896825411665930>│``{member.mention} GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
                                f'**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
@@ -137,47 +191,17 @@ class DailyClass(commands.Cog):
                 if update_user['user']['stars'] >= 10:
                     data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
                     update_guild = data_guild
-                    if data_guild['vip'] is False and ctx.author.id == ctx.guild.owner.id:
+                    if data_guild['vip'] is False and member.id == ctx.guild.owner.id:
                         update_guild['vip'] = True
                         await self.bot.db.update_data(data_guild, update_guild, 'guilds')
                         await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
-                                       '**VOCÊ LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
+                                       '**O LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
                                        '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '
-                                       '"ASH ANNOUNCE"``')
+                                       '"ASH ANNOUNCE" E USAR O SISTEMA DE MUSICA!``')
+
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')
-
-    @check_it(no_pm=True)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
-    @daily.group(name='vip')
-    async def _vip(self, ctx):
-        """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
-        Use ash daily vip"""
-        data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        if data_['config']['vip']:
-            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update_ = data_
-            update_['config']['vip'] = True
-            await self.bot.db.update_data(data_, update_, 'users')
-            await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
-                           f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
-        else:
-            if ctx.guild.id != self.bot.config['config']['default_guild']:
-                await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro do'
-                               ' meu servidor de suporte, para isso use o comando ASH INVITE para receber no seu '
-                               'privado o link do meu servidor.``')
-                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update_ = data_
-                del data_['cooldown'][str(ctx.command)]
-                await self.bot.db.update_data(data_, update_, 'users')
-            else:
-                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update_ = data_
-                update_['config']['vip'] = True
-                await self.bot.db.update_data(data_, update_, 'users')
-                await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
-                               f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
 
 
 def setup(bot):

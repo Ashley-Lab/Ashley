@@ -26,21 +26,37 @@ class OpenClass(commands.Cog):
                            f"VOCÊ GANHOU UM GIFT: {GIFT}\n"
                            f"COM O TEMPO DE ATIVAÇÃO DE: {time} SEGUNDOS!")
         else:
-            await ctx.send(f"Esse Servidor não tem caixas disponiveis...")
+            await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='gift', aliases=['g'])
-    async def gift(self, ctx, *, gift_t=None):
+    async def gift(self, ctx, *, gift=None):
         """Evento de Caixas..."""
-        if gift_t is None:
-            return await ctx.send("Você precisa gigitar um numero de GIFT!")
-        gift = await open_gift(self.bot, gift_t)
         if gift is None:
-            return await ctx.send("Você precisa gigitar um numero de GIFT VALIDO!")
+            return await ctx.send("<:negate:520418505993093130>│``Você precisa gigitar um numero de GIFT!``")
+
+        reward = await open_gift(self.bot, gift)
+
+        if reward is None:
+            return await ctx.send("<:negate:520418505993093130>│``Você precisa gigitar um numero de GIFT VALIDO!``")
         else:
-            return await ctx.send("PARABENS VC USOU SEU GIFT COM SUCESSO")
+            await ctx.send("🎊 **PARABENS** 🎉 ``VC USOU SEU GIFT COM SUCESSO!!``")
+
+            answer_ = await self.bot.db.add_money(ctx, reward['money'], True)
+            await ctx.send(f'<:rank:519896825411665930>│``VOCÊ GANHOU!`` 🎊 **PARABENS** 🎉 '
+                           f'``você GANHOU:``\n {answer_}')
+
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['inventory']['coins'] += reward["coins"]
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
+                           f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
+
+            response = await self.bot.db.add_reward(ctx, reward['list'])
+            await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
 
 def setup(bot):

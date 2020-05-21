@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, randint
 
 
 def generate_gift():
@@ -29,15 +29,27 @@ async def register_gift(bot, time):
         data = await bot.db.get_data("_id", _id, "gift")
         if data is None:
             data = {"_id": _id, "gift_t": gift_t, "validity": time}
-            await bot.db.push_data(data, "cooldown")
+            await bot.db.push_data(data, "gift")
             return gift_t
 
 
-async def open_gift(bot, gift_t):
-    data = await bot.db.get_data("gift_t", gift_t, "gift")
+async def open_gift(bot, gift):
+
+    if "-" in gift:
+        key = "gift_t"
+    else:
+        key = "_id"
+
+    data = await bot.db.get_data(key, gift, "gift")
+
     if data is not None:
         _id = data['_id']
         await bot.db.delete_data({"_id": _id}, "gift")
-        return [0]
+
+        ethernyas = randint(1000, 3000)
+        coins = randint(10, 50)
+        items = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
+
+        return {"money": ethernyas, "coins": coins, "items": items}
     else:
         return None

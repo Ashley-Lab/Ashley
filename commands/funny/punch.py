@@ -1,4 +1,3 @@
-
 import discord
 
 from random import choice, randint

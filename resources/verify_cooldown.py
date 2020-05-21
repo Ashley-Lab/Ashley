@@ -12,8 +12,6 @@ async def verify_cooldown(bot, _id, time_in_seconds):
         update = data
         time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() - update["cooldown"]
         if time_diff < time_in_seconds:
-            update['cooldown'] = (datetime.datetime.utcnow() - epoch).total_seconds()
-            await bot.db.update_data(data, update, 'cooldown')
             return False
         update['cooldown'] = (datetime.datetime.utcnow() - epoch).total_seconds()
         await bot.db.update_data(data, update, 'cooldown')

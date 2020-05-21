@@ -3,7 +3,6 @@ import copy
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-from asyncio import sleep
 
 
 class RepeatCommand(commands.Cog):
@@ -18,10 +17,8 @@ class RepeatCommand(commands.Cog):
         """apenas desenvolvedores"""
         msg = copy.copy(ctx.message)
         msg.content = command
-        ctx_ = await self.bot.get_context(msg)
         for i in range(times):
-            await self.bot.invoke(ctx_)
-            await sleep(7)
+            await self.bot.process_commands(msg)
 
 
 def setup(bot):

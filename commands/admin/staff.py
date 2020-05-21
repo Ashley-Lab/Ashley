@@ -1,7 +1,6 @@
 import discord
 
 from discord.ext import commands
-from resources.translation import t_
 from asyncio import TimeoutError
 from resources.check import check_it
 from resources.db import Database
@@ -53,8 +52,7 @@ class StaffAdmin(commands.Cog):
         """Comando usado pra apagar varias mensagens em um canal
         Use ash staff delete <numero de mensagens a se apagar>"""
         if number > 100:
-            return await ctx.send(t_(ctx, "<:negate:520418505993093130>│``Você nao pode apagar mais do que 100 "
-                                          "mensagens``", "guild"))
+            return await ctx.send("<:negate:520418505993093130>│``Você nao pode apagar mais do que 100 mensagens``")
         try:
             await ctx.message.channel.purge(limit=number)
         except discord.Forbidden:

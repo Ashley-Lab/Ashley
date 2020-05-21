@@ -347,34 +347,34 @@ class Database(object):
                 update_user['inventory'][item] = amount
             response += f"**{amount}**: ``{self.bot.items[item][1]}``\n"
         await self.bot.db.update_data(data_user, update_user, 'users')
-        response += "```Jogue de novo para ganhar mais!```"
+        response += "```Boa sorte da proxima vez!```"
         return response
 
-    async def add_type(self, ctx, amount, etherny):
+    async def add_type(self, ctx, amount, ethernya):
         # DATA DO MEMBRO
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        update_user['treasure']['bronze'] += etherny[0] * 2
-        update_user['treasure']['silver'] += etherny[1] * 2
-        update_user['treasure']['gold'] += etherny[2] * 2
+        update_user['treasure']['bronze'] += ethernya[0] * 2
+        update_user['treasure']['silver'] += ethernya[1] * 2
+        update_user['treasure']['gold'] += ethernya[2] * 2
         update_user['treasure']['money'] += amount * 2
         await self.bot.db.update_data(data_user, update_user, 'users')
 
         # DATA NATIVA DO SERVIDOR
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        update_guild_native['data']['total_bronze'] += etherny[0] * 2
-        update_guild_native['data']['total_silver'] += etherny[1] * 2
-        update_guild_native['data']['total_gold'] += etherny[2] * 2
+        update_guild_native['data']['total_bronze'] += ethernya[0] * 2
+        update_guild_native['data']['total_silver'] += ethernya[1] * 2
+        update_guild_native['data']['total_gold'] += ethernya[2] * 2
         update_guild_native['data']['total_money'] += amount * 2
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         # DATA DO SERVIDOR ATUAL
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update_guild = data_guild
-        update_guild['treasure']['total_bronze'] += etherny[0]
-        update_guild['treasure']['total_silver'] += etherny[1]
-        update_guild['treasure']['total_gold'] += etherny[2]
+        update_guild['treasure']['total_bronze'] += ethernya[0]
+        update_guild['treasure']['total_silver'] += ethernya[1]
+        update_guild['treasure']['total_gold'] += ethernya[2]
         update_guild['treasure']['total_money'] += amount
         await self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
@@ -399,18 +399,19 @@ class Database(object):
                     if kwargs.get("cooldown"):
                         time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() \
                                     - update_user["cooldown"][str(ctx.command)]
-
                         time_left = kwargs.get("time") - time_diff
-
                         if time_diff < kwargs.get("time"):
                             raise commands.CheckFailure(f'<:negate:520418505993093130>│**Aguarde**: `Você deve '
                                                         f'esperar` **{{}}** `para usar esse comando '
                                                         f'novamente!`'.format(parse_duration(int(time_left))))
-                        if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
+
+                        if self.bot.guilds_commands[ctx.guild.id] > 50 and str(ctx.command) == "daily work" or \
+                                str(ctx.command) != "daily work":
                             update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
                                                                          - epoch).total_seconds()
                 except KeyError:
-                    if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
+                    if self.bot.guilds_commands[ctx.guild.id] > 50 and str(ctx.command) == "daily work" or \
+                            str(ctx.command) != "daily work":
                         try:
                             update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
                                                                          - epoch).total_seconds()
@@ -418,7 +419,8 @@ class Database(object):
                             update_user['cooldown'] = {str(ctx.command): (datetime.datetime.utcnow() -
                                                                           epoch).total_seconds()}
 
-                if self.bot.guilds_commands[ctx.guild.id] > 50 or str(ctx.command) != "daily work":
+                if self.bot.guilds_commands[ctx.guild.id] > 50 and str(ctx.command) == "daily work" or \
+                        str(ctx.command) != "daily work":
                     await self.bot.db.update_data(data_user, update_user, 'users')
 
                 if kwargs.get("g_vip") and data_guild['vip']:

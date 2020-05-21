@@ -38,8 +38,8 @@ class Ashley(commands.AutoShardedBot):
                               ' PODE DAR RECOMENDAÇÃO PARA OUTRAS PESSOAS!',
                               'PARA SUBIR DE PATENTE, VC PRECISA USAR OS MEUS COMANDOS E ADQUIRIR RANKPOINTS E'
                               ' MEDALHAS!',
-                              'VOCE ADQUIRE ETHERNYAS USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO:'
-                              '"ASH DAILY REC", "ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
+                              'VOCE ADQUIRE ETHERNYAS USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO: '
+                              '"ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
                               'AGORA SEU SERVIDOR TAMBEM SE TORNA VIP, COM ISSO O DONO DO SERVIDOR PODE CADASTRAR SEUS'
                               ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
                               ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!',
@@ -58,8 +58,7 @@ class Ashley(commands.AutoShardedBot):
                       '<:etherny_preto:691016493957251152>']
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.data_cog = {}
-        self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash rec': 'ash daily rec',
-                         'ash vip': 'ash daily vip'}
+        self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
         self.vip_cog = ['commands.music.default', 'commands.admin.staff', 'commands.game.coin', 'events.on_message',
                         'commands.game.guessing', 'commands.game.jkp', 'commands.ashley.farm', 'commands.rpg.status',
                         'commands.member.pet', 'commands.member.married', 'commands.member.booket',
@@ -91,7 +90,9 @@ class Ashley(commands.AutoShardedBot):
 
     async def atr_initialize(self):
         self.blacklist = dumps(await self.db.get_all_data("blacklist"))
+        print('\033[1;32m( 🔶 ) | Inicialização do atributo \033[1;34mBLACKLIST\033[1;32m foi feita sucesso!\33[m')
         self.shutdowns = dumps(await self.db.get_all_data("shutdown"))
+        print('\033[1;32m( 🔶 ) | Inicialização do atributo \033[1;34mSHUTDOWN\033[1;32m foi feita sucesso!\33[m')
 
     async def check(self, ctx):
         perms = ctx.channel.permissions_for(ctx.me)
@@ -194,7 +195,7 @@ class Ashley(commands.AutoShardedBot):
                 if (update_user['user']['commands'] % 2) == 0:
                     chance = randint(1, 100)
                     quant = randint(1, 3)
-                    if chance >= 51:
+                    if chance <= 50:
                         update_user['inventory']['rank_point'] += quant
                         await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                        f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
@@ -205,7 +206,7 @@ class Ashley(commands.AutoShardedBot):
                                        f"TENTE USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
-                    if chance >= 81:
+                    if chance <= 20:
                         update_user['inventory']['medal'] += 1
                         await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                        f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
@@ -216,13 +217,13 @@ class Ashley(commands.AutoShardedBot):
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
                     await ctx.send(f"``{_name} ganhou`` {msg}", delete_after=5.0)
-                _chance = randint(1, 1000)
+                _chance = randint(1, 100)
                 if _chance <= 5:
 
                     BOX = choice(self.boxes)
                     box_type = self.boxes.index(BOX)
                     if ctx.guild.id not in self.box:
-                        self.box[ctx.guild.id] = {"status": True, "quant": 1, "boxes": [box_type]}
+                        self.box[ctx.guild.id] = {"quant": 1, "boxes": [box_type]}
                     else:
                         self.box[ctx.guild.id]['quant'] += 1
                         self.box[ctx.guild.id]['boxes'].append(box_type)
