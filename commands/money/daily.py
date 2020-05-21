@@ -148,20 +148,21 @@ class DailyClass(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         try:
-            if member.id in update['cooldown']['rec']['list']:
-                return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje``")
+            if update['cooldown']['rec']['cont'] < 5:
+                if member.id in update['cooldown']['rec']['list']:
+                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje``")
 
-            update['cooldown']['rec']['cont'] += 1
-            update['cooldown']['rec']['date'] = localtime()
-            update['cooldown']['rec']['list'].append(member.id)
-            await self.bot.db.update_data(data, update, 'users')
+                update['cooldown']['rec']['cont'] += 1
+                update['cooldown']['rec']['date'] = localtime()
+                update['cooldown']['rec']['list'].append(member.id)
+                await self.bot.db.update_data(data, update, 'users')
         except KeyError:
             update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
             await self.bot.db.update_data(data, update, 'users')
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        if update['cooldown']['rec']['cont'] > 5:
+        if update['cooldown']['rec']['cont'] >= 5:
             date_now = localtime()
             date_old = update['cooldown']['rec']['date']
             if date_now[0] == date_old[0]:
@@ -185,7 +186,7 @@ class DailyClass(commands.Cog):
             chance = randint(1, 100)
             if chance <= 20:
                 update_user['user']['stars'] += 1
-                await ctx.send(f'<:rank:519896825411665930>│``{member.mention} GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
+                await ctx.send(f'<:rank:519896825411665930>│{member.mention} ``GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
                                f'**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
                                f'``ASH RANK``')
                 if update_user['user']['stars'] >= 10:

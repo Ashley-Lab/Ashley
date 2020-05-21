@@ -22,9 +22,9 @@ class OpenClass(commands.Cog):
             self.bot.box[ctx.guild.id]['quant'] -= 1
             time = randint(60, 600)
             GIFT = await register_gift(self.bot, time)
-            await ctx.send(f"Caixa aberta com sucesso! **COMANDO EM FASE TE TESTES**\n"
-                           f"VOCÊ GANHOU UM GIFT: {GIFT}\n"
-                           f"COM O TEMPO DE ATIVAÇÃO DE: {time} SEGUNDOS!")
+            await ctx.send(f"**COMANDO EM FASE TE TESTES**\n"
+                           f"> 🎊 **PARABENS** 🎉 ``VOCÊ GANHOU UM GIFT:``\n```{GIFT}```\n"
+                           f"``COM O TEMPO DE ATIVAÇÃO DE:`` **{time}** ``SEGUNDOS!``")
         else:
             await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``")
 
@@ -55,7 +55,7 @@ class OpenClass(commands.Cog):
             await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                            f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
 
-            response = await self.bot.db.add_reward(ctx, reward['list'])
+            response = await self.bot.db.add_reward(ctx, reward['items'])
             await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
 

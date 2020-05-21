@@ -1,7 +1,7 @@
 import re
-import pymongo
 import discord
 import requests
+import operator
 import unicodedata
 
 from io import BytesIO
@@ -86,7 +86,12 @@ class RankingClass(commands.Cog):
         medal = data['inventory']['medal']
         rank_point = data['inventory']['rank_point']
         data_ = await self.bot.db.get_all_data("users")
-        rank = [x.get("user_id") for x in data_.limit(int(data_.count())).sort("user", pymongo.DESCENDING)]
+
+        dict_ = dict()
+        for _ in data_:
+            dict_[str(_.get('user_id'))] = _['user'].get('experience')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data_))]
 
         position = int(rank.index(user.id)) + 1
         amount_rp = 200
