@@ -48,8 +48,8 @@ class Ashley(commands.AutoShardedBot):
                               'PARTIR DE AGORA TODAS NOVIDADES DO BOT VAO SER INSERIDAS NO CANAL EM DESTAQUE QUE VOCÊS'
                               ' DEFINIREM! OBRIGADO A TODOS PELA ATENÇÃO.\n ASS: DENKY (DEVELOPER MASTER)']
         self.languages = ("pt", "en")
-        self.progress = "V.6 -> 82.1%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 6.8.21 | PROGRESS: " + str(self.progress)
+        self.progress = "V.6 -> 98.2%"
+        self.version = "API: " + str(discord.__version__) + " | BOT: 6.9.82 | PROGRESS: " + str(self.progress)
         self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
         self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',

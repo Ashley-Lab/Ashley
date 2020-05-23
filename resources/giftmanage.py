@@ -1,4 +1,5 @@
 from random import choice, randint
+from config import data as config
 
 
 def generate_gift():
@@ -46,10 +47,16 @@ async def open_gift(bot, gift):
         _id = data['_id']
         await bot.db.delete_data({"_id": _id}, "gift")
 
-        ethernyas = randint(1000, 3000)
-        coins = randint(10, 50)
+        ethernyas = randint(500, 1000)
+        coins = randint(10, 30)
         items = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
 
-        return {"money": ethernyas, "coins": coins, "items": items}
+        rare = None
+        chance = randint(1, 100)
+        if chance <= 10:
+            all_i = config['items']
+            rare = choice([x for x in all_i.keys() if all_i[x][3] == 3 or all_i[x][3] == 4])
+
+        return {"money": ethernyas, "coins": coins, "items": items, "rare": rare}
     else:
         return None
