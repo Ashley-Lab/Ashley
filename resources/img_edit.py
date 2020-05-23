@@ -8,7 +8,7 @@ def gift(key, time):
     show = ImageDraw.Draw(image)
 
     # load fonts
-    font_key = ImageFont.truetype("fonts/bot.otf", 24)
+    font_key = ImageFont.truetype("fonts/gift.otf", 18)
     font_time = ImageFont.truetype("fonts/bot.otf", 24)
 
     # retangulos dos textos
@@ -24,7 +24,7 @@ def gift(key, time):
     # alinhamento do retangulo 1
     w, h = show.textsize(key, font=font_key)
     x = (x2 - x1 - w) / 2 + x1 + 3
-    y = (y2 - y1 - h) / 2 + y1
+    y = (y2 - y1 - h) / 2 + y1 + 3
     show.text(xy=(x + 2, y + 2), text=key, fill=(0, 0, 0), font=font_key)
     show.text(xy=(x, y), text=key, fill=(255, 255, 255), font=font_key)
 

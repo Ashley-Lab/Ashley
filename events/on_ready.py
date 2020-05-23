@@ -73,9 +73,8 @@ class OnReady(commands.Cog):
                             await self.bot.db.update_data(data_member, update_member, 'users')
 
     async def draw_gift(self):
-        time = randint(3600, 7200)
         while True:
-            if await verify_cooldown(self.bot, "draw_gift", time):
+            if await verify_cooldown(self.bot, "draw_gift", 17280):
                 for guild in self.bot.guilds:
                     data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
                     if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:

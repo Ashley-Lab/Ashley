@@ -31,7 +31,9 @@ class OpenClass(commands.Cog):
             gt(gift, f"{time} SEGUNDOS")
             await ctx.send(file=discord.File('giftcard.png'))
         else:
-            await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``")
+            await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``\n"
+                           f"**OBS:** se eu for reiniciada, todas as caixas disponiveis sao resetadas. Isso é feito"
+                           f" por medidas de segurança da minha infraestrutura!")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -46,37 +48,40 @@ class OpenClass(commands.Cog):
 
         if reward is None:
             return await ctx.send("<:negate:520418505993093130>│``Você precisa gigitar um numero de GIFT VALIDO!``")
-        else:
-            await ctx.send("🎊 **PARABENS** 🎉 ``VC USOU SEU GIFT COM SUCESSO!!``")
-            answer_ = await self.bot.db.add_money(ctx, reward['money'], True)
-            await ctx.send(f'<:rank:519896825411665930>│``você GANHOU:``\n {answer_}')
 
-            key_item = None
-            rarity = None
-            if reward['rare'] is not None:
-                for k, v in self.bot.items.items():
-                    if v == reward['rare']['data']:
-                        key_item = k
-                rarity = list(self.legend.keys())[list(self.legend.values()).index(reward['rare']['data'][3])]
+        if not reward['validity']:
+            return await ctx.send("<:negate:520418505993093130>│``ESSE GIFT ESTÁ COM O TEMPO EXPIRADO!``")
 
-            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update = data
-            update['inventory']['coins'] += reward["coins"]
-            if reward['rare'] is not None:
-                try:
-                    update['inventory'][key_item] += 1
-                except KeyError:
-                    update['inventory'][key_item] = 1
-            await self.bot.db.update_data(data, update, 'users')
-            await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
-                           f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
+        await ctx.send("🎊 **PARABENS** 🎉 ``VC USOU SEU GIFT COM SUCESSO!!``")
+        answer_ = await self.bot.db.add_money(ctx, reward['money'], True)
+        await ctx.send(f'<:rank:519896825411665930>│``você GANHOU:``\n {answer_}')
 
-            if reward['rare'] is not None:
-                await ctx.send(f"``O ITEM ``{reward['rare']['data'][0]}**{reward['rare']['data'][1]}** ``ENCONTRA-SE "
-                               f"NO SEU INVENTÁRIO!``\n``ELE TEM O TIER`` **{rarity.upper()}**")
+        key_item = None
+        rarity = None
+        if reward['rare'] is not None:
+            for k, v in self.bot.items.items():
+                if v == reward['rare']['data']:
+                    key_item = k
+            rarity = list(self.legend.keys())[list(self.legend.values()).index(reward['rare']['data'][3])]
 
-            response = await self.bot.db.add_reward(ctx, reward['items'])
-            await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        update['inventory']['coins'] += reward["coins"]
+        if reward['rare'] is not None:
+            try:
+                update['inventory'][key_item] += 1
+            except KeyError:
+                update['inventory'][key_item] = 1
+        await self.bot.db.update_data(data, update, 'users')
+        await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
+                       f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
+
+        if reward['rare'] is not None:
+            await ctx.send(f"``O ITEM ``{reward['rare']['data'][0]}**{reward['rare']['data'][1]}** ``ENCONTRA-SE "
+                           f"NO SEU INVENTÁRIO!``\n``ELE TEM O TIER`` **{rarity.upper()}**")
+
+        response = await self.bot.db.add_reward(ctx, reward['items'])
+        await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
 
 def setup(bot):

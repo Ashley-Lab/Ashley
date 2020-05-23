@@ -129,7 +129,7 @@ class IaInteractions(commands.Cog):
                                                   'Não falo com você...',
                                                   'Estou de mal de você...',
                                                   'Você é muito chato...'])
-                                return await  self.send_message(message, content)
+                                return await self.send_message(message, content)
                 else:
                     response = self.heart.get_response(content_)
                     if response is not None:

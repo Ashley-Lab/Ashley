@@ -1,5 +1,6 @@
 from random import choice, randint
 from config import data as config
+from resources.verify_cooldown import verify_cooldown
 
 
 def generate_gift():
@@ -21,6 +22,7 @@ def generate_gift():
             fgift += '-'
         fgift += gift[L]
     fgift += str(choice(gentype))
+    gift += fgift[-1]
     return fgift, gift
 
 
@@ -31,7 +33,8 @@ async def register_gift(bot, time):
         if data is None:
             data = {"_id": _id, "gift_t": gift_t, "validity": time}
             await bot.db.push_data(data, "gift")
-            return gift_t
+            if not await verify_cooldown(bot, _id, time):
+                return gift_t
 
 
 async def open_gift(bot, gift):
@@ -44,8 +47,17 @@ async def open_gift(bot, gift):
     data = await bot.db.get_data(key, gift, "gift")
 
     if data is not None:
+
         _id = data['_id']
-        await bot.db.delete_data({"_id": _id}, "gift")
+        time = data['validity']
+
+        if await verify_cooldown(bot, _id, time, True):
+            validity = True
+        else:
+            validity = False
+
+        if validity:
+            await bot.db.delete_data({"_id": _id}, "gift")
 
         ethernyas = randint(500, 1000)
         coins = randint(10, 30)
@@ -57,6 +69,7 @@ async def open_gift(bot, gift):
             all_i = config['items']
             rare = choice([x for x in all_i.keys() if all_i[x][3] == 3 or all_i[x][3] == 4])
 
-        return {"money": ethernyas, "coins": coins, "items": items, "rare": rare}
+        return {"money": ethernyas, "coins": coins, "items": items, "rare": rare, "validity": validity}
+
     else:
         return None
