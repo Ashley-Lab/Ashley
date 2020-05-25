@@ -1,5 +1,6 @@
 # Ashley Git Ignore
 data/auth.json
+data/
 
 # Python Configs
 *.idea/
