@@ -219,7 +219,7 @@ class Ashley(commands.AutoShardedBot):
                     await ctx.send(f"``{_name} tambem ganhou`` {msg}", delete_after=5.0)
 
                 _chance = randint(1, 100)
-                if _chance <= 1:
+                if _chance <= 2:
 
                     BOX = choice(self.boxes)
                     box_type = self.boxes.index(BOX)
@@ -232,10 +232,11 @@ class Ashley(commands.AutoShardedBot):
                     embed = discord.Embed(
                         title="**Presente Liberado**",
                         colour=self.color,
-                        description=f"Esse servidor foi gratificado com uma box **{self.boxes_l[str(box_type)]}**!\n"
-                                    f"Para abri-la é so usar o comando ``ash open``\n"
-                                    f"**qualquer membro pode abrir uma box**\n"
-                                    f"**Obs:** Essa guilda tem {self.box[ctx.guild.id]['quant']} box(es) disponiveis!")
+                        description=f"Esse servidor foi gratificado com um presente "
+                                    f"**{self.boxes_l[str(box_type)]}**!\n Para abri-lo é so usar o comando "
+                                    f"``ash open``\n **qualquer membro pode abrir um presente**\n"
+                                    f"**Obs:** Essa guilda tem {self.box[ctx.guild.id]['quant']} presente(s) "
+                                    f"disponiveis!")
                     embed.set_author(name=self.user.name, icon_url=self.user.avatar_url)
                     embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                     embed.set_thumbnail(url=BOX)

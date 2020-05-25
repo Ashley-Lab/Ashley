@@ -23,8 +23,8 @@ class OpenClass(commands.Cog):
             try:
                 BOX = choice(self.bot.box[ctx.guild.id]['boxes'])
             except IndexError:
-                return await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``\n"
-                                      f"``TODAS AS CAIXAS FORAM UTILIZADAS, AGUARDE UMA NOVA CAIXA DROPAR E FIQUE "
+                return await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem presentes disponiveis!``\n"
+                                      f"``TODOS OS PRESENTES FORAM UTILIZADOS, AGUARDE UM NOVO PRESENTE DROPAR E FIQUE "
                                       f"ATENTO!``")
             I_BOX = self.bot.box[ctx.guild.id]['boxes'].index(BOX)
             del(self.bot.box[ctx.guild.id]['boxes'][I_BOX])
@@ -36,8 +36,8 @@ class OpenClass(commands.Cog):
             gt(gift, f"{time} SEGUNDOS")
             await ctx.send(file=discord.File('giftcard.png'))
         else:
-            await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``\n"
-                           f"**OBS:** se eu for reiniciada, todas as caixas disponiveis sao resetadas. Isso é feito"
+            await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem presentes disponiveis...``\n"
+                           f"**OBS:** se eu for reiniciada, todos os presentes disponiveis sao resetados. Isso é feito"
                            f" por medidas de segurança da minha infraestrutura!")
 
     @check_it(no_pm=True)

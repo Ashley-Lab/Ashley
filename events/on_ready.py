@@ -94,11 +94,11 @@ class OnReady(commands.Cog):
                             embed = discord.Embed(
                                 title="**Presente Liberado**",
                                 colour=self.color,
-                                description=f"Esse servidor foi gratificado com uma box "
+                                description=f"Esse servidor foi gratificado com um presente "
                                             f"**{self.bot.boxes_l[str(boxt)]}**!\n"
-                                            f"Para abri-la é so usar o comando ``ash open``\n"
-                                            f"**qualquer membro pode abrir uma box**\n"
-                                            f"**Obs:** Essa guilda tem {self.bot.box[guild.id]['quant']} box(es)"
+                                            f"Para abri-lo é so usar o comando ``ash open``\n"
+                                            f"**qualquer membro pode abrir um presente**\n"
+                                            f"**Obs:** Essa guilda tem {self.bot.box[guild.id]['quant']} presente(s)"
                                             f"disponiveis!")
                             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
