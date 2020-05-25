@@ -219,8 +219,6 @@ class Ashley(commands.AutoShardedBot):
                     await ctx.send(f"``{_name} tambem ganhou`` {msg}", delete_after=5.0)
 
                 _chance = randint(1, 100)
-                if ctx.author.id == "300592580381376513":
-                    _chance = 1
                 if _chance <= 1:
 
                     BOX = choice(self.boxes)

@@ -64,11 +64,10 @@ class OpenClass(commands.Cog):
         key_item = None
         rarity = None
         if reward['rare'] is not None:
-            print(reward['rare']['data'])
             for k, v in self.bot.items.items():
-                if v == reward['rare']['data']:
+                if v == reward['rare']:
                     key_item = k
-            rarity = list(self.legend.keys())[list(self.legend.values()).index(reward['rare']['data'][3])]
+            rarity = list(self.legend.keys())[list(self.legend.values()).index(reward['rare'][3])]
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -83,7 +82,7 @@ class OpenClass(commands.Cog):
                        f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
 
         if reward['rare'] is not None:
-            await ctx.send(f"``O ITEM ``{reward['rare']['data'][0]}**{reward['rare']['data'][1]}** ``ENCONTRA-SE "
+            await ctx.send(f"``O ITEM ``{reward['rare'][0]}**{reward['rare'][1]}** ``ENCONTRA-SE "
                            f"NO SEU INVENTÁRIO!``\n``ELE TEM O TIER`` **{rarity.upper()}**")
 
         response = await self.bot.db.add_reward(ctx, reward['items'])

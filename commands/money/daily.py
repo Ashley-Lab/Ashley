@@ -134,11 +134,12 @@ class DailyClass(commands.Cog):
     async def rec(self, ctx, member: discord.Member = None):
         """Comando usado pra dar um rec da Ashley pra algum usuario
         Use ash rec <usuario desejado>"""
+        if member is None:
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
+
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
 
-        if member is None:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
         if member.id == ctx.author.id:
             return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
         if data_user is None:
