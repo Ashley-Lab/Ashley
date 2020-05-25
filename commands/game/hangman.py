@@ -35,6 +35,9 @@ class ForceCass(commands.Cog):
             def check(m):
                 return m.author == ctx.author
 
+            def check_letter(m):
+                return m.author == ctx.author and len(m.content) == 1
+
             def check_response(m):
                 return m.author == ctx.author and m.content.upper() in ['S', 'N']
 
@@ -118,7 +121,7 @@ Dica: **{}**'''.format(senha, dica))
                     await ctx.send("\n<:safada:530029764061298699>│``Digite uma letra:``")
 
                     try:
-                        tentativa = await self.bot.wait_for('message', check=check)
+                        tentativa = await self.bot.wait_for('message', check=check_letter)
                         tentativa = tentativa.content.lower()
                     except TimeoutError:
                         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

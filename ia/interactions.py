@@ -80,7 +80,7 @@ class IaInteractions(commands.Cog):
                                                   'Voce ja tem essa resposta',
                                                   'Eu nao vou te responder isso de novo!',
                                                   'Quantas vezes eu vou ter que falar a mesma coisa?'])
-                                if chance >= 95:
+                                if chance >= 95 and "?" in message.content:
                                     return await self.send_message(message, content)
                     self.msg[message.author.id].append(message.content)
                     if len(self.msg[message.author.id]) >= 22:
@@ -124,7 +124,7 @@ class IaInteractions(commands.Cog):
                         if chance >= 95:
                             return await self.send_message(message)
                         else:
-                            if chance_not < 3:
+                            if chance_not < 3 and "?" in message.content:
                                 content = choice(['Não estou afim de responder...',
                                                   'Não falo com você...',
                                                   'Estou de mal de você...',
@@ -141,7 +141,7 @@ class IaInteractions(commands.Cog):
                                            f'> **Resposta processada pela ashley:**\n'
                                            f'> ``{response}``\n')
 
-                        if chance >= 95:
+                        if chance >= 95 and include(message.content, ['ash', 'ashley']):
                             return await self.send_message(message, response)
                     else:
                         if chance >= 95:

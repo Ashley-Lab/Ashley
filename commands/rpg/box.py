@@ -127,8 +127,7 @@ ITEMS:
             if data['box']:
                 num_ = self.verify_money(data, num)
                 if num_ < num:
-                    return await ctx.send("<:negate:520418505993093130>│``Você não tem dinheiro o"
-                                          " suficiente...``")
+                    return await ctx.send("<:negate:520418505993093130>│``Você não tem dinheiro o suficiente...``")
                 for c in range(num):
                     await self.bot.booster.buy_booster(self.bot, ctx)
                     await sleep(1)

@@ -20,7 +20,12 @@ class OpenClass(commands.Cog):
     async def open(self, ctx):
         """Evento de Caixas..."""
         if ctx.guild.id in self.bot.box:
-            BOX = choice(self.bot.box[ctx.guild.id]['boxes'])
+            try:
+                BOX = choice(self.bot.box[ctx.guild.id]['boxes'])
+            except IndexError:
+                return await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem caixas disponiveis...``\n"
+                                      f"``TODAS AS CAIXAS FORAM UTILIZADAS, AGUARDE UMA NOVA CAIXA DROPAR E FIQUE "
+                                      f"ATENTO!``")
             I_BOX = self.bot.box[ctx.guild.id]['boxes'].index(BOX)
             del(self.bot.box[ctx.guild.id]['boxes'][I_BOX])
             self.bot.box[ctx.guild.id]['quant'] -= 1
@@ -42,12 +47,12 @@ class OpenClass(commands.Cog):
     async def gift(self, ctx, *, gift=None):
         """Evento de Caixas..."""
         if gift is None:
-            return await ctx.send("<:negate:520418505993093130>│``Você precisa gigitar um numero de GIFT!``")
+            return await ctx.send("<:negate:520418505993093130>│``Você precisa digitar um numero de GIFT!``")
 
-        reward = await open_gift(self.bot, gift)
+        reward = await open_gift(self.bot, gift.upper())
 
         if reward is None:
-            return await ctx.send("<:negate:520418505993093130>│``Você precisa gigitar um numero de GIFT VALIDO!``")
+            return await ctx.send("<:negate:520418505993093130>│``Você precisa digitar um numero de GIFT VALIDO!``")
 
         if not reward['validity']:
             return await ctx.send("<:negate:520418505993093130>│``ESSE GIFT ESTÁ COM O TEMPO EXPIRADO!``")
@@ -59,6 +64,7 @@ class OpenClass(commands.Cog):
         key_item = None
         rarity = None
         if reward['rare'] is not None:
+            print(reward['rare']['data'])
             for k, v in self.bot.items.items():
                 if v == reward['rare']['data']:
                     key_item = k
