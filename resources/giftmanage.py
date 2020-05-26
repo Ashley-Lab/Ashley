@@ -65,9 +65,10 @@ async def open_gift(bot, gift):
 
         rare = None
         chance = randint(1, 100)
-        if chance <= 10:
+        if chance <= 5:
             all_i = config['items']
-            rare = choice([x for x in all_i.keys() if all_i[x][3] == 3 or all_i[x][3] == 4])
+            item = choice([x for x in all_i.keys() if all_i[x][3] == 3 or all_i[x][3] == 4])
+            rare = all_i[item]
 
         return {"money": ethernyas, "coins": coins, "items": items, "rare": rare, "validity": validity}
 

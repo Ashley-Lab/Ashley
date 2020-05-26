@@ -88,7 +88,7 @@ async def paginator(bot, items, inventory, embed, ctx):
     for key in inventory.keys():
         if cont == 0:
             description = embed[2]
-        if ctx.command == "inventory":
+        if str(ctx.command) == "inventory":
             try:
                 rarity = list(legend.keys())[list(legend.values()).index(items[key][3])]
                 string = f'{items[key][0]} ``{inventory[key]}{("⠀" * (5 - len(str(inventory[key]))))}`` ' \
@@ -96,7 +96,9 @@ async def paginator(bot, items, inventory, embed, ctx):
             except KeyError:
                 string = f"<:negate:520418505993093130> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
         else:
-            string = f"**Custo || Recompença:**\n{items[key]['cost']} || {items[key]['reward']}\n\n"
+            cost = "".join(f"{i[0]}: **{i[1]}** **│** " for i in items[key]['cost'])
+            reward = "".join(f"{i[0]}: **{i[1]}** **│** " for i in items[key]['reward'])
+            string = f"``{key.upper()}:``\n**Custo:** {cost[:-7]} \n **Recompença:** {reward[:-7]}\n\n"
         cont += len(string)
         if cont <= 1500 and cont_i < 20:
             description += string

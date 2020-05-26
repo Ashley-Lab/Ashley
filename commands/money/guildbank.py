@@ -40,11 +40,11 @@ class GuildBank(commands.Cog):
         d = c.replace('v', '.')
         await ctx.send(f'<:coins:519896825365528596>│ No total há **R$ {d}** de ``ETHERNYAS`` dentro desse '
                        f'servidor!')
-        self.gold = self.get_atr(ctx.guild.id, 'total_gold')
+        self.gold = await self.get_atr(ctx.guild.id, 'total_gold')
         await ctx.send(f'{self.bot.money[2]} **{self.format_num(self.gold)}**')
-        self.silver = self.get_atr(ctx.guild.id, 'total_silver')
+        self.silver = await self.get_atr(ctx.guild.id, 'total_silver')
         await ctx.send(f'{self.bot.money[1]} **{self.format_num(self.silver)}**')
-        self.bronze = self.get_atr(ctx.guild.id, 'total_bronze')
+        self.bronze = await self.get_atr(ctx.guild.id, 'total_bronze')
         await ctx.send(f'{self.bot.money[0]} **{self.format_num(self.bronze)}**')
 
 

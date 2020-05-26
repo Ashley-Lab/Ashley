@@ -54,11 +54,11 @@ class Economy(commands.Cog):
         d = c.replace('v', '.')
         await ctx.send(f'<:coins:519896825365528596>│ No total há **R$ {d}** de ``ETHERNYAS`` geral em '
                        f'todos os servidores')
-        self.gold = self.get_all_guilds_atr('total_gold')
+        self.gold = await self.get_all_guilds_atr('total_gold')
         await ctx.send(f'{self.bot.money[2]} **{self.format_num(self.gold)}**')
-        self.silver = self.get_all_guilds_atr('total_silver')
+        self.silver = await self.get_all_guilds_atr('total_silver')
         await ctx.send(f'{self.bot.money[1]} **{self.format_num(self.silver)}**')
-        self.bronze = self.get_all_guilds_atr('total_bronze')
+        self.bronze = await self.get_all_guilds_atr('total_bronze')
         await ctx.send(f'{self.bot.money[0]} **{self.format_num(self.bronze)}**')
         for ranking in await self.get_all_list('ranking'):
             self.global_ranking[ranking] += 1

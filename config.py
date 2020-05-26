@@ -1,7 +1,13 @@
 import json
 
+with open("data/achievements.json", encoding="utf-8") as achievements:
+    achievements = json.load(achievements)
+
 with open("data/answers.json", encoding="utf-8") as answers:
     answers = json.load(answers)
+
+with open("data/attribute.json", encoding="utf-8") as attribute:
+    attribute = json.load(attribute)
 
 # auth nao é carregado aqui!
 
@@ -72,7 +78,9 @@ with open("data/translations.json", encoding="utf-8") as translations:
     translations = json.load(translations)
 
 data = {
+    "achievements": achievements,
     "answers": answers,
+    "attribute": attribute,
     "battle": battle,
     "cards": cards,
     "classes": classes,

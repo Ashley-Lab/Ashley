@@ -30,20 +30,16 @@ class DoorClass(commands.Cog):
                 description = 'Materiais:'
                 maximo = None
 
-                for c in recipe['custo']:
-                    name = c.keys()[0]
-                    quantidade = c[name]
-                    description += '\n{}X{}'.format(name, quantidade)
+                for c in recipe['cost']:
+                    description += f'\n{c[0]}X{c[1]}'
 
                 description += '\n\nResultado:'
 
-                for c in recipe['recompeça']:
-                    name = c.keys()[0]
-                    quantidade = c[name]
-                    description += '\n{}X{}'.format(name, quantidade)
+                for c in recipe['reward']:
+                    description += f'\n{c[0]}X{c[1]}'
 
-                for c in recipe['custo']:
-                    tempmax = data['inventory'][c.keys()[0]] // c[c.keys()[0]]
+                for c in recipe['cost']:
+                    tempmax = data['inventory'][c[0]] // c[1]
                     if maximo is None or maximo > tempmax:
                         maximo = tempmax
 
@@ -53,10 +49,10 @@ class DoorClass(commands.Cog):
 
                 embed = discord.Embed(
                     title='Recipe',
-                    color=0x564128,
+                    color=self.bot.color,
                     description=description)
 
-                msg = ctx.send(embed=embed)
+                msg = await ctx.send(embed=embed)
                 emojis = ['▶', '⏩', '⏭', '❌']
 
                 for c in emojis:
@@ -67,21 +63,17 @@ class DoorClass(commands.Cog):
                     reaction = await self.bot.wait_for('reaction_add')
 
                 if reaction[0].emoji == '▶':
-                    for c in recipe['custo']:
-                        name = c.keys()[0]
-                        quantidade = c[name]
-                        data['inventory'][c.keys()[0]] -= quantidade
+                    for c in recipe['cost']:
+                        data['inventory'][c[0]] -= c[1]
 
-                    for c in recipe['recompensa']:
-                        name = c.keys()[0]
-                        quantidade = c[name]
+                    for c in recipe['reward']:
                         try:
-                            data['inventory'][c.keys()[0]] += quantidade
+                            data['inventory'][c[0]] += c[1]
                         except KeyError:
-                            data['inventory'][c.keys()[0]] = quantidade
+                            data['inventory'][c[0]] = c[1]
 
                 elif reaction[0].emoji == '⏩':
-                    await ctx.send('Quantas receitas você quer fazer?')
+                    await ctx.send('<:alert_status:519896811192844288>│``Quantas receitas você quer fazer?``')
                     resp = await self.bot.wait_for('message', check=check)
 
                     while True:
@@ -91,45 +83,38 @@ class DoorClass(commands.Cog):
                                 break
                         except TypeError:
                             pass
-                        await ctx.send('Valor invalido tente denovo.')
+                        await ctx.send('<:negate:520418505993093130>|``Valor invalido tente denovo.``')
                         resp = await self.bot.wait_for('message')
 
                     resp = int(resp)
 
-                    for c in recipe['custo']:
-                        name = c.keys()[0]
-                        quantidade = c[name] * resp
-                        data['inventory'][c.keys()[0]] -= quantidade
+                    for c in recipe['cost']:
+                        data['inventory'][c[0]] -= c[1]
 
-                    for c in recipe['recompensa']:
-                        name = c.keys()[0]
-                        quantidade = c[name] * resp
+                    for c in recipe['reward']:
                         try:
-                            data['inventory'][c.keys()[0]] += quantidade
+                            data['inventory'][c[0]] += c[1] * resp
                         except KeyError:
-                            data['inventory'][c.keys()[0]] = quantidade
+                            data['inventory'][c[0]] = c[1] * resp
 
                 elif reaction[0].emoji == '⏭':
-                    for c in recipe['custo']:
-                        name = c.keys()[0]
-                        quantidade = c[name] * maximo
-                        data['inventory'][c.keys()[0]] -= quantidade
+                    for c in recipe['cost']:
+                        data['inventory'][c[0]] -= c[1] * maximo
 
-                    for c in recipe['recompensa']:
-                        name = c.keys()[0]
-                        quantidade = c[name] * maximo
+                    for c in recipe['reward']:
                         try:
-                            data['inventory'][c.keys()[0]] += quantidade
+                            data['inventory'][c[0]] += c[1] * maximo
                         except KeyError:
-                            data['inventory'][c.keys()[0]] = quantidade
+                            data['inventory'][c[0]] = c[1] * maximo
 
                 await msg.delete()
                 print(str(data))
+                await ctx.send("<:confirmado:519896822072999937>│``CRAFT FEITO COM SUCESSO!``")
             else:
-                ctx.send('item não existe')
+                await ctx.send('<:negate:520418505993093130>|``Esse item não existe.``')
         else:
-            embed = ['Recipes/Craft', self.color, 'Lista dos Recipes: \n']
-            await paginator(self.bot, recipes, {}, embed, ctx)
+            embed = ['Recipes/Craft', self.color, '``Para craftar um item use:`` **ash craft <nome_do_item>**\n\n']
+            await paginator(self.bot, recipes, recipes, embed, ctx)
 
 
 def setup(bot):

@@ -24,68 +24,44 @@ from config import data as config
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
 class Ashley(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, shard_count=1, **kwargs)
+        super().__init__(*args, shard_count=2, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
         self.commands_used = Counter()
         self.guilds_commands = Counter()
         self.guilds_messages = Counter()
         self.user_commands = Counter()
-        self.announcements = ['VIP: VOCÊ SÓ SE TORNA VIP ENTRANDO NO MEU SERVIDOR E USANDO O COMANDO "ASH VIP"!',
-                              'O COMANDO "ASH RANK" ESTÁ FINALIZADO, AGORA VOCÊ PODERÁ OLHAR SEU RANK A QUALQUER'
-                              ' MOMENTO!',
-                              'O COMANDO "ASH REC" SERVE PARA VOCÊ ADIQUIRIR ESTRELAS NO SEU RANK, POREM VOCÊ APENAS'
-                              ' PODE DAR RECOMENDAÇÃO PARA OUTRAS PESSOAS!',
-                              'PARA SUBIR DE PATENTE, VC PRECISA USAR OS MEUS COMANDOS E ADQUIRIR RANKPOINTS E'
-                              ' MEDALHAS!',
-                              'VOCE ADQUIRE ETHERNYAS USANDO OS COMANDOS GERAIS E OS COMANDOS DIARIOS, TAIS COMO: '
-                              '"ASH DAILY COIN", "ASH DAILY WORK" OU "ASH DAILY VIP"!',
-                              'AGORA SEU SERVIDOR TAMBEM SE TORNA VIP, COM ISSO O DONO DO SERVIDOR PODE CADASTRAR SEUS'
-                              ' PROPRIOS ANUNCIOS COMIGO. ENTRETANDO OS ANUNCIOS EXTERNOS TERÃO QUE PASSAR POR UMA'
-                              ' APROVAÇÃO HUMANA POR QUESTÕES DE SEGURANÇA!',
-                              'PEÇO QUE TODOS OS DONOS OU ADMINISTRADORES DOS SERVIDORES QUE TEM A ASHLEY, ATIVEM A '
-                              'FUNÇÃO DO ASH NEWS, VOCÊS CONSEGUEM FAZER ISSO NO COMANDO (ASH CONFIG GUILD), POIS A '
-                              'PARTIR DE AGORA TODAS NOVIDADES DO BOT VAO SER INSERIDAS NO CANAL EM DESTAQUE QUE VOCÊS'
-                              ' DEFINIREM! OBRIGADO A TODOS PELA ATENÇÃO.\n ASS: DENKY (DEVELOPER MASTER)']
+        self.blacklist = list()
+        self.shutdowns = list()
+
+        self.config = config
+        self.color = int(config['config']['default_embed'], 16)
+        self.announcements = config['attribute']['announcements']
+        self.all_prefix = config['attribute']['all_prefix']
+        self.vip_cog = config['attribute']['vip_cog']
+        self.titling = config['attribute']['titling']
+        self.boxes_l = config['attribute']['boxes_l']
+        self.translations = config['translations']
+        self.boxes = config['attribute']['boxes']
+        self.money = config['attribute']['money']
+        self.items = config['items']
+        self.icons = config['icons']
+        self.pets = config['pets']
+
+        self.server_ = "HEROKU"
         self.languages = ("pt", "en")
         self.progress = "V.6 -> 98.2%"
-        self.version = "API: " + str(discord.__version__) + " | BOT: 6.9.82 | PROGRESS: " + str(self.progress)
-        self.server_ = "HEROKU"
         self.prefix_ = "'ash.', 'ash '"
-        self.all_prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
-                           'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
-        self.money = ['<:etherny_amarelo:691015381296480266>', '<:etherny_roxo:691014717761781851>',
-                      '<:etherny_preto:691016493957251152>']
+        self.bl_item = ['medal', 'rank_point']
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.data_cog = {}
+        self.staff = [235937029106434048, 300592580381376513, 299273939614564363]
+        self.version = "API: " + str(discord.__version__) + " | BOT: 6.9.82 | PROGRESS: " + str(self.progress)
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
-        self.vip_cog = ['commands.music.default', 'commands.admin.staff', 'commands.game.coin', 'events.on_message',
-                        'commands.game.guessing', 'commands.game.jkp', 'commands.ashley.farm', 'commands.rpg.status',
-                        'commands.member.pet', 'commands.member.married', 'commands.member.booket',
-                        'commands.member.transfer', 'commands.rpg.inventory', 'commands.rpg.shop']
-        self.titling = {"10": "Vassal", "25": "Heir", "50": "Knight", "100": "Elder", "200": "Baron", "300": "Viscount",
-                        "400": "Count", "500": "Marquis", "1000": "Duke", "1500": "Grand Duke"}
-
-        self.boxes = ['https://i.imgur.com/YcfbVH8.png', 'https://i.imgur.com/RvWFG1H.png',
-                      'https://i.imgur.com/SUdzwlM.png', 'https://i.imgur.com/1EEO1YV.png']
-        self.boxes_l = {'0': "Blue Common", '1': "Blue Uncommon", '2': "Pink Common", '3': "Pink Uncommon"}
+        self.data_cog = {}
         self.box = {}
 
         self.db: Database = Database(self)
         self.data: DataInteraction = DataInteraction(self)
-
-        self.staff = [235937029106434048, 300592580381376513, 299273939614564363]
-        self.bl_item = ['medal', 'rank_point']
-        self.blacklist = list()
-        self.shutdowns = list()
-        self.config = config
-
-        self.translations = self.config['translations']
-        self.items = self.config['items']
-        self.icons = self.config['icons']
-        self.pets = self.config['pets']
-        self.color = int(self.config['config']['default_embed'], 16)
-
         self.booster: Booster = Booster(self.items)
 
     async def atr_initialize(self):
@@ -216,7 +192,7 @@ class Ashley(commands.AutoShardedBot):
                 await self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
-                    await ctx.send(f"``{_name} tambem ganhou`` {msg}", delete_after=5.0)
+                    await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
 
                 _chance = randint(1, 100)
                 if _chance <= 2:
