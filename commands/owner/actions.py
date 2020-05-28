@@ -21,12 +21,12 @@ class ActionsClass(commands.Cog):
             guild = await self.bot.db.get_data("guild_id", id_, "guilds")
             if guild is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
-            self.bot.data.add_vip(target="guilds", guild_id=id_, state=True)
+            await self.bot.data.add_vip(target="guilds", guild_id=id_, state=True)
         elif target == "user":
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
-            self.bot.data.add_vip(target="users", user_id=id_, state=True)
+            await self.bot.data.add_vip(target="users", user_id=id_, state=True)
         else:
             return await ctx.send("<:oc_status:519896814225457152>│``OPÇÃO INVALIDA!``")
         embed = discord.Embed(
@@ -45,12 +45,12 @@ class ActionsClass(commands.Cog):
             guild = await self.bot.db.get_data("guild_id", id_, "guilds")
             if guild is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
-            self.bot.data.add_vip(target="guilds", guild_id=id_, state=False)
+            await self.bot.data.add_vip(target="guilds", guild_id=id_, state=False)
         elif target == "user":
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
-            self.bot.data.add_vip(target="users", user_id=id_, state=False)
+            await self.bot.data.add_vip(target="users", user_id=id_, state=False)
         else:
             return await ctx.send("<:oc_status:519896814225457152>│``OPÇÃO INVALIDA!``")
         embed = discord.Embed(

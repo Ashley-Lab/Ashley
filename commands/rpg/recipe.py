@@ -38,10 +38,13 @@ class DoorClass(commands.Cog):
                 for c in recipe['reward']:
                     description += f'\n{c[0]}X{c[1]}'
 
-                for c in recipe['cost']:
-                    tempmax = data['inventory'][c[0]] // c[1]
-                    if maximo is None or maximo > tempmax:
-                        maximo = tempmax
+                try:
+                    for c in recipe['cost']:
+                        tempmax = data['inventory'][c[0]] // c[1]
+                        if maximo is None or maximo > tempmax:
+                            maximo = tempmax
+                except KeyError:
+                    return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens necessarios.``')
 
                 description += '\nMaximo que você pode craftar{}' \
                                '\n▶:craftar 1\n⏩:craftar alguns' \
@@ -63,8 +66,12 @@ class DoorClass(commands.Cog):
                     reaction = await self.bot.wait_for('reaction_add')
 
                 if reaction[0].emoji == '▶':
-                    for c in recipe['cost']:
-                        data['inventory'][c[0]] -= c[1]
+                    try:
+                        for c in recipe['cost']:
+                            data['inventory'][c[0]] -= c[1]
+                    except KeyError:
+                        return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                                              'necessarios.``')
 
                     for c in recipe['reward']:
                         try:
@@ -88,8 +95,12 @@ class DoorClass(commands.Cog):
 
                     resp = int(resp)
 
-                    for c in recipe['cost']:
-                        data['inventory'][c[0]] -= c[1]
+                    try:
+                        for c in recipe['cost']:
+                            data['inventory'][c[0]] -= c[1]
+                    except KeyError:
+                        return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                                              'necessarios.``')
 
                     for c in recipe['reward']:
                         try:

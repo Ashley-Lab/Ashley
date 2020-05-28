@@ -7,7 +7,7 @@ from asyncio import TimeoutError
 
 responses = config['answers']
 questions = config['questions']
-legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+legend = {"-": -1, "Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
 color_embed = None
 
 

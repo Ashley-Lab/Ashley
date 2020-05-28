@@ -49,8 +49,8 @@ class ConfigClass(commands.Cog):
     async def _language(self, ctx, language=None):
         if language is not None:
             if language in self.bot.languages:
-                if language != self.bot.data.get_language(ctx.guild.id):
-                    self.bot.data.set_language(ctx.guild.id, language)
+                if language != await self.bot.data.get_language(ctx.guild.id):
+                    await self.bot.data.set_language(ctx.guild.id, language)
                     await ctx.send(f'Você acaba de mudar o idioma padrão do servidor para {language}')
                 else:
                     await ctx.send(f'<:alert_status:519896811192844288>│``você ja está usando a linguagem`` '
@@ -60,7 +60,7 @@ class ConfigClass(commands.Cog):
                                f'algumas dessas``: **{self.bot.languages}**')
         else:
             await ctx.send(f'<:confirmado:519896822072999937>│``Sua linguagem atual é`` '
-                           f'**{self.bot.data.get_language(ctx.guild.id)}**')
+                           f'**{await self.bot.data.get_language(ctx.guild.id)}**')
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
