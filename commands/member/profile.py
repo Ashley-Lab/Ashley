@@ -101,6 +101,11 @@ class ProfileSystem(commands.Cog):
             vip[0].append(False)
         vip[0].append(False)
 
+        if data['user']['married']:
+            married = user.avatar_url_as(format="png")
+        else:
+            married = None
+
         if data['user']['titling'] is None:
             titling = 'Vagabond'
         else:
@@ -113,7 +118,7 @@ class ProfileSystem(commands.Cog):
 
         data_profile = {
             "avatar_member": member.avatar_url_as(format="png"),
-            "avatar_married": user.avatar_url_as(format="png"),
+            "avatar_married": married,
             "name": remove_acentos_e_caracteres_especiais(member.display_name),
             "xp": str(data['user']['experience']),
             "level": str(data['user']['level']),

@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
            't', 'u', 'v', 'w', 'x', 'y', 'z')
+avatar_marry = None
 
 with open("data/pets.json", encoding="utf-8") as pets:
     pets = json.load(pets)
@@ -95,6 +96,7 @@ def gift(key, time):
 
 def profile(data_):
     # load dashboard image
+    global avatar_marry
     image = Image.open("images/dashboards/profile.png").convert('RGBA')
     show = ImageDraw.Draw(image)
 
@@ -118,7 +120,8 @@ def profile(data_):
 
     # take avatar member
     avatar_user = get_avatar(data_['avatar_member'], 119, 119)
-    avatar_marry = get_avatar(data_['avatar_married'], 122, 122)
+    if data_['avatar_married'] is not None:
+        avatar_marry = get_avatar(data_['avatar_married'], 122, 122)
 
     # take artifacts img
     artifacts = {
@@ -157,7 +160,8 @@ def profile(data_):
 
     # add img to main img
     image.paste(avatar_user, (278, 7), avatar_user)
-    image.paste(avatar_marry, (665, 439), avatar_marry)
+    if data_['avatar_married'] is not None:
+        image.paste(avatar_marry, (665, 439), avatar_marry)
 
     # add percent to bar xp
     percent = calc_xp(int(data_["xp"]), int(data_["level"]))
