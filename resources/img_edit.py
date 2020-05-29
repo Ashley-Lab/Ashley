@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
            't', 'u', 'v', 'w', 'x', 'y', 'z')
 
-with open("../data/pets.json", encoding="utf-8") as pets:
+with open("data/pets.json", encoding="utf-8") as pets:
     pets = json.load(pets)
 
 
@@ -95,12 +95,12 @@ def gift(key, time):
 
 def profile(data_):
     # load dashboard image
-    image = Image.open("../images/dashboards/profile.png").convert('RGBA')
+    image = Image.open("images/dashboards/profile.png").convert('RGBA')
     show = ImageDraw.Draw(image)
 
     # load fonts
-    font_number = ImageFont.truetype("../fonts/times.ttf", 24)
-    font_text = ImageFont.truetype("../fonts/bot.otf", 24)
+    font_number = ImageFont.truetype("fonts/times.ttf", 24)
+    font_text = ImageFont.truetype("fonts/bot.otf", 24)
 
     # take pet
     if data_['pet'] is not None:
@@ -109,10 +109,10 @@ def profile(data_):
             pet_c = choice(pet['colour'][2])
             indice = pet['colour'][2].index(pet_c)
             mask = choice(letters[:pet['mask'][indice]])
-            link_ = f"../images/pet/{data_['pet']}/{pet_c}/mask_{mask}.png"
+            link_ = f"images/pet/{data_['pet']}/{pet_c}/mask_{mask}.png"
         else:
             mask = choice(letters[:pet['mask'][0]])
-            link_ = f"../images/pet/{data_['pet']}/mask_{mask}.png"
+            link_ = f"images/pet/{data_['pet']}/mask_{mask}.png"
     else:
         link_ = None
 
@@ -151,7 +151,7 @@ def profile(data_):
     }
 
     for key in artifacts.keys():
-        img = Image.open(f"../images/artifacts/{key}.png").convert('RGBA')
+        img = Image.open(f"images/artifacts/{key}.png").convert('RGBA')
         img = img.resize((39, 57))
         artifacts[key].append(img)
 
@@ -161,7 +161,7 @@ def profile(data_):
 
     # add percent to bar xp
     percent = calc_xp(int(data_["xp"]), int(data_["level"]))
-    percent_img = Image.open("../images/elements/1porcent.png").convert('RGBA')
+    percent_img = Image.open("images/elements/1porcent.png").convert('RGBA')
     w_percent, h_percent = percent_img.size
     ini_x, ini_y = 540, 8
     for n in range(percent[0]):
@@ -169,7 +169,8 @@ def profile(data_):
         ini_x += w_percent
 
     for k in artifacts.keys():
-        image.paste(artifacts[k][1], (artifacts[k][0][0], artifacts[k][0][1]), artifacts[k][1])
+        if k[k.find("/"):] in data_['artifacts']:
+            image.paste(artifacts[k][1], (artifacts[k][0][0], artifacts[k][0][1]), artifacts[k][1])
 
     # rectangles' texts
     rectangles = {
@@ -199,8 +200,8 @@ def profile(data_):
     font_ = ['rec', 'coin', 'wallet', 'xp']
 
     # take vip img
-    vip_xy = [[(280, 135), "../images/elements/vip_member.png"], [(326, 135), "../images/elements/vip_guild.png"],
-              [(372, 135), "../images/elements/vip_rpg.png"]]
+    vip_xy = [[(280, 135), "images/elements/vip_member.png"], [(326, 135), "images/elements/vip_guild.png"],
+              [(372, 135), "images/elements/vip_rpg.png"]]
 
     # add text to img
     for k in rectangles.keys():
@@ -228,7 +229,7 @@ def profile(data_):
                 size = 20
                 width = size * 1.8
 
-            font_text_about = ImageFont.truetype("../fonts/times.ttf", size)
+            font_text_about = ImageFont.truetype("fonts/times.ttf", size)
             msg = textwrap.wrap(data_[k], width=width)
             x_s1, y_s1, x_s2, y_s2 = rectangles[k]
             current_h = (y_s2 - y_s1) / 2 + width
@@ -246,7 +247,7 @@ def profile(data_):
                     vip = Image.open(vip_xy[_][1]).convert('RGBA')
                     image.paste(vip, (vip_xy[_][0][0], vip_xy[_][0][1]), vip)
                 _ += 1
-            font_text_vip = ImageFont.truetype("../fonts/bot.otf", 20)
+            font_text_vip = ImageFont.truetype("fonts/bot.otf", 20)
             x_, y_ = text_align(rectangles[k], data_[k][1], font_text_vip)
             show.text(xy=(x_ + 1, y_ + 1), text=data_[k][1].upper(), fill=(255, 255, 255), font=font_text_vip)
             show.text(xy=(x_, y_), text=data_[k][1].upper(), fill=(68, 29, 114), font=font_text_vip)
@@ -256,6 +257,10 @@ def profile(data_):
                 data_[k] += " / " + str(percent[1])
             x_, y_ = text_align(rectangles[k], data_[k], font_s)
             if font_s == font_text:
+                if k == "entitlement":
+                    font_s = font_text = ImageFont.truetype("fonts/bot.otf", 30)
+                if k == "commands":
+                    font_s = font_text = ImageFont.truetype("fonts/bot.otf", 28)
                 show.text(xy=(x_ + 1, y_ + 1), text=data_[k].upper(), fill=(0, 0, 0), font=font_s)
                 show.text(xy=(x_, y_), text=data_[k].upper(), fill=(255, 255, 255), font=font_s)
             else:
@@ -265,33 +270,4 @@ def profile(data_):
                 show.text(xy=(x_, y_), text=data_[k].upper(), fill=(68, 29, 114), font=font_s)
 
     # save image
-    # image.save('profile.png')
-    image.show()
-
-
-if __name__ == "__main__":
-    text_ = "Eu sempre tive muito medo de palhaços, mas como minha mãe sempre amou espetáculos de circos, " \
-            "eu sempre a acompanhava!Havia um circo na cidade naquela época, e eu já estava com os nervos a " \
-            "flor da pele, eu sabia o que estava por vir!O grande dia chegou e eu estava ainda mais nervosa, " \
-            "porém, amo muito minha mãe, e o fato de ela estar animada, me tira um pouco esse nervosismo, " \
-            "acho que minha mãe gosta tanto de circos, pois a faz..."
-
-    data = {
-        "avatar_member": "https://cdn.discordapp.com/avatars/300592580381376513/84ebae2907109a9d40540266c2666bca.png?"
-                         "size=1024",
-        "avatar_married": "https://cdn.discordapp.com/avatars/300592580381376513/84ebae2907109a9d40540266c2666bca.png?"
-                         "size=1024",
-        "name": remove_acentos_e_caracteres_especiais("Denky#5960"),
-        "xp": "747860",
-        "level": "14",
-        "vip": ([True, True, True], "18 horas, 52 minutos, 14 segundos"),
-        "rec": "32",
-        "coin": "2.454",
-        "commands": "2.963",
-        "entitlement": "Viscount",
-        "about": text_[:50],
-        "wallet": "480.161,00",
-        "pet": "Menown",
-    }
-
-    profile(data)
+    image.save('profile.png')

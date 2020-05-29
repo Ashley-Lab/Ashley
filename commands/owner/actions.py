@@ -72,7 +72,7 @@ class ActionsClass(commands.Cog):
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``ID INVALIDO!``")
-        answer = self.bot.ban_(id_, reason)
+        answer = await self.bot.ban_(id_, reason)
         if answer:
             embed = discord.Embed(
                 color=discord.Color.red(),
@@ -98,7 +98,7 @@ class ActionsClass(commands.Cog):
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
                 return await ctx.send("<:oc_status:519896814225457152>│``ID INVALIDO!``")
-        answer = self.bot.un_ban_(id_)
+        answer = await self.bot.un_ban_(id_)
         if answer:
             embed = discord.Embed(
                 color=discord.Color.red(),

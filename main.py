@@ -232,7 +232,7 @@ class Ashley(commands.AutoShardedBot):
             await guild.leave()
         else:
             entrance = self.get_channel(619899848082063372)
-            msg = f"{guild.id}: **{guild.name}** ``ME ADICINOU NO SERVIDOR!``"
+            msg = f"> **{guild.id}:** {guild.name} ``ME ADICINOU NO SERVIDOR!``"
             await entrance.send(msg)
 
     async def on_guild_remove(self, guild):
@@ -240,12 +240,12 @@ class Ashley(commands.AutoShardedBot):
             data = await self.db.get_data("guild_id", guild.id, "guilds")
             if data is not None:
                 blacklist = self.get_channel(542134573010518017)
-                msg = f"**{guild.id}:** ||{guild.name}|| ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
+                msg = f"> **{guild.id}:** {guild.name} ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
                 await blacklist.send(msg)
                 await self.ban_(guild.id, msg)
             else:
                 blacklist = self.get_channel(542134573010518017)
-                msg = f"**{guild.id}:** ||{guild.name}|| ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, " \
+                msg = f"> **{guild.id}:** {guild.name} ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, " \
                       f"ENTÃO NÃO ENTROU NA MINHA BLACKLIST!``"
                 await blacklist.send(msg)
 

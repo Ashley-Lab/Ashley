@@ -161,6 +161,7 @@ class Database(object):
             },
             # dados do inventario de quests do bot (voltado para o rpg)
             "inventory_quest": dict(),
+            "artifacts": dict(),
             # dados do cooldown dos comandos especificos (diarios)
             "cooldown": {}
         }
