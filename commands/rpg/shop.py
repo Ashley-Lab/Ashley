@@ -18,7 +18,7 @@ class ShopClass(commands.Cog):
     def verify_money(data, num):
         cont = 0
         for _ in range(num):
-            if data['treasure']['money'] > 100:
+            if data['treasure']['money'] > 200:
                 cont += 1
             else:
                 pass

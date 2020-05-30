@@ -48,7 +48,7 @@ class TwitterClass(commands.Cog):
             await ctx.send('<:alert_status:519896811192844288>│``Sua mensagem foi muito grande!``')
         else:
             avatarurl = requests.get(ctx.author.avatar_url_as(format="png"))
-            avatar = Image.open(BytesIO(avatarurl.content))
+            avatar = Image.open(BytesIO(avatarurl.content)).convert('RGBA')
             avatar = avatar.resize((rede[0][0], rede[0][0]))
             big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
             mascara = Image.new('L', big_avatar, 0)
@@ -113,7 +113,7 @@ class TwitterClass(commands.Cog):
                                     'https://i.imgur.com/I2eCtiW.jpg'])
 
             imgurl = requests.get(imgurl)
-            img = Image.open(BytesIO(imgurl.content))
+            img = Image.open(BytesIO(imgurl.content)).convert('RGBA')
             img = img.resize(rede[1][0])
             big_img = (img.size[0] * 3, img.size[1] * 3)
             mascara = Image.new('L', big_img, 0)
@@ -135,14 +135,14 @@ class TwitterClass(commands.Cog):
             if rede[2][2][0] == '':
                 rede[2][2][0] = '@{}'.format(ctx.author)
 
-            image = Image.open('images/social/twitter.png')
+            image = Image.open('images/social/twitter.png').convert('RGBA')
             escrita = ImageDraw.Draw(image)
             for c in (rede[2]):
                 font = ImageFont.truetype('fonts/Arial.ttf', c[2])
                 texto = str(c[0])
                 escrita.text(xy=c[1], text=texto, fill=(10, 10, 10), font=font)
-            image.paste(avatar, rede[0][1], avatar).convert('RGBA')
-            image.paste(img, rede[1][1], img).convert('RGBA')
+            image.paste(avatar, rede[0][1], avatar)
+            image.paste(img, rede[1][1], img)
             image.save('social.png')
             await ctx.send(file=discord.File('social.png'))
             await msg.delete()

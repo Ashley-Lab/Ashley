@@ -33,10 +33,10 @@ class TopClass(commands.Cog):
                           value=f"``PREFIX:`` **top** ``+``\n"
                                 f"{self.st[67]}│**xp** ``or`` **exp**\n"
                                 f"{self.st[67]}│**level** ``or`` **nivel**\n"
-                                f"{self.st[67]}│**Ethernia** ``or`` **dinheiro**\n"
-                                f"{self.st[67]}│**Ethernia Black** ``or`` **preto**\n"
-                                f"{self.st[67]}│**Ethernia Purple** ``or`` **roxo**\n"
-                                f"{self.st[67]}│**Ethernia Yellow** ``or`` **amarelo\n"
+                                f"{self.st[67]}│**money** ``or`` **dinheiro**\n"
+                                f"{self.st[67]}│**ethernya black** ``or`` **eb**\n"
+                                f"{self.st[67]}│**ethernya purple** ``or`` **ep**\n"
+                                f"{self.st[67]}│**ethernya yellow** ``or`` **ey\n"
                                 f"{self.st[67]}│**command** ``or`` **comando**\n"
                                 f"{self.st[67]}│**point** ``or`` **ponto**\n")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
@@ -51,8 +51,11 @@ class TopClass(commands.Cog):
     async def _xp(self, ctx):
         """Comando usado pra retornar o top 20 em questão de xp da Ashley
         Use ash top xp"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_xp(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -61,48 +64,63 @@ class TopClass(commands.Cog):
     async def _level(self, ctx):
         """Comando usado pra retornar o top 20 em questão de level da Ashley
         Use ash top level"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_level(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @top.group(name='ethernia', aliases=['dinheiro'])
-    async def _ethernia(self, ctx):
+    @top.group(name='money', aliases=['dinheiro', 'ethernya'])
+    async def _money(self, ctx):
         """Comando usado pra retornar o top 20 em questão de ethernia da Ashley
         Use ash top ethernia"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_money(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @top.group(name='black', aliases=['preto', 'Ethernia Black'])
+    @top.group(name='black', aliases=['preto', 'ethernia black', 'eb'])
     async def _black(self, ctx):
         """Comando usado pra retornar o top 20 em questão de ethernia negra da Ashley
         Use ash top preto"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_gold(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @top.group(name='purple', aliases=['roxo', 'Ethernia Purple'])
+    @top.group(name='purple', aliases=['roxo', 'ethernia purple', 'ep'])
     async def _purple(self, ctx):
         """Comando usado pra retornar o top 20 em questão de ethernia roxa da Ashley
         Use ash top roxo"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_silver(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @top.group(name='yellow', aliases=['amarelo', 'Ethernia Yellow'])
+    @top.group(name='yellow', aliases=['amarelo', 'ethernia yellow', 'ey'])
     async def _yellow(self, ctx):
         """Comando usado pra retornar o top 20 em questão de ethernia amarela da Ashley
         Use ash top amarelo"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_bronze(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -111,8 +129,11 @@ class TopClass(commands.Cog):
     async def _point(self, ctx):
         """Comando usado pra retornar o top 20 em questão de pontos da Ashley
         Use ash top point"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_point(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -121,8 +142,11 @@ class TopClass(commands.Cog):
     async def _command(self, ctx):
         """Comando usado pra retornar o top 20 em questão de comandos usados
         Use ash top command"""
+        msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
+                             "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_commands(20)
         await ctx.send(f'```py\n{top}```')
+        await msg.delete()
 
 
 def setup(bot):

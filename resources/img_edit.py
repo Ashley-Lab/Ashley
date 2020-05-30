@@ -16,11 +16,25 @@ with open("data/pets.json", encoding="utf-8") as pets:
     pets = json.load(pets)
 
 
+def guess_lvl(lvl_g):
+    xp_ = 0
+    lvl_n = 1
+    while True:
+        next_lvl = int(xp_ ** 0.2)
+        if lvl_n < next_lvl:
+            lvl_n = next_lvl
+            if lvl_n == lvl_g:
+                break
+        xp_ += 1
+    return xp_
+
+
 def calc_xp(xp, lvl):
     experience_now = xp
     lvl_now = lvl
     experience = experience_now
     lvl_guess = lvl_now + 1
+
     while True:
         lvl_next = int(experience ** 0.2)
         if lvl_now < lvl_next:
@@ -29,8 +43,11 @@ def calc_xp(xp, lvl):
                 xp_ = experience
                 break
         experience += 1
-    percent = int(experience_now * 100 / xp_)
-    return int(percent / 2), xp_
+
+    xp_b = guess_lvl(lvl)
+
+    percent = int((experience_now - xp_b) * 100 / (xp_ - xp_b))
+    return int(percent / 2), xp_, xp_b
 
 
 def remove_acentos_e_caracteres_especiais(word):
@@ -253,12 +270,15 @@ def profile(data_):
                 _ += 1
             font_text_vip = ImageFont.truetype("fonts/bot.otf", 20)
             x_, y_ = text_align(rectangles[k], data_[k][1], font_text_vip)
+            if not data_[k][0][0]:
+                data_[k][1] = "VOCE NAO TEM VIP ATIVO"
             show.text(xy=(x_ + 1, y_ + 1), text=data_[k][1].upper(), fill=(255, 255, 255), font=font_text_vip)
             show.text(xy=(x_, y_), text=data_[k][1].upper(), fill=(68, 29, 114), font=font_text_vip)
         else:
             font_s = font_number if k in font_ else font_text
             if k == "xp":
-                data_[k] += " / " + str(percent[1])
+                new_xp = f"{data_[k] - percent[2]} / {percent[1] - percent[2]}"
+                data_[k] = new_xp
             x_, y_ = text_align(rectangles[k], data_[k], font_s)
             if font_s == font_text:
                 if k == "entitlement":

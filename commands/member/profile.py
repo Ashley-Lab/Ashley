@@ -9,6 +9,7 @@ from resources.img_edit import profile, remove_acentos_e_caracteres_especiais
 
 user = None
 time_left = None
+rec = 0
 
 
 class ProfileSystem(commands.Cog):
@@ -34,7 +35,7 @@ class ProfileSystem(commands.Cog):
         if member is None:
             member = ctx.author
 
-        global time_left, user
+        global time_left, user, rec
 
         data = await self.bot.db.get_data("user_id", member.id, "users")
         update = data
@@ -82,15 +83,15 @@ class ProfileSystem(commands.Cog):
             time_left = None
 
         await self.bot.db.update_data(data, update, 'users')
-        data = await self.bot.db.get_data("user_id", member.id, "users")
+        n_data = await self.bot.db.get_data("user_id", member.id, "users")
 
-        a = '{:,.2f}'.format(float(data['treasure']['money']))
+        a = '{:,.2f}'.format(float(n_data['treasure']['money']))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')
         d = c.replace('v', '.')
 
         vip = [[], f"{time_left}"]
-        if data['config']['vip']:
+        if n_data['config']['vip']:
             vip[0].append(True)
         else:
             vip[0].append(False)
@@ -101,36 +102,50 @@ class ProfileSystem(commands.Cog):
             vip[0].append(False)
         vip[0].append(False)
 
-        if data['user']['married']:
+        if n_data['user']['married']:
             married = user.avatar_url_as(format="png")
         else:
             married = None
 
-        if data['user']['titling'] is None:
+        if n_data['user']['titling'] is None:
             titling = 'Vagabond'
         else:
-            titling = data['user']['titling']
+            titling = n_data['user']['titling']
 
         try:
-            comandos = self.number_convert(data['user']['commands'])
+            comandos = self.number_convert(n_data['user']['commands'])
         except KeyError:
             comandos = 0
+
+        try:
+            if n_data['user']['about']:
+                about = n_data['user']['about']
+            else:
+                about = "Mude seu about, usando o comando \"ash about <text>\""
+        except KeyError:
+            about = "Mude seu about, usando o comando \"ash about <text>\""
+
+        try:
+            if n_data['user']['rec']:
+                rec = n_data['user']['rec']
+        except KeyError:
+            rec = 0
 
         data_profile = {
             "avatar_member": member.avatar_url_as(format="png"),
             "avatar_married": married,
             "name": remove_acentos_e_caracteres_especiais(member.display_name),
-            "xp": str(data['user']['experience']),
-            "level": str(data['user']['level']),
+            "xp": n_data['user']['experience'],
+            "level": str(n_data['user']['level']),
             "vip": vip,
-            "rec": str(data['user']['rec']),
-            "coin": str(self.number_convert(data['inventory']['coins'])),
+            "rec": str(rec),
+            "coin": str(self.number_convert(n_data['inventory']['coins'])),
             "commands": str(comandos),
             "entitlement": str(titling),
-            "about": remove_acentos_e_caracteres_especiais(data['user']['about']),
+            "about": remove_acentos_e_caracteres_especiais(about),
             "wallet": str(d),
-            "pet": data['pet']['pet_equipped'],
-            "artifacts": data['artifacts']
+            "pet": n_data['pet']['pet_equipped'],
+            "artifacts": n_data['artifacts']
         }
 
         profile(data_profile)

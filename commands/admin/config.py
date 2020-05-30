@@ -268,7 +268,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_12.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``ActionLog ativado!``')
+                msg = await ctx.send('<:confirmado:519896822072999937>│``Sorteio de Membros ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)

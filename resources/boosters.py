@@ -124,8 +124,8 @@ class Booster(object):
 
     async def buy_box(self, bot, ctx):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
-        if data['treasure']['money'] > 1000:
-            answer = await bot.db.take_money(ctx, 1000)
+        if data['treasure']['money'] > 2000:
+            answer = await bot.db.take_money(ctx, 2000)
         else:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR OU RESETAR "
                                   "A BOX!\nVOCÊ PRECISA DE 1.000 ETHERNYAS PARA COMPRAR OU RESETAR UMA BOX.``")
@@ -179,8 +179,8 @@ class Booster(object):
         except KeyError:
             await ctx.send("<:alert_status:519896811192844288>│``VOCÊ PRECISA COMPRAR UMA BOX PARA PODER COMPRAR "
                            "BOOSTERS!")
-        if data['treasure']['money'] > 100:
-            answer = await bot.db.take_money(ctx, 100)
+        if data['treasure']['money'] > 200:
+            answer = await bot.db.take_money(ctx, 200)
         else:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
                                   "\nVOCÊ PRECISA DE 100 ETHENYAS PARA COMPRAR UM BOOSTER.``")

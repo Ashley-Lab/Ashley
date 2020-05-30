@@ -28,12 +28,12 @@ class SkillClass(commands.Cog):
                                 '``E ABAIXO SE ENCONTRA SEUS PONTOS DISTRIBUIDOS:``\n'
                                 '**1**: ``Constituição - {}``\n**2**: ``Presição - {}``\n**3**: ``Agilidade - {}``\n'
                                 '**4**: ``Ataque - {}``\n**5**: ``Sorte - '
-                                '{}``'.format(data['rpg']['status']['pdh'],
-                                              data['rpg']['status']['con'],
-                                              data['rpg']['status']['prec'],
-                                              data['rpg']['status']['agi'],
-                                              data['rpg']['status']['atk'],
-                                              data['rpg']['status']['luk']))
+                                '{}``'.format(data['rpg']['Status']['pdh'],
+                                              data['rpg']['Status']['con'],
+                                              data['rpg']['Status']['prec'],
+                                              data['rpg']['Status']['agi'],
+                                              data['rpg']['Status']['atk'],
+                                              data['rpg']['Status']['luk']))
                 resposta.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
                 resposta.set_thumbnail(url="{}".format(ctx.author.avatar_url))
                 resposta.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -52,10 +52,10 @@ class SkillClass(commands.Cog):
             resposta = discord.Embed(
                 title='Escolha onde você quer adiconar seu ponto de habilidade:',
                 color=self.color,
-                description='**ATUALMENTE VOCÊ TEM {} PONTOS DE HABILIDADE**\n'
+                description='ATUALMENTE VOCÊ TEM **{}** PONTOS DE HABILIDADE\n'
                             '``QUAL HABILIDADE VOCE DESEJA AUMENTAR?``\n'
                             '**1**: ``{}``\n**2**: ``{}``\n**3**: ``{}``\n'
-                            '**4**: ``{}``\n**5**: ``{}``'.format(data['rpg']['status']['pdh'], 'con',
+                            '**4**: ``{}``\n**5**: ``{}``'.format(data['rpg']['Status']['pdh'], 'con',
                                                                   'prec', 'agi', 'atk', 'luk'))
             resposta.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
             resposta.set_thumbnail(url="{}".format(ctx.author.avatar_url))
@@ -71,22 +71,22 @@ class SkillClass(commands.Cog):
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito! Comando '
                                       'cancelado.``', delete_after=5.0)
             option = int(option.content)
-            if update['rpg']['status']['pdh'] > 0:
+            if update['rpg']['Status']['pdh'] > 0:
                 if option == 1:
-                    update['rpg']['status']['con'] += 1
-                    update['rpg']['status']['pdh'] -= 1
+                    update['rpg']['Status']['con'] += 1
+                    update['rpg']['Status']['pdh'] -= 1
                 elif option == 2:
-                    update['rpg']['status']['prec'] += 1
-                    update['rpg']['status']['pdh'] -= 1
+                    update['rpg']['Status']['prec'] += 1
+                    update['rpg']['Status']['pdh'] -= 1
                 elif option == 3:
-                    update['rpg']['status']['agi'] += 1
-                    update['rpg']['status']['pdh'] -= 1
+                    update['rpg']['Status']['agi'] += 1
+                    update['rpg']['Status']['pdh'] -= 1
                 elif option == 4:
-                    update['rpg']['status']['atk'] += 1
-                    update['rpg']['status']['pdh'] -= 1
+                    update['rpg']['Status']['atk'] += 1
+                    update['rpg']['Status']['pdh'] -= 1
                 elif option == 5:
-                    update['rpg']['status']['luk'] += 1
-                    update['rpg']['status']['pdh'] -= 1
+                    update['rpg']['Status']['luk'] += 1
+                    update['rpg']['Status']['pdh'] -= 1
                 else:
                     return await ctx.send('<:negate:520418505993093130>│``Opção Invalida!``', delete_after=5.0)
                 await self.bot.db.update_data(data, update, "users")
@@ -105,12 +105,12 @@ class SkillClass(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if ctx.author.id == data["user_id"]:
-            update['rpg']['status']['con'] = 1
-            update['rpg']['status']['prec'] = 1
-            update['rpg']['status']['agi'] = 1
-            update['rpg']['status']['atk'] = 1
-            update['rpg']['status']['luk'] = 1
-            update['rpg']['status']['pdh'] = update['rpg']['Level'] - 1
+            update['rpg']['Status']['con'] = 5
+            update['rpg']['Status']['prec'] = 5
+            update['rpg']['Status']['agi'] = 5
+            update['rpg']['Status']['atk'] = 5
+            update['rpg']['Status']['luk'] = 0
+            update['rpg']['Status']['pdh'] = update['rpg']['Level'] - 1
             await self.bot.db.update_data(data, update, "users")
             await ctx.send('<:confirmado:519896822072999937>│``Status resetados com sucesso!``', delete_after=5.0)
 

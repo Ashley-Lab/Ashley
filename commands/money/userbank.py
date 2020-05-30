@@ -38,18 +38,21 @@ class UserBank(commands.Cog):
         """Comando usado para verificar quanto dinheiro você tem
         Use ash wallet"""
         self.money = await self.get_atr(ctx.author.id, 'money')
+        self.gold = await self.get_atr(ctx.author.id, 'gold')
+        self.silver = await self.get_atr(ctx.author.id, 'silver')
+        self.bronze = await self.get_atr(ctx.author.id, 'bronze')
+
         a = '{:,.2f}'.format(float(self.money))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')
         d = c.replace('v', '.')
-        await ctx.send(f'<:coins:519896825365528596>│ No total você tem **R$ {d}** de ``ETHERNYAS`` na sua '
-                       f'carteira!')
-        self.gold = await self.get_atr(ctx.author.id, 'gold')
-        await ctx.send(f'{self.bot.money[2]} **{self.format_num(self.gold)}**')
-        self.silver = await self.get_atr(ctx.author.id, 'silver')
-        await ctx.send(f'{self.bot.money[1]} **{self.format_num(self.silver)}**')
-        self.bronze = await self.get_atr(ctx.author.id, 'bronze')
-        await ctx.send(f'{self.bot.money[0]} **{self.format_num(self.bronze)}**')
+
+        msg = f"<:coins:519896825365528596>│ **{ctx.author}** No total  você tem **R$ {d}** de ``ETHERNYAS`` na sua " \
+              f"carteira!\n {self.bot.money[2]} **{self.format_num(self.gold)}** | " \
+              f"{self.bot.money[1]} **{self.format_num(self.silver)}** | " \
+              f"{self.bot.money[0]} **{self.format_num(self.bronze)}**"
+
+        await ctx.send(msg)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -79,11 +82,6 @@ class UserBank(commands.Cog):
         update_guild_native = data_guild_native
         update_guild_native_member = data_guild_native_member
 
-        a = '{:,.0f}'.format(float(amount))
-        b = a.replace(',', 'v')
-        c = b.replace('.', ',')
-        d = c.replace('v', '.')
-
         if data_user['treasure']["money"] >= amount:
             update_user['treasure']['money'] -= amount
             update_guild_native['data'][f'total_money'] -= amount
@@ -93,8 +91,8 @@ class UserBank(commands.Cog):
             await self.bot.db.update_data(data_member, update_member, 'users')
             await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             await self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
-            return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {d} DE ETHERNYAS '
-                                  f'PARA {member.name} COM SUCESSO!``')
+            return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {self.format_num(amount)} DE '
+                                  f'ETHERNYAS PARA {member.name} COM SUCESSO!``')
         else:
             return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
                                   f"ETHERNYAS!``")

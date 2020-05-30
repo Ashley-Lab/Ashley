@@ -3,6 +3,7 @@ import asyncio
 import itertools
 import math
 import random
+import urllib
 import youtube_dl
 
 from discord.ext import commands
@@ -234,7 +235,10 @@ class GuildState:
 
     @staticmethod
     def is_requester(ctx):
-        return ctx.voice_client.source.requester == ctx.author
+        try:
+            return ctx.voice_client.source.requester == ctx.author
+        except AttributeError:
+            return False
 
 
 class MusicDefault(commands.Cog):
@@ -346,8 +350,17 @@ class MusicDefault(commands.Cog):
             last_search[ctx.guild.id] = list()
         last_search[ctx.guild.id].append(search)
         if last_search[ctx.guild.id] is not None:
-            source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
-            await player.queue.put(source)
+            try:
+                source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
+                await player.queue.put(source)
+            except youtube_dl.utils.DownloadError:
+                pass
+            except youtube_dl.utils.ExtractorError:
+                pass
+            except urllib.error.HTTPError:
+                pass
+            await ctx.send('<:alert_status:519896811192844288>│``ATUALMENTE MEU HOST ESTÁ IMPOSSIBILITADO PEDIR '
+                           'MUSICA AO YOUTUBE!``')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

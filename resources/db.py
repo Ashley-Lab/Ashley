@@ -330,9 +330,9 @@ class Database(object):
                     await self.add_type(ctx, (answer['amount'] * 3), answer['list'])
                     msg = f"**{answer['amount'] * 3}** ``Ethernyas``"
             if ext:
-                msg += f"\n``Sendo Elas:``\n" \
-                       f"**{answer['list'][0]}**  {self.bot.money[0]}\n" \
-                       f"**{answer['list'][1]}**  {self.bot.money[1]}\n" \
+                msg += f"\n``Sendo Elas:`` " \
+                       f"**{answer['list'][0]}**  {self.bot.money[0]} | " \
+                       f"**{answer['list'][1]}**  {self.bot.money[1]} | " \
                        f"**{answer['list'][2]}**  {self.bot.money[2]}\n"
             return msg
 
@@ -348,7 +348,7 @@ class Database(object):
                 update_user['inventory'][item] = amount
             response += f"**{amount}**: ``{self.bot.items[item][1]}``\n"
         await self.bot.db.update_data(data_user, update_user, 'users')
-        response += "```Boa sorte da proxima vez!```"
+        response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
         return response
 
     async def add_type(self, ctx, amount, ethernya):
@@ -473,7 +473,7 @@ class DataInteraction(object):
             try:
                 if message.author.id == record["user_id"]:
                     time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() - record["user"]['xp_time']
-                    if time_diff >= 60:
+                    if time_diff >= 5:
                         change = randint(1, 200)
                         if 10 < update['user']['level'] < 20 and update['user']['ranking'] is not None:
                             if change == 200 and update['user']['ranking'] == "Bronze":

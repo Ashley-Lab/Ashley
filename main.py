@@ -54,7 +54,7 @@ class Ashley(commands.AutoShardedBot):
         self.prefix_ = "'ash.', 'ash '"
         self.bl_item = ['medal', 'rank_point']
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.staff = [235937029106434048, 300592580381376513, 299273939614564363]
+        self.staff = [235937029106434048, 300592580381376513]
         self.version = "API: " + str(discord.__version__) + " | BOT: 6.9.82 | PROGRESS: " + str(self.progress)
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
         self.data_cog = {}
@@ -158,8 +158,6 @@ class Ashley(commands.AutoShardedBot):
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
             _name = ctx.author.name.upper()
-            if str(ctx.author.id) not in self.blacklist:
-                await self.data.level_up(ctx)
             data = await self.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data_user is not None:
@@ -255,10 +253,11 @@ class Ashley(commands.AutoShardedBot):
 
         if message.webhook_id is not None:
             ctx = await self.get_context(message)
-            await self.invoke(ctx)
+            return await self.invoke(ctx)
 
         if message.guild is not None and str(message.author.id) not in self.blacklist:
-            await self.data.add_experience(message, 5)
+            await self.data.add_experience(message, randint(5, 15))
+            await self.data.level_up(message)
             if message.content.lower() in self.shortcut:
                 msg = copy.copy(message)
                 msg.content = self.shortcut[message.content.lower()]
