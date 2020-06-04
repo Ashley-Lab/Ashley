@@ -64,7 +64,7 @@ class Economy(commands.Cog):
         c = b.replace('.', ',')
         d = c.replace('v', '.')
 
-        msg = f"<:coins:519896825365528596>│ **{ctx.author}** No total há **R$ {d}** de ``ETHERNYAS`` geral em todos os " \
+        msg = f"<:coins:519896825365528596>│ **{ctx.author}** No total há **R$ {d}** de ``ETHERNYAS`` em todos os " \
               f"servidores\n {self.bot.money[2]} **{self.format_num(self.gold)}** | " \
               f"{self.bot.money[1]} **{self.format_num(self.silver)}** | " \
               f"{self.bot.money[0]} **{self.format_num(self.bronze)}**\n\n" \

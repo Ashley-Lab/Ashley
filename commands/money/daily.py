@@ -178,10 +178,7 @@ class DailyClass(commands.Cog):
                 update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
                 await self.bot.db.update_data(data, update, 'users')
 
-        try:
-            update_user['user']['rec'] += 1
-        except KeyError:
-            update_user['user']['rec'] = 1
+        update_user['user']['rec'] += 1
 
         if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)

@@ -3,11 +3,12 @@ import discord
 import datetime
 import operator
 
-from discord.ext import commands
-from motor.motor_asyncio import AsyncIOMotorClient as Client
 from random import randint
 from collections import Counter
+from discord.ext import commands
+from motor.motor_asyncio import AsyncIOMotorClient as Client
 from resources.utility import parse_duration, quant_etherny
+from resources.structure import user_data_structure, guild_data_structure
 
 with open("data/auth.json") as auth:
     _auth = json.loads(auth.read())
@@ -85,189 +86,39 @@ class Database(object):
     #                               ITERAÇÕES DIRETAS COM O BANCO DE DADOS
     # ---------------------------------- ============================ -----------------------------------
 
-    async def add_user(self, ctx, **data):
-        db_name = data.get("db_name", "users")
-        data = {
-            # dados basicos do usuario
-            "user_id": ctx.author.id,
-            "guild_id": ctx.guild.id,
-            # dados de usuario para uso do bot comum
-            "user": {
-                "experience": 0,
-                "level": 1,
-                "ranking": "Bronze",
-                "titling": "Vagabond",
-                "married": False,
-                "stars": 0,
-                "rec": 0,
-                "background": "default",
-                "ia_response": True,
-                "achievements": list()
-            },
-            # dados da parte financeira
-            "treasure": {
-                "money": 0,
-                "gold": 0,
-                "silver": 0,
-                "bronze": 0
-            },
-            # dados de configuração de recursos do bot
-            "config": {
-                "playing": False,
-                "battle": False,
-                "provinces": None,
-                "vip": False,
-                "roles": [],
-                "points": 0
-            },
-            # dados de moderações globais e locais
-            "moderation": {
-                "credibility": {"ashley": 100, "guilds": [{"id": 0, "points": 100}]},
-                "warns": [{"status": False, "author": None, "reason": None, "date": None, "point": 0}],
-                "behavior": {"guild_id": 0, "historic": {"input": [], "output": []}},
-                "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
-            },
-            # dados do rpg do bot
-            "rpg": {
-                "Name": None,
-                "Level": 1,
-                "XP": 0,
-                "Status": {
-                    "con": 5,
-                    "prec": 5,
-                    "agi": 5,
-                    "atk": 5,
-                    "luk": 0,
-                    "pdh": 0
-                },
-                "Class": 'Default',
-                "artifacts": dict(),
-                "relics": dict(),
-                "img": None,
-            },
-            # dados do sistema de pets
-            "pet": {
-                "status": False,
-                "pet_equipped": None,
-                "pet_bag": list(),
-                "pet_skin_status": None,
-                "pet_skin": None
-            },
-            # dados do invetario de itens (tando rpg quanto outros itens importantes para o bot
-            "inventory": {
-                "medal": 0,
-                "rank_point": 0,
-                "coins": 10
-            },
-            # dados do inventario de quests do bot (voltado para o rpg)
-            "inventory_quest": dict(),
-            "artifacts": dict(),
-            # dados do cooldown dos comandos especificos (diarios)
-            "cooldown": {}
-        }
-        if await self.get_data("user_id", ctx.author.id, db_name) is None:
-            await self.push_data(data, db_name)
+    async def add_user(self, ctx):
+
+        if await self.get_data("user_id", ctx.author.id, "users") is None:
+            data = user_data_structure
+            data["user_id"] = ctx.author.id
+            data["guild_id"] = ctx.guild.id
+            await self.push_data(data, "users")
 
     async def add_guild(self, guild, data):
-        db_name = data.get("db_name", "guilds")
-        new_data = {
-            "guild_id": guild.id,
-            "vip": False,
-            "data": {
-                "commands": 0,
-                "lang": "pt",
-                "ranking": "Bronze",
-                "items": dict(),
-                "accounts": 0,
-                "total_money": 0,
-                "total_gold": 0,
-                "total_silver": 0,
-                "total_bronze": 0,
-            },
-            "treasure": {
-                "total_money": 0,
-                "total_gold": 0,
-                "total_silver": 0,
-                "total_bronze": 0
-            },
-            "log_config": {
-                "log": data.get("log", False),
-                "log_channel_id": data.get("log_channel_id", None),
-                "msg_delete": data.get("msg_delete", True),
-                "msg_edit": data.get("msg_edit", True),
-                "channel_edit_topic": data.get("channel_edit_topic", True),
-                "channel_edit_name": data.get("channel_edit_name", True),
-                "channel_created": data.get("channel_created", True),
-                "channel_deleted": data.get("channel_deleted", True),
-                "channel_edit": data.get("channel_edit", True),
-                "role_created": data.get("role_created", True),
-                "role_deleted": data.get("role_deleted", True),
-                "role_edit": data.get("role_edit", True),
-                "guild_update": data.get("guild_update", True),
-                "member_edit_avatar": data.get("member_edit_avatar", True),
-                "member_edit_nickname": data.get("member_edit_nickname", True),
-                "member_voice_entered": data.get("member_voice_entered", True),
-                "member_voice_exit": data.get("member_voice_exit", True),
-                "member_ban": data.get("member_ban", True),
-                "member_unBan": data.get("member_unBan", True),
-                "emoji_update": data.get("emoji_update", True)
-            },
-            "ia_config": {
-                "auto_msg": data.get("auto_msg", False),
-            },
-            "rpg_config": {
-                "rpg": data.get("rpg", False),
-                "announcement": data.get("announcement", False),
-                "announcement_id": data.get("announcement_id", None),
-                "chat_farm": data.get("chat_farm", False),
-                "chat_farm_id": data.get("chat_farm_id", None),
-                "chat_battle": data.get("chat_battle", False),
-                "chat_battle_id": data.get("chat_battle_id", None),
-                "chat_pvp": data.get("chat_pvp", False),
-                "chat_pvp_id": data.get("chat_pvp_id", None)
-            },
-            "bot_config": {
-                "ash_news": data.get("ash_news", False),
-                "ash_news_id": data.get("log", None),
-                "ash_git": data.get("ash_news_id", False),
-                "ash_git_id": data.get("ash_git_id", None),
-                "ash_draw": data.get("ash_draw", False),
-                "ash_draw_id": data.get("ash_draw_id", None),
-            },
-            "func_config": {
-                "cont_users": data.get("cont_users", False),
-                "cont_users_id": data.get("cont_users_id", None),
-                "member_join": data.get("member_join", False),
-                "member_join_id": data.get("member_join_id", None),
-                "member_remove": data.get("member_remove", False),
-                "member_remove_id": data.get("member_remove_id", None),
-            },
-            "moderation": {
-                "status": False,
-                "moderation_log": False,
-                "moderation_channel_id": None,
-                "bad_word": False,
-                "bad_word_list": list(),
-                "flood": False,
-                "flood_channels": list(),
-                "ping": False,
-                "ping_channels": list(),
-                "join_system": {
-                    "join_system": False,
-                    "join_system_channel_door": None,
-                    "join_system_channel_log": None,
-                    "join_system_role": None,
-                },
-                "prison": {
-                    "status": False,
-                    "prison_channel": None,
-                    "prison_role": None,
-                    "prisoners": {"id": {"time": 0, "reason": None, "roles": list()}}
-                }
-            }
-        }
-        if await self.get_data("guild_id", guild.id, db_name) is None:
-            await self.push_data(new_data, db_name)
+        _data = guild_data_structure
+        _data['guild_id'] = guild.id
+
+        _data['log_config']['log'] = data.get("log", False)
+        _data['log_config']['log_channel_id'] = data.get("log_channel_id", None)
+
+        _data['ia_config']["auto_msg"] = data.get("auto_msg", False)
+
+        _data['bot_config']["ash_news"] = data.get("ash_news", False)
+        _data['bot_config']["ash_news_id"] = data.get("ash_news_id", None)
+        _data['bot_config']["ash_git"] = data.get("ash_git", False)
+        _data['bot_config']["ash_git_id"] = data.get("ash_git_id", None)
+        _data['bot_config']["ash_draw"] = data.get("ash_draw", False)
+        _data['bot_config']["ash_draw_id"] = data.get("ash_draw_id", None)
+
+        _data['func_config']["cont_users"] = data.get("cont_users", False)
+        _data['func_config']["cont_users_id"] = data.get("cont_users_id", None)
+        _data['func_config']["member_join"] = data.get("member_join", False)
+        _data['func_config']["member_join_id"] = data.get("member_join_id", None)
+        _data['func_config']["member_remove"] = data.get("member_remove", False)
+        _data['func_config']["member_remove_id"] = data.get("member_remove_id", None)
+
+        if await self.get_data("guild_id", guild.id, "guilds") is None:
+            await self.push_data(_data, "guilds")
 
     async def take_money(self, ctx, amount: int = 0):
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")

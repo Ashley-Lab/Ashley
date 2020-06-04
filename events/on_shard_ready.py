@@ -14,9 +14,6 @@ class Shards(commands.Cog):
     @commands.Cog.listener()
     async def on_shard_ready(self, shard_id):
 
-        # inicializar os atributos awaits
-        await self.bot.atr_initialize()
-
         self.web_hook.embed = Embed(
             colour=random_color(),
             description=f"**O shard `{shard_id}` se encontra pronto para uso**\nAproveite o dia ;)",

@@ -59,10 +59,7 @@ class CharadeClass(commands.Cog):
                                f'**{self.charade[charade].lower().replace("resposta: ", "")}** ``e vc respondeu`` '
                                f'**{answer.content.lower()}** ``Ganhou 12 pontos!``')
 
-                try:
-                    update['config']['points'] += 12
-                except KeyError:
-                    update['config']['points'] = 12
+                update['config']['points'] += 12
 
             elif len([name for name in answer.content.lower().split() if len(name) >= 2 and
                      name in self.charade[charade].lower().replace('resposta: ', '')]) > \
@@ -71,10 +68,7 @@ class CharadeClass(commands.Cog):
                                f'era `` **{self.charade[charade].lower().replace("resposta: ", "")}** ``e vc '
                                f'respondeu`` **{answer.content.lower()}** ``Ganhou 4 pontos!``')
 
-                try:
-                    update['config']['points'] += 4
-                except KeyError:
-                    update['config']['points'] = 4
+                update['config']['points'] += 4
 
             else:
                 await ctx.send(f'<:negate:520418505993093130>│``A resposta era `` '
@@ -82,12 +76,9 @@ class CharadeClass(commands.Cog):
                                f'respondeu`` **{answer.content.lower()}** '
                                f'``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
 
-                try:
-                    if update['config']['points'] - 8 >= 0:
-                        update['config']['points'] -= 8
-                    else:
-                        update['config']['points'] = 0
-                except KeyError:
+                if update['config']['points'] - 8 >= 0:
+                    update['config']['points'] -= 8
+                else:
                     update['config']['points'] = 0
 
             update['config']['playing'] = False

@@ -16,6 +16,7 @@ class ReceptionClass(commands.Cog):
     async def reception(self, ctx):
         """comando pra configurar o welcome
         Use ash reception ou ash rp e siga as instruções no comando(use # pra marcar os canais)"""
+
         def check(m):
             return m.author == ctx.author
 
@@ -64,20 +65,20 @@ class ReceptionClass(commands.Cog):
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     while len(resp) > 1900:
-                        ctx.send('Mensagem muito longa, favor usar {} caracteres a menos.'.format(len(resp)-1900))
+                        ctx.send('Mensagem muito longa, favor usar {} caracteres a menos.'.format(len(resp) - 1900))
                         resp = await self.bot.wait_for('message', check=check)
                         resp = resp.content
                     data['message'] = resp
                     await msg.delete()
                 else:
                     total = 0
-                    msg = await  ctx.send('Defina um titulo pro embed de {}.'.format(c))
+                    msg = await ctx.send('Defina um titulo pro embed de {}.'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     data['embed']['title'] = resp
                     total += len(data['embed']['title'])
                     await msg.delete()
-                    msg = await  ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
+                    msg = await ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     while True:
@@ -91,22 +92,22 @@ class ReceptionClass(commands.Cog):
                             resp = resp.content
                     data['embed']['color'] = resp
                     await msg.delete()
-                    msg = await  ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
+                    msg = await ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     total += len(resp)
                     data['embed']['description'] = resp
                     await msg.delete()
-                    msg = await  ctx.send('Defina uma imagem pro embed de {}.'
-                                          '(use um url, placeholder user-avatar-url é usavel aqui. '
-                                          'Se não quiser coloque 0.)'.format(c))
+                    msg = await ctx.send('Defina uma imagem pro embed de {}.'
+                                         '(use um url, placeholder user-avatar-url é usavel aqui. '
+                                         'Se não quiser coloque 0.)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     data['embed']['image'] = resp
                     await msg.delete()
-                    msg = await  ctx.send('Defina uma thumbnail pro embed de {}.(use um url, '
-                                          'placeholder user-avatar-url é usavel aqui. '
-                                          'Se não quiser coloque 0.)'.format(c))
+                    msg = await ctx.send('Defina uma thumbnail pro embed de {}.(use um url, '
+                                         'placeholder user-avatar-url é usavel aqui. '
+                                         'Se não quiser coloque 0.)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     data['embed']['thumbnail'] = resp
@@ -114,14 +115,14 @@ class ReceptionClass(commands.Cog):
                     data['embed']['fields'] = {}
                     limitedecampos = 3
                     listalimite = []
-                    for c2 in range(0, limitedecampos+1):
+                    for c2 in range(0, limitedecampos + 1):
                         listalimite.append(str(c2))
-                    msg = await  ctx.send('Defina um numero de campos pro embed de {}.'
-                                          '(0 caso não queira usar, até 3.)'.format(c))
+                    msg = await ctx.send('Defina um numero de campos pro embed de {}.'
+                                         '(0 caso não queira usar, até 3.)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     while resp not in listalimite:
-                        msg = await  ctx.send('Numero invalido ou fora de limite.')
+                        msg = await ctx.send('Numero invalido ou fora de limite.')
                         resp = await self.bot.wait_for('message', check=check)
                         resp = resp.content
                     data['embed']['fields']['numero'] = int(resp)
@@ -129,12 +130,12 @@ class ReceptionClass(commands.Cog):
                     data['embed']['fields']['fields'] = []
                     for c2 in range(0, data['embed']['fields']['numero']):
                         templist = []
-                        msg = await  ctx.send('Defina o titulo {}º campo.'.format(c2))
+                        msg = await ctx.send('Defina o titulo {}º campo.'.format(c2))
                         resp = await self.bot.wait_for('message', check=check)
                         resp = resp.content
                         templist.append(resp)
                         await msg.delete()
-                        msg = await  ctx.send('Defina o conteudo {}º campo.'.format(c2))
+                        msg = await ctx.send('Defina o conteudo {}º campo.'.format(c2))
                         resp = await self.bot.wait_for('message', check=check)
                         resp = resp.content
                         templist.append(resp)

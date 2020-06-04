@@ -37,22 +37,16 @@ class MarriedSystem(commands.Cog):
             if member.id == ctx.author.id:
                 return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE CASAR CONSIGO MESMO!``')
 
-            try:
-                if data_user['user']['marrieding'] is False and data_member['user']['marrieding'] is False:
-                    update_user['user']['marrieding'] = True
-                    update_member['user']['marrieding'] = True
-                    await self.bot.db.update_data(data_user, update_user, 'users')
-                    await self.bot.db.update_data(data_member, update_member, 'users')
-                elif data_user['user']['marrieding'] is True:
-                    return await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
-                elif data_member['user']['marrieding'] is True:
-                    return await ctx.send('<:negate:520418505993093130>│{} `` JÁ ESTÁ EM PROCESSO DE '
-                                          'CASAMENTO!``'.format(member.mention))
-            except KeyError:
+            if data_user['user']['marrieding'] is False and data_member['user']['marrieding'] is False:
                 update_user['user']['marrieding'] = True
                 update_member['user']['marrieding'] = True
                 await self.bot.db.update_data(data_user, update_user, 'users')
                 await self.bot.db.update_data(data_member, update_member, 'users')
+            elif data_user['user']['marrieding'] is True:
+                return await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
+            elif data_member['user']['marrieding'] is True:
+                return await ctx.send('<:negate:520418505993093130>│{} `` JÁ ESTÁ EM PROCESSO DE '
+                                      'CASAMENTO!``'.format(member.mention))
 
             data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             data_member = await self.bot.db.get_data("user_id", member.id, "users")

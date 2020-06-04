@@ -55,19 +55,14 @@ class PokemonClass(commands.Cog):
             if answer.content.upper() == response['nome'].upper():
                 await ctx.send(f'<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 ``O pokemon era`` '
                                f'**{response["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 12 pontos!``')
-                try:
-                    update['config']['points'] += 12
-                except KeyError:
-                    update['config']['points'] = 12
+                update['config']['points'] += 12
             else:
                 await ctx.send(f'<:negate:520418505993093130>│``O pokemon era`` **{response["nome"]}** ``e vc '
                                f'respondeu`` **{answer.content}** ``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
-                try:
-                    if update['config']['points'] - 8 >= 0:
-                        update['config']['points'] -= 8
-                    else:
-                        update['config']['points'] = 0
-                except KeyError:
+
+                if update['config']['points'] - 8 >= 0:
+                    update['config']['points'] -= 8
+                else:
                     update['config']['points'] = 0
 
             update['config']['playing'] = False

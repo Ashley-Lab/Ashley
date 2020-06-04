@@ -55,11 +55,6 @@ ytdlopts = {
     'source_address': '0.0.0.0'
 }
 
-ffmpegopts = {
-    'before_options': '-nostdin',
-    'options': '-vn'
-}
-
 ytdl = YoutubeDL(ytdlopts)
 
 

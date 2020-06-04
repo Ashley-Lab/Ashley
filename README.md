@@ -4,7 +4,7 @@
 </p>
 
 ## Sobre Mim
->Meu primeiro projeto no GITHUB - Daniel Amaral (25 Anos) Recife/PE
+>Meu primeiro projeto no GITHUB - Daniel Amaral (26 Anos) Recife/PE
 - Email: danielamaral.f@hotmail.com
 - Criado por: Denky#5960🤴
 
@@ -21,15 +21,14 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 **Designers e Ilustradores**
 
-- Patchouli Knowledge#9732 (Olivia Martins)
 - zNunshei#8659 (Matheus Vilares)
-- Jurubeba_#5096 (Juanita Pereira)
+- Mochi#1030 (-)
 
 **Revisores Gramaticais**
 
 - Denky#5960 (Daniel Amaral)
-- Paçoca#1865 (Emílio Silva)
 - Bublee#9482 (Geórgia Bezerra)
+- zMews#2863 (-)
 
 ## Roteiristas
 
@@ -42,13 +41,11 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 **Portugues**
 
-- Paçoca#1865 (Emílio Silva)
 - Denky#5960 (Daniel Amaral)
 
 **Ingles**
 
 - Denky#5960 (Daniel Amaral)
-- Patchouli Knowledge#9732 (Olivia Martins)
 
 ## Build Pack
 

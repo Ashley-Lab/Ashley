@@ -24,7 +24,7 @@ from config import data as config
 # CLASSE PRINCIPAL SENDO SUBCLASSE DA BIBLIOTECA DISCORD
 class Ashley(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, shard_count=2, **kwargs)
+        super().__init__(*args, shard_count=1, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
         self.commands_used = Counter()
@@ -110,10 +110,7 @@ class Ashley(commands.AutoShardedBot):
                 self.guilds_commands[ctx.guild.id] += 1
                 self.user_commands[ctx.author.id] += 1
                 update_guild = data_guild
-                try:
-                    update_guild['data']['commands'] += 1
-                except KeyError:
-                    update_guild['data']['commands'] = 1
+                update_guild['data']['commands'] += 1
                 await self.db.update_data(data_guild, update_guild, 'guilds')
                 if data_user is not None:
                     if (self.guilds_commands[ctx.guild.id] % 10) == 0:
@@ -162,10 +159,7 @@ class Ashley(commands.AutoShardedBot):
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data_user is not None:
                 update_user = data_user
-                try:
-                    update_user['user']['commands'] += 1
-                except KeyError:
-                    update_user['user']['commands'] = 1
+                update_user['user']['commands'] += 1
                 if (update_user['user']['commands'] % 2) == 0:
                     chance = randint(1, 100)
                     quant = randint(1, 3)
@@ -318,33 +312,30 @@ if __name__ == "__main__":
     bot.remove_command('help')
     cont = 0
 
-    try:
-        print("\033[1;35m( >> ) | Iniciando...\033[m")
-        print("\033[1;35m( > ) | Iniciando carregamento de extensões...\033[m")
-        f = open("modulos.txt", "r")
-        for name in f.readlines():
-            if len(name.strip()) > 0:
-                try:
-                    if '@' not in name.strip() and '#' not in name.strip():
-                        bot.load_extension(name.strip())
-                        if name.strip() not in bot.vip_cog:
-                            bot.data_cog[name.strip()] = "<:on_status:519896814799945728>"
-                        else:
-                            bot.data_cog[name.strip()] = "<:stream_status:519896814825242635>"
-                        cont += 1
+    print("\033[1;35m( >> ) | Iniciando...\033[m\n")
+    print("\033[1;35m( >> ) | Iniciando carregamento de extensões...\033[m")
+    f = open("modulos.txt", "r")
+    for name in f.readlines():
+        if len(name.strip()) > 0:
+            try:
+                if '@' not in name.strip() and '#' not in name.strip():
+                    bot.load_extension(name.strip())
+                    if name.strip() not in bot.vip_cog:
+                        bot.data_cog[name.strip()] = "<:on_status:519896814799945728>"
                     else:
-                        if '#' not in name.strip():
-                            print(f'\033[1;36m( ☢️ ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
-                            bot.data_cog[name.strip()] = "<:oc_status:519896814225457152>"
-                except Exception as e:
+                        bot.data_cog[name.strip()] = "<:stream_status:519896814825242635>"
+                    cont += 1
+                else:
                     if '#' not in name.strip():
-                        print(f"\033[1;31m( ❌ ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
-                        bot.data_cog[name.strip()] = "<:alert_status:519896811192844288>"
-                        traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
-                    continue
-        f.close()
-    except Exception as e:
-        print('[Erro] : {}'.format(e))
+                        print(f'\033[1;36m( ☢️ ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
+                        bot.data_cog[name.strip()] = "<:oc_status:519896814225457152>"
+            except Exception as e:
+                if '#' not in name.strip():
+                    print(f"\033[1;31m( ❌ ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
+                    bot.data_cog[name.strip()] = "<:alert_status:519896811192844288>"
+                    traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
+                continue
+    f.close()
 
     print(f"\033[1;35m( ✔ ) | {cont}/{len(bot.data_cog.keys())} extensões foram carregadas!\033[m")
     bot.run(_auth['_t__ashley'])

@@ -45,36 +45,6 @@ class ProfileSystem(commands.Cog):
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
 
         try:
-            if data['user']['married']:
-                user = self.bot.get_user(data['user']['married_at'])
-        except KeyError:
-            update['user']['married'] = False
-
-        try:
-            if data['user']['about']:
-                pass
-        except KeyError:
-            update['user']['about'] = "Mude seu about, usando o comando \"ash about <text>\""
-
-        try:
-            if data['artifacts']:
-                pass
-        except KeyError:
-            update['artifacts'] = dict()
-
-        try:
-            if data['pet']:
-                pass
-        except KeyError:
-            update['pet'] = {
-                "status": False,
-                "pet_equipped": None,
-                "pet_bag": list(),
-                "pet_skin_status": None,
-                "pet_skin": None
-            }
-
-        try:
             epoch = dt.utcfromtimestamp(0)
             cooldown = data["cooldown"]["daily vip"]
             time_diff = cooldown - (dt.utcnow() - epoch).total_seconds()
@@ -103,33 +73,10 @@ class ProfileSystem(commands.Cog):
         vip[0].append(False)
 
         if n_data['user']['married']:
+            user = self.bot.get_user(data['user']['married_at'])
             married = user.avatar_url_as(format="png")
         else:
             married = None
-
-        if n_data['user']['titling'] is None:
-            titling = 'Vagabond'
-        else:
-            titling = n_data['user']['titling']
-
-        try:
-            comandos = self.number_convert(n_data['user']['commands'])
-        except KeyError:
-            comandos = 0
-
-        try:
-            if n_data['user']['about']:
-                about = n_data['user']['about']
-            else:
-                about = "Mude seu about, usando o comando \"ash about <text>\""
-        except KeyError:
-            about = "Mude seu about, usando o comando \"ash about <text>\""
-
-        try:
-            if n_data['user']['rec']:
-                rec = n_data['user']['rec']
-        except KeyError:
-            rec = 0
 
         data_profile = {
             "avatar_member": member.avatar_url_as(format="png"),
@@ -138,11 +85,11 @@ class ProfileSystem(commands.Cog):
             "xp": n_data['user']['experience'],
             "level": str(n_data['user']['level']),
             "vip": vip,
-            "rec": str(rec),
+            "rec": str(n_data['user']['rec']),
             "coin": str(self.number_convert(n_data['inventory']['coins'])),
-            "commands": str(comandos),
-            "entitlement": str(titling),
-            "about": remove_acentos_e_caracteres_especiais(about),
+            "commands": str(self.number_convert(n_data['user']['commands'])),
+            "entitlement": str(n_data['user']['titling']),
+            "about": remove_acentos_e_caracteres_especiais(n_data['user']['about']),
             "wallet": str(d),
             "pet": n_data['pet']['pet_equipped'],
             "artifacts": n_data['artifacts']
@@ -165,15 +112,13 @@ class ProfileSystem(commands.Cog):
         if len(text) > 200:
             return await ctx.send("<:alert_status:519896811192844288>│``SEU TEXTO NAO PODE TER MAIS QUE 200 "
                                   "CARACTERES``")
-        try:
-            if data['user']['about'] and len(text) <= 200:
-                update['user']['about'] = text
-                await self.bot.db.update_data(data, update, 'users')
-                await ctx.send("<:confirmado:519896822072999937>│``TEXTO SOBRE VOCÊ ATUALIZADO COM SUCESSO!``")
-            else:
-                return await ctx.send("<:alert_status:519896811192844288>│``TEXTO MUITO GRANDE``")
-        except KeyError:
-            return await ctx.send("<:alert_status:519896811192844288>│``OLHE SEU PERFIL PRIMEIRO!``")
+
+        if data['user']['about'] and len(text) <= 200:
+            update['user']['about'] = text
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send("<:confirmado:519896822072999937>│``TEXTO SOBRE VOCÊ ATUALIZADO COM SUCESSO!``")
+        else:
+            return await ctx.send("<:alert_status:519896811192844288>│``TEXTO MUITO GRANDE``")
 
 
 def setup(bot):

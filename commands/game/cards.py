@@ -55,27 +55,19 @@ class CardsClass(commands.Cog):
             if answer.content.upper() == card['nome'].upper():
                 await ctx.send(f'<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 ``A carta era`` '
                                f'**{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 12 pontos!``')
-                try:
-                    update['config']['points'] += 12
-                except KeyError:
-                    update['config']['points'] = 12
+                update['config']['points'] += 12
             elif len([name for name in answer.content.upper().split() if len(name) >= 2 and
                      name in card['nome'].upper().split()]) > (len(card['nome'].upper().split()) / 2):
                 await ctx.send(f'<:rank:519896825411665930>│``VOCÊ QUASE ACERTOU!`` 🎊 **PARABENS** 🎉 ``A carta era``'
                                f' **{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 4 pontos!``')
-                try:
-                    update['config']['points'] += 4
-                except KeyError:
-                    update['config']['points'] = 4
+                update['config']['points'] += 4
             else:
                 await ctx.send(f'<:negate:520418505993093130>│``A carta era`` **{card["nome"]}** ``e vc respondeu`` '
                                f'**{answer.content}** ``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
-                try:
-                    if update['config']['points'] - 8 >= 0:
-                        update['config']['points'] -= 8
-                    else:
-                        update['config']['points'] = 0
-                except KeyError:
+
+                if update['config']['points'] - 8 >= 0:
+                    update['config']['points'] -= 8
+                else:
                     update['config']['points'] = 0
 
             update['config']['playing'] = False
