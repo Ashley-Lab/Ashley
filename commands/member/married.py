@@ -127,8 +127,8 @@ class MarriedSystem(commands.Cog):
         update_member = data_member
 
         if data_member is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
-                                  '``esse usuário não está cadastrado!``', delete_after=5.0)
+            await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+                           '``esse usuário não está cadastrado!``', delete_after=5.0)
         if member is not None:
             if member.id == ctx.author.id:
                 return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE SE SEPARAR DE VOCÊ MESMO!``')
@@ -151,16 +151,18 @@ class MarriedSystem(commands.Cog):
                     await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
             else:
                 update_user['user']['married'] = False
-                update_member['user']['married'] = False
                 update_user['user']['married_at'] = None
-                update_member['user']['married_at'] = None
                 await self.bot.db.update_data(data_user, update_user, 'users')
-                await self.bot.db.update_data(data_member, update_member, 'users')
                 return await ctx.send(
                     f"😢 **QUE PENA** 😢 {ctx.author.mention} **agora você"
                     f" está SEPARADO(A)!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
         elif data_member['user']['married'] is False:
-            return await ctx.send('<:negate:520418505993093130>│``ELE(A) NÃO ESTA CASADO(A)!``')
+            update_user['user']['married'] = False
+            update_user['user']['married_at'] = None
+            await self.bot.db.update_data(data_user, update_user, 'users')
+            return await ctx.send(
+                f"😢 **QUE PENA** 😢 {ctx.author.mention} **agora você"
+                f" está SEPARADO(A)!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
         else:
             return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO ESTA CASADO(A)!``')
 

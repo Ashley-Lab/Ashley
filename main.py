@@ -186,7 +186,7 @@ class Ashley(commands.AutoShardedBot):
                     msg = await self.db.add_money(ctx, 6, True)
                     await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
 
-                _chance = randint(1, 100)
+                _chance = randint(1, 200)
                 if _chance <= 2:
 
                     BOX = choice(self.boxes)

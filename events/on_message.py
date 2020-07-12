@@ -2,41 +2,17 @@ import time
 import discord
 
 from config import data as config
-from random import choice
 from asyncio import TimeoutError, sleep
-from discord.ext import commands
-from resources.utility import get_response, include
+from resources.utility import include
 
 
 class SystemMessage(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.msg = {}
         self.ping_test = {}
         self.time = None
         self.user_cont_msg = {}
         self.user_cont_word = {}
-        self.letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-                        't', 'u', 'v', 'w', 'x', 'y', 'z')
-
-    async def send_message(self, message):
-        try:
-            if self.msg[message.author.id] is None:
-                return
-        except KeyError:
-            self.msg[message.author.id] = "não entendi..."
-        pet_n = choice(list(self.bot.pets.keys()))
-        pet = self.bot.pets[pet_n]
-        if pet['colour'][0] is True:
-            pet_c = choice(pet['colour'][2])
-            indice = pet['colour'][2].index(pet_c)
-            mask = choice(self.letters[:pet['mask'][indice]])
-            link_ = f'images/pet/{pet_n}/{pet_c}/mask_{mask}.png'
-        else:
-            mask = choice(self.letters[:pet['mask'][0]])
-            link_ = f'images/pet/{pet_n}/mask_{mask}.png'
-        ctx = await self.bot.get_context(message)
-        await self.bot.web_hook_rpg(ctx, link_, pet_n, self.msg[ctx.author.id], 'Pet')
 
     async def check_p(self, message):
         ctx = await self.bot.get_context(message)
@@ -68,37 +44,6 @@ class SystemMessage(commands.Cog):
                                                                       'PAPAI```'.format(message.author.mention))
                                 else:
                                     return
-
-                try:
-                    user_data = await self.bot.db.get_data("user_id", message.author.id, "users")
-                    if user_data is not None:
-                        if user_data['config']['vip'] is True and 'pet ' in message.content.lower():
-                            if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
-                                self.msg[message.author.id] = choice(config['salutation']['day'])
-                                await self.send_message(message)
-                            if 'boa noite' in message.content.lower():
-                                self.msg[message.author.id] = choice(config['salutation']['night'])
-                                await self.send_message(message)
-                            if '?' in message.content.lower():
-                                self.msg[message.author.id] = await get_response(message)
-                                await self.send_message(message)
-                        elif 'pet ' in message.content.lower() and '?' in message.content.lower() \
-                                and user_data['config']['vip'] is False:
-                            if await self.check_p(message):
-                                await message.channel.send("<:negate:520418505993093130>│``APENAS USUARIOS COM VIP"
-                                                           " ATIVO PODEM USAR ESSE COMANDO``\n **Para ganhar seu vip"
-                                                           " diário use ASH INVITE entre no meu canal de suporte e"
-                                                           " use o comando ASH VIP**")
-                    else:
-                        try:
-                            if message.mentions[0] == self.bot.user or include(message.content, ['ashley', 'ash']):
-                                if await self.check_p(message):
-                                    await message.channel.send(f'<:negate:520418505993093130>│``Você ainda não está '
-                                                               f'registrado, por favor use`` **ash register**.')
-                        except IndexError:
-                            pass
-                except discord.Forbidden:
-                    pass
 
                 if data_guild['ia_config']['auto_msg']:
                     if message.author.id not in self.ping_test:

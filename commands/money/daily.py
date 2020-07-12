@@ -80,7 +80,7 @@ class DailyClass(commands.Cog):
                     money = randint(240 + min_, 2400 + max_)
                 msg = await self.bot.db.add_money(ctx, money)
                 await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar:`` \n'
-                               f'**{msg}**\n'
+                               f'{msg}\n'
                                f'``Obs:`` **{max_ + min_}** ``de ETHERNYAS a mais por usar {min_} comandos.``')
             else:
                 try:
@@ -182,7 +182,7 @@ class DailyClass(commands.Cog):
 
         if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)
-            if chance <= 20:
+            if chance <= 25:
                 update_user['user']['stars'] += 1
                 await ctx.send(f'<:rank:519896825411665930>│{member.mention} ``GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
                                f'**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '

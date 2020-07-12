@@ -1,6 +1,5 @@
 import discord
 import asyncio
-import pymongo
 
 from random import choice, randint
 from itertools import cycle

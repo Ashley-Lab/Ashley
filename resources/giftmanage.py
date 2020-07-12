@@ -59,7 +59,7 @@ async def open_gift(bot, gift):
         if validity:
             await bot.db.delete_data({"_id": _id}, "gift")
 
-        ethernyas = randint(500, 1000)
+        ethernyas = randint(250, 275)
         coins = randint(10, 30)
         items = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
 

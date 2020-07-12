@@ -52,14 +52,14 @@ class IaInteractions(commands.Cog):
                         for msg in self.msg[message.author.id]:
                             if '?' in msg:
                                 num += 4
-                        self.num = randint(num, 95)
+                        self.num = randint(num, 99)
                 except KeyError:
                     pass
                 # -----------======================-----------
 
                 # --------------============================--------------
                 if include(message.content, ['ash', 'ashley']):
-                    self.num = 95
+                    self.num = 99
                 # --------------============================--------------
 
                 # -------=================-------
@@ -80,7 +80,7 @@ class IaInteractions(commands.Cog):
                                                   'Voce ja tem essa resposta',
                                                   'Eu nao vou te responder isso de novo!',
                                                   'Quantas vezes eu vou ter que falar a mesma coisa?'])
-                                if chance >= 95 and "?" in message.content:
+                                if chance >= 99 and "?" in message.content:
                                     return await self.send_message(message, content)
                     self.msg[message.author.id].append(message.content)
                     if len(self.msg[message.author.id]) >= 22:
@@ -96,7 +96,7 @@ class IaInteractions(commands.Cog):
                                               'Não tem outra coisa pra falar não?',
                                               'Para de falar a mesma coisa...',
                                               'Você tem problema é? Fica se repetindo...'])
-                            if chance >= 95:
+                            if chance >= 99:
                                 return await self.send_message(message, content)
                 except IndexError:
                     pass
@@ -108,20 +108,12 @@ class IaInteractions(commands.Cog):
 
                 # sistema de IA
                 if '?' in message.content and len(message.content) > 2:
-
                     response = self.heart.get_response(content_)
                     if response is not None:
-                        # sistema de log de perguntas de respostas
-                        channel = self.bot.get_channel(706571512550785045)
-                        await channel.send(f'> **Mensagem enviada pelo usuario:**\n'
-                                           f'> ``{message.content}``\n'
-                                           f'> **Resposta processada pela ashley:**\n'
-                                           f'> ``{response}``\n')
-
-                        if chance >= 95:
+                        if chance >= 99:
                             return await self.send_message(message, response)
                     else:
-                        if chance >= 95:
+                        if chance >= 99:
                             return await self.send_message(message)
                         else:
                             if chance_not < 3 and "?" in message.content:
@@ -133,18 +125,10 @@ class IaInteractions(commands.Cog):
                 else:
                     response = self.heart.get_response(content_)
                     if response is not None:
-
-                        # sistema de log de perguntas de respostas
-                        channel = self.bot.get_channel(706571512550785045)
-                        await channel.send(f'> **Mensagem enviada pelo usuario:**\n'
-                                           f'> ``{message.content}``\n'
-                                           f'> **Resposta processada pela ashley:**\n'
-                                           f'> ``{response}``\n')
-
-                        if chance >= 95 and include(message.content, ['ash', 'ashley']):
+                        if chance >= 99 and include(message.content, ['ash', 'ashley']):
                             return await self.send_message(message, response)
                     else:
-                        if chance >= 95:
+                        if chance >= 99:
                             if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
                                 content = choice(config['salutation']['day'])
                                 content = content.lower()
