@@ -190,7 +190,7 @@ def profile(data_):
         ini_x += w_percent
 
     for k in artifacts.keys():
-        if k[k.find("/"):] in data_['artifacts']:
+        if k[k.find("/") + 1:] in data_['artifacts'].keys():
             image.paste(artifacts[k][1], (artifacts[k][0][0], artifacts[k][0][1]), artifacts[k][1])
 
     # rectangles' texts

@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import pymongo
 
 from random import choice, randint
 from itertools import cycle
@@ -47,24 +48,6 @@ class OnReady(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         self.ctx = await self.bot.get_context(message)
-
-    async def play_background(self):
-        while True:
-            if self.ctx is not None:
-                if str(self.ctx.command) == "connect":
-                    if await verify_cooldown(self.bot, f"play_{self.ctx.guild.id}", 60):
-                        try:
-                            await asyncio.sleep(1)
-                            player = discord.FFmpegPCMAudio("audio/hunter.mp3",
-                                                            before_options=opt["before_options"],
-                                                            options=opt["options"])
-                            source = discord.PCMVolumeTransformer(discord.PCMVolumeTransformer(player))
-                            vc = self.ctx.voice_client
-                            vc.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
-                            vc.source.volume = 1
-                        except Exception as Error:
-                            print(f"Error:\n{Error}")
-            await asyncio.sleep(1)
 
     async def draw_member(self):
         while True:
@@ -235,8 +218,6 @@ class OnReady(commands.Cog):
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_MEMBERS\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.draw_gift())
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_GIFT\033[1;32m foi carregado com sucesso!\33[m')
-        self.bot.loop.create_task(self.play_background())
-        print('\033[1;32m( 🔶 ) | O loop \033[1;34mPLAY_BACKGROUND\033[1;32m foi carregado com sucesso!\33[m')
         print("\033[1;35m( ✔ ) | Loops internos carregados com sucesso!\033[m\n")
 
         print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])

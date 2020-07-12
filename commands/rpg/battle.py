@@ -18,15 +18,15 @@ class Battle(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='battle', aliases=['batalha', 'duel', 'duelo'])
-    async def battle(self, ctx, lower_net="nl"):
+    async def battle(self, ctx, lower_net="disable"):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
-        if lower_net == 'ln':
-            Class_rpg['lower_net'] = True
+        if lower_net in ['ln', 'lower', 'net', 'n', 'not']:
+            Class_rpg['lower_net'] = lower_net
             await ctx.send(f"**MODO LOWER NET ATIVADO:** \n"
                            f"``Esse modo retira as imagens para melhorar a experiencia de quem tem internet lenta.``")
         else:
-            Class_rpg['lower_net'] = False
+            Class_rpg['lower_net'] = lower_net
         Class_rpg['Name'] = ctx.author.name
         Class_rpg['img'] = ctx.author.avatar_url
         list_items = list(choice_equips(self.bot).values())
@@ -34,10 +34,15 @@ class Battle(commands.Cog):
             Class_rpg['itens'].append(list_items[c])
         db_player = Class_rpg
         db_monster = choice(self.monsters)
+        db_monster['Status']['con'] = randint(50, 100)
+        db_monster['Status']['prec'] = randint(25, 50)
+        db_monster['Status']['agi'] = randint(25, 50)
+        db_monster['Status']['atk'] = randint(25, 50)
+        db_monster['Status']['luk'] = randint(25, 50)
         if lower_net == 'ln':
-            db_monster['lower_net'] = True
+            db_monster['lower_net'] = lower_net
         else:
-            db_monster['lower_net'] = False
+            db_monster['lower_net'] = lower_net
         player = Entity(db_player, True)
         monster = Entity(db_monster, False)
         turns = choice([0, 1])
@@ -52,7 +57,7 @@ class Battle(commands.Cog):
                         description=f"``{monster.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    if lower_net != 'ln':
+                    if lower_net == 'disable':
                         embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_monster['img']}")
                     await ctx.send(embed=embed)
@@ -65,7 +70,7 @@ class Battle(commands.Cog):
                         description=f"``{ctx.author.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    if lower_net != 'ln':
+                    if lower_net == 'disable':
                         embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_player['img']}")
                     await ctx.send(embed=embed)
@@ -80,7 +85,7 @@ class Battle(commands.Cog):
                         description=f"``{ctx.author.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    if lower_net != 'ln':
+                    if lower_net == 'disable':
                         embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_player['img']}")
                     await ctx.send(embed=embed)
@@ -93,7 +98,7 @@ class Battle(commands.Cog):
                         description=f"``{monster.name.upper()} EVADIU``",
                         color=0x000000
                     )
-                    if lower_net != 'ln':
+                    if lower_net == 'disable':
                         embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                     embed.set_thumbnail(url=f"{db_monster['img']}")
                     await ctx.send(embed=embed)
@@ -104,7 +109,7 @@ class Battle(commands.Cog):
                 color=0x000000
             )
             img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
-            if lower_net != 'ln':
+            if lower_net == 'disable':
                 embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
@@ -114,7 +119,7 @@ class Battle(commands.Cog):
                 color=0x000000
             )
             img = "https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532"
-            if lower_net != 'ln':
+            if lower_net == 'disable':
                 embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)

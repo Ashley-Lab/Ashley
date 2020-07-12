@@ -26,6 +26,10 @@ class Database(object):
         self._connect = Client(_auth['db_url'] + "?retryWrites=false", connectTimeoutMS=30000)
         self._database = self._connect[_auth['db_name']]
 
+    # nao deve ser usado em comandos
+    async def collection_data(self, db_name):
+        return self._database[db_name]
+
     async def push_data(self, data, db_name):
         db = self._database[db_name]
         await db.insert_one(data)
@@ -37,7 +41,7 @@ class Database(object):
     async def update_data(self, data, update, db_name):
         db = self._database[db_name]
         await db.update_one({'_id': data['_id']}, {
-            '$set': update
+            '$set': update,
         }, upsert=False)
 
     async def update_all_data(self, search, update, db_name):
@@ -90,12 +94,14 @@ class Database(object):
 
         if await self.get_data("user_id", ctx.author.id, "users") is None:
             data = user_data_structure
+            data["_id"] = ctx.author.id
             data["user_id"] = ctx.author.id
             data["guild_id"] = ctx.guild.id
             await self.push_data(data, "users")
 
     async def add_guild(self, guild, data):
         _data = guild_data_structure
+        _data['_id'] = guild.id
         _data['guild_id'] = guild.id
 
         _data['log_config']['log'] = data.get("log", False)

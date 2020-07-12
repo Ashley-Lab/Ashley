@@ -47,8 +47,8 @@ def choice_equips(bot):
 
 
 def choice_mods():
-    mods = random.choice([random.randint(1, 2), random.randint(3, 4), random.randint(5, 6), random.randint(7, 8),
-                          random.randint(9, 10)])
+    mods = random.choice([random.randint(1, 2), random.randint(1, 3), random.randint(1, 4), random.randint(1, 5),
+                          random.randint(1, 6)])
     return mods
 
 

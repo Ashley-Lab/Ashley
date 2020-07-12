@@ -43,9 +43,9 @@ class Entity(object):
             for c in db['itens']:
                 self.armor += itens[c[1]][c[0]]['armor']
                 key = self.status.keys()
-                for c2 in key:
+                for name in key:
                     try:
-                        self.status[c2] += itens[c[1]][c[0]]['modifier'][c2]
+                        self.status[name] += itens[c[1]][c[0]]['modifier'][name]
                     except KeyError:
                         pass
         key = self.status.keys()
@@ -96,7 +96,7 @@ class Entity(object):
                     c2 = atacks[c]
                     description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{self.level_skill}**\n" \
                                    f"``Dano:`` **{self.atacks[c2]['damage'][self.level_skill - 1]}**\n" \
-                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill - 1]}**\n" \
+                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill - 1]}%**\n" \
                                    f"``Efeito(s):`` " \
                                    f"**{str(self.atacks[c2]['effs'][self.level_skill - 1].keys())}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
@@ -132,7 +132,8 @@ class Entity(object):
                                 self.atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
                                 self.atack = atacks[self.atack]
                                 if self.status['mp'] > self.atacks[self.atack]['mana'][self.level_skill - 1]:
-                                    self.status['mp'] -= self.atacks[self.atack]['mana'][self.level_skill - 1]
+                                    percent = self.atacks[self.atack]['mana'][self.level_skill - 1]
+                                    self.status['mp'] -= int(((self.status['con'] * manatax) * percent) / 100)
                                     break
                                 else:
                                     embed = discord.Embed(

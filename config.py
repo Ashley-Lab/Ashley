@@ -6,6 +6,9 @@ with open("data/achievements.json", encoding="utf-8") as achievements:
 with open("data/answers.json", encoding="utf-8") as answers:
     answers = json.load(answers)
 
+with open("data/artifacts.json", encoding="utf-8") as artifacts:
+    artifacts = json.load(artifacts)
+
 with open("data/attribute.json", encoding="utf-8") as attribute:
     attribute = json.load(attribute)
 
@@ -80,6 +83,7 @@ with open("data/translations.json", encoding="utf-8") as translations:
 data = {
     "achievements": achievements,
     "answers": answers,
+    "artifacts": artifacts,
     "attribute": attribute,
     "battle": battle,
     "cards": cards,

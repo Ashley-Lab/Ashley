@@ -65,7 +65,7 @@ def embed_creator(description, img_url, monster, hp_max, hp, monster_img, lower_
         description=description,
         color=color_embed
     )
-    if not lower_net:
+    if lower_net == 'disable':
         embed.set_image(url=img_url)
     embed.set_thumbnail(url=f"{monster_img}")
     return embed

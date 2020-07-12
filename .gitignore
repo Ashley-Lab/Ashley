@@ -2,7 +2,6 @@
 data/auth.json
 data/
 images/
-audio/
 
 # Python Configs
 *.idea/
