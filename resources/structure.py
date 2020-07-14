@@ -165,5 +165,10 @@ guild_data_structure = {
                     "prison_role": None,
                     "prisoners": {"id": {"time": 0, "reason": None, "roles": list()}}
                 }
+            },
+            "command_locked": {
+                "status": False,
+                "channel_locked": list(),
+                "channel_unlocked": list()
             }
 }

@@ -68,24 +68,11 @@ class OnMemberJoin(commands.Cog):
                     channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
                     embed = discord.Embed(
                         color=self.color,
-                        description="<a:blue:525032762256785409>│``USE O COMANDO`` **ash cargos** ``PARA VOCE VER OS "
-                                    "CARGOS DISPONIVEIS``")
+                        description="<a:blue:525032762256785409>│**OBS:** ``SE VOCÊ VEIO AQUI ATRAS DO VIP É SÓ USAR O "
+                                    "COMANDO`` **ASH VIP**")
                     await channel_.send(embed=embed)
-                    await channel_.send(f"**OBS:** ``SE VOCÊ VEIO AQUI ATRAS DO VIP É SÓ USAR O COMANDO`` **ASH VIP**")
             except discord.Forbidden:
                 pass
-
-            try:
-                if data['func_config']['join_system']:
-                    pass
-            except KeyError:
-                data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
-                update = data
-                update['func_config']['join_system'] = False
-                update['func_config']['join_system_id'] = None
-                update['func_config']['join_system_role'] = None
-                update['func_config']['join_system_member_state'] = dict()
-                await self.bot.db.update_data(data, update, 'guilds')
 
 
 def setup(bot):

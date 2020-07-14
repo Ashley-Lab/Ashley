@@ -4,6 +4,17 @@ import traceback
 from discord.ext import commands
 from resources.utility import ERRORS
 
+cor = {
+    'clear': '\033[m',
+    'cian': '\033[1;36m',
+    'roxo': '\033[1;35m',
+    'azul': '\033[1;34m',
+    'amar': '\033[1;33m',
+    'verd': '\033[1;32m',
+    'verm': '\033[1;31m',
+    'pers': '\033[1;35;47m'
+}
+
 
 class CommandErrorHandler(commands.Cog):
     def __init__(self, bot):
@@ -37,8 +48,8 @@ class CommandErrorHandler(commands.Cog):
         # obs: existem comandos com cooldowns personalizados que nao entram nesse contexto
         if isinstance(error, commands.CommandOnCooldown):
 
-            # exceção criada para o desenvolvedores
-            if ctx.author.id in self.bot.staff:
+            # exceção criada para os desenvolvedores e testers
+            if ctx.author.id in self.bot.staff or ctx.author.id in self.bot.testers:
                 return await ctx.reinvoke()
 
             return await ctx.send(f"<:negate:520418505993093130>│**Aguarde**: `Você deve esperar` **{{:.2f}}** "
@@ -49,7 +60,7 @@ class CommandErrorHandler(commands.Cog):
         channel = self.bot.get_channel(530419409311760394)
         await channel.send(f"<:oc_status:519896814225457152>│``Ocorreu um erro no comando:`` "
                            f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
-                           f"**{ctx.channel}** ``e o erro foi:`` **{error}**")
+                           f"**{ctx.channel}** ``com o membro:`` **{ctx.author}**  ``com o id:`` **{ctx.author.id}**")
 
         # Permite verificar exceções originais geradas e enviadas para CommandInvokeError.
         # Se nada for encontrado. Mantemos a exceção passada para on_command_error.
@@ -60,9 +71,16 @@ class CommandErrorHandler(commands.Cog):
         if not isinstance(error, commands.CommandOnCooldown):
             # e como nao quero print de comando mal executado pelo usuario faço a outra exceção
             if not isinstance(error, commands.CheckFailure):
-                print(f"\033[1;31m( ❌ ) | error in command: \033[1;34m{ctx.command}\033[1;31m, in Guild: "
-                      f"\033[1;34m{ctx.guild}\033[1;31m, in Channel: \033[1;34m{ctx.channel}\033[1;31m. "
-                      f"With error:\n \033[1;35m{error}\33[m\n")
+                print(f"{cor['verm']}( ❌ ) | error in command: {cor['azul']}{str(ctx.command).upper()}\n"
+                      f"{cor['verm']}>> in Guild: "
+                      f"{cor['azul']}{ctx.guild} {cor['verm']}- {cor['amar']}ID: {ctx.guild.id}\n"
+                      f"{cor['verm']}>> in Channel: "
+                      f"{cor['azul']}{ctx.channel} {cor['verm']}- {cor['amar']}ID: {ctx.channel.id}\n"
+                      f"{cor['verm']}>> with the Member: "
+                      f"{cor['azul']}{ctx.author} {cor['verm']}- {cor['amar']}ID: {ctx.author.id}\n"
+                      f"{cor['verm']}>> with error:\n "
+                      f"{cor['roxo']}{error}"
+                      f"{cor['clear']}\n")
                 # o print do traceback é para ver os erros mais detalhadamente
                 traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 

@@ -97,11 +97,11 @@ Dica: **{}**'''.format(senha, dica))
                                 ' CANCELADO**')
 
                         if resp.content.lower() == palavra.lower():
+                            msg = await self.bot.db.add_money(ctx, 20, True)
                             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                             update = data
                             update['config']['playing'] = False
                             await self.bot.db.update_data(data, update, 'users')
-                            msg = await self.bot.db.add_money(ctx, 20, True)
                             return await ctx.send("<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
                                                   "{}".format(msg))
                         elif self.trying[ctx.author.id] == 2:

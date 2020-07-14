@@ -84,12 +84,7 @@ ITEMS:
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
         await ctx.send("<:alert_status:519896811192844288>│``Comprando box...``")
-        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        try:
-            if data['box']:
-                await ctx.send("<:negate:520418505993093130>│``Você ja tem uma box...``")
-        except KeyError:
-            await self.bot.booster.buy_box(self.bot, ctx)
+        await self.bot.booster.buy_box(self.bot, ctx)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -123,16 +118,16 @@ ITEMS:
                                   " de uma vez...``")
         elif num == 0:
             return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar 0 booster``")
-        try:
-            if data['box']:
-                num_ = self.verify_money(data, num)
-                if num_ < num:
-                    return await ctx.send("<:negate:520418505993093130>│``Você não tem dinheiro o suficiente...``")
-                for c in range(num):
-                    await self.bot.booster.buy_booster(self.bot, ctx)
-                    await sleep(1)
-                await ctx.send("<:on_status:519896814799945728>│``Obrigado pelas compras, volte sempre!``")
-        except KeyError:
+
+        if data['box']['status']['active']:
+            num_ = self.verify_money(data, num)
+            if num_ < num:
+                return await ctx.send("<:negate:520418505993093130>│``Você não tem dinheiro o suficiente...``")
+            for _ in range(num):
+                await self.bot.booster.buy_booster(self.bot, ctx)
+                await sleep(0.5)
+            await ctx.send("<:on_status:519896814799945728>│``Obrigado pelas compras, volte sempre!``")
+        else:
             await ctx.send("<:negate:520418505993093130>│``Você ainda não tem uma box...``\n"
                            "``Para conseguir sua box use o comando:`` **ash box buy** ``ou`` **ash shop**")
 

@@ -109,6 +109,12 @@ class ProfileSystem(commands.Cog):
         if text is None:
             return await ctx.send("<:alert_status:519896811192844288>│``DIGITE ALGO PARA COLOCAR NO SEU PERFIL, "
                                   "LOGO APÓS O COMANDO!``")
+
+        text = remove_acentos_e_caracteres_especiais(text)
+        if text == "":
+            text = "PRECISO DIGITAR ALGO DESCENTE..."
+        await ctx.send(f"<:alert_status:519896811192844288>│``SEU TEXTO VAI FICAR ASSIM:``\n{text}")
+
         if len(text) > 200:
             return await ctx.send("<:alert_status:519896811192844288>│``SEU TEXTO NAO PODE TER MAIS QUE 200 "
                                   "CARACTERES``")

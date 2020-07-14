@@ -46,18 +46,6 @@ class OnMemberRemove(commands.Cog):
             except discord.Forbidden:
                 pass
 
-            try:
-                if data['func_config']['join_system']:
-                    pass
-            except KeyError:
-                data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
-                update = data
-                update['func_config']['join_system'] = False
-                update['func_config']['join_system_id'] = None
-                update['func_config']['join_system_role'] = None
-                update['func_config']['join_system_member_state'] = dict()
-                await self.bot.db.update_data(data, update, 'guilds')
-
 
 def setup(bot):
     bot.add_cog(OnMemberRemove(bot))

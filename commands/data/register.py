@@ -16,11 +16,14 @@ class RegisterClass(commands.Cog):
     async def register(self, ctx):
         """ Usado pra registrar um usuario na ashley Exemplo: "ash register" """
         if ctx.invoked_subcommand is None:
+            data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            if data_guild is None:
+                return await ctx.send('<:negate:520418505993093130>│``Sua guilda ainda não está registrada, por '
+                                      'favor digite:`` **ash register guild** ``para cadastrar sua guilda '
+                                      'no meu`` **banco de dados!**')
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-
             if data is None and ctx.author.id in [r.id for r in ctx.guild.members if not r.bot]:
                 await self.bot.db.add_user(ctx)
-
                 data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
                 update_guild = data_guild
                 update_guild['data']['accounts'] += 1

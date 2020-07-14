@@ -7,7 +7,7 @@ commands.bot.ping
 commands.data.register
 commands.ashley.farm
 commands.bot.invite
-commands.ashley.painel
+handler.on_command_error
 commands.funny.ascii
 commands.funny.gif
 commands.funny.gossip
@@ -91,11 +91,11 @@ commands.img_edit.facebook
 commands.img_edit.instagram
 commands.img_edit.twitter
 commands.img_edit.whatsapp
-commands.rpg.shop
+ia.interactions
 commands.guild.receptions
 commands.member.ia_response
 commands.guild.open
 commands.rpg.recipe
+commands.ashley.utility
+commands.admin.channel_locker
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1
-handler.on_command_error
-ia.interactions

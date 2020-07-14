@@ -17,6 +17,7 @@ from resources.webhook import WebHook
 from bson.json_util import dumps
 from resources.utility import date_format
 from resources.db import Database, DataInteraction
+from resources.verify_cooldown import verify_cooldown
 from resources.boosters import Booster
 from config import data as config
 
@@ -50,12 +51,13 @@ class Ashley(commands.AutoShardedBot):
 
         self.server_ = "HEROKU"
         self.languages = ("pt", "en")
-        self.progress = "V.6 -> 98.2%"
+        self.progress = "V.7 -> 005.0%"
         self.prefix_ = "'ash.', 'ash '"
         self.bl_item = ['medal', 'rank_point']
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.staff = [235937029106434048, 300592580381376513]
-        self.version = "API: " + str(discord.__version__) + " | BOT: 6.9.82 | PROGRESS: " + str(self.progress)
+        self.testers = [390244145643651073, 617739561488875522]
+        self.version = "API: " + str(discord.__version__) + " | BOT: 7.0.50 | PROGRESS: " + str(self.progress)
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
         self.data_cog = {}
         self.box = {}
@@ -252,12 +254,37 @@ class Ashley(commands.AutoShardedBot):
         if message.guild is not None and str(message.author.id) not in self.blacklist:
             await self.data.add_experience(message, randint(5, 15))
             await self.data.level_up(message)
-            if message.content.lower() in self.shortcut:
-                msg = copy.copy(message)
-                msg.content = self.shortcut[message.content.lower()]
-                await self.process_commands(msg)
+
+            run_command = False
+            data_guild = await self.db.get_data("guild_id", message.guild.id, "guilds")
+            if data_guild is not None:
+                if data_guild['command_locked']['status']:
+                    if message.channel.id in data_guild['command_locked']['channel_unlocked']:
+                        run_command = True
+                else:
+                    if message.channel.id not in data_guild['command_locked']['channel_locked']:
+                        run_command = True
             else:
-                await self.process_commands(message)
+                if message.guild.system_channel is not None:
+                    if await verify_cooldown(self.bot, f"{message.guild.id}_no_register", 3600):
+                        embed = discord.Embed(
+                            color=self.color,
+                            description="<a:blue:525032762256785409>│``SEU SERVIDOR AINDA NAO ESTA CADASTRADO USE``"
+                                        " **ASH REGISTER GUILD** ``PARA QUE EU POSSA PARTICIPAR DAS ATIVIDADES DE "
+                                        "VOCES TAMBEM, É MUITO FACIL E RAPIDO. QUALQUER DUVIDA ENTRE ME CONTATO COM "
+                                        "MEU SERVIDOR DE SUPORTE`` [CLICANDO AQUI](https://discord.gg/rYT6QrM)")
+                        await member.guild.system_channel.send(embed=embed)
+
+            if run_command:
+                if message.content.lower() in self.shortcut:
+                    msg = copy.copy(message)
+                    msg.content = self.shortcut[message.content.lower()]
+                    await self.process_commands(msg)
+                else:
+                    await self.process_commands(message)
+            else:
+                await message.channel.send("<:alert_status:519896811192844288>|``NAO POSSO EXECUTAR COMANDOS NESSE "
+                                           "CANAL!``")
 
     @staticmethod
     def get_ram():

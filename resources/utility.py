@@ -162,11 +162,29 @@ async def get_response(message):
                 if questions['perg_qual'][c] == "quando":
                     response = choice(responses['resposta_quando'])
                     return response
+                elif questions['perg_qual'][c] == "como":
+                    response = choice(responses['resposta_como'])
+                    return response
                 elif questions['perg_qual'][c] == "onde":
                     response = choice(responses['resposta_onde'])
                     return response
                 elif questions['perg_qual'][c] == "vamos":
                     response = choice(responses['resposta_vamos'])
+                    return response
+                elif questions['perg_qual'][c] == "qual":
+                    response = choice(responses['resposta_qual'])
+                    return response
+                elif questions['perg_qual'][c] == "quanto":
+                    response = choice(responses['resposta_quanto'])
+                    return response
+                elif questions['perg_qual'][c] == "quem":
+                    response = choice(responses['resposta_quem'])
+                    return response
+                elif questions['perg_qual'][c] == "quer":
+                    response = choice(responses['resposta_quer'])
+                    return response
+                elif questions['perg_qual'][c] == "o que" or questions['perg_qual'][c] == "oq":
+                    response = choice(responses['resposta_o_que'])
                     return response
                 else:
                     response = choice(responses['resposta_outras'])

@@ -239,19 +239,27 @@ def profile(data_):
         elif k == "about":
             if len(data_[k]) <= 50:
                 size = 26
+                if len(data_[k].split()) <= 5:
+                    size = 21
                 width = size * 1.2
             elif len(data_[k]) <= 100:
                 size = 24
+                if len(data_[k].split()) <= 5:
+                    size = 19
                 width = size * 1.4
             elif len(data_[k]) <= 150:
                 size = 22
+                if len(data_[k].split()) <= 5:
+                    size = 17
                 width = size * 1.6
             else:
                 size = 20
+                if len(data_[k].split()) <= 5:
+                    size = 15
                 width = size * 1.8
 
             font_text_about = ImageFont.truetype("fonts/times.ttf", size)
-            msg = textwrap.wrap(data_[k], width=width)
+            msg = textwrap.wrap(data_[k], width=int(width))
             x_s1, y_s1, x_s2, y_s2 = rectangles[k]
             current_h = (y_s2 - y_s1) / 2 + width
             for line in msg:

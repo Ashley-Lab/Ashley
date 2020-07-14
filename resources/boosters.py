@@ -12,7 +12,7 @@ class Booster(object):
         # box configs
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}
         self.legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
-        self.bl = {"Comum": "c", "Incomum": "n", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur",
+        self.bl = {"Comum": "c", "Incomum": "i", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur",
                    "Secret": "secret"}
         self.rarity = {"Comum": 500, "Incomum": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
 
@@ -171,19 +171,14 @@ class Booster(object):
 
     async def buy_booster(self, bot, ctx):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
-        try:
-            if data['box']['status']['active']:
-                pass
-            else:
-                await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
-        except KeyError:
-            await ctx.send("<:alert_status:519896811192844288>│``VOCÊ PRECISA COMPRAR UMA BOX PARA PODER COMPRAR "
-                           "BOOSTERS!")
-        if data['treasure']['money'] > 200:
-            answer = await bot.db.take_money(ctx, 200)
-        else:
+        if not data['box']['status']['active']:
+            await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
+
+        if data['treasure']['money'] < 200:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
                                   "\nVOCÊ PRECISA DE 100 ETHENYAS PARA COMPRAR UM BOOSTER.``")
+
+        answer = await bot.db.take_money(ctx, 200)
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         item = self.buy_item(data['box'], data['user']['ranking'], data['config']['vip'])

@@ -2,6 +2,7 @@
 data/auth.json
 data/
 images/
+ia/scripts/
 
 # Python Configs
 *.idea/
