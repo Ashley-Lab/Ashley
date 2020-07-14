@@ -34,7 +34,7 @@ class DadoClass(commands.Cog):
             return await ctx.send('<:alert_status:519896811192844288>│``Número muito grande de lados!``')
         for r in range(rolls):
             result += ''.join(str(random.randint(1, limit))) + ', '
-        await ctx.send(f'```{result}```')
+        await ctx.send(f'```{result[:-1]}```')
 
 
 def setup(bot):

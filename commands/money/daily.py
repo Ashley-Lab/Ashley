@@ -151,7 +151,8 @@ class DailyClass(commands.Cog):
         try:
             if update['cooldown']['rec']['cont'] < 5:
                 if member.id in update['cooldown']['rec']['list']:
-                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje``")
+                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro nas ultimas"
+                                          f" 24 horas.``")
 
                 update['cooldown']['rec']['cont'] += 1
                 update['cooldown']['rec']['date'] = localtime()
@@ -173,7 +174,7 @@ class DailyClass(commands.Cog):
                         await self.bot.db.update_data(data, update, 'users')
                     else:
                         return await ctx.send(f"<:oc_status:519896814225457152>│``Você ultrapassou suas recomendações "
-                                              f"diárias``")
+                                              f"dentro de 24 horas.``")
             if date_now[0] > date_old[0] or date_now[1] > date_old[1]:
                 update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
                 await self.bot.db.update_data(data, update, 'users')

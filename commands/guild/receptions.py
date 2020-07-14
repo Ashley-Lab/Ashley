@@ -16,13 +16,14 @@ class ReceptionClass(commands.Cog):
     async def reception(self, ctx):
         """comando pra configurar o welcome
         Use ash reception ou ash rp e siga as instruções no comando(use # pra marcar os canais)"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        update = data
 
         def check(m):
             return m.author == ctx.author
 
         lista = ['welcome', 'leaving', 'ban', 'private']
         for c in lista:
-            data = {}
             embed = discord.Embed(
                 title='PlaceHolders',
                 color=0x456332,
@@ -40,27 +41,27 @@ class ReceptionClass(commands.Cog):
             while resp.content.lower() not in ['s', 'n']:
                 resp = await self.bot.wait_for('message', check=check)
             if resp.content.lower() == 's':
-                data['status'] = True
+                update['receptions']['status'] = True
             else:
-                data['status'] = False
+                update['receptions']['status'] = False
             await msg.delete()
-            if data['status'] is True:
+            if update['receptions']['status'] is True:
                 if c != 'private':
                     msg = await ctx.send('Marque um canal para {}.'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
-                    data['channelid'] = int(str(resp.content).replace('<#', '').replace('>', ''))
+                    update['receptions']['channelid'] = int(str(resp.content).replace('<#', '').replace('>', ''))
                     await msg.delete()
-                data['embed'] = {}
+                update['receptions']['embed'] = {}
                 msg = await ctx.send('Deseja usar um embed pra {}? s/n'.format(c))
                 resp = await self.bot.wait_for('message', check=check)
                 while resp.content.lower() not in ['s', 'n']:
                     resp = await self.bot.wait_for('message', check=check)
                 if resp.content.lower() == 's':
-                    data['embed']['status'] = True
+                    update['receptions']['embed']['status'] = True
                 else:
-                    data['embed']['status'] = False
+                    update['receptions']['embed']['status'] = False
                 await msg.delete()
-                if data['embed']['status'] is False:
+                if update['receptions']['embed']['status'] is False:
                     msg = await ctx.send('Defina uma mensagem pra {}.'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
@@ -68,15 +69,15 @@ class ReceptionClass(commands.Cog):
                         ctx.send('Mensagem muito longa, favor usar {} caracteres a menos.'.format(len(resp) - 1900))
                         resp = await self.bot.wait_for('message', check=check)
                         resp = resp.content
-                    data['message'] = resp
+                    update['receptions']['message'] = resp
                     await msg.delete()
                 else:
                     total = 0
                     msg = await ctx.send('Defina um titulo pro embed de {}.'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
-                    data['embed']['title'] = resp
-                    total += len(data['embed']['title'])
+                    update['receptions']['embed']['title'] = resp
+                    total += len(update['receptions']['embed']['title'])
                     await msg.delete()
                     msg = await ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
@@ -90,29 +91,29 @@ class ReceptionClass(commands.Cog):
                             await ctx.send('Isso não é uma cor, tente denovo.')
                             resp = await self.bot.wait_for('message', check=check)
                             resp = resp.content
-                    data['embed']['color'] = resp
+                    update['receptions']['embed']['color'] = resp
                     await msg.delete()
                     msg = await ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
                     total += len(resp)
-                    data['embed']['description'] = resp
+                    update['receptions']['embed']['description'] = resp
                     await msg.delete()
                     msg = await ctx.send('Defina uma imagem pro embed de {}.'
                                          '(use um url, placeholder user-avatar-url é usavel aqui. '
                                          'Se não quiser coloque 0.)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
-                    data['embed']['image'] = resp
+                    update['receptions']['embed']['image'] = resp
                     await msg.delete()
                     msg = await ctx.send('Defina uma thumbnail pro embed de {}.(use um url, '
                                          'placeholder user-avatar-url é usavel aqui. '
                                          'Se não quiser coloque 0.)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
-                    data['embed']['thumbnail'] = resp
+                    update['receptions']['embed']['thumbnail'] = resp
                     await msg.delete()
-                    data['embed']['fields'] = {}
+                    update['receptions']['embed']['fields'] = {}
                     limitedecampos = 3
                     listalimite = []
                     for c2 in range(0, limitedecampos + 1):
@@ -125,10 +126,10 @@ class ReceptionClass(commands.Cog):
                         msg = await ctx.send('Numero invalido ou fora de limite.')
                         resp = await self.bot.wait_for('message', check=check)
                         resp = resp.content
-                    data['embed']['fields']['numero'] = int(resp)
+                    update['receptions']['embed']['fields']['numero'] = int(resp)
                     await msg.delete()
-                    data['embed']['fields']['fields'] = []
-                    for c2 in range(0, data['embed']['fields']['numero']):
+                    update['receptions']['embed']['fields']['fields'] = []
+                    for c2 in range(0, update['receptions']['embed']['fields']['numero']):
                         templist = []
                         msg = await ctx.send('Defina o titulo {}º campo.'.format(c2))
                         resp = await self.bot.wait_for('message', check=check)
@@ -140,7 +141,8 @@ class ReceptionClass(commands.Cog):
                         resp = resp.content
                         templist.append(resp)
                         await msg.delete()
-                        data['embed']['fields']['fields'].append(templist)
+                        update['receptions']['embed']['fields']['fields'].append(templist)
+        await self.bot.db.update_data(data, update, 'guilds')
         await ctx.send('configuração feita com sucesso')
 
 

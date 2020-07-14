@@ -35,32 +35,11 @@ class ConfigClass(commands.Cog):
                           value=f"``PREFIX:`` **config** ``+``\n"
                                 f"{self.st[0]}│**guild** ``or`` **server**\n"
                                 f"{self.st[0]}│**report** ``or`` **reportar**\n"
-                                f"{self.st[0]}│**language** ``or`` **idioma**\n"
                                 f"{self.st[0]}│**log**")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=top)
-
-    @check_it(no_pm=True, manage_guild=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @config.command(name='language', aliases=['idioma'])
-    async def _language(self, ctx, language=None):
-        if language is not None:
-            if language in self.bot.languages:
-                if language != await self.bot.data.get_language(ctx.guild.id):
-                    await self.bot.data.set_language(ctx.guild.id, language)
-                    await ctx.send(f'Você acaba de mudar o idioma padrão do servidor para {language}')
-                else:
-                    await ctx.send(f'<:alert_status:519896811192844288>│``você ja está usando a linguagem`` '
-                                   f'**{language}**')
-            else:
-                await ctx.send(f'<:negate:520418505993093130>│``Não existe essa linguagem disponível, escolha '
-                               f'algumas dessas``: **{self.bot.languages}**')
-        else:
-            await ctx.send(f'<:confirmado:519896822072999937>│``Sua linguagem atual é`` '
-                           f'**{await self.bot.data.get_language(ctx.guild.id)}**')
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -457,12 +436,6 @@ class ConfigClass(commands.Cog):
         if error.__str__() in ERRORS[7]:
             return await ctx.send('<:negate:520418505993093130>│``Você precisa de uma permissão especifica:`` '
                                   '**manage_guild / Gerenciar Servidor**')
-
-    @_language.error
-    async def _language_error(self, ctx, error):
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send('<:negate:520418505993093130>│``Você não '
-                           'tem permissão para usar esse comando!``')
 
 
 def setup(bot):

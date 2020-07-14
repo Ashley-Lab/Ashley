@@ -4,8 +4,6 @@ import discord.utils
 from config import data
 from discord.ext import commands
 
-staff = [235937029106434048, 300592580381376513]
-
 
 def check_it(**kwargs):
     permissions = ('add_reactions', 'administrator', 'attach_files', 'ban_members', 'change_nickname' 'connect',
@@ -22,8 +20,6 @@ def check_it(**kwargs):
     def predicate(ctx):
         if ctx.message.webhook_id is not None:
             return True
-        if ctx.guild.owner.id == ctx.author.id:
-            return True
 
         if isinstance(ctx.message.channel, (discord.DMChannel, discord.GroupChannel)):
             if ctx.command.name == "help" or ctx.command.name == "ajuda":
@@ -37,11 +33,11 @@ def check_it(**kwargs):
                 raise commands.CheckFailure("<:negate:520418505993093130>│``Esse comando apenas pode ser usado"
                                             " em um canal`` **nsfw!!**")
 
-        if ctx.message.author.id == data['config']['owner_id'] and kwargs.get('is_owner', False):
+        if ctx.author.id == data['config']['owner_id'] and kwargs.get('is_owner', False):
             pass
-        elif ctx.message.author.id in staff and kwargs.get('is_owner', False):
+        elif ctx.author.id in ctx.bot.staff and kwargs.get('is_owner', False):
             pass
-        elif ctx.message.author.id != data['config']['owner_id'] and kwargs.get('is_owner', False):
+        elif ctx.author.id != data['config']['owner_id'] and kwargs.get('is_owner', False):
             raise commands.CheckFailure("<:negate:520418505993093130>│``Apenas meu criador pode usar esse comando!``")
 
         if kwargs.get("check_role", False):

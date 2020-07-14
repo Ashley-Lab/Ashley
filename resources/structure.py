@@ -170,5 +170,6 @@ guild_data_structure = {
                 "status": False,
                 "channel_locked": list(),
                 "channel_unlocked": list()
-            }
+            },
+            "receptions": dict()
 }

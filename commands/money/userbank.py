@@ -64,7 +64,7 @@ class UserBank(commands.Cog):
     @commands.command(name='pay', aliases=['pagar'])
     async def pay(self, ctx, member: discord.Member = None, amount: int = None):
         if member is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mensionar alguem.``")
+            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mencionar alguem.``")
         if amount is None:
             return await ctx.send("<:oc_status:519896814225457152>│``Você precisa dizer uma quantia.``")
         if member.id == ctx.author.id:
@@ -107,7 +107,7 @@ class UserBank(commands.Cog):
     @commands.command(name='give', aliases=['dar'])
     async def give(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
         if member is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``")
+            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mencionar alguem!``")
         if amount is None:
             return await ctx.send("<:oc_status:519896814225457152>│``Você precisa dizer uma quantia!``")
         if member.id == ctx.author.id:

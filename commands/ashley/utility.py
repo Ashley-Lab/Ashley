@@ -19,8 +19,8 @@ class UtilityClass(commands.Cog):
             try:
                 role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
                 if role is not None:
-                    if role in [r for r in ctx.author.roles]:
-                        await user.add_roles(role)
+                    if role not in [r for r in ctx.author.roles]:
+                        await ctx.author.add_roles(role)
                         await ctx.send("<:confirmado:519896822072999937>│``VOCE AGORA É UM LOVER MEU!! FALE NO "
                                        "CHAT_VIP PARA COMEMORAR!!``")
                     else:
@@ -43,7 +43,7 @@ class UtilityClass(commands.Cog):
                 role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
                 if role is not None:
                     if role in [r for r in ctx.author.roles]:
-                        await user.remove_roles(role)
+                        await ctx.author.remove_roles(role)
                         await ctx.send("<:confirmado:519896822072999937>│``QUE PENA, VOCE NAO ME AMA MAIS?!``")
                     else:
                         await ctx.send("<:alert_status:519896811192844288>│``VOCE NAO TEM MAIS O MEU CARGO, POXA..."

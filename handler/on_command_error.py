@@ -27,6 +27,12 @@ class CommandErrorHandler(commands.Cog):
         if hasattr(ctx.command, 'on_error'):
             return
 
+        # Isso faz com que os comandos com argumentos invalidos tenham um retorno explicatorio!
+        if isinstance(error, commands.BadArgument):
+            return await ctx.send(f'<:negate:520418505993093130>│``VOCE INSERIU UMA INFORMAÇÃO INVALDA! POR FAVOR '
+                                  f'TENTE NOVAMENTE OU USE O COMANDO:`` **ASH HELP {str(ctx.command).upper()}**'
+                                  f' ``PARA MAIORES INFORMAÇÕES.``')
+
         # Todos os eventos de erros ignorados, qualquer coisa ignorada retornará e impedirá que algo aconteça.
         if isinstance(error, commands.CommandNotFound) or isinstance(error, commands.UserInputError):
             return

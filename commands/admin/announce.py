@@ -90,8 +90,11 @@ class RegisterAnnounce(commands.Cog):
                 announces.append(data)
         for announce in range(len(announces)):
             await ctx.send(f"{announce + 1}º Anuncio:\n{announces[announce]}")
-        await ctx.send("<:alert_status:519896811192844288>│``Qual anuncio você deseja verificar? Obs: Digite o numero"
-                       " do anuncio``")
+        if len(announces) > 0:
+            await ctx.send("<:alert_status:519896811192844288>│``Qual anuncio você deseja verificar? Obs: Digite o "
+                           "numero do anuncio``")
+        else:
+            return await ctx.send("<:alert_status:519896811192844288>│``VOCE NAO TEM ANUNCIOS DISPONIVEIS!``")
 
         def check(m):
             return m.author.id == ctx.author.id and m.content.isdigit()
@@ -99,10 +102,13 @@ class RegisterAnnounce(commands.Cog):
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=60.0)
             num = int(answer.content)
+            answer = int(answer.content)
+            if answer < 0:
+                answer = 0
         except TimeoutError:
             return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
                                   '**COMANDO CANCELADO**')
-        if int(answer.content) <= len(announces):
+        if len(announces) >= answer > 0:
             pass
         else:
             return await ctx.send('<:negate:520418505993093130>│ **DESCULPE VOCÊ DIGITOU UM NUMERO INEXISTENTE!**')
@@ -131,7 +137,7 @@ class RegisterAnnounce(commands.Cog):
                 await member.send("<:negate:520418505993093130>│``Seu anuncio foi verificado, mas não foi aprovado!``")
             except discord.errors.Forbidden:
                 pass
-            return await ctx.send('<:negate:520418505993093130>│ **COMANDO CANCELADO**')
+            return await ctx.send('<:negate:520418505993093130>│ **ANUNCIO DELETADO**')
 
         data = announces[num - 1]
         update = data

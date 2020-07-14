@@ -42,7 +42,6 @@ class Ashley(commands.AutoShardedBot):
         self.vip_cog = config['attribute']['vip_cog']
         self.titling = config['attribute']['titling']
         self.boxes_l = config['attribute']['boxes_l']
-        self.translations = config['translations']
         self.boxes = config['attribute']['boxes']
         self.money = config['attribute']['money']
         self.items = config['items']
@@ -50,7 +49,6 @@ class Ashley(commands.AutoShardedBot):
         self.pets = config['pets']
 
         self.server_ = "HEROKU"
-        self.languages = ("pt", "en")
         self.progress = "V.7 -> 005.0%"
         self.prefix_ = "'ash.', 'ash '"
         self.bl_item = ['medal', 'rank_point']
@@ -265,15 +263,16 @@ class Ashley(commands.AutoShardedBot):
                     if message.channel.id not in data_guild['command_locked']['channel_locked']:
                         run_command = True
             else:
+                run_command = True
                 if message.guild.system_channel is not None:
-                    if await verify_cooldown(self.bot, f"{message.guild.id}_no_register", 3600):
+                    if await verify_cooldown(self, f"{message.guild.id}_no_register", 3600):
                         embed = discord.Embed(
                             color=self.color,
                             description="<a:blue:525032762256785409>│``SEU SERVIDOR AINDA NAO ESTA CADASTRADO USE``"
                                         " **ASH REGISTER GUILD** ``PARA QUE EU POSSA PARTICIPAR DAS ATIVIDADES DE "
-                                        "VOCES TAMBEM, É MUITO FACIL E RAPIDO. QUALQUER DUVIDA ENTRE ME CONTATO COM "
+                                        "VOCES TAMBEM, É MUITO FACIL E RAPIDO. QUALQUER DUVIDA ENTRE EM CONTATO COM "
                                         "MEU SERVIDOR DE SUPORTE`` [CLICANDO AQUI](https://discord.gg/rYT6QrM)")
-                        await member.guild.system_channel.send(embed=embed)
+                        await message.guild.system_channel.send(embed=embed)
 
             if run_command:
                 if message.content.lower() in self.shortcut:
