@@ -168,8 +168,8 @@ guild_data_structure = {
             },
             "command_locked": {
                 "status": False,
-                "channel_locked": list(),
-                "channel_unlocked": list()
+                "while_list": list(),
+                "black_list": list()
             },
             "receptions": dict()
 }

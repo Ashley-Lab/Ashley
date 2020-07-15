@@ -29,7 +29,7 @@ class CommandErrorHandler(commands.Cog):
 
         # Isso faz com que os comandos com argumentos invalidos tenham um retorno explicatorio!
         if isinstance(error, commands.BadArgument):
-            return await ctx.send(f'<:negate:520418505993093130>│``VOCE INSERIU UMA INFORMAÇÃO INVALDA! POR FAVOR '
+            return await ctx.send(f'<:negate:520418505993093130>│``VOCE INSERIU UMA INFORMAÇÃO INVALIDA! POR FAVOR '
                                   f'TENTE NOVAMENTE OU USE O COMANDO:`` **ASH HELP {str(ctx.command).upper()}**'
                                   f' ``PARA MAIORES INFORMAÇÕES.``')
 

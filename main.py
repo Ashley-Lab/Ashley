@@ -245,8 +245,9 @@ class Ashley(commands.AutoShardedBot):
         if message.author.id == self.user.id:
             return
 
+        ctx = await self.get_context(message)
+
         if message.webhook_id is not None:
-            ctx = await self.get_context(message)
             return await self.invoke(ctx)
 
         if message.guild is not None and str(message.author.id) not in self.blacklist:
@@ -257,10 +258,10 @@ class Ashley(commands.AutoShardedBot):
             data_guild = await self.db.get_data("guild_id", message.guild.id, "guilds")
             if data_guild is not None:
                 if data_guild['command_locked']['status']:
-                    if message.channel.id in data_guild['command_locked']['channel_unlocked']:
+                    if message.channel.id in data_guild['command_locked']['while_list']:
                         run_command = True
                 else:
-                    if message.channel.id not in data_guild['command_locked']['channel_locked']:
+                    if message.channel.id not in data_guild['command_locked']['black_list']:
                         run_command = True
             else:
                 run_command = True
@@ -272,7 +273,16 @@ class Ashley(commands.AutoShardedBot):
                                         " **ASH REGISTER GUILD** ``PARA QUE EU POSSA PARTICIPAR DAS ATIVIDADES DE "
                                         "VOCES TAMBEM, É MUITO FACIL E RAPIDO. QUALQUER DUVIDA ENTRE EM CONTATO COM "
                                         "MEU SERVIDOR DE SUPORTE`` [CLICANDO AQUI](https://discord.gg/rYT6QrM)")
-                        await message.guild.system_channel.send(embed=embed)
+                        try:
+                            await message.guild.system_channel.send(embed=embed)
+                        except discord.Forbidden:
+                            try:
+                                await message.guild.owner.send(embed=embed)
+                            except discord.Forbidden:
+                                pass
+
+            if str(ctx.command) in ['channel']:
+                run_command = True
 
             if run_command:
                 if message.content.lower() in self.shortcut:
@@ -282,8 +292,9 @@ class Ashley(commands.AutoShardedBot):
                 else:
                     await self.process_commands(message)
             else:
-                await message.channel.send("<:alert_status:519896811192844288>|``NAO POSSO EXECUTAR COMANDOS NESSE "
-                                           "CANAL!``")
+                if ctx.command is not None:
+                    await message.channel.send("<:alert_status:519896811192844288>|``NAO POSSO EXECUTAR COMANDOS NESSE"
+                                               " CANAL!``")
 
     @staticmethod
     def get_ram():

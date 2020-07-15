@@ -1,9 +1,9 @@
-from discord.ext import commands
-from resources.utility import get_response, include
-from random import choice, randint
-from config import data as config
 from ia.scripts import ia
+from discord.ext import commands
+from config import data as config
+from random import choice, randint
 from resources.ia_heart import HeartIA
+from resources.utility import get_response, include
 
 
 class IaInteractions(commands.Cog):
@@ -11,9 +11,8 @@ class IaInteractions(commands.Cog):
         self.bot = bot
         self.msg = {}
         self.num = 1
-        self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses, ia.commands, ia.common,
-                        ia.yugioh]
         self.heart = HeartIA(self.scripts, 0.9)
+        self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses, ia.commands, ia.common]
 
     async def send_message(self, message, content=None):
         link_ = f'images/avatar/possessed_ashley.png'
@@ -30,25 +29,26 @@ class IaInteractions(commands.Cog):
         if message.guild is not None and str(message.author.id) not in self.bot.blacklist:
             data_guild = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             user_data = await self.bot.db.get_data("user_id", message.author.id, "users")
-            dg = data_guild
-            ud = user_data
+            dg, ud = data_guild, user_data
             if dg is not None and ud is not None and dg['ia_config']['auto_msg'] and ud['user']['ia_response']:
 
                 # sistema de bloqueio de commando em canal / tambem afeta a ia
                 # ----------------------==================================----------------------
                 run_command = False
                 if data_guild['command_locked']['status']:
-                    if message.channel.id in data_guild['command_locked']['channel_unlocked']:
+                    if message.channel.id in data_guild['command_locked']['while_list']:
                         run_command = True
                 else:
-                    if message.channel.id not in data_guild['command_locked']['channel_locked']:
+                    if message.channel.id not in data_guild['command_locked']['black_list']:
                         run_command = True
                 # ----------------------==================================----------------------
 
-                # filtro de comandos ( para nao haver iteração em cima de comandos
+                # filtro de comandos ( para nao haver iteração em cima de comandos )
+                # -----------======================-----------
                 ctx = await self.bot.get_context(message)
                 if ctx.command is not None:
                     return
+                # -----------======================-----------
 
                 # sistema de chance da ashley  responder a um usuario
 
@@ -79,16 +79,16 @@ class IaInteractions(commands.Cog):
                 # -------=================-------
                 chance = randint(self.num, 100)
                 and_num = (chance - self.num)
-                if and_num < 5:
-                    and_num = 5
+                if and_num < 10:
+                    and_num = 10
                 chance_not = randint(1, and_num)
                 # -------=================-------
 
                 # --------------============================--------------
                 if run_command:
                     if not include(message.content, ['ash', 'ashley']):
-                        chance = 0
-                        chance_not = 0
+                        chance = 5
+                        chance_not = 5
                 # --------------============================--------------
 
                 # filtro de quantidade de mensagens salvas por usuario
@@ -117,9 +117,11 @@ class IaInteractions(commands.Cog):
                     pass
 
                 # remoção do codi-name "ash" ou "ashley"
+                # --------------------============================--------------------
                 content_ = message.content.lower()
                 content_ = content_.replace("ashley", "").replace("ash", "")
                 content_ = content_.replace(" ?", "?").replace("  ", " ").strip()
+                # --------------------============================--------------------
 
                 # sistema de IA
                 if '?' in message.content and len(message.content) > 2:
@@ -131,7 +133,7 @@ class IaInteractions(commands.Cog):
                         if chance >= 99:
                             return await self.send_message(message)
                         else:
-                            if chance_not < 2 and "?" in message.content:
+                            if chance_not == 1 and "?" in message.content:
                                 content = choice(self.bot.config['answers']['upset'])
                                 return await self.send_message(message, content)
                 else:
