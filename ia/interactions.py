@@ -11,8 +11,8 @@ class IaInteractions(commands.Cog):
         self.bot = bot
         self.msg = {}
         self.num = 1
-        self.heart = HeartIA(self.scripts, 0.9)
         self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses, ia.commands, ia.common]
+        self.heart = HeartIA(self.scripts, 0.9)
 
     async def send_message(self, message, content=None):
         link_ = f'images/avatar/possessed_ashley.png'
