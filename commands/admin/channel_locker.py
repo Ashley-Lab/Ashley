@@ -7,7 +7,7 @@ OFF = ['unlocked', 'unblock', 'off']
 EM = ['<:confirmed:721581574461587496>', '<:negate:721581573396496464>']
 
 
-class DoorClass(commands.Cog):
+class ChannelClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -66,5 +66,5 @@ class DoorClass(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(DoorClass(bot))
-    print('\033[1;32m( 🔶 ) | O comando \033[1;34mDOOR_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')
+    bot.add_cog(ChannelClass(bot))
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mCHANNEL_LOCKER\033[1;32m foi carregado com sucesso!\33[m')

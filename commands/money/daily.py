@@ -4,7 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from random import randint
-from time import localtime
+from datetime import datetime
 
 money = 0
 
@@ -148,36 +148,27 @@ class DailyClass(commands.Cog):
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        try:
-            if update['cooldown']['rec']['cont'] < 5:
-                if member.id in update['cooldown']['rec']['list']:
-                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro nas ultimas"
-                                          f" 24 horas.``")
 
+        date_now = datetime.today()
+        date_old = update['cooldown']['rec']['date']
+
+        try:
+            if update['cooldown']['rec']['cont'] < 6 and abs((date_old - date_now).days) < 2:
+                if member.id in update['cooldown']['rec']['list']:
+                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje!``")
                 update['cooldown']['rec']['cont'] += 1
-                update['cooldown']['rec']['date'] = localtime()
                 update['cooldown']['rec']['list'].append(member.id)
                 await self.bot.db.update_data(data, update, 'users')
+            else:
+                if abs((date_old - date_now).days) > 1:
+                    update['cooldown']['rec'] = {"cont": 1, "date": datetime.today(), "list": [member.id]}
+                    await self.bot.db.update_data(data, update, 'users')
+                else:
+                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você ultrapassou suas "
+                                          f"recomendações por hoje!``")
         except KeyError:
-            update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
+            update['cooldown']['rec'] = {"cont": 1, "date": datetime.today(), "list": [member.id]}
             await self.bot.db.update_data(data, update, 'users')
-
-        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        update = data
-        if update['cooldown']['rec']['cont'] >= 5:
-            date_now = localtime()
-            date_old = update['cooldown']['rec']['date']
-            if date_now[0] == date_old[0]:
-                if date_now[1] == date_old[1]:
-                    if date_now[2] > date_old[2]:
-                        update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
-                        await self.bot.db.update_data(data, update, 'users')
-                    else:
-                        return await ctx.send(f"<:oc_status:519896814225457152>│``Você ultrapassou suas recomendações "
-                                              f"dentro de 24 horas.``")
-            if date_now[0] > date_old[0] or date_now[1] > date_old[1]:
-                update['cooldown']['rec'] = {"cont": 1, "date": localtime(), "list": [member.id]}
-                await self.bot.db.update_data(data, update, 'users')
 
         update_user['user']['rec'] += 1
 

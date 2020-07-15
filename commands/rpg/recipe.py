@@ -6,7 +6,7 @@ from resources.db import Database
 from resources.utility import paginator
 
 
-class DoorClass(commands.Cog):
+class RecipeClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.color = self.bot.color
@@ -129,5 +129,5 @@ class DoorClass(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(DoorClass(bot))
-    print('\033[1;32m( 🔶 ) | O comando \033[1;34mDOOR_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')
+    bot.add_cog(RecipeClass(bot))
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mRECIPE_SYSTEM\033[1;32m foi carregado com sucesso!\33[m')

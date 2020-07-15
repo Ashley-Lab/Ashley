@@ -5,12 +5,14 @@ from random import choice, randint
 from resources.ia_heart import HeartIA
 from resources.utility import get_response, include
 
+C_SIM = 98
+C_NAO = 98
+
 
 class IaInteractions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.msg = {}
-        self.num = 1
         self.scripts = [ia.about_me, ia.concept, ia.deeping, ia.introduction, ia.responses, ia.commands, ia.common]
         self.heart = HeartIA(self.scripts, 0.9)
 
@@ -32,6 +34,19 @@ class IaInteractions(commands.Cog):
             dg, ud = data_guild, user_data
             if dg is not None and ud is not None and dg['ia_config']['auto_msg'] and ud['user']['ia_response']:
 
+                # filtro de comandos ( para nao haver iteração em cima de comandos )
+                # -----------======================-----------
+                ctx = await self.bot.get_context(message)
+                if ctx.command is not None:
+                    return
+                # -----------======================-----------
+
+                # sistema de chance da ashley  responder a um usuario
+                # -------=================-------
+                chance = randint(1, 100)
+                chance_not = randint(1, 100)
+                # -------=================-------
+
                 # sistema de bloqueio de commando em canal / tambem afeta a ia
                 # ----------------------==================================----------------------
                 run_command = False
@@ -43,66 +58,26 @@ class IaInteractions(commands.Cog):
                         run_command = True
                 # ----------------------==================================----------------------
 
-                # filtro de comandos ( para nao haver iteração em cima de comandos )
-                # -----------======================-----------
-                ctx = await self.bot.get_context(message)
-                if ctx.command is not None:
-                    return
-                # -----------======================-----------
-
-                # sistema de chance da ashley  responder a um usuario
-
-                # ---======---
-                self.num = 1
-                # ---======---
-
-                # -----------======================-----------
-                try:
-                    if '?' in self.msg[message.author.id][-1]:
-                        num = 1
-                        for msg in self.msg[message.author.id]:
-                            if '?' in msg:
-                                num += 1
-                        end_num = num + randint(1, 15)
-                        if end_num > 25:
-                            end_num = 25
-                        self.num = randint(num, end_num)
-                except KeyError:
-                    pass
-                # -----------======================-----------
-
                 # --------------============================--------------
-                if include(message.content, ['ash', 'ashley']):
-                    self.num = 99
-                # --------------============================--------------
-
-                # -------=================-------
-                chance = randint(self.num, 100)
-                and_num = (chance - self.num)
-                if and_num < 10:
-                    and_num = 10
-                chance_not = randint(1, and_num)
-                # -------=================-------
-
-                # --------------============================--------------
-                if run_command:
-                    if not include(message.content, ['ash', 'ashley']):
-                        chance = 5
-                        chance_not = 5
+                if run_command is True and include(message.content, ['ash', 'ashley']) is False:
+                    chance = 1
+                    chance_not = 1
                 # --------------============================--------------
 
                 # filtro de quantidade de mensagens salvas por usuario
                 try:
                     # filtro de pergunta repetida a longo prazo
-                    if len(self.msg[message.author.id]) >= 11:
+                    if len(self.msg[message.author.id]) >= 10:
                         for msg in self.msg[message.author.id]:
-                            if message.content == msg:
-                                content = choice(self.bot.config['answers']['repeat'])
-                                if chance >= 99 and "?" in message.content:
+                            if message.content == msg and "?" in message.content:
+                                if chance >= C_SIM or include(message.content, ['ash', 'ashley']):
+                                    content = choice(self.bot.config['answers']['repeat'])
                                     return await self.send_message(message, content)
+
                     self.msg[message.author.id].append(message.content)
-                    if len(self.msg[message.author.id]) >= 22:
+                    if len(self.msg[message.author.id]) >= 20:
                         self.msg[message.author.id] = [message.content]
+
                 except KeyError:
                     self.msg[message.author.id] = [message.content]
 
@@ -110,8 +85,8 @@ class IaInteractions(commands.Cog):
                 try:
                     if self.msg[message.author.id][-1] == self.msg[message.author.id][-2]:
                         if self.msg[message.author.id][-1] == self.msg[message.author.id][-3]:
-                            content = choice(self.bot.config['answers']['repeated'])
-                            if chance >= 99:
+                            if chance >= C_SIM or include(message.content, ['ash', 'ashley']):
+                                content = choice(self.bot.config['answers']['repeated'])
                                 return await self.send_message(message, content)
                 except IndexError:
                     pass
@@ -124,33 +99,28 @@ class IaInteractions(commands.Cog):
                 # --------------------============================--------------------
 
                 # sistema de IA
-                if '?' in message.content and len(message.content) > 2:
-                    response = self.heart.get_response(content_)
-                    if response is not None:
-                        if chance >= 99:
+                if chance >= C_SIM or include(message.content, ['ash', 'ashley']):
+                    if '?' in message.content and len(message.content) > 2:
+                        response = self.heart.get_response(content_)
+                        if response is not None:
                             return await self.send_message(message, response)
-                    else:
-                        if chance >= 99:
-                            return await self.send_message(message)
                         else:
-                            if chance_not == 1 and "?" in message.content:
-                                content = choice(self.bot.config['answers']['upset'])
-                                return await self.send_message(message, content)
-                else:
-                    response = self.heart.get_response(content_)
-                    if response is not None:
-                        if chance >= 99 and include(message.content, ['ash', 'ashley']):
-                            return await self.send_message(message, response)
+                            return await self.send_message(message)
                     else:
-                        if chance >= 99:
+                        response = self.heart.get_response(content_)
+                        if response is not None:
+                            return await self.send_message(message, response)
+                        else:
                             if 'bom dia' in message.content.lower() or 'boa tarde' in message.content.lower():
                                 content = choice(config['salutation']['day'])
-                                content = content.lower()
-                                content = content.replace('bom dia', 'boa tarde')
                                 return await self.send_message(message, content)
                             elif 'boa noite' in message.content.lower():
                                 content = choice(config['salutation']['night'])
                                 return await self.send_message(message, content)
+                else:
+                    if chance_not >= C_NAO and "?" in message.content:
+                        content = choice(self.bot.config['answers']['upset'])
+                        return await self.send_message(message, content)
 
 
 def setup(bot):
