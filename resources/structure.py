@@ -171,5 +171,8 @@ guild_data_structure = {
                 "while_list": list(),
                 "black_list": list()
             },
-            "receptions": dict()
+            "receptions": dict(),
+            "music": {
+                "dj": False
+            }
 }

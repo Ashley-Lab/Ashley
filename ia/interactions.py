@@ -5,8 +5,9 @@ from random import choice, randint
 from resources.ia_heart import HeartIA
 from resources.utility import get_response, include
 
-C_SIM = 98
-C_NAO = 98
+C_SIM, C_NAO = 98, 98
+chance, chance_not = 0, 0
+ASHLEY = [" ash", "ash ", " ash ", "ashley"]
 
 
 class IaInteractions(commands.Cog):
@@ -28,6 +29,7 @@ class IaInteractions(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        global chance, chance_not
         if message.guild is not None and str(message.author.id) not in self.bot.blacklist:
             data_guild = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             user_data = await self.bot.db.get_data("user_id", message.author.id, "users")
@@ -41,12 +43,6 @@ class IaInteractions(commands.Cog):
                     return
                 # -----------======================-----------
 
-                # sistema de chance da ashley  responder a um usuario
-                # -------=================-------
-                chance = randint(1, 100)
-                chance_not = randint(1, 100)
-                # -------=================-------
-
                 # sistema de bloqueio de commando em canal / tambem afeta a ia
                 # ----------------------==================================----------------------
                 run_command = False
@@ -58,11 +54,19 @@ class IaInteractions(commands.Cog):
                         run_command = True
                 # ----------------------==================================----------------------
 
+                # sistema de chance da ashley  responder a um usuario
+
                 # --------------============================--------------
-                if run_command is True and include(message.content, ['ash', 'ashley']) is False:
-                    chance = 1
-                    chance_not = 1
+                if run_command:
+                    if not include(message.content, ASHLEY):
+                        chance = 0
+                        chance_not = 0
+                chance = randint(1, 100)
+                chance_not = randint(1, 100)
                 # --------------============================--------------
+
+                if chance == 0 or chance_not == 0:
+                    return
 
                 # filtro de quantidade de mensagens salvas por usuario
                 try:
@@ -70,7 +74,7 @@ class IaInteractions(commands.Cog):
                     if len(self.msg[message.author.id]) >= 10:
                         for msg in self.msg[message.author.id]:
                             if message.content == msg and "?" in message.content:
-                                if chance >= C_SIM or include(message.content, ['ash', 'ashley']):
+                                if chance >= C_SIM or include(message.content, ASHLEY):
                                     content = choice(self.bot.config['answers']['repeat'])
                                     return await self.send_message(message, content)
 
@@ -85,7 +89,7 @@ class IaInteractions(commands.Cog):
                 try:
                     if self.msg[message.author.id][-1] == self.msg[message.author.id][-2]:
                         if self.msg[message.author.id][-1] == self.msg[message.author.id][-3]:
-                            if chance >= C_SIM or include(message.content, ['ash', 'ashley']):
+                            if chance >= C_SIM or include(message.content, ASHLEY):
                                 content = choice(self.bot.config['answers']['repeated'])
                                 return await self.send_message(message, content)
                 except IndexError:
@@ -99,7 +103,7 @@ class IaInteractions(commands.Cog):
                 # --------------------============================--------------------
 
                 # sistema de IA
-                if chance >= C_SIM or include(message.content, ['ash', 'ashley']):
+                if chance >= C_SIM or include(message.content, ASHLEY):
                     if '?' in message.content and len(message.content) > 2:
                         response = self.heart.get_response(content_)
                         if response is not None:

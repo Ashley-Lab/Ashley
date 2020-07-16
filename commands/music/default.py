@@ -260,7 +260,7 @@ class MusicDefault(commands.Cog):
         state = self.get_state(channel.guild)
         state.skip_votes.add(member)
         users_in_channel = len([member for member in channel.members if not member.bot])
-        if (float(len(state.skip_votes)) / users_in_channel) >= 0.5:
+        if (float(len(state.skip_votes)) / users_in_channel) >= 0.8:
             channel.guild.voice_client.stop()
 
     def get_state(self, guild):
@@ -292,6 +292,11 @@ class MusicDefault(commands.Cog):
     async def _connect(self, ctx, *, channel: discord.VoiceChannel = None):
         """Comando usado pra fazer a Ashley se conectar a um canal de voz
         use ash conneect"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         if not channel:
             try:
                 channel = ctx.author.voice.channel
@@ -325,6 +330,11 @@ class MusicDefault(commands.Cog):
     async def play_(self, ctx, *, search: str = "Ashley escape the fate"):
         """Comando usado pra fazer a Ashley tocar musica/adicionar uma musica na queue
         Use ash play"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         await ctx.trigger_typing()
         vc = ctx.voice_client
 
@@ -355,7 +365,7 @@ class MusicDefault(commands.Cog):
             except urllib.error.HTTPError:
                 pass
             await ctx.send('<:alert_status:519896811192844288>│``ATUALMENTE MEU HOST ESTÁ IMPOSSIBILITADO PEDIR '
-                           'MUSICA AO YOUTUBE!``')
+                           'MUSICA AO YOUTUBE! TENTE NOVAMENTE...``')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -364,6 +374,11 @@ class MusicDefault(commands.Cog):
     async def pause_(self, ctx):
         """Comando usado pra fazer a Ashley pausar as musicas
         Use ash pause"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         vc = ctx.voice_client
 
         try:
@@ -392,6 +407,11 @@ class MusicDefault(commands.Cog):
     async def resume_(self, ctx):
         """Comando usado pra fazer a Ashley voltar a tocar as musicas pausadas
         Use ash resume"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         vc = ctx.voice_client
 
         try:
@@ -421,6 +441,11 @@ class MusicDefault(commands.Cog):
     async def skip_(self, ctx):
         """Comando usado pra pular uma musica
         Use ash skip"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         vc = ctx.voice_client
 
         try:
@@ -459,6 +484,11 @@ class MusicDefault(commands.Cog):
     async def queue_info(self, ctx):
         """Comando usado pra ver a situação atual da queue
         Use ash queue"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         vc = ctx.voice_client
         global cont
 
@@ -503,6 +533,11 @@ class MusicDefault(commands.Cog):
     async def _shuffle(self, ctx):
         """Comando usado pra misturar a ordem das musicas
         Use ash shuffle"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         state = self.get_player(ctx)
 
         try:
@@ -528,6 +563,11 @@ class MusicDefault(commands.Cog):
     async def _remove(self, ctx, index=-1):
         """Comando usado pra remover uma musica da queue
         Use ash remove <numero da musica no queue>"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         state = self.get_player(ctx)
 
         try:
@@ -560,6 +600,11 @@ class MusicDefault(commands.Cog):
     async def _clear(self, ctx):
         """Comando usado pra limpar a queue
         Use ash clear"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         state = self.get_player(ctx)
 
         try:
@@ -586,6 +631,11 @@ class MusicDefault(commands.Cog):
     async def _repeat(self, ctx):
         """Comando usado pra repetir a queue atual
         Use ash repeat"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         try:
             channel = ctx.author.voice.channel
             if channel:
@@ -609,6 +659,11 @@ class MusicDefault(commands.Cog):
     async def now_playing_(self, ctx):
         """Comando usado pra ver que musica esta tocando no momento
         Use ash nowplaying"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
@@ -625,9 +680,12 @@ class MusicDefault(commands.Cog):
         except discord.HTTPException:
             pass
 
-        player.np = await ctx.send(f'<:play:519896828091564033>│**Tocando agora:** `{vc.source.title}` \n'
-                                   f'<:point:519896842192814110>│Requerido por`{vc.source.requester}` \n'
-                                   f'Duração: **{parse_duration(vc.source.duration)}**', delete_after=20)
+        try:
+            player.np = await ctx.send(f'<:play:519896828091564033>│**Tocando agora:** `{vc.source.title}` \n'
+                                       f'<:point:519896842192814110>│Requerido por`{vc.source.requester}` \n'
+                                       f'Duração: **{parse_duration(vc.source.duration)}**', delete_after=20)
+        except AttributeError:
+            pass
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -671,6 +729,11 @@ class MusicDefault(commands.Cog):
     async def stop_(self, ctx):
         """Comando usado pra fazer a ashley parar de tocar musica
         Use ash stop"""
+        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        if data['music']['dj']:
+            if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
+                return await ctx.send("<:oc_status:519896814225457152>│``APENAS MEMBROS COM O CARGO DE``"
+                                      " **</Ash_Dj>** ``PODEM USAR OS COMANDOS DE MUSICA!``")
         vc = ctx.voice_client
 
         try:
