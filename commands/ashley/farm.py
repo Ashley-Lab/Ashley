@@ -117,7 +117,7 @@ class FarmClass(commands.Cog):
                     if ctx.guild.id == self.bot.config['config']['default_guild']:
                         embed = discord.Embed(
                             title="Escolha a área que você deseja Ir:\n"
-                                  "```COMANDO PARA VOLTAR AO CLAN ATUAL: ash.respawn```",
+                                  "```COMANDO PARA VOLTAR: ash.respawn```",
                             color=self.color,
                             description="- Para ir até **Etheria**: Clique em :crystal_ball:\n"
                                         "- Para ir até **Rauberior**: Clique em :lion_face:\n"

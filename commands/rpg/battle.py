@@ -22,11 +22,10 @@ class Battle(commands.Cog):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
         if lower_net in ['ln', 'lower', 'net', 'n', 'not']:
-            Class_rpg['lower_net'] = lower_net
-            await ctx.send(f"**MODO LOWER NET ATIVADO:** \n"
-                           f"``Esse modo retira as imagens para melhorar a experiencia de quem tem internet lenta.``")
-        else:
-            Class_rpg['lower_net'] = lower_net
+            await ctx.send(f"**MODO LOWER NET ATIVADO:**")
+
+        # preparação para a batalha
+        Class_rpg['lower_net'] = lower_net
         Class_rpg['Name'] = ctx.author.name
         Class_rpg['img'] = ctx.author.avatar_url
         list_items = list(choice_equips(self.bot).values())
@@ -45,64 +44,45 @@ class Battle(commands.Cog):
             db_monster['lower_net'] = lower_net
         player = Entity(db_player, True)
         monster = Entity(db_monster, False)
-        turns = choice([0, 1])
-        while player.status['hp'] > 0 and monster.status['hp'] > 0:
-            if turns == 0:
-                atk = await player.turn(monster.status['hp'], self.bot, ctx)
-                await sleep(1)
-                if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
-                    await monster.damage(atk, player.status['atk'], ctx, player.name)
-                else:
-                    embed = discord.Embed(
-                        description=f"``{monster.name.upper()} EVADIU``",
-                        color=0x000000
-                    )
-                    if lower_net == 'disable':
-                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
-                    embed.set_thumbnail(url=f"{db_monster['img']}")
-                    await ctx.send(embed=embed)
-                atk = await monster.turn(monster.status['hp'], self.bot, ctx)
-                await sleep(1)
-                if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
-                    await player.damage(atk, monster.status['atk'], ctx, monster.name)
-                else:
-                    embed = discord.Embed(
-                        description=f"``{ctx.author.name.upper()} EVADIU``",
-                        color=0x000000
-                    )
-                    if lower_net == 'disable':
-                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
-                    embed.set_thumbnail(url=f"{db_player['img']}")
-                    await ctx.send(embed=embed)
-                await sleep(2)
+
+        # durante a batalha
+        while True:
+            if player.status['hp'] <= 0:
+                break
+
+            atk = await player.turn(monster.status['hp'], self.bot, ctx)
+            await sleep(1)
+            if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
+                await monster.damage(atk, player.status['atk'], ctx, player.name)
             else:
-                atk = await monster.turn(monster.status['hp'], self.bot, ctx)
-                await sleep(1)
-                if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
-                    await player.damage(atk, monster.status['atk'], ctx, monster.name)
-                else:
-                    embed = discord.Embed(
-                        description=f"``{ctx.author.name.upper()} EVADIU``",
-                        color=0x000000
-                    )
-                    if lower_net == 'disable':
-                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
-                    embed.set_thumbnail(url=f"{db_player['img']}")
-                    await ctx.send(embed=embed)
-                atk = await player.turn(monster.status['hp'], self.bot, ctx)
-                await sleep(1)
-                if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
-                    await monster.damage(atk, player.status['atk'], ctx, player.name)
-                else:
-                    embed = discord.Embed(
-                        description=f"``{monster.name.upper()} EVADIU``",
-                        color=0x000000
-                    )
-                    if lower_net == 'disable':
-                        embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
-                    embed.set_thumbnail(url=f"{db_monster['img']}")
-                    await ctx.send(embed=embed)
-                await sleep(2)
+                embed = discord.Embed(
+                    description=f"``{monster.name.upper()} EVADIU``",
+                    color=0x000000
+                )
+                if lower_net == 'disable':
+                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                embed.set_thumbnail(url=f"{db_monster['img']}")
+                await ctx.send(embed=embed)
+
+            if monster.status['hp'] <= 0:
+                break
+
+            atk = await monster.turn(monster.status['hp'], self.bot, ctx)
+            await sleep(1)
+            if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
+                await player.damage(atk, monster.status['atk'], ctx, monster.name)
+            else:
+                embed = discord.Embed(
+                    description=f"``{ctx.author.name.upper()} EVADIU``",
+                    color=0x000000
+                )
+                if lower_net == 'disable':
+                    embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
+                embed.set_thumbnail(url=f"{db_player['img']}")
+                await ctx.send(embed=embed)
+            await sleep(2)
+
+        # depois da batalha
         if monster.status['hp'] > 0:
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} PERDEU!``",

@@ -20,6 +20,7 @@ cont = Counter()
 opus_libs_dll = ['libopus-0.x86.dll', 'libopus-0.x64.dll', 'libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib']
 youtube_dl.utils.bug_reports_message = lambda: ' '
 last_search = {}
+error_y = False
 
 
 def load_opus_lib(opus_libs=None):
@@ -330,6 +331,7 @@ class MusicDefault(commands.Cog):
     async def play_(self, ctx, *, search: str = "Ashley escape the fate"):
         """Comando usado pra fazer a Ashley tocar musica/adicionar uma musica na queue
         Use ash play"""
+        global error_y
         data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         if data['music']['dj']:
             if "</Ash_Dj>" not in [r.name for r in ctx.author.roles]:
@@ -355,17 +357,18 @@ class MusicDefault(commands.Cog):
             last_search[ctx.guild.id] = list()
         last_search[ctx.guild.id].append(search)
         if last_search[ctx.guild.id] is not None:
+            error_y = False
             try:
                 source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
                 await player.queue.put(source)
             except youtube_dl.utils.DownloadError:
-                pass
+                error_y = True
             except youtube_dl.utils.ExtractorError:
-                pass
+                error_y = True
             except urllib.error.HTTPError:
-                pass
-            await ctx.send('<:alert_status:519896811192844288>│``ATUALMENTE MEU HOST ESTÁ IMPOSSIBILITADO PEDIR '
-                           'MUSICA AO YOUTUBE! TENTE NOVAMENTE...``')
+                error_y = True
+            if error_y:
+                await ctx.send('<:alert_status:519896811192844288>│``HOUVE UM ERRO NO PEDIDO DA MUSICA...``')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

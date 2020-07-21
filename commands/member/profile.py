@@ -97,7 +97,10 @@ class ProfileSystem(commands.Cog):
 
         profile(data_profile)
         await ctx.send("> ``CLIQUE NA IMAGEM PARA MAIORES DETALHES``")
-        await ctx.send(file=discord.File('profile.png'))
+        try:
+            await ctx.send(file=discord.File('profile.png'))
+        except discord.HTTPException:
+            pass
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

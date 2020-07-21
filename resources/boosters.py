@@ -128,7 +128,7 @@ class Booster(object):
             answer = await bot.db.take_money(ctx, 2000)
         else:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR OU RESETAR "
-                                  "A BOX!\nVOCÊ PRECISA DE 1.000 ETHERNYAS PARA COMPRAR OU RESETAR UMA BOX.``")
+                                  "A BOX!\nVOCÊ PRECISA DE 2.000 ETHERNYAS PARA COMPRAR OU RESETAR UMA BOX.``")
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         box = self.create_box
@@ -197,5 +197,9 @@ class Booster(object):
             update['box']['status']['active'] = False
         await bot.db.update_data(data, update, 'users')
         await ctx.send(answer)
+        if rarity.lower() in ["Ultra Raro", "Secret"]:
+            return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM "
+                                  f"``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
+                                  f"TEM O TIER`` ✨ **{rarity.upper()}** ✨")
         await ctx.send(f"``O ITEM ``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
                        f"TEM O TIER`` **{rarity.upper()}**")

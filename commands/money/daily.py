@@ -112,10 +112,14 @@ class DailyClass(commands.Cog):
         data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if not data_['config']['vip']:
             if ctx.guild.id != self.bot.config['config']['default_guild']:
-                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update_ = data_
-                del data_['cooldown'][str(ctx.command)]
-                await self.bot.db.update_data(data_, update_, 'users')
+                try:
+                    data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update_ = data_
+                    del data_['cooldown'][str(ctx.command)]
+                    await self.bot.db.update_data(data_, update_, 'users')
+                except KeyError:
+                    pass
+
                 return await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro '
                                       'do meu servidor de suporte, para isso use o comando ASH INVITE para receber no '
                                       'seu privado o link do meu servidor.``')
@@ -149,10 +153,10 @@ class DailyClass(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        date_now = datetime.today()
-        date_old = update['cooldown']['rec']['date']
-
         try:
+            date_now = datetime.today()
+            date_old = update['cooldown']['rec']['date']
+
             if update['cooldown']['rec']['cont'] < 6 and abs((date_old - date_now).days) < 2:
                 if member.id in update['cooldown']['rec']['list']:
                     return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje!``")

@@ -83,7 +83,7 @@ class OnReady(commands.Cog):
                             await channel__.send(embed=embed)
                             update_member['inventory']['coins'] += coins
                             await self.bot.db.update_data(data_member, update_member, 'users')
-            await asyncio.sleep(1)
+            await asyncio.sleep(60)
 
     async def draw_gift(self):
         while True:
@@ -117,7 +117,7 @@ class OnReady(commands.Cog):
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                             embed.set_thumbnail(url=BOX)
                             await channel__.send(embed=embed)
-            await asyncio.sleep(1)
+            await asyncio.sleep(60)
 
     async def change_status(self):
         status = cycle(self.status)
@@ -140,7 +140,7 @@ class OnReady(commands.Cog):
                     if not self.bot.is_closed():
                         await self.bot.change_presence(activity=discord.Game(name=current_status),
                                                        status=current_state)
-            await asyncio.sleep(1)
+            await asyncio.sleep(60)
 
     @commands.Cog.listener()
     async def on_ready(self):

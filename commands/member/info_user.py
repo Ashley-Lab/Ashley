@@ -20,10 +20,14 @@ class UserInfo(commands.Cog):
         if member is None:
             member = ctx.author
         data = await self.bot.db.get_data("user_id", member.id, "users")
+        if data is not None:
+            link = f"https://api-ashley.herokuapp.com/get-users/{data['_id']}"
+            database = f"[Clique Aqui]({link})"
+        else:
+            database = "USUARIO NAO CADASTRADO"
         role = ",".join([r.name for r in member.roles if r.name != "@everyone"])
         userjoinedat = str(member.joined_at).split('.', 1)[0]
         usercreatedat = str(member.created_at).split('.', 1)[0]
-        link = f"https://api-ashley.herokuapp.com/get-users/{data['_id']}"
         embed = discord.Embed(
             title=":pushpin:Informações pessoais de:",
             color=self.color,
@@ -34,8 +38,7 @@ class UserInfo(commands.Cog):
         embed.add_field(name="💻ID:", value=member.id, inline=True)
         embed.add_field(name=":label:Tag:", value=member.discriminator, inline=True)
         embed.add_field(name="Cargos:", value=role, inline=True)
-        if data is not None:
-            embed.add_field(name="DataBase:", value=f"[Clique Aqui]({link})")
+        embed.add_field(name="DataBase:", value=database)
         embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
         embed.set_thumbnail(url=member.avatar_url)
         await ctx.send(embed=embed)

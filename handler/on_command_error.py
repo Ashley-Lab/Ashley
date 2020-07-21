@@ -53,11 +53,6 @@ class CommandErrorHandler(commands.Cog):
         # aqui faço as verificações dos cooldowns dos comandos padroes
         # obs: existem comandos com cooldowns personalizados que nao entram nesse contexto
         if isinstance(error, commands.CommandOnCooldown):
-
-            # exceção criada para os desenvolvedores e testers
-            if ctx.author.id in self.bot.staff or ctx.author.id in self.bot.testers:
-                return await ctx.reinvoke()
-
             return await ctx.send(f"<:negate:520418505993093130>│**Aguarde**: `Você deve esperar` **{{:.2f}}** "
                                   f"`segundos` `para mandar outro comando!`".format(error.retry_after),
                                   delete_after=float("{:.2f}".format(error.retry_after)))

@@ -76,22 +76,14 @@ ITEMS:
                         await ctx.send(embed=box)
                 except KeyError:
                     await ctx.send("<:negate:520418505993093130>│``Você nao tem box na sua conta ainda...``\n"
-                                   "``Para conseguir sua box use o comando:`` **ash box buy** ``ou`` **ash shop**")
+                                   "``Para conseguir sua box use o comando:`` **ash box buy**")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
-        await ctx.send("<:alert_status:519896811192844288>│``Comprando box...``")
-        await self.bot.booster.buy_box(self.bot, ctx)
-
-    @check_it(no_pm=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @box.command(name='reset', aliases=['resetar'])
-    async def _reset(self, ctx):
-        await ctx.send("<:alert_status:519896811192844288>│``Resetando box...``")
+        await ctx.send("<:alert_status:519896811192844288>│``Comprando a sua box...``")
         await self.bot.booster.buy_box(self.bot, ctx)
 
     @check_it(no_pm=True)
@@ -114,10 +106,10 @@ ITEMS:
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         num = int(answer.content)
         if num > 10:
-            return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 booster"
+            return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 boosters"
                                   " de uma vez...``")
-        elif num == 0:
-            return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar 0 booster``")
+        elif num < 1:
+            return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar 0 ou menos boosters``")
 
         if data['box']['status']['active']:
             num_ = self.verify_money(data, num)
@@ -128,8 +120,8 @@ ITEMS:
                 await sleep(0.5)
             await ctx.send("<:on_status:519896814799945728>│``Obrigado pelas compras, volte sempre!``")
         else:
-            await ctx.send("<:negate:520418505993093130>│``Você ainda não tem uma box...``\n"
-                           "``Para conseguir sua box use o comando:`` **ash box buy** ``ou`` **ash shop**")
+            await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
+                           "``Para ativar sua box use o comando:`` **ash box buy**")
 
 
 def setup(bot):

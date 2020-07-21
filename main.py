@@ -266,7 +266,7 @@ class Ashley(commands.AutoShardedBot):
             else:
                 run_command = True
                 if message.guild.system_channel is not None:
-                    if await verify_cooldown(self, f"{message.guild.id}_no_register", 3600):
+                    if await verify_cooldown(self, f"{message.guild.id}_no_register", 86400):
                         embed = discord.Embed(
                             color=self.color,
                             description="<a:blue:525032762256785409>│``SEU SERVIDOR AINDA NAO ESTA CADASTRADO USE``"

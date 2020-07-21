@@ -15,29 +15,17 @@ class OnMemberJoin(commands.Cog):
         if data is not None:
             if data['func_config']['member_join']:
                 try:
-                    if member.guild.system_channel is not None:
-                        to_send = discord.Embed(
-                            title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
-                            color=self.color,
-                            description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
-                                        "digite ``ash.ajuda`` que eu irei ajudar você com "
-                                        "muito prazer!".format(member.name, member.guild))
-                        to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                        to_send.set_thumbnail(url="{}".format(member.avatar_url))
-                        to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
-                        await member.guild.system_channel.send(embed=to_send)
-                    else:
-                        to_send = discord.Embed(
-                            title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
-                            color=self.color,
-                            description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
-                                        "digite ``ash.ajuda`` que eu irei ajudar você com "
-                                        "muito prazer!".format(member.name, member.guild))
-                        to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                        to_send.set_thumbnail(url="{}".format(member.avatar_url))
-                        to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
-                        channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
-                        await channel_.send(embed=to_send)
+                    to_send = discord.Embed(
+                        title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
+                        color=self.color,
+                        description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
+                                    "digite ``ash.ajuda`` que eu irei ajudar você com "
+                                    "muito prazer!".format(member.name, member.guild))
+                    to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+                    to_send.set_thumbnail(url="{}".format(member.avatar_url))
+                    to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
+                    channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
+                    await channel_.send(embed=to_send)
                 except discord.errors.Forbidden:
                     pass
                 except AttributeError:
@@ -65,12 +53,23 @@ class OnMemberJoin(commands.Cog):
                 if self.bot.config['config']['default_guild'] == member.guild.id:
                     role = discord.utils.find(lambda r: r.name == "</Members>", member.guild.roles)
                     await member.add_roles(role)
-                    channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
-                    embed = discord.Embed(
-                        color=self.color,
-                        description="<a:blue:525032762256785409>│**OBS:** ``SE VOCÊ VEIO AQUI ATRAS DO VIP É SÓ USAR O "
-                                    "COMANDO`` **ASH VIP**")
-                    await channel_.send(embed=embed)
+                    data = await self.bot.db.get_data("user_id", member.id, "users")
+                    if data is not None:
+                        if len(data['config']['roles']) != 0:
+                            cargos = member.roles
+                            for c in range(0, len(cargos)):
+                                if cargos[c].name != "@everyone":
+                                    await member.remove_roles(cargos[c])
+                            role = discord.utils.find(lambda r: r.name == "👺Mobrau👺", member.guild.roles)
+                            await member.add_roles(role)
+                            channel_ = self.bot.get_channel(576795574783705104)
+                            return await channel_.send(f"<a:blue:525032762256785409>│{member.mention} ``SAIR SEM DAR "
+                                                       f"RESPAWN NAO É A MANDEIRA CORRETA DE SAIR DO SERVIDOR``")
+                        else:
+                            channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
+                            t = "<a:blue:525032762256785409>│**OBS:** ``PARA PEGAR SEU VIP USE O COMANDO`` **ASH VIP**"
+                            embed = discord.Embed(color=self.color, description=t)
+                            await channel_.send(embed=embed)
             except discord.Forbidden:
                 pass
 

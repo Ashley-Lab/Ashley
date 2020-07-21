@@ -57,12 +57,12 @@ class IaInteractions(commands.Cog):
                 # sistema de chance da ashley  responder a um usuario
 
                 # --------------============================--------------
+                chance = randint(1, 100)
+                chance_not = randint(1, 100)
                 if run_command:
                     if not include(message.content, ASHLEY):
                         chance = 0
                         chance_not = 0
-                chance = randint(1, 100)
-                chance_not = randint(1, 100)
                 # --------------============================--------------
 
                 if chance == 0 or chance_not == 0:

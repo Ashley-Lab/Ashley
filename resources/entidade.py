@@ -118,13 +118,16 @@ class Entity(object):
                         reaction = await bot.wait_for('reaction_add')
                     emo = "<:pass:692967573649752194>"
                     emoji_ = str(emo).replace('<:', '').replace(emo[emo.rfind(':'):], '')
-                    if reaction[0].emoji.name == emoji_:
-                        regen = int(((self.status['con'] * manatax) / 100) * 15)
-                        if (self.status['mp'] + regen) <= (self.status['con'] * manatax):
-                            self.status['mp'] += regen
-                        else:
-                            self.status['mp'] = (self.status['con'] * manatax)
-                        break
+                    try:
+                        if reaction[0].emoji.name == emoji_:
+                            regen = int(((self.status['con'] * manatax) / 100) * 15)
+                            if (self.status['mp'] + regen) <= (self.status['con'] * manatax):
+                                self.status['mp'] += regen
+                            else:
+                                self.status['mp'] = (self.status['con'] * manatax)
+                            break
+                    except AttributeError:
+                        pass
                     for c in emojis:
                         emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
                         try:
@@ -147,6 +150,8 @@ class Entity(object):
                                     self.atack = None
                         except TypeError:
                             break
+                        except AttributeError:
+                            pass
                     if self.atack is not None:
                         break
             else:

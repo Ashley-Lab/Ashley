@@ -153,135 +153,116 @@ class UserBank(commands.Cog):
             return await ctx.send("<:oc_status:519896814225457152>│``Você não tem esse item no seu inventario!``")
 
     @check_it(no_pm=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 15.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='ticket', aliases=['raspadinha', 'rifa'])
     async def ticket(self, ctx):
         """raspadinha da sorte da ashley"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        update = data
-        if not data['config']['playing']:
-            update['config']['playing'] = True
-            await self.bot.db.update_data(data, update, 'users')
-            global coin, cost, plus
+        global coin, cost, plus
 
-            def check(m):
-                return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
-                       m.author == ctx.author and m.content == '3'
+        def check(m):
+            return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
+                   m.author == ctx.author and m.content == '3'
 
-            n_cost = [500, 80, 20]
-            if data['config']['vip']:
-                for i in range(len(n_cost)):
-                    n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
+        n_cost = [500, 80, 20]
+        if data['config']['vip']:
+            for i in range(len(n_cost)):
+                n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
 
-            await ctx.send(f"🎫│``Que tipo de`` **TICKET** ``voce deseja comprar?``"
-                           f" ``Escolha uma dessas opções abaixo! Desconto no preço por ser`` **VIP: "
-                           f"{'-20%' if data['config']['vip'] else '-0%'}**\n"
-                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                           f"``Bonus de Chance:`` **+1%**\n"
-                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                           f"``Bonus de Chance:`` **+2%**\n"
-                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                           f"``Bonus de Chance:`` **+3%**")
+        await ctx.send(f"🎫│``Que tipo de`` **TICKET** ``voce deseja comprar?``"
+                       f" ``Escolha uma dessas opções abaixo! Desconto no preço por ser`` **VIP: "
+                       f"{'-20%' if data['config']['vip'] else '-0%'}**\n"
+                       f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
+                       f"``Bonus de Chance:`` **+1%**\n"
+                       f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
+                       f"``Bonus de Chance:`` **+2%**\n"
+                       f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
+                       f"``Bonus de Chance:`` **+3%**")
 
-            try:
-                answer = await self.bot.wait_for('message', check=check, timeout=60.0)
-            except TimeoutError:
+        try:
+            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+        except TimeoutError:
+            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                                  ' CANCELADO**')
+
+        if int(answer.content) == 1:
+            cost = n_cost[0]
+            coin = "bronze"
+            plus = 1
+        if int(answer.content) == 2:
+            cost = n_cost[1]
+            coin = "silver"
+            plus = 2
+        if int(answer.content) == 3:
+            cost = n_cost[2]
+            coin = "gold"
+            plus = 3
+
+        if data['treasure'][coin] < cost:
+            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você não tem pedras suficientes.`` '
+                                  '**COMANDO CANCELADO**')
+
+        # DATA DO MEMBRO
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+        update_user['treasure'][coin] -= cost
+        await self.bot.db.update_data(data_user, update_user, 'users')
+
+        # DATA NATIVA DO SERVIDOR
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        update_guild_native = data_guild_native
+        update_guild_native['data'][f"total_{coin}"] -= cost
+        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+
+        msg = await ctx.send("<a:loading:520418506567843860>│``RASPANDO TICKET...``")
+        await sleep(1)
+        await msg.delete()
+
+        awards = self.bot.config['artifacts']
+        reward = choice(list(awards.keys()))
+        exodia = ["braço_direito", "braço_esquerdo", "perna_direita", "perna_esquerda", "the_one"]
+        reliquia = ["anel", "balança", "chave", "colar", "enigma", "olho", "vara"]
+        lucky = "EXODIA" if reward in exodia else "RELIQUIA" if reward in reliquia else "ARMADURA"
+        a = await ctx.send(f"<:alert_status:519896811192844288>│``SUA SORTE ESTÁ PARA:`` **{lucky}**")
+
+        msg = await ctx.send("<a:loading:520418506567843860>│``SEU PREMIO FOI...``")
+        await sleep(3)
+        await msg.delete()
+
+        percent = randint(1, 100)
+        bonus = awards[reward]["tier"] + plus
+        chance = 100 * awards[reward]["chance"] if randint(1, 10) > 3 else 100 * awards[reward]["chance"] * bonus
+        if percent <= chance:
+            if reward in data["artifacts"]:
+                money = randint(6, 18)
+                msg = await self.bot.db.add_money(ctx, money, True)
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
                 update['config']['playing'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
-                                      ' CANCELADO**')
+                return await ctx.send(f"> ``VOCE TIROU UM ARTEFATO REPETIDO, "
+                                      f"PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
+            file = discord.File(awards[reward]["url"], filename="reward.png")
+            embed = discord.Embed(title='VOCÊ GANHOU! 🎊 **PARABENS** 🎉', color=self.bot.color)
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+            embed.set_image(url="attachment://reward.png")
+            await ctx.send(file=file, embed=embed)
 
-            if int(answer.content) == 1:
-                cost = n_cost[0]
-                coin = "bronze"
-                plus = 1
-            if int(answer.content) == 2:
-                cost = n_cost[1]
-                coin = "silver"
-                plus = 2
-            if int(answer.content) == 3:
-                cost = n_cost[2]
-                coin = "gold"
-                plus = 3
-
-            if data['treasure'][coin] < cost:
-                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update = data
-                update['config']['playing'] = False
-                await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você não tem pedras suficientes.`` '
-                                      '**COMANDO CANCELADO**')
-
-            # DATA DO MEMBRO
-            data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update_user = data_user
-            update_user['treasure'][coin] -= cost
-            await self.bot.db.update_data(data_user, update_user, 'users')
-
-            # DATA NATIVA DO SERVIDOR
-            data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
-            update_guild_native = data_guild_native
-            update_guild_native['data'][f"total_{coin}"] -= cost
-            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-
-            msg = await ctx.send("<a:loading:520418506567843860>│``RASPANDO TICKET...``")
-            await sleep(1)
-            await msg.delete()
-
-            awards = self.bot.config['artifacts']
-            reward = choice(list(awards.keys()))
-            exodia = ["braço_direito", "braço_esquerdo", "perna_direita", "perna_esquerda", "the_one"]
-            reliquia = ["anel", "balança", "chave", "colar", "enigma", "olho", "vara"]
-            lucky = "EXODIA" if reward in exodia else "RELIQUIA" if reward in reliquia else "ARMADURA"
-            a = await ctx.send(f"<:alert_status:519896811192844288>│``SUA SORTE ESTÁ PARA:`` **{lucky}**")
-
-            msg = await ctx.send("<a:loading:520418506567843860>│``SEU PREMIO FOI...``")
+            msg = await ctx.send("<a:loading:520418506567843860>│``SALVANDO SEU PREMIO...``")
             await sleep(3)
             await msg.delete()
 
-            percent = randint(1, 100)
-            bonus = awards[reward]["tier"] + plus
-            chance = 100 * awards[reward]["chance"] if randint(1, 10) > 3 else 100 * awards[reward]["chance"] * bonus
-            if percent <= chance:
-                if reward in data["artifacts"]:
-                    money = randint(6, 18)
-                    msg = await self.bot.db.add_money(ctx, money, True)
-                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                    update = data
-                    update['config']['playing'] = False
-                    await self.bot.db.update_data(data, update, 'users')
-                    return await ctx.send(f"> ``VOCE TIROU UM ARTEFATO REPETIDO, "
-                                          f"PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
-                file = discord.File(awards[reward]["url"], filename="reward.png")
-                embed = discord.Embed(title='VOCÊ GANHOU! 🎊 **PARABENS** 🎉', color=self.bot.color)
-                embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-                embed.set_image(url="attachment://reward.png")
-                await ctx.send(file=file, embed=embed)
-
-                msg = await ctx.send("<a:loading:520418506567843860>│``SALVANDO SEU PREMIO...``")
-                await sleep(3)
-                await msg.delete()
-
-                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update = data
-                update["artifacts"][reward] = awards[reward]
-                await self.bot.db.update_data(data, update, 'users')
-                await ctx.send(f"<:confirmado:519896822072999937>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
-            else:
-                money = randint(6, 18)
-                msg = await self.bot.db.add_money(ctx, money, True)
-                await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
-            await a.delete()
-
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
-            update['config']['playing'] = False
+            update["artifacts"][reward] = awards[reward]
             await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f"<:confirmado:519896822072999937>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
         else:
-            await ctx.send('<:negate:520418505993093130>│``VOCÊ NÃO PODE USAR UM COMANDO PODE CIMA DO OUTRO!``')
+            money = randint(6, 18)
+            msg = await self.bot.db.add_money(ctx, money, True)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
+        await a.delete()
 
 
 def setup(bot):
