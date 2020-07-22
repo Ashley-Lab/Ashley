@@ -15,15 +15,6 @@ class SystemMessage(commands.Cog):
         self.user_cont_msg = {}
         self.user_cont_word = {}
 
-    async def check_p(self, message):
-        ctx = await self.bot.get_context(message)
-        perms = ctx.channel.permissions_for(ctx.me)
-        if not perms.send_messages:
-            return False
-        if not perms.read_messages:
-            return False
-        return True
-
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild is not None and str(message.author.id) not in self.bot.blacklist:
@@ -35,16 +26,17 @@ class SystemMessage(commands.Cog):
                 if ctx.command is not None:
                     return
 
+                perms = ctx.channel.permissions_for(ctx.me)
+                if not perms.send_messages or not perms.read_messages:
+                    return
+
                 if 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
                     if message.author.id != self.bot.owner_id and "pet " not in message.content.lower():
                         for c in range(0, len(config['questions']['denky_r'])):
                             if config['questions']['denky_r'][c] in message.content:
-                                if await self.check_p(message):
-                                    return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu'
-                                                                      ' pai!**\n```VOU CONTAR TUDO PRO '
-                                                                      'PAPAI```'.format(message.author.mention))
-                                else:
-                                    return
+                                return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu'
+                                                                  ' pai!**\n```VOU CONTAR TUDO PRO '
+                                                                  'PAPAI```'.format(message.author.mention))
 
                 if data_guild['ia_config']['auto_msg']:
                     if message.author.id not in self.ping_test:
@@ -67,27 +59,22 @@ class SystemMessage(commands.Cog):
                                     _3 = "<:afs:530031864350507028> "
                                     if count_ashley == 0:
                                         if time.time() < self.time:
-                                            if await self.check_p(message):
-                                                await message.channel.send(f'{_1}``SE VC PRECISA DE AJUDA USE`` '
-                                                                           f'**ASH AJUDA**')
+                                            await message.channel.send(f'{_1}``SE VC PRECISA DE AJUDA USE`` '
+                                                                       f'**ASH AJUDA**')
                                     elif count_ashley == 1:
                                         if time.time() < self.time:
-                                            if await self.check_p(message):
-                                                await message.channel.send(f'{_2}``EM QUE POSSO AJUDA-LO?``')
+                                            await message.channel.send(f'{_2}``EM QUE POSSO AJUDA-LO?``')
                                     elif count_ashley == 2:
                                         if time.time() < self.time:
-                                            if await self.check_p(message):
-                                                await message.channel.send(f'{_2}``DE NOVO CORAÇÃO?``')
+                                            await message.channel.send(f'{_2}``DE NOVO CORAÇÃO?``')
                                     elif count_ashley == 3:
                                         if time.time() < self.time:
-                                            if await self.check_p(message):
-                                                await message.channel.send(f'{_3}``VOCÊ SABE QUE É CHATO FICAR '
-                                                                           f'MARCANDO?``')
+                                            await message.channel.send(f'{_3}``VOCÊ SABE QUE É CHATO FICAR '
+                                                                       f'MARCANDO?``')
                                     else:
                                         if time.time() < self.time:
-                                            if await self.check_p(message):
-                                                await message.channel.send('<a:pingada:520418507817615364>'
-                                                                           ' ``PARA PELO AMOR DE DEUS!``')
+                                            await message.channel.send('<a:pingada:520418507817615364>'
+                                                                       ' ``PARA PELO AMOR DE DEUS!``')
                                             self.time = time.time() - 1
 
                                     message_ = await self.bot.wait_for('message', check=check, timeout=10.0)
@@ -97,17 +84,15 @@ class SystemMessage(commands.Cog):
                                             count_ashley += 1
                                         else:
                                             if time.time() < self.time:
-                                                if await self.check_p(message):
-                                                    await message.channel.send(f'{_1}``OI '
-                                                                               f'{message.author.name.upper()} '
-                                                                               f'ESTOU AQUI PARA TE AJUDAR, USE:`` '
-                                                                               f'**ASH AJUDA**')
+                                                await message.channel.send(f'{_1}``OI '
+                                                                           f'{message.author.name.upper()} '
+                                                                           f'ESTOU AQUI PARA TE AJUDAR, USE:`` '
+                                                                           f'**ASH AJUDA**')
                                     else:
                                         if time.time() < self.time:
-                                            if await self.check_p(message):
-                                                await message.channel.send(f'<a:hi:520418511856730123> '
-                                                                           f'{message.author.mention} ``NÃO SEJA '
-                                                                           f'TIMIDO, USE:`` **ASH AJUDA**')
+                                            await message.channel.send(f'<a:hi:520418511856730123> '
+                                                                       f'{message.author.mention} ``NÃO SEJA '
+                                                                       f'TIMIDO, USE:`` **ASH AJUDA**')
                                 self.ping_test[message.author.id]['p'] = False
                     except IndexError:
                         self.ping_test[message.author.id]['p'] = False
@@ -124,8 +109,7 @@ class SystemMessage(commands.Cog):
                                 if data['bot_config']['ash_news']:
                                     channel_ = self.bot.get_channel(data['bot_config']['ash_news_id'])
                                     if channel_ is not None:
-                                        if await self.check_p(message):
-                                            await channel_.send(message.content)
+                                        await channel_.send(message.content)
                             except discord.Forbidden:
                                 pass
                             await sleep(0.5)
@@ -138,8 +122,7 @@ class SystemMessage(commands.Cog):
                                 if data['bot_config']['ash_git']:
                                     channel_ = self.bot.get_channel(data['bot_config']['ash_git_id'])
                                     if channel_ is not None:
-                                        if await self.check_p(message):
-                                            await channel_.send(embed=message.embeds[0])
+                                        await channel_.send(embed=message.embeds[0])
                             except discord.Forbidden:
                                 pass
                             except IndexError:
@@ -148,10 +131,9 @@ class SystemMessage(commands.Cog):
             else:
                 try:
                     if message.mentions[0] == self.bot.user or include(message.content, ['ashley', 'ash']):
-                        if await self.check_p(message):
-                            await message.channel.send('<:negate:520418505993093130>│``Sua guilda ainda não está '
-                                                       'registrada, por favor digite:`` **ash register guild** '
-                                                       '``para cadastrar sua guilda no meu`` **banco de dados!**')
+                        await message.channel.send('<:negate:520418505993093130>│``Sua guilda ainda não está '
+                                                   'registrada, por favor digite:`` **ash register guild** '
+                                                   '``para cadastrar sua guilda no meu`` **banco de dados!**')
                 except IndexError:
                     pass
 

@@ -43,30 +43,20 @@ class IaInteractions(commands.Cog):
                     return
                 # -----------======================-----------
 
-                # sistema de bloqueio de commando em canal / tambem afeta a ia
-                # ----------------------==================================----------------------
-                run_command = False
-                if data_guild['command_locked']['status']:
-                    if message.channel.id in data_guild['command_locked']['while_list']:
-                        run_command = True
-                else:
-                    if message.channel.id not in data_guild['command_locked']['black_list']:
-                        run_command = True
-                # ----------------------==================================----------------------
+                # verificação de permissão para enviar msg e ler
+
+                # -----------======================-----------
+                perms = ctx.channel.permissions_for(ctx.me)
+                if not perms.send_messages or not perms.read_messages:
+                    return
+                # -----------======================-----------
 
                 # sistema de chance da ashley  responder a um usuario
 
                 # --------------============================--------------
                 chance = randint(1, 100)
                 chance_not = randint(1, 100)
-                if run_command:
-                    if not include(message.content, ASHLEY):
-                        chance = 0
-                        chance_not = 0
                 # --------------============================--------------
-
-                if chance == 0 or chance_not == 0:
-                    return
 
                 # filtro de quantidade de mensagens salvas por usuario
                 try:

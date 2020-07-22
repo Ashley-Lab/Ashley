@@ -35,26 +35,11 @@ class ConfigClass(commands.Cog):
                           value=f"``PREFIX:`` **config** ``+``\n"
                                 f"{self.st[0]}│**guild** ``or`` **server**\n"
                                 f"{self.st[0]}│**report** ``or`` **reportar**\n"
-                                f"{self.st[0]}│**dj**\n"
                                 f"{self.st[0]}│**log**")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=top)
-
-    @check_it(no_pm=True, manage_guild=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @config.command(name='dj')
-    async def _dj(self, ctx):
-        """nem eu sei..."""
-        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-        update = data
-        update['music']['dj'] = not update['music']['dj']
-        await self.bot.db.update_data(data, update, "guilds")
-        if data['music']['dj']:
-            return await ctx.send("<:on_status:519896814799945728>│``SISTEMA DE DJ ATIVADO``")
-        await ctx.send("<:oc_status:519896814225457152>│``SISTEMA DE DJ DESATIVADO``")
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

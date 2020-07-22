@@ -68,6 +68,7 @@ user_data_structure = {
             },
             "inventory_quest": dict(),
             "artifacts": dict(),
+            "box": {"status": {"active": False, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}},
             "cooldown": dict()
 }
 
@@ -171,8 +172,5 @@ guild_data_structure = {
                 "while_list": list(),
                 "black_list": list()
             },
-            "receptions": dict(),
-            "music": {
-                "dj": False
-            }
+            "receptions": dict()
 }

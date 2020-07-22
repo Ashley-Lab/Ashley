@@ -29,7 +29,7 @@ commands.rpg.battle
 commands.money.economy
 commands.money.guildbank
 commands.money.userbank
-commands.music.default
+commands.admin.channel_locker
 commands.admin.announce
 commands.owner.create_doc
 commands.owner.eval
@@ -97,5 +97,4 @@ commands.member.ia_response
 commands.guild.open
 commands.rpg.recipe
 commands.ashley.utility
-commands.admin.channel_locker
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

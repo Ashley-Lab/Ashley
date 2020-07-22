@@ -70,13 +70,6 @@ class Ashley(commands.AutoShardedBot):
         self.shutdowns = dumps(await self.db.get_all_data("shutdown"))
         print('\033[1;32m( 🔶 ) | Inicialização do atributo \033[1;34mSHUTDOWN\033[1;32m foi feita sucesso!\33[m')
 
-    async def check(self, ctx):
-        perms = ctx.channel.permissions_for(ctx.me)
-        if not perms.send_messages:
-            raise commands.CommandNotFound()
-        if not perms.read_messages:
-            raise commands.CommandNotFound()
-
     async def shutdown(self, reason):
         date = dt(*dt.utcnow().timetuple()[:6])
         data = {"_id": date, "reason": reason}
@@ -246,6 +239,9 @@ class Ashley(commands.AutoShardedBot):
             return
 
         ctx = await self.get_context(message)
+        perms = ctx.channel.permissions_for(ctx.me)
+        if not perms.send_messages or not perms.read_messages:
+            return
 
         if message.webhook_id is not None:
             return await self.invoke(ctx)

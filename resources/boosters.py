@@ -127,8 +127,8 @@ class Booster(object):
         if data['treasure']['money'] > 2000:
             answer = await bot.db.take_money(ctx, 2000)
         else:
-            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR OU RESETAR "
-                                  "A BOX!\nVOCÊ PRECISA DE 2.000 ETHERNYAS PARA COMPRAR OU RESETAR UMA BOX.``")
+            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR "
+                                  "A BOX!\nVOCÊ PRECISA DE 2.000 ETHERNYAS PARA COMPRAR UMA BOX.``")
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         box = self.create_box
@@ -172,13 +172,13 @@ class Booster(object):
     async def buy_booster(self, bot, ctx):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         if not data['box']['status']['active']:
-            await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
+            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
 
-        if data['treasure']['money'] < 200:
+        if data['treasure']['money'] < 500:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
-                                  "\nVOCÊ PRECISA DE 100 ETHENYAS PARA COMPRAR UM BOOSTER.``")
+                                  "\nVOCÊ PRECISA DE 500 ETHENYAS PARA COMPRAR UM BOOSTER.``")
 
-        answer = await bot.db.take_money(ctx, 200)
+        answer = await bot.db.take_money(ctx, 500)
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         item = self.buy_item(data['box'], data['user']['ranking'], data['config']['vip'])
@@ -197,7 +197,7 @@ class Booster(object):
             update['box']['status']['active'] = False
         await bot.db.update_data(data, update, 'users')
         await ctx.send(answer)
-        if rarity.lower() in ["Ultra Raro", "Secret"]:
+        if rarity.lower() in ["ultra raro", "secret"]:
             return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM "
                                   f"``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
                                   f"TEM O TIER`` ✨ **{rarity.upper()}** ✨")

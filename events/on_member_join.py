@@ -25,6 +25,8 @@ class OnMemberJoin(commands.Cog):
                     to_send.set_thumbnail(url="{}".format(member.avatar_url))
                     to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
                     channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
+                    if channel_ is None:
+                        return
                     await channel_.send(embed=to_send)
                 except discord.errors.Forbidden:
                     pass
@@ -63,10 +65,14 @@ class OnMemberJoin(commands.Cog):
                             role = discord.utils.find(lambda r: r.name == "👺Mobrau👺", member.guild.roles)
                             await member.add_roles(role)
                             channel_ = self.bot.get_channel(576795574783705104)
-                            return await channel_.send(f"<a:blue:525032762256785409>│{member.mention} ``SAIR SEM DAR "
-                                                       f"RESPAWN NAO É A MANDEIRA CORRETA DE SAIR DO SERVIDOR``")
+                            if channel_ is None:
+                                return
+                            await channel_.send(f"<a:blue:525032762256785409>│{member.mention} ``SAIR SEM DAR "
+                                                f"RESPAWN NAO É A MANEIRA CORRETA DE SAIR DO SERVIDOR``")
                         else:
                             channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
+                            if channel_ is None:
+                                return
                             t = "<a:blue:525032762256785409>│**OBS:** ``PARA PEGAR SEU VIP USE O COMANDO`` **ASH VIP**"
                             embed = discord.Embed(color=self.color, description=t)
                             await channel_.send(embed=embed)

@@ -9,6 +9,5 @@ aiohttp
 requests
 pyfiglet
 websockets
-youtube_dl
 async_timeout
-discord.py[voice]
+discord.py
