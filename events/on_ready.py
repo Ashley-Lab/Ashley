@@ -59,7 +59,7 @@ class OnReady(commands.Cog):
                             if channel__ is None:
                                 continue
 
-                            draw_member = choice(list(guild.members))
+                            draw_member = choice([member for member in guild.members if not member.bot])
                             try:
                                 member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
                             except TypeError:

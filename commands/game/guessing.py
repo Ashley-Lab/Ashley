@@ -8,6 +8,7 @@ from resources.db import Database
 class GameThinker(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.extra = ['Melted_Bone', 'Life_Crystal', 'Energy', 'Death_Blow', 'Stone_of_Soul', 'Vital_Force']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -17,7 +18,7 @@ class GameThinker(commands.Cog):
         """Use ash guess ou ash adivinhe, e tente acertar o numero que ela pensou"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        if data['inventory']['coins'] > 0 and not data['config']['playing']:
+        if data['inventory']['coins'] > 9 and not data['config']['playing']:
             update['config']['playing'] = True
             await self.bot.db.update_data(data, update, 'users')
 
@@ -38,20 +39,21 @@ class GameThinker(commands.Cog):
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito, o número que eu '
                                       'tinha escolhido era`` **{}**.'.format(number))
 
-            update['inventory']['coins'] -= 1
+            update['inventory']['coins'] -= 10
+            await self.bot.db.update_data(data, update, 'users')
+            reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
+            change = randint(15, 100)
+            if change == 15:
+                reward.append(choice(self.extra))
+
             if resposta.content in ["0", "1", "2", "3", "4", "5"]:
-                update['inventory']['coins'] -= 1
-                await self.bot.db.update_data(data, update, 'users')
                 if resposta.content == number:
-                    change = randint(1, 100)
-                    answer_ = await self.bot.db.add_money(ctx, 15, True)
+                    answer_ = await self.bot.db.add_money(ctx, change, True)
                     await ctx.send("<:rank:519896825411665930>│``O numero que eu pensei foi`` **{}** "
                                    "``e o número que vc falou foi`` **{}** 🎊 **PARABENS** 🎉 ``você GANHOU:``\n"
                                    "{}".format(number, resposta.content, answer_))
                     if change < 50:
-                        response = await self.bot.db.add_reward(ctx, ['crystal_fragment_light',
-                                                                      'crystal_fragment_enery',
-                                                                      'crystal_fragment_dark'])
+                        response = await self.bot.db.add_reward(ctx, reward)
                         await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:

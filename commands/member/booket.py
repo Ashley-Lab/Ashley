@@ -71,7 +71,7 @@ class Booket(commands.Cog):
             else:
                 return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO ESTA CASADO(A)!``')
         else:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem.``')
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem.``')
 
 
 def setup(bot):

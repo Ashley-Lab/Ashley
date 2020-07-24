@@ -14,7 +14,7 @@ class Booster(object):
         self.legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
         self.bl = {"Comum": "c", "Incomum": "i", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur",
                    "Secret": "secret"}
-        self.rarity = {"Comum": 500, "Incomum": 400, "Raro": 300, "Super Raro": 200, "Ultra Raro": 150, "Secret": 100}
+        self.rarity = {"Comum": 600, "Incomum": 500, "Raro": 400, "Super Raro": 300, "Ultra Raro": 200, "Secret": 100}
 
         # booster configs
         self.booster_choice = None
@@ -36,12 +36,12 @@ class Booster(object):
         self.box_count = 0
 
         # Limites dos itens
-        self.l_secret = 1
-        self.l_ur = 2 * len([x for x in self.items.keys() if self.items[x][3] == 4])
-        self.l_sr = 3 * len([x for x in self.items.keys() if self.items[x][3] == 3])
-        self.l_r = 6 * len([x for x in self.items.keys() if self.items[x][3] == 2])
-        self.l_i = 28 * len([x for x in self.items.keys() if self.items[x][3] == 1])
-        self.l_c = 60 * len([x for x in self.items.keys() if self.items[x][3] == 0])
+        self.l_secret = 2 * len([x for x in self.items.keys() if self.items[x][3] == 5])
+        self.l_ur = 3 * len([x for x in self.items.keys() if self.items[x][3] == 4])
+        self.l_sr = 5 * len([x for x in self.items.keys() if self.items[x][3] == 3])
+        self.l_r = 10 * len([x for x in self.items.keys() if self.items[x][3] == 2])
+        self.l_i = 30 * len([x for x in self.items.keys() if self.items[x][3] == 1])
+        self.l_c = 50 * len([x for x in self.items.keys() if self.items[x][3] == 0])
 
     def reset_counts(self):
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}

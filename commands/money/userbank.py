@@ -235,14 +235,15 @@ class UserBank(commands.Cog):
         chance = 100 * awards[reward]["chance"] if randint(1, 10) > 3 else 100 * awards[reward]["chance"] * bonus
         if percent <= chance:
             if reward in data["artifacts"]:
-                money = randint(6, 18)
-                msg = await self.bot.db.add_money(ctx, money, True)
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
-                update['config']['playing'] = False
+                try:
+                    update['inventory'][reward] += 1
+                except KeyError:
+                    update['inventory'][reward] = 1
                 await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send(f"> ``VOCE TIROU UM ARTEFATO REPETIDO, "
-                                      f"PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
+                                      f"PELO MENOS VOCE GANHOU ESSA RELIQUIA NO SEU INVENTARIO``", delete_after=30.0)
             file = discord.File(awards[reward]["url"], filename="reward.png")
             embed = discord.Embed(title='VOCÊ GANHOU! 🎊 **PARABENS** 🎉', color=self.bot.color)
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
@@ -259,7 +260,7 @@ class UserBank(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f"<:confirmado:519896822072999937>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
         else:
-            money = randint(6, 18)
+            money = randint(10, 30)
             msg = await self.bot.db.add_money(ctx, money, True)
             await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
         await a.delete()

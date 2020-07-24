@@ -7,8 +7,9 @@ from asyncio import TimeoutError
 
 responses = config['answers']
 questions = config['questions']
-legend = {"-": -1, "Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
 color_embed = None
+legend = {"-": -1, "Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5,
+          "Legendary": 6, "Heroic": 7, "Divine": 8, "Sealed": 9}
 
 
 def include(string_, list_):
@@ -98,7 +99,7 @@ async def paginator(bot, items, inventory, embed, ctx):
         else:
             cost = "".join(f"{i[0]}: **{i[1]}** **│** " for i in items[key]['cost'])
             reward = "".join(f"{i[0]}: **{i[1]}** **│** " for i in items[key]['reward'])
-            string = f"``{key.upper()}:``\n**Custo:** {cost[:-7]} \n **Recompença:** {reward[:-7]}\n\n"
+            string = f"``{key}:``\n**Custo:** {cost[:-7]} \n **Recompença:** {reward[:-7]}\n\n"
         cont += len(string)
         if cont <= 1500 and cont_i < 20:
             description += string

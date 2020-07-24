@@ -110,19 +110,28 @@ class DailyClass(commands.Cog):
         """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
         Use ash daily vip"""
         data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        if not data_['config']['vip']:
-            if ctx.guild.id != self.bot.config['config']['default_guild']:
-                try:
-                    data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                    update_ = data_
-                    del data_['cooldown'][str(ctx.command)]
-                    await self.bot.db.update_data(data_, update_, 'users')
-                except KeyError:
-                    pass
+        if data_['config']['vip']:
+            try:
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                del data_['cooldown'][str(ctx.command)]
+                await self.bot.db.update_data(data_, update_, 'users')
+            except KeyError:
+                pass
+            return await ctx.send('<:negate:520418505993093130>│``VOCE JA É VIP``')
 
-                return await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro '
-                                      'do meu servidor de suporte, para isso use o comando ASH INVITE para receber no '
-                                      'seu privado o link do meu servidor.``')
+        if ctx.guild.id != self.bot.config['config']['default_guild']:
+            try:
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                del data_['cooldown'][str(ctx.command)]
+                await self.bot.db.update_data(data_, update_, 'users')
+            except KeyError:
+                pass
+
+            return await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro '
+                                  'do meu servidor de suporte, para isso use o comando ASH INVITE para receber no '
+                                  'seu privado o link do meu servidor.``')
 
         data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_ = data_
@@ -139,7 +148,7 @@ class DailyClass(commands.Cog):
         """Comando usado pra dar um rec da Ashley pra algum usuario
         Use ash rec <usuario desejado>"""
         if member is None:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem!``')
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem!``')
 
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
@@ -147,7 +156,7 @@ class DailyClass(commands.Cog):
         if member.id == ctx.author.id:
             return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
         if data_user is None:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mensionar alguem cadastrado no meu '
+            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem cadastrado no meu '
                                   'banco de dados!``')
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

@@ -3,11 +3,32 @@ import discord
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from resources.giftmanage import register_gift
+from resources.img_edit import gift as gt
 
 
 class UtilityClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @check_it(no_pm=True, is_owner=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.command(name='create_gift', aliases=['cg'])
+    async def create_gift(self, ctx, time=None):
+        """Esse nem eu sei..."""
+        if time is None:
+            return await ctx.send("<:alert_status:519896811192844288>│``Digite o tempo de cooldown do gift.``")
+        try:
+            time = int(time)
+        except ValueError:
+            return await ctx.send("<:alert_status:519896811192844288>│``O tempo de cooldown deve ser em numeros.``")
+
+        gift = await register_gift(self.bot, time)
+        gt(gift, f"{time} SEGUNDOS")
+        await ctx.send(file=discord.File('giftcard.png'))
+        await ctx.send(f"> 🎊 **PARABENS** 🎉 ``VOCÊ GANHOU UM GIFT``\n"
+                       f"``USE O COMANDO:`` **ASH GIFT** ``PARA RECEBER SEU PRÊMIO!!``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

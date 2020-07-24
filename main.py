@@ -59,6 +59,7 @@ class Ashley(commands.AutoShardedBot):
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
         self.data_cog = {}
         self.box = {}
+        self.msg_cont = 0
 
         self.db: Database = Database(self)
         self.data: DataInteraction = DataInteraction(self)
@@ -114,32 +115,8 @@ class Ashley(commands.AutoShardedBot):
                         embed = discord.Embed(
                             color=0x000000,
                             description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
-                            f'```{announce}```')
+                                        f'```{announce}```')
                         await ctx.send(embed=embed)
-                    if data_user['config']['vip']:
-                        try:
-                            epoch = dt.utcfromtimestamp(0)
-                            cooldown = data_user["cooldown"]["daily vip"]
-                            time_diff = (dt.utcnow() - epoch).total_seconds() - cooldown
-                            if time_diff >= 86400:
-                                data_ = await self.db.get_data("user_id", ctx.author.id, "users")
-                                update_ = data_
-                                if update_['config']['vip']:
-                                    update_['config']['vip'] = False
-                                    await self.db.update_data(data_, update_, 'users')
-                                    await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
-                                                   f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
-                                                   f' para receber seu proximo dia de vip!**')
-                                else:
-                                    if (self.guilds_commands[ctx.guild.id] % 10) == 0:
-                                        await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode ganhar "
-                                                       "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando "
-                                                       "ASH INVITE**")
-                        except KeyError:
-                            if (self.guilds_commands[ctx.guild.id] % 10) == 0:
-                                await ctx.send("<:alert_status:519896811192844288>**│** ``Agora você pode ganhar "
-                                               "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
-                                               "INVITE**")
                 commands_log = self.get_channel(575688812068339717)
                 await commands_log.send(f"``O membro`` {ctx.author.name} ``acabou de usar o comando`` "
                                         f"**{str(ctx.command).upper()}** ``dentro da guilda`` {ctx.guild.name} ``na "
@@ -203,6 +180,42 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_thumbnail(url=BOX)
                     await ctx.send(embed=embed)
 
+                if data_user['config']['vip']:
+                    try:
+                        if str(ctx.command) == "daily vip":
+                            return
+                        epoch = dt.utcfromtimestamp(0)
+                        cooldown = data_user["cooldown"]["daily vip"]
+                        time_diff = (dt.utcnow() - epoch).total_seconds() - cooldown
+                        if time_diff >= 86400:
+                            data_ = await self.db.get_data("user_id", ctx.author.id, "users")
+                            update_ = data_
+                            if update_['config']['vip']:
+                                update_['config']['vip'] = False
+                                await self.db.update_data(data_, update_, 'users')
+                                if ctx.guild.id == 519894833783898112:
+                                    return await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} '
+                                                          f'``INFELIZMENTE VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``')
+                                await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
+                                               f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
+                                               f' para receber seu proximo dia de vip!**')
+                            else:
+                                if (self.guilds_commands[ctx.guild.id] % 10) == 0:
+                                    if ctx.guild.id == 519894833783898112:
+                                        return await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode "
+                                                              "ganhar VIP DIARIO ENTRANDO NO MEU SERVIDOR!``")
+                                    await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode ganhar "
+                                                   "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando "
+                                                   "ASH INVITE**")
+                    except KeyError:
+                        if (self.guilds_commands[ctx.guild.id] % 10) == 0:
+                            if ctx.guild.id == 519894833783898112:
+                                return await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE VC ESTA"
+                                                      " AQUI E USE O COMANDO`` **ASH VIP**")
+                            await ctx.send("<:alert_status:519896811192844288>**│** ``Agora você pode ganhar "
+                                           "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
+                                           "INVITE**")
+
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
             owner = self.get_user(guild.owner.id)
@@ -243,6 +256,8 @@ class Ashley(commands.AutoShardedBot):
         if not perms.send_messages or not perms.read_messages:
             return
 
+        self.msg_cont += 1
+
         if message.webhook_id is not None:
             return await self.invoke(ctx)
 
@@ -261,7 +276,7 @@ class Ashley(commands.AutoShardedBot):
                         run_command = True
             else:
                 run_command = True
-                if message.guild.system_channel is not None:
+                if message.guild.system_channel is not None and (self.msg_cont % 10) == 0:
                     if await verify_cooldown(self, f"{message.guild.id}_no_register", 86400):
                         embed = discord.Embed(
                             color=self.color,
@@ -335,8 +350,8 @@ if __name__ == "__main__":
         _auth = json.loads(auth.read())
 
     description_ashley = f"Um bot de assistencia para servidores criado por: Denky#5960\n" \
-        f"**Adicione para seu servidor:**: {config['config']['default_link']}\n" \
-        f"**Servidor de Origem**: {config['config']['default_invite']}\n"
+                         f"**Adicione para seu servidor:**: {config['config']['default_link']}\n" \
+                         f"**Servidor de Origem**: {config['config']['default_invite']}\n"
 
     prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
               'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']

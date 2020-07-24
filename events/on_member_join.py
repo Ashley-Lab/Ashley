@@ -67,15 +67,15 @@ class OnMemberJoin(commands.Cog):
                             channel_ = self.bot.get_channel(576795574783705104)
                             if channel_ is None:
                                 return
-                            await channel_.send(f"<a:blue:525032762256785409>│{member.mention} ``SAIR SEM DAR "
-                                                f"RESPAWN NAO É A MANEIRA CORRETA DE SAIR DO SERVIDOR``")
-                        else:
-                            channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
-                            if channel_ is None:
-                                return
-                            t = "<a:blue:525032762256785409>│**OBS:** ``PARA PEGAR SEU VIP USE O COMANDO`` **ASH VIP**"
-                            embed = discord.Embed(color=self.color, description=t)
-                            await channel_.send(embed=embed)
+                            return await channel_.send(f"<a:blue:525032762256785409>│{member.mention} ``SAIR SEM DAR "
+                                                       f"RESPAWN NAO É A MANEIRA CORRETA DE SAIR DO SERVIDOR``")
+                        data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+                        channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
+                        if channel_ is None:
+                            return
+                        t = "<a:blue:525032762256785409>│**OBS:** ``PARA PEGAR SEU VIP USE O COMANDO`` **ASH VIP**"
+                        embed = discord.Embed(color=self.color, description=t)
+                        await channel_.send(embed=embed)
             except discord.Forbidden:
                 pass
 

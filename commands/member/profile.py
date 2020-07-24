@@ -73,8 +73,13 @@ class ProfileSystem(commands.Cog):
         vip[0].append(False)
 
         if n_data['user']['married']:
-            user = self.bot.get_user(data['user']['married_at'])
-            married = user.avatar_url_as(format="png")
+            try:
+                user = self.bot.get_user(data['user']['married_at'])
+                married = user.avatar_url_as(format="png")
+            except AttributeError:
+                married = "https://w-dog.net/wallpapers/2/13/487318654230690/abandoned-church-the-altar-interior.jpg"
+                await ctx.send("<:alert_status:519896811192844288>│``VOCE TA CASADO COM ALGUEM QUE NAO EXISTE MAIS, "
+                               "FAÇA UM FAVOR PRA VC MESMO E PEÇA O DIVORCIO!``")
         else:
             married = None
 
