@@ -66,7 +66,7 @@ class SkillClass(commands.Cog):
                 return m.author == ctx.author and m.content.isdigit()
 
             try:
-                option = await self.bot.wait_for('message', check=is_correct, timeout=15.0)
+                option = await self.bot.wait_for('message', check=is_correct, timeout=30.0)
             except TimeoutError:
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito! Comando '
                                       'cancelado.``', delete_after=5.0)

@@ -9,7 +9,7 @@ class ReceptionClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @check_it(no_pm=True)
+    @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='reception', aliases=['recepção', 'rp'])

@@ -32,7 +32,7 @@ class HeadsOrTails(commands.Cog):
                 return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2'
 
             try:
-                answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
             except TimeoutError:
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data

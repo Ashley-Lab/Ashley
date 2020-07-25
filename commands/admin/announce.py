@@ -53,7 +53,7 @@ class RegisterAnnounce(commands.Cog):
                            and m.content.upper() == 'N'
 
                 try:
-                    answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+                    answer = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                     update_ = data_
@@ -100,7 +100,7 @@ class RegisterAnnounce(commands.Cog):
             return m.author.id == ctx.author.id and m.content.isdigit()
 
         try:
-            answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
             num = int(answer.content)
             answer = int(answer.content)
             if answer < 0:
@@ -122,7 +122,7 @@ class RegisterAnnounce(commands.Cog):
                    and m.content.upper() == 'N'
 
         try:
-            answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
             return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
                                   '**COMANDO CANCELADO**')

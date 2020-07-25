@@ -126,12 +126,12 @@ async def paginator(bot, items, inventory, embed, ctx):
         Embed.set_footer(text="Ashley ® Todos os direitos reservados.  [Pag {}/{}]".format(cont + 1, len(descriptions)))
         await msg.edit(embed=Embed, content='')
         try:
-            reaction = await bot.wait_for('reaction_add', timeout=60.0)
+            reaction = await bot.wait_for('reaction_add', timeout=30.0)
         except TimeoutError:
             break
         while reaction[1].id != ctx.author.id:
             try:
-                reaction = await bot.wait_for('reaction_add', timeout=60.0)
+                reaction = await bot.wait_for('reaction_add', timeout=30.0)
             except TimeoutError:
                 break
         if reaction[0].emoji == '⬅' and cont > 0:

@@ -70,11 +70,11 @@ class ConfigClass(commands.Cog):
                 if config != "log_channel_id":
                     question = await ctx.send(f'<:stream_status:519896814825242635>│``Você deseja ativar o(a) '
                                               f'{config}`` **1** para ``SIM`` ou **0** para ``NÃO``')
-                    answer = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+                    answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
                     changes[config] = bool(int(answer.content))
                 else:
                     question = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal de LOG``')
-                    answer = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                    answer = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                     changes[config] = answer.content
 
                 await question.delete()
@@ -115,13 +115,13 @@ class ConfigClass(commands.Cog):
                                  ' um canal de registro de ações.```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_1 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_1 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_1.content)
             if resp_1.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do ActionLog!``')
 
-                resp_2 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_2 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_2.channel_mentions[0].id)
                 await msg.delete()
 
@@ -135,13 +135,13 @@ class ConfigClass(commands.Cog):
                                  'ashley```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_3 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_3 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_3.content)
             if resp_3.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do BotNews!``')
 
-                resp_4 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_4 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_4.channel_mentions[0].id)
                 await msg.delete()
 
@@ -155,13 +155,13 @@ class ConfigClass(commands.Cog):
                                  'quantos membros existem em seu servidor, em tempo real.```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_5 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_5 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_5.content)
             if resp_5.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Contador de membros!``')
 
-                resp_6 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_6 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_6.channel_mentions[0].id)
                 await msg.delete()
 
@@ -192,14 +192,14 @@ class ConfigClass(commands.Cog):
                                  'etc```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_7 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_7 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_7.content)
             if resp_7.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Registro de Entrada '
                                      'de Membros!``')
 
-                resp_8 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_8 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_8.channel_mentions[0].id)
                 await msg.delete()
 
@@ -214,14 +214,14 @@ class ConfigClass(commands.Cog):
                                  'etc```\n'
                                  ' **1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_9 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_9 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_9.content)
             if resp_9.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do '
                                      'Registro de Sainda de Membros!``')
 
-                resp_10 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_10 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_10.channel_mentions[0].id)
                 await msg.delete()
 
@@ -237,13 +237,13 @@ class ConfigClass(commands.Cog):
                                  'ou mais membros cadastrados na ashley```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_11 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_11 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_11.content)
             if resp_11.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Sorteio de Membros!``')
 
-                resp_12 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_12 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_12.channel_mentions[0].id)
                 await msg.delete()
 
@@ -260,14 +260,14 @@ class ConfigClass(commands.Cog):
                 'comunidade de bots do discord.```\n'
                 '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_13 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_13 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_13.content)
             if resp_13.content == '1':
                 await msg.delete()
                 msg = await ctx.send(
                     '<:stream_status:519896814825242635>│``Marque o canal do Log de Programação de Ashley!``')
 
-                resp_14 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_14 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_14.channel_mentions[0].id)
                 await msg.delete()
 
@@ -284,7 +284,7 @@ class ConfigClass(commands.Cog):
                                  'divertidas que eu posso fazer.```\n'
                                  ' **1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_15 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_15 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_15.content)
             if resp_15.content == '1':
                 await msg.delete()
@@ -361,13 +361,13 @@ class ConfigClass(commands.Cog):
             msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o Report?`` '
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
-            resp_1 = await self.bot.wait_for('message', check=check_option, timeout=60.0)
+            resp_1 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_1.content)
             if resp_1.content == '1':
                 await msg.delete()
                 msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Report!``')
 
-                resp_2 = await self.bot.wait_for('message', check=check_channel, timeout=60.0)
+                resp_2 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_2.channel_mentions[0].id)
                 await msg.delete()
 

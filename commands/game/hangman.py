@@ -61,7 +61,7 @@ Dica: **{}**'''.format(senha, dica))
                     await ctx.send('<a:seila:525105069637632000>│``Ja quer adivinhar?`` **S/N**')
 
                     try:
-                        resp = await self.bot.wait_for('message', check=check_response, timeout=60.0)
+                        resp = await self.bot.wait_for('message', check=check_response, timeout=30.0)
                     except TimeoutError:
                         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
@@ -86,7 +86,7 @@ Dica: **{}**'''.format(senha, dica))
                             await ctx.send(f"``OLÁ MESTRE, SUA RESPOSTA É:`` **{palavra.upper()}**")
 
                         try:
-                            resp = await self.bot.wait_for('message', check=check, timeout=60.0)
+                            resp = await self.bot.wait_for('message', check=check, timeout=30.0)
                         except TimeoutError:
                             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                             update = data
@@ -121,7 +121,7 @@ Dica: **{}**'''.format(senha, dica))
                     await ctx.send("\n<:safada:530029764061298699>│``Digite uma letra:``")
 
                     try:
-                        tentativa = await self.bot.wait_for('message', check=check_letter)
+                        tentativa = await self.bot.wait_for('message', check=check_letter, timeout=30.0)
                         tentativa = tentativa.content.lower()
                     except TimeoutError:
                         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

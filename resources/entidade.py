@@ -1,6 +1,6 @@
 import discord
 
-from asyncio import sleep
+from asyncio import sleep, TimeoutError
 from resources.utility import embed_creator
 from random import randint, choice
 from config import data
@@ -113,9 +113,13 @@ class Entity(object):
                     await msg.add_reaction(emojis[c])
                 await msg.add_reaction('<:pass:692967573649752194>')
                 while True:
-                    reaction = await bot.wait_for('reaction_add')
-                    while reaction[1].id != ctx.author.id:
-                        reaction = await bot.wait_for('reaction_add')
+                    try:
+                        reaction = await bot.wait_for('reaction_add', timeout=30.0)
+                        while reaction[1].id != ctx.author.id:
+                            reaction = await bot.wait_for('reaction_add', timeout=30.0)
+                    except TimeoutError:
+                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                                              ' CANCELADO**')
                     emo = "<:pass:692967573649752194>"
                     emoji_ = str(emo).replace('<:', '').replace(emo[emo.rfind(':'):], '')
                     try:

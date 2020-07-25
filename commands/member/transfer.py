@@ -41,7 +41,7 @@ class TransferClass(commands.Cog):
                        f' recebe-lo? Responsta com`` **[S/N]**', delete_after=60.0)
 
         try:
-            answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
             return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
                                   '**COMANDO CANCELADO**')

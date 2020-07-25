@@ -63,7 +63,7 @@ class MarriedSystem(commands.Cog):
                 return m.author.id == member.id and m.content.upper() in ['SIM', 'NÃO', 'S', 'N', 'NAO', 'CLARO']
 
             try:
-                answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
             except TimeoutError:
                 update_user['user']['marrieding'] = False
                 update_member['user']['marrieding'] = False

@@ -22,6 +22,7 @@ class RecipeClass(commands.Cog):
         global resp
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         recipes = self.bot.config['recipes']
+        update = data
 
         if item is not None:
 
@@ -35,16 +36,24 @@ class RecipeClass(commands.Cog):
                 maximo = None
 
                 for c in recipe['cost']:
-                    description += f'\n``{c[0]}:`` **{c[1]}**'
+                    try:
+                        quant = data['inventory'][c[0]]
+                    except KeyError:
+                        quant = 0
+                    description += f'\n``{c[0]}:`` **{c[1]}**/{quant}'
 
                 description += '\n\n**Recompença:**'
 
                 for c in recipe['reward']:
-                    description += f'\n``{c[0]}:`` **{c[1]}**'
+                    try:
+                        quant = data['inventory'][c[0]]
+                    except KeyError:
+                        quant = 0
+                    description += f'\n``{c[0]}:`` **{c[1]}**/{quant}'
 
                 try:
                     for c in recipe['cost']:
-                        tempmax = data['inventory'][c[0]] // c[1]
+                        tempmax = update['inventory'][c[0]] // c[1]
                         if maximo is None or maximo > tempmax:
                             maximo = tempmax
                 except KeyError:
@@ -55,7 +64,7 @@ class RecipeClass(commands.Cog):
                                '\n⏭ **Craftar o Maximo**\n❌ **Fechar**'.format(maximo)
 
                 embed = discord.Embed(
-                    title='Recipe',
+                    title='Recipe\n(Custo/Quantidade no inventario)',
                     color=self.bot.color,
                     description=description)
 
@@ -65,15 +74,19 @@ class RecipeClass(commands.Cog):
                 for c in emojis:
                     await msg.add_reaction(c)
 
-                reaction = await self.bot.wait_for('reaction_add')
-                while reaction[1].id != ctx.author.id or reaction[0].emoji not in emojis:
-                    reaction = await self.bot.wait_for('reaction_add')
+                try:
+                    reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
+                    while reaction[1].id != ctx.author.id or reaction[0].emoji not in emojis:
+                        reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
+                except TimeoutError:
+                    return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito! Comando '
+                                          'cancelado.``', delete_after=5.0)
 
                 if reaction[0].emoji == '▶':
                     try:
                         for c in recipe['cost']:
-                            if data['inventory'][c[0]] >= c[1]:
-                                data['inventory'][c[0]] -= c[1]
+                            if update['inventory'][c[0]] >= c[1]:
+                                update['inventory'][c[0]] -= c[1]
                             else:
                                 return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
                                                       'necessarios.``')
@@ -83,14 +96,14 @@ class RecipeClass(commands.Cog):
 
                     for c in recipe['reward']:
                         try:
-                            data['inventory'][c[0]] += c[1]
+                            update['inventory'][c[0]] += c[1]
                         except KeyError:
-                            data['inventory'][c[0]] = c[1]
+                            update['inventory'][c[0]] = c[1]
 
                 elif reaction[0].emoji == '⏩':
                     await ctx.send('<:alert_status:519896811192844288>│``Quantas receitas você quer fazer?``')
                     try:
-                        resp = await self.bot.wait_for('message', check=check, timeout=60.0)
+                        resp = await self.bot.wait_for('message', check=check, timeout=30.0)
                     except TimeoutError:
                         return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                               ' CANCELADO**')
@@ -99,7 +112,7 @@ class RecipeClass(commands.Cog):
                         if int(resp.content) <= maximo:
                             break
                         try:
-                            resp = await self.bot.wait_for('message', check=check, timeout=60.0)
+                            resp = await self.bot.wait_for('message', check=check, timeout=30.0)
                         except TimeoutError:
                             return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
                                                   '**COMANDO CANCELADO**')
@@ -115,8 +128,8 @@ class RecipeClass(commands.Cog):
                     try:
                         for _ in range(resp):
                             for c in recipe['cost']:
-                                if data['inventory'][c[0]] >= c[1]:
-                                    data['inventory'][c[0]] -= c[1]
+                                if update['inventory'][c[0]] >= c[1]:
+                                    update['inventory'][c[0]] -= c[1]
                                 else:
                                     return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
                                                           'necessarios.``')
@@ -126,9 +139,9 @@ class RecipeClass(commands.Cog):
 
                     for c in recipe['reward']:
                         try:
-                            data['inventory'][c[0]] += c[1] * resp
+                            update['inventory'][c[0]] += c[1] * resp
                         except KeyError:
-                            data['inventory'][c[0]] = c[1] * resp
+                            update['inventory'][c[0]] = c[1] * resp
 
                 elif reaction[0].emoji == '⏭':
                     if maximo < 1:
@@ -138,8 +151,8 @@ class RecipeClass(commands.Cog):
                     try:
                         for _ in range(maximo):
                             for c in recipe['cost']:
-                                if data['inventory'][c[0]] >= c[1]:
-                                    data['inventory'][c[0]] -= c[1]
+                                if update['inventory'][c[0]] >= c[1]:
+                                    update['inventory'][c[0]] -= c[1]
                                 else:
                                     return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
                                                           'necessarios.``')
@@ -149,17 +162,18 @@ class RecipeClass(commands.Cog):
 
                     for c in recipe['reward']:
                         try:
-                            data['inventory'][c[0]] += c[1] * maximo
+                            update['inventory'][c[0]] += c[1] * maximo
                         except KeyError:
-                            data['inventory'][c[0]] = c[1] * maximo
+                            update['inventory'][c[0]] = c[1] * maximo
 
                 if reaction[0].emoji == "❌":
                     await msg.delete()
                     return
 
                 await msg.delete()
-                print(str(data))
-                await ctx.send("<:confirmado:519896822072999937>│``CRAFT FEITO COM SUCESSO!``")
+                await self.bot.db.update_data(data, update, 'users')
+                await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM`` ✨ **{item.upper()}** ✨ "
+                               f"``FOI CRAFTADO FEITO COM SUCESSO!``")
             else:
                 await ctx.send('<:negate:520418505993093130>|``Esse item não existe.``')
         else:

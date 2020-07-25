@@ -153,7 +153,7 @@ class UserBank(commands.Cog):
             return await ctx.send("<:oc_status:519896814225457152>│``Você não tem esse item no seu inventario!``")
 
     @check_it(no_pm=True)
-    @commands.cooldown(1, 15.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='ticket', aliases=['raspadinha', 'rifa'])
     async def ticket(self, ctx):

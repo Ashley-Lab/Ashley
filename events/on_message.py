@@ -77,7 +77,7 @@ class SystemMessage(commands.Cog):
                                                                        ' ``PARA PELO AMOR DE DEUS!``')
                                             self.time = time.time() - 1
 
-                                    message_ = await self.bot.wait_for('message', check=check, timeout=10.0)
+                                    message_ = await self.bot.wait_for('message', check=check, timeout=30.0)
 
                                     if "<@!478977311266570242>" in message_.content:
                                         if '?' not in message_.content and "ash " not in message_.content.lower():

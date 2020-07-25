@@ -165,28 +165,28 @@ class StaffAdmin(commands.Cog):
                     return m.author == ctx.author
 
                 try:
-                    member = await self.bot.wait_for('message', check=check, timeout=60.0)
+                    member = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
                 await msg_1.delete()
                 msg_2 = await ctx.author.send('<:stream_status:519896814825242635>│``Qual o motivo da denuncia?`` '
                                               '{}'.format(ctx.author.mention))
                 try:
-                    report = await self.bot.wait_for('message', check=check, timeout=60.0)
+                    report = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
                 await msg_2.delete()
                 msg_3 = await ctx.author.send('<:stream_status:519896814825242635>│``Que dia aconteceu isso?`` '
                                               '{}'.format(ctx.author.mention))
                 try:
-                    day = await self.bot.wait_for('message', check=check, timeout=60.0)
+                    day = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
                 await msg_3.delete()
                 msg_4 = await ctx.author.send('<:stream_status:519896814825242635>│``Link da prova já hospedada '
                                               'senhor`` {}:'.format(ctx.author.mention))
                 try:
-                    file = await self.bot.wait_for('message', check=check, timeout=60.0)
+                    file = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
                 await msg_4.delete()

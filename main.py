@@ -49,13 +49,13 @@ class Ashley(commands.AutoShardedBot):
         self.pets = config['pets']
 
         self.server_ = "HEROKU"
-        self.progress = "V.7 -> 005.0%"
+        self.progress = "V.7 -> 038.8%"
         self.prefix_ = "'ash.', 'ash '"
         self.bl_item = ['medal', 'rank_point']
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.staff = [235937029106434048, 300592580381376513]
         self.testers = [390244145643651073, 617739561488875522]
-        self.version = "API: " + str(discord.__version__) + " | BOT: 7.0.50 | PROGRESS: " + str(self.progress)
+        self.version = "API: " + str(discord.__version__) + " | BOT: 7.3.88 | PROGRESS: " + str(self.progress)
         self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
         self.data_cog = {}
         self.box = {}

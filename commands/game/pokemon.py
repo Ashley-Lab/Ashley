@@ -42,7 +42,7 @@ class PokemonClass(commands.Cog):
                 await ctx.send(f"``OLÁ MESTRE, SUA RESPOSTA É:`` **{response['nome'].upper()}**")
 
             try:
-                answer = await self.bot.wait_for('message', check=check, timeout=60.0)
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
             except TimeoutError:
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data

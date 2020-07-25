@@ -17,12 +17,7 @@ class Booster(object):
         self.rarity = {"Comum": 600, "Incomum": 500, "Raro": 400, "Super Raro": 300, "Ultra Raro": 200, "Secret": 100}
 
         # booster configs
-        self.booster_choice = None
-        self.booster_bronze = {"Comum": 95, "Incomum": 1, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_silver = {"Comum": 60, "Incomum": 36, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_gold = {"Comum": 50, "Incomum": 46, "Raro": 1, "Super Raro": 1, "Ultra Raro": 1, "Secret": 1}
-        self.booster_vip = {"Comum": 50, "Incomum": 30, "Raro": 15, "Super Raro": 3, "Ultra Raro": 1, "Secret": 1}
-        self.booster_secret = {"Comum": 40, "Incomum": 30, "Raro": 20, "Super Raro": 7, "Ultra Raro": 2, "Secret": 1}
+        self.booster_choice = {"Comum": 0, "Incomum": 0, "Raro": 0, "Super Raro": 0, "Ultra Raro": 0, "Secret": 0}
 
         # contadores de itens
         self.secret = 0
@@ -36,12 +31,12 @@ class Booster(object):
         self.box_count = 0
 
         # Limites dos itens
-        self.l_secret = 2 * len([x for x in self.items.keys() if self.items[x][3] == 5])
-        self.l_ur = 3 * len([x for x in self.items.keys() if self.items[x][3] == 4])
-        self.l_sr = 5 * len([x for x in self.items.keys() if self.items[x][3] == 3])
-        self.l_r = 10 * len([x for x in self.items.keys() if self.items[x][3] == 2])
-        self.l_i = 30 * len([x for x in self.items.keys() if self.items[x][3] == 1])
-        self.l_c = 50 * len([x for x in self.items.keys() if self.items[x][3] == 0])
+        self.l_secret = 0
+        self.l_ur = 0
+        self.l_sr = 0
+        self.l_r = 0
+        self.l_i = 0
+        self.l_c = 0
 
     def reset_counts(self):
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}
@@ -53,11 +48,21 @@ class Booster(object):
         self.i = 0
         self.c = 0
 
+    def define_limit(self, size):
+        # Limites dos itens
+        self.l_secret = int(size * 0.05)
+        self.l_ur = int(size * 0.10)
+        self.l_sr = int(size * 0.15)
+        self.l_r = int(size * 0.20)
+        self.l_i = int(size * 0.20)
+        self.l_c = int(size * 0.30)
+
     @property
     def create_box(self):
-        self.reset_counts()
         rarity = choice(list(self.rarity.keys()))
         size = self.rarity[rarity]
+        self.reset_counts()
+        self.define_limit(size)
         self.box['status']['rarity'] = rarity
         self.box['status']['size'] = size
         self.box['items'] = dict()
@@ -67,6 +72,9 @@ class Booster(object):
                 if self.secret < self.l_secret:
                     if item not in self.box['items']:
                         self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                        self.box['status']['secret'] += 1
+                    else:
+                        self.box['items'][item]['size'] += 1
                         self.box['status']['secret'] += 1
                     self.secret += 1
                     self.box_count += 1
@@ -137,29 +145,17 @@ class Booster(object):
         await ctx.send(answer)
         await ctx.send("```A BOX ENCONTRA-SE NA SUA CONTA!```")
 
-    def buy_item(self, box_, ranking, is_vip):
-        self.ranking = ranking
-        self.is_vip = is_vip
+    def buy_item(self, box_):
+        self.item_ = None
 
-        if self.ranking == "Bronze":
-            self.booster_choice = self.booster_bronze
-        elif self.ranking == "Silver":
-            self.booster_choice = self.booster_silver
-        elif self.ranking == "Gold":
-            self.booster_choice = self.booster_gold
-
-        if self.is_vip:
-            self.booster_choice = self.booster_vip
-
-        chance = randint(1, 100)
-        if chance == 100:
-            self.booster_choice = self.booster_secret
+        for k, v in self.bl.items():
+            self.booster_choice[k] = box_['status'][v]
 
         list_items = []
         for i_, amount in self.booster_choice.items():
             list_items += [i_] * amount
 
-        while True:
+        for _ in range(len(list_items)):
             result = choice(list_items)
             if box_['status'][self.bl[result]] > 0:
                 self.item_ = choice(list(box_['items'].values()))
@@ -174,29 +170,55 @@ class Booster(object):
         if not data['box']['status']['active']:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
 
-        if data['treasure']['money'] < 500:
+        price = 500
+        if data['user']['ranking'] == "Bronze":
+            price -= 50
+        if data['user']['ranking'] == "Silver":
+            price -= 100
+        if data['user']['ranking'] == "Gold":
+            price -= 150
+        if data['config']['vip']:
+            price -= 50
+
+        if data['treasure']['money'] < price:
             return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
                                   "\nVOCÊ PRECISA DE 500 ETHENYAS PARA COMPRAR UM BOOSTER.``")
 
-        answer = await bot.db.take_money(ctx, 500)
+        answer = await bot.db.take_money(ctx, price)
+        await ctx.send(answer)
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        item = self.buy_item(data['box'], data['user']['ranking'], data['config']['vip'])
+
+        item = self.buy_item(data['box'])
+        if item is None:
+            return await ctx.send("<:negate:520418505993093130>│``VOCÊ FALHOU EM COMPRAR O ITEM...``")
+
         for k, v in self.items.items():
             if v == item['data']:
                 self.key_item = k
+
         rarity = list(self.legend.keys())[list(self.legend.values()).index(item['data'][3])]
         update['box']['status'][self.bl[rarity]] -= 1
         update['box']['status']['size'] -= 1
         update['box']['items'][self.key_item]['size'] -= 1
+
+        if update['box']['status']['size'] <= 0:
+            update['box']['status']['active'] = False
+
+            reward = list()
+            op = ['soul_crystal_of_love', 'soul_crystal_of_hope', 'soul_crystal_of_hate']
+            reward.append(choice(op))
+            response = await self.bot.db.add_reward(ctx, reward)
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
+                           f"``COMO PREMIO VOCE ACABA DE GANHAR ESSE ITEM:`` ✨ **{response.upper()}** ✨")
+
         try:
             update['inventory'][self.key_item] += 1
         except KeyError:
             update['inventory'][self.key_item] = 1
-        if update['box']['status']['size'] <= 0:
-            update['box']['status']['active'] = False
+
         await bot.db.update_data(data, update, 'users')
-        await ctx.send(answer)
+
         if rarity.lower() in ["ultra raro", "secret"]:
             return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM "
                                   f"``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "

@@ -11,7 +11,8 @@ from resources.img_edit import gift as gt
 class OpenClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
+        self.legend = {"-": -1, "Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5,
+                       "Legendary": 6, "Heroic": 7, "Divine": 8, "Sealed": 9}
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -27,7 +28,7 @@ class OpenClass(commands.Cog):
                                       f"``TODOS OS PRESENTES FORAM UTILIZADOS, AGUARDE UM NOVO PRESENTE DROPAR E FIQUE "
                                       f"ATENTO!``")
             I_BOX = self.bot.box[ctx.guild.id]['boxes'].index(BOX)
-            del(self.bot.box[ctx.guild.id]['boxes'][I_BOX])
+            del (self.bot.box[ctx.guild.id]['boxes'][I_BOX])
             self.bot.box[ctx.guild.id]['quant'] -= 1
             time = randint(60, 600)
             gift = await register_gift(self.bot, time)
@@ -82,8 +83,8 @@ class OpenClass(commands.Cog):
                        f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
 
         if reward['rare'] is not None:
-            await ctx.send(f"``O ITEM ``{reward['rare'][0]}**{reward['rare'][1]}** ``ENCONTRA-SE "
-                           f"NO SEU INVENTÁRIO!``\n``ELE TEM O TIER`` **{rarity.upper()}**")
+            await ctx.send(f"<a:fofo:524950742487007233>│``O ITEM ``{reward['rare'][0]}**{reward['rare'][1]}** "
+                           f"``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE TEM O TIER`` **{rarity.upper()}**")
 
         response = await self.bot.db.add_reward(ctx, reward['items'])
         await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
