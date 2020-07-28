@@ -76,7 +76,6 @@ class RankingClass(commands.Cog):
         except IndexError:
             user = ctx.author
         data = await self.bot.db.get_data("user_id", user.id, "users")
-        data_guild = await self.bot.db.get_data("guild_id", user.guild.id, "guilds")
 
         if data is None:
             return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
@@ -94,26 +93,7 @@ class RankingClass(commands.Cog):
         rank = [int(sorted_x[x][0]) for x in range(len(data_))]
 
         position = int(rank.index(user.id)) + 1
-        amount_rp = 200
-        amount_medal = 0
-        count_medal = 0
-        count_patent = 1
-        patent = 0
-
-        if 100 < rank_point < 200:
-            patent += 1
-        elif rank_point >= 200:
-            while True:
-                if rank_point >= amount_rp and medal >= amount_medal:
-                    amount_medal += count_medal
-                    amount_rp += 100
-                    count_medal += 1
-                    count_patent += 1
-                else:
-                    patent = count_patent
-                    if patent >= 30:
-                        patent = 30
-                    break
+        patent = data['user']['patent']
 
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``")
 
@@ -149,16 +129,22 @@ class RankingClass(commands.Cog):
                 else:
                     if data['user']['ranking'] == "Bronze":
                         star_ = 'star_bronze'
+
                     if data['user']['ranking'] == "Silver":
                         star_ = 'star_silver'
+
                     if data['user']['ranking'] == "Gold":
                         star_ = 'star_gold'
-                    if data_guild['vip']:
-                        star_ = "star_greem"
+
                     if user.id == ctx.guild.owner.id:
                         star_ = "star_pink"
+
+                    if position < 11:
+                        star_ = "star_greem"
+
                     if user.id in self.bot.staff:
                         star_ = "star_blue"
+
                     if n <= data['user']['stars']:
                         star = star_
                     else:

@@ -1,4 +1,5 @@
 import discord
+import operator
 from pytz import timezone
 
 from config import data as config
@@ -72,6 +73,29 @@ def embed_creator(description, img_url, monster, hp_max, hp, monster_img, lower_
     return embed
 
 
+def patent_calculator(rank_point, medal):
+    amount_rp = 200
+    amount_medal = 0
+    count_medal = 0
+    count_patent = 1
+    patent = 0
+    if 100 < rank_point < 200:
+        patent += 1
+    elif rank_point >= 200:
+        while True:
+            if rank_point >= amount_rp and medal >= amount_medal:
+                amount_medal += count_medal
+                amount_rp += 100
+                count_medal += 1
+                count_patent += 1
+            else:
+                patent = count_patent
+                if patent >= 30:
+                    patent = 30
+                break
+    return patent
+
+
 def convert_item_name(item, db_items):
     for key in db_items.keys():
         if item.lower() in ['ficha', 'medalha', 'rank point']:
@@ -86,7 +110,17 @@ async def paginator(bot, items, inventory, embed, ctx):
     cont = 0
     cont_i = 0
     description = ''
-    for key in inventory.keys():
+
+    if str(ctx.command) == "inventory":
+        dict_ = dict()
+        for _ in inventory.keys():
+            dict_[_] = items[_][3]
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
+        list_i = [sorted_x[x][0] for x in range(len(inventory.keys()))]
+    else:
+        list_i = inventory.keys()
+
+    for key in list_i:
         if cont == 0:
             description = embed[2]
         if str(ctx.command) == "inventory":
@@ -97,9 +131,10 @@ async def paginator(bot, items, inventory, embed, ctx):
             except KeyError:
                 string = f"<:negate:520418505993093130> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
         else:
-            cost = "".join(f"{i[0]}: **{i[1]}** **│** " for i in items[key]['cost'])
-            reward = "".join(f"{i[0]}: **{i[1]}** **│** " for i in items[key]['reward'])
-            string = f"``{key}:``\n**Custo:** {cost[:-7]} \n **Recompença:** {reward[:-7]}\n\n"
+            cost = "".join(f"{items[i[0]][0]} {i[0]}: **{i[1]}** **│** " for i in inventory[key]['cost'])
+            reward = "".join(f"{items[i[0]][0]} {i[0]}: **{i[1]}** **│** " for i in inventory[key]['reward'])
+            icon = inventory[key]['reward'][0][0]
+            string = f"{items[icon][0]} ``{key.upper()}``\n**Custo:** {cost[:-7]} \n **Recompença:** {reward[:-7]}\n\n"
         cont += len(string)
         if cont <= 1500 and cont_i < 20:
             description += string

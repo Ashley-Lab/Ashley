@@ -36,6 +36,7 @@ class DailyClass(commands.Cog):
             daily.add_field(name="Daily Commands:",
                             value=f"``PREFIX:`` **daily** ``or`` **diario** ``+``\n"
                                   f"{self.st[66]}│**coin** ``or`` **ficha**\n"
+                                  f"{self.st[66]}│**energy** ``or`` **energia**\n"
                                   f"{self.st[66]}│**work** ``or`` **trabalho**\n"
                                   f"{self.st[66]}│**vip**")
             daily.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
@@ -51,11 +52,41 @@ class DailyClass(commands.Cog):
         Use ash daily coin"""
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
-        coin = randint(15, 35)
+
+        if not data_user['security']['status']:
+            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                                  "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
+
+        coin = randint(50, 100)
         update_user['inventory']['coins'] += coin
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                        f'<:coin:519896843388452864> **{coin}** ``fichas!``')
+
+    @check_it(no_pm=True)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @daily.group(name='energy', aliases=['energia'])
+    async def _energy(self, ctx):
+        """Comando usado pra ganhar coins de jogo da Ashley
+        Use ash daily energy"""
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+
+        if not data_user['security']['status']:
+            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                                  "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
+
+        patent = update_user['user']['patent']
+        energy = randint(5, 15)
+        energy += patent * 2
+        try:
+            update_user['inventory']['Energy'] += energy
+        except KeyError:
+            update_user['inventory']['Energy'] = energy
+        await self.bot.db.update_data(data_user, update_user, 'users')
+        await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
+                       f'<:energy:546019943603503114> **{energy}** ``Energias!`` + **{patent * 2}** '
+                       f'``pela sua patente. Olhe seu inventario usando o comando:`` **ash i**')
 
     @check_it(no_pm=True)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
@@ -72,6 +103,12 @@ class DailyClass(commands.Cog):
                     min_ += 1
                     max_ += randint(1, 3)
                 data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+
+                if not data_user['security']['status']:
+                    return await ctx.send(
+                        "<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                        "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
+
                 if data_user['user']['ranking'] == "Bronze":
                     money = randint(120 + min_, 1200 + max_)
                 elif data_user['user']['ranking'] == "Silver":
@@ -152,6 +189,10 @@ class DailyClass(commands.Cog):
 
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
+
+        if not data_user['security']['status']:
+            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                                  "DEMAIS`` **ESSE TIPO DE USUARIO NAO PODE RECEBER RECOMENDAÇÃO...**'")
 
         if member.id == ctx.author.id:
             return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')

@@ -161,8 +161,8 @@ def profile(data_):
         'exodia/perna_esquerda': [(135, 120)],
         'exodia/the_one': [(106, 45)],
 
-        'relics/anel': [(108, 293)],
-        'relics/balança': [(161, 293)],
+        'relics/anel': [(161, 293)],
+        'relics/balança': [(108, 293)],
         'relics/chave': [(53, 293)],
         'relics/colar': [(185, 222)],
         'relics/enigma': [(133, 222)],

@@ -15,7 +15,7 @@ from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import WebHook
 from bson.json_util import dumps
-from resources.utility import date_format
+from resources.utility import date_format, patent_calculator
 from resources.db import Database, DataInteraction
 from resources.verify_cooldown import verify_cooldown
 from resources.boosters import Booster
@@ -56,7 +56,8 @@ class Ashley(commands.AutoShardedBot):
         self.staff = [235937029106434048, 300592580381376513]
         self.testers = [390244145643651073, 617739561488875522]
         self.version = "API: " + str(discord.__version__) + " | BOT: 7.3.88 | PROGRESS: " + str(self.progress)
-        self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip'}
+        self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip',
+                         'ash energy': 'ash daily energy'}
         self.data_cog = {}
         self.box = {}
         self.msg_cont = 0
@@ -104,7 +105,8 @@ class Ashley(commands.AutoShardedBot):
                 self.guilds_commands[ctx.guild.id] += 1
                 self.user_commands[ctx.author.id] += 1
                 update_guild = data_guild
-                update_guild['data']['commands'] += 1
+                if data_user['security']['status']:
+                    update_guild['data']['commands'] += 1
                 await self.db.update_data(data_guild, update_guild, 'guilds')
                 if data_user is not None:
                     if (self.guilds_commands[ctx.guild.id] % 10) == 0:
@@ -129,11 +131,14 @@ class Ashley(commands.AutoShardedBot):
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data_user is not None:
                 update_user = data_user
-                update_user['user']['commands'] += 1
+                if data_user['security']['status']:
+                    update_user['user']['commands'] += 1
                 if (update_user['user']['commands'] % 2) == 0:
                     chance = randint(1, 100)
                     quant = randint(1, 3)
                     if chance <= 50:
+                        if not data_user['security']['status']:
+                            return
                         update_user['inventory']['rank_point'] += quant
                         await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                        f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
@@ -145,6 +150,8 @@ class Ashley(commands.AutoShardedBot):
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
                     if chance <= 20:
+                        if not data_user['security']['status']:
+                            return
                         update_user['inventory']['medal'] += 1
                         await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                        f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
@@ -158,6 +165,9 @@ class Ashley(commands.AutoShardedBot):
 
                 _chance = randint(1, 200)
                 if _chance <= 2:
+
+                    if not data_user['security']['status']:
+                        return
 
                     BOX = choice(self.boxes)
                     box_type = self.boxes.index(BOX)
@@ -179,6 +189,25 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                     embed.set_thumbnail(url=BOX)
                     await ctx.send(embed=embed)
+
+                data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+                update_user = data_user
+                update_user['security']['commands'] += 1
+                update_user['security']['last_command'] = dt.today()
+                update_user['security']['last_channel'] = ctx.channel.id
+                await self.db.update_data(data_user, update_user, 'users')
+
+                data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+                update_user = data_user
+                patent = patent_calculator(data_user['inventory']['rank_point'], data_user['inventory']['medal'])
+                if patent > data_user['user']['patent']:
+                    update_user['user']['patent'] = patent
+                    await self.db.update_data(data_user, update_user, 'users')
+                    file = discord.File(f'images/patente/{patent}.png', filename="patent.png")
+                    embed = discord.Embed(title='🎊 **PARABENS** 🎉\n``VOCE SUBIU DE PATENTE``', color=self.color)
+                    embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+                    embed.set_image(url="attachment://patent.png")
+                    await ctx.send(file=file, embed=embed)
 
                 if data_user['config']['vip']:
                     try:

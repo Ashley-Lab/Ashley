@@ -50,6 +50,11 @@ class OpenClass(commands.Cog):
         if gift is None:
             return await ctx.send("<:negate:520418505993093130>│``Você precisa digitar um numero de GIFT!``")
 
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        if not data_user['security']['status']:
+            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                                  "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
+
         reward = await open_gift(self.bot, gift.upper())
 
         if reward is None:

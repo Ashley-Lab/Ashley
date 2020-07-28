@@ -156,6 +156,9 @@ class Database(object):
         msg = None
         answer = quant_etherny(amount)
 
+        if not data_user['security']['status']:
+            return '``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'
+
         if data_user is not None:
             if update_user['user']['ranking'] == 'Bronze':
                 await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
@@ -187,7 +190,7 @@ class Database(object):
                     await self.add_type(ctx, (answer['amount'] * 3), answer['list'])
                     msg = f"**{answer['amount'] * 3}** ``Ethernyas``"
             if ext:
-                msg += f"\n``Sendo Elas:`` " \
+                msg += f"\n``e a quantidade de pedras abaixo:`` " \
                        f"**{answer['list'][0]}**  {self.bot.money[0]} | " \
                        f"**{answer['list'][1]}**  {self.bot.money[1]} | " \
                        f"**{answer['list'][2]}**  {self.bot.money[2]}\n"
@@ -196,6 +199,10 @@ class Database(object):
     async def add_reward(self, ctx, list_):
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
+
+        if not data_user['security']['status']:
+            return '``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'
+
         response = '``Caiu pra você:`` \n'
         for item in list_:
             amount = randint(1, 3)

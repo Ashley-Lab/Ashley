@@ -232,7 +232,7 @@ class UserBank(commands.Cog):
 
         percent = randint(1, 100)
         bonus = awards[reward]["tier"] + plus
-        chance = 100 * awards[reward]["chance"] if randint(1, 10) > 3 else 100 * awards[reward]["chance"] * bonus
+        chance = 100 * awards[reward]["chance"] if randint(1, 10) > 5 else 100 * awards[reward]["chance"] * bonus
         if percent <= chance:
             if reward in data["artifacts"]:
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -242,7 +242,7 @@ class UserBank(commands.Cog):
                 except KeyError:
                     update['inventory'][reward] = 1
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send(f"> ``VOCE TIROU UM ARTEFATO REPETIDO, "
+                return await ctx.send(f"> ``VOCE TIROU UM ARTEFATO`` **{self.bot.items[reward][1]}** ``REPETIDO, "
                                       f"PELO MENOS VOCE GANHOU ESSA RELIQUIA NO SEU INVENTARIO``", delete_after=30.0)
             file = discord.File(awards[reward]["url"], filename="reward.png")
             embed = discord.Embed(title='VOCÊ GANHOU! 🎊 **PARABENS** 🎉', color=self.bot.color)

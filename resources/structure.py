@@ -6,6 +6,7 @@ user_data_structure = {
                 "level": 1,
                 "ranking": "Bronze",
                 "titling": "Vagabond",
+                "patent": 0,
                 "married": False,
                 "married_at": None,
                 "marrieding": False,
@@ -25,6 +26,7 @@ user_data_structure = {
             "config": {
                 "playing": False,
                 "battle": False,
+                "buying": False,
                 "provinces": None,
                 "vip": False,
                 "roles": [],
@@ -69,6 +71,14 @@ user_data_structure = {
             "inventory_quest": dict(),
             "artifacts": dict(),
             "box": {"status": {"active": False, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}},
+            "security": {
+                "commands": 0,
+                "last_command": None,
+                "last_channel": None,
+                "last_verify": None,
+                "strikes": 0,
+                "status": True
+            },
             "cooldown": dict()
 }
 

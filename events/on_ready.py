@@ -1,10 +1,12 @@
 import discord
 import asyncio
 
-from random import choice, randint
+import time as date
 from itertools import cycle
-from datetime import datetime as dt
 from discord.ext import commands
+from random import choice, randint
+from datetime import datetime as dt
+from resources.utility import date_format
 from resources.verify_cooldown import verify_cooldown
 from resources.structure import user_data_structure, guild_data_structure
 
@@ -29,7 +31,6 @@ class OnReady(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot = bot
-        self.ctx = None
         self.time_ready = None
         self.color = self.bot.color
         self.url = 'https://www.twitch.tv/d3nkyt0'
@@ -44,9 +45,68 @@ class OnReady(commands.Cog):
                        'minha roupa na sua cara!', '😢 + 💸 = 😍 & 🍫',
                        'meu feitiço na sua vida!', '😢 + 💸 = 😍 & 🍫']
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        self.ctx = await self.bot.get_context(message)
+    async def security_macro(self):
+        while True:
+            if await verify_cooldown(self.bot, "security_macro", 300):
+                date_ = date.localtime()
+                data_ = date_format(dt.now())
+
+                all_data = await self.bot.db.get_all_data("users")
+                for data in all_data:
+                    update = data
+
+                    last_verify = update['security']['last_verify']
+                    last_command = update['security']['last_command']
+                    update['security']['last_verify'] = dt.today()
+
+                    if last_command is None:
+                        await self.bot.db.update_data(data, update, "users")
+                        continue
+
+                    if not update['security']['status']:
+                        continue
+
+                    last_verify = date.mktime(last_verify.timetuple())
+                    last_command = date.mktime(last_command.timetuple())
+                    minutes = int(int(last_verify - last_command) / 60)
+
+                    if minutes < 5 and update['security']['commands'] > 50:
+
+                        update['security']['strikes'] += 1
+                        update['security']['commands'] = 0
+                        channel_ = self.bot.get_channel(737467830571761786)
+                        await channel_.send(f'```O USUARIO {data["user_id"]} FOI DETECTADO USANDO MACRO\n'
+                                            f'Na Data e Hora: {data_}```')
+                        try:
+                            if update['security']['last_channel'] is not None:
+                                channel_ = self.bot.get_channel(update['security']['last_channel'])
+                                await channel_.send(f'<a:blue:525032762256785409>│``EI TENHA CALMA VOCE TA '
+                                                    f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER '
+                                                    f'BLOQUEADO POR 24 HORAS.`` <a:blue:525032762256785409>'
+                                                    f'**AVISO {update["security"]["strikes"]}/6**')
+                        except KeyError:
+                            pass
+
+                    if update['security']['strikes'] == 6:
+                        update['security']['status'] = not update['security']['status']
+                        channel_ = self.bot.get_channel(737467830571761786)
+                        await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA USANDO MACRO E FOI BLOQUEADO\n'
+                                            f'Na Data e Hora: {data_}```')
+
+                    await self.bot.db.update_data(data, update, "users")
+
+                # existe uma diferença de hora de +3 para o servidor da ashley
+                if date_[3] == 3 and date_[4] <= 30:
+                    all_data = await self.bot.db.get_all_data("users")
+                    for data in all_data:
+                        update = data
+                        update['security']['commands'] = 0
+                        update['security']['strikes'] = 0
+                        update['security']['last_verify'] = dt.today()
+                        update['security']['status'] = True
+                        await self.bot.db.update_data(data, update, "users")
+
+            await asyncio.sleep(60)
 
     async def draw_member(self):
         while True:
@@ -83,7 +143,7 @@ class OnReady(commands.Cog):
                             await channel__.send(embed=embed)
                             update_member['inventory']['coins'] += coins
                             await self.bot.db.update_data(data_member, update_member, 'users')
-            await asyncio.sleep(60)
+            await asyncio.sleep(300)
 
     async def draw_gift(self):
         while True:
@@ -117,7 +177,7 @@ class OnReady(commands.Cog):
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                             embed.set_thumbnail(url=BOX)
                             await channel__.send(embed=embed)
-            await asyncio.sleep(60)
+            await asyncio.sleep(300)
 
     async def change_status(self):
         status = cycle(self.status)
@@ -169,6 +229,7 @@ class OnReady(commands.Cog):
             update = data
             update['config']['playing'] = False
             update['config']['battle'] = False
+            update['config']['buying'] = False
             update['user']['marrieding'] = False
             await self.bot.db.update_data(data, update, "users")
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita sucesso!\33[m')
@@ -217,6 +278,8 @@ class OnReady(commands.Cog):
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_MEMBERS\033[1;32m foi carregado com sucesso!\33[m')
         self.bot.loop.create_task(self.draw_gift())
         print('\033[1;32m( 🔶 ) | O loop \033[1;34mDRAW_GIFT\033[1;32m foi carregado com sucesso!\33[m')
+        self.bot.loop.create_task(self.security_macro())
+        print('\033[1;32m( 🔶 ) | O loop \033[1;34mSECURITY_MACRO\033[1;32m foi carregado com sucesso!\33[m')
         print("\033[1;35m( ✔ ) | Loops internos carregados com sucesso!\033[m\n")
 
         print(cor['cian'], '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬', cor['clear'])

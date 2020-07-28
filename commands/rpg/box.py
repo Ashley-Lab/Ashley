@@ -68,6 +68,7 @@ Raridade da Box:
 ```Markdown
 STATUS:
 <ACTIVE: {}>
+
 ITEMS:
 <SECRET: {}/{}>
 <UR: {}/{}>
@@ -77,7 +78,8 @@ ITEMS:
 <C: {}/{}>
 <SIZE: {}/{}>```'''.format(rarity, status, s, l_s, ur, l_ur, sr, l_sr, r, l_r, i, l_i, c, l_c, size_now, size_full)
                     box = discord.Embed(
-                        title="{}'s box:".format(ctx.author.name),
+                        title="{}'s box:\n"
+                              "``PARA ABRIR SUA BOX USE O COMANDO`` **ASH BOX BOOSTER**".format(ctx.author.name),
                         color=self.color,
                         description=description
                     )
@@ -94,6 +96,14 @@ ITEMS:
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        if data['config']['buying']:
+            return await ctx.send('<:negate:520418505993093130>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
+
+        update['config']['buying'] = True
+        await self.bot.db.update_data(data, update, 'users')
+
         def check_option(m):
             return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
@@ -102,7 +112,7 @@ ITEMS:
         if data['box']['status']['active']:
             await ctx.send("<:alert_status:519896811192844288>│``ATENÇÃO: VOCE JA TEM UMA BOX ATIVA NA SUA CONTA!``\n"
                            "``PARA ABRIR SUA BOX USE O COMANDO`` **ASH BOX BOOSTER**\n"
-                           "``AGORA SE VC QUER RESETAR SUA BOX PARA OBTER UMA RARIDADE MAIOR?``\n"
+                           "``AGORA VOCE QUER RESETAR SUA BOX PARA OBTER UMA RARIDADE MAIOR?``\n"
                            "**1** para ``SIM`` ou **0** para ``NÃO``")
             try:
                 answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
@@ -110,21 +120,44 @@ ITEMS:
                 if answer:
                     await self.bot.booster.buy_box(self.bot, ctx)
                 else:
+                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update = data
+                    update['config']['buying'] = False
+                    await self.bot.db.update_data(data, update, 'users')
                     return await ctx.send('<:negate:520418505993093130>│**COMANDO CANCELADO PELO USUARIO!**')
             except TimeoutError:
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                update['config']['buying'] = False
+                await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
         else:
             await self.bot.booster.buy_box(self.bot, ctx)
+
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        await ctx.send(f"<:on_status:519896814799945728>│``SUA BOX TEM A RARIDADE:`` "
-                       f"**{data['box']['status']['rarity']}**")
+        if data['box']['status']['active']:
+            await ctx.send(f"<:on_status:519896814799945728>│``SUA BOX TEM A RARIDADE:`` "
+                           f"**{data['box']['status']['rarity']}**")
+
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        update['config']['buying'] = False
+        await self.bot.db.update_data(data, update, 'users')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='booster', aliases=['pacote'])
     async def _booster(self, ctx):
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        if data['config']['buying']:
+            return await ctx.send('<:negate:520418505993093130>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
+
+        update['config']['buying'] = True
+        await self.bot.db.update_data(data, update, 'users')
+
         await ctx.send("<:alert_status:519896811192844288>│``Comprando booster...``")
         await ctx.send("<:alert_status:519896811192844288>│``Quantos boosters você deseja comprar?``")
 
@@ -134,15 +167,27 @@ ITEMS:
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['config']['buying'] = False
+            await self.bot.db.update_data(data, update, 'users')
             return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
                                   ' CANCELADO**')
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         num = int(answer.content)
         if num > 10:
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['config']['buying'] = False
+            await self.bot.db.update_data(data, update, 'users')
             return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 boosters"
                                   " de uma vez...``")
         elif num < 1:
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['config']['buying'] = False
+            await self.bot.db.update_data(data, update, 'users')
             return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar 0 ou menos boosters``")
 
         if data['box']['status']['active']:
@@ -157,18 +202,30 @@ ITEMS:
                 price -= 50
             num_ = self.verify_money(data['treasure']['money'], num, price)
             if num_ < num:
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                update['config']['buying'] = False
+                await self.bot.db.update_data(data, update, 'users')
                 return await ctx.send("<:negate:520418505993093130>│``Você não tem dinheiro o suficiente...``")
             for _ in range(num):
                 if data['box']['status']['active']:
                     await self.bot.booster.buy_booster(self.bot, ctx)
                     await sleep(0.5)
                 else:
+                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update = data
+                    update['config']['buying'] = False
+                    await self.bot.db.update_data(data, update, 'users')
                     return await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
                                           "``Para ativar sua box use o comando:`` **ash box buy**")
             await ctx.send("<:on_status:519896814799945728>│``Obrigado pelas compras, volte sempre!``")
         else:
             await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
                            "``Para ativar sua box use o comando:`` **ash box buy**")
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        update['config']['buying'] = False
+        await self.bot.db.update_data(data, update, 'users')
 
 
 def setup(bot):

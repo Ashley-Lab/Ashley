@@ -208,7 +208,7 @@ class Booster(object):
             reward = list()
             op = ['soul_crystal_of_love', 'soul_crystal_of_hope', 'soul_crystal_of_hate']
             reward.append(choice(op))
-            response = await self.bot.db.add_reward(ctx, reward)
+            response = await bot.db.add_reward(ctx, reward)
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
                            f"``COMO PREMIO VOCE ACABA DE GANHAR ESSE ITEM:`` ✨ **{response.upper()}** ✨")
 
