@@ -73,11 +73,15 @@ user_data_structure = {
             "box": {"status": {"active": False, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}},
             "security": {
                 "commands": 0,
+                "commands_today": 0,
                 "last_command": None,
                 "last_channel": None,
                 "last_verify": None,
+                "last_blocked": None,
                 "strikes": 0,
-                "status": True
+                "strikes_to_ban": 0,
+                "status": True,
+                "blocked": False
             },
             "cooldown": dict()
 }

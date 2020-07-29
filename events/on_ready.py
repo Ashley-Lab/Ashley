@@ -35,7 +35,7 @@ class OnReady(commands.Cog):
         self.color = self.bot.color
         self.url = 'https://www.twitch.tv/d3nkyt0'
         self.time = [0, 1]
-        self.details = ['Yu-gi-oh!', 'RPG', 'Magic', 'Pokemon']
+        self.details = ['Yu-gi-oh!', 'RPG', 'Pokemon']
         self.state = [discord.Status.online, discord.Status.idle, discord.Status.dnd]
         self.status = ['minha equipe nos pensamentos!', '😢 + 💸 = 😍 & 🍫',
                        'meus cabelos ao vento!', '😢 + 💸 = 😍 & 🍫',
@@ -55,9 +55,10 @@ class OnReady(commands.Cog):
                 for data in all_data:
                     update = data
 
+                    update['security']['last_verify'] = dt.today()
+                    update['security']['blocked'] = False
                     last_verify = update['security']['last_verify']
                     last_command = update['security']['last_command']
-                    update['security']['last_verify'] = dt.today()
 
                     if last_command is None:
                         await self.bot.db.update_data(data, update, "users")
@@ -65,6 +66,36 @@ class OnReady(commands.Cog):
 
                     if not update['security']['status']:
                         continue
+
+                    if update['security']['commands_today'] > 900:
+                        try:
+                            update['security']['status'] = not update['security']['status']
+                            update['security']['blocked'] = not update['security']['blocked']
+                        except KeyError:
+                            update['security']['status'] = False
+                            update['security']['blocked'] = True
+
+                        update['security']['last_blocked'] = dt.today()
+
+                        try:
+                            update['security']['strikes_to_ban'] += 1
+                        except KeyError:
+                            update['security']['strikes_to_ban'] = 1
+
+                        channel_ = self.bot.get_channel(737467830571761786)
+                        await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA POSSIVELMENTE USANDO MACRO E FOI '
+                                            f'BLOQUEADO\nNa Data e Hora: {data_}```')
+                        try:
+                            if update['security']['last_channel'] is not None:
+                                channel_ = self.bot.get_channel(update['security']['last_channel'])
+                                await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
+                                                    f'POIS EXTRAPOLOU OS LIMITES HOJE``<a:red:525032764211200002>'
+                                                    f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS PRIVILEGIOS '
+                                                    f'DE GANHAR OS ITENS** <a:red:525032764211200002>'
+                                                    f'<a:red:525032764211200002> ``ESSE BLOQUEIO FOI MAIS RIGIDO``'
+                                                    f'<a:red:525032764211200002><a:red:525032764211200002>')
+                        except KeyError:
+                            pass
 
                     last_verify = date.mktime(last_verify.timetuple())
                     last_command = date.mktime(last_command.timetuple())
@@ -75,23 +106,37 @@ class OnReady(commands.Cog):
                         update['security']['strikes'] += 1
                         update['security']['commands'] = 0
                         channel_ = self.bot.get_channel(737467830571761786)
-                        await channel_.send(f'```O USUARIO {data["user_id"]} FOI DETECTADO USANDO MACRO\n'
+                        await channel_.send(f'```O USUARIO {data["user_id"]} FOI DETECTADO POSSIVELMENTE USANDO MACRO\n'
                                             f'Na Data e Hora: {data_}```')
                         try:
-                            if update['security']['last_channel'] is not None:
-                                channel_ = self.bot.get_channel(update['security']['last_channel'])
-                                await channel_.send(f'<a:blue:525032762256785409>│``EI TENHA CALMA VOCE TA '
-                                                    f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER '
-                                                    f'BLOQUEADO POR 24 HORAS.`` <a:blue:525032762256785409>'
-                                                    f'**AVISO {update["security"]["strikes"]}/6**')
+                            if update['security']['strikes'] < 6:
+                                if update['security']['last_channel'] is not None:
+                                    channel_ = self.bot.get_channel(update['security']['last_channel'])
+                                    await channel_.send(f'<a:blue:525032762256785409>│``EI TENHA CALMA VOCE TA '
+                                                        f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER '
+                                                        f'BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
+                                                        f'<a:blue:525032762256785409>'
+                                                        f'**AVISO {update["security"]["strikes"]}/5**')
                         except KeyError:
                             pass
+                    else:
+                        update['security']['commands'] = 0
 
                     if update['security']['strikes'] == 6:
                         update['security']['status'] = not update['security']['status']
                         channel_ = self.bot.get_channel(737467830571761786)
-                        await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA USANDO MACRO E FOI BLOQUEADO\n'
-                                            f'Na Data e Hora: {data_}```')
+                        await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA POSSIVELMENTE USANDO MACRO E FOI '
+                                            f'BLOQUEADO\nNa Data e Hora: {data_}```')
+
+                        try:
+                            if update['security']['last_channel'] is not None:
+                                channel_ = self.bot.get_channel(update['security']['last_channel'])
+                                await channel_.send(f'<a:blue:525032762256785409>│``VOCE FOI BLOQUEADO ATE AS 0 '
+                                                    f'HORAS DO DIA DE HOJE..`` <a:blue:525032762256785409>'
+                                                    f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS PRIVILEGIOS '
+                                                    f'DE GANHAR OS ITENS**')
+                        except KeyError:
+                            pass
 
                     await self.bot.db.update_data(data, update, "users")
 
@@ -100,11 +145,23 @@ class OnReady(commands.Cog):
                     all_data = await self.bot.db.get_all_data("users")
                     for data in all_data:
                         update = data
-                        update['security']['commands'] = 0
-                        update['security']['strikes'] = 0
-                        update['security']['last_verify'] = dt.today()
-                        update['security']['status'] = True
-                        await self.bot.db.update_data(data, update, "users")
+
+                        try:
+                            last_verify = date.mktime(update['security']['last_verify'].timetuple())
+                            last_blocked = date.mktime(update['security']['last_blocked'].timetuple())
+                            minutes = int(int(last_verify - last_blocked) / 60)
+                            if minutes > 4320:
+                                update['security']['blocked'] = False
+                        except KeyError:
+                            pass
+
+                        if not update['security']['blocked']:
+                            update['security']['commands'] = 0
+                            update['security']['commands_today'] = 0
+                            update['security']['strikes'] = 0
+                            update['security']['last_verify'] = dt.today()
+                            update['security']['status'] = True
+                            await self.bot.db.update_data(data, update, "users")
 
             await asyncio.sleep(60)
 

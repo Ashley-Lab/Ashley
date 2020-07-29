@@ -58,6 +58,18 @@ class IaInteractions(commands.Cog):
                 chance_not = randint(1, 100)
                 # --------------============================--------------
 
+                # filtro de mensagem contra o criador kkkk
+
+                # --------------============================--------------
+                if 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
+                    if message.author.id != self.bot.owner_id:
+                        for c in range(0, len(config['questions']['denky_r'])):
+                            if config['questions']['denky_r'][c] in message.content:
+                                return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu'
+                                                                  ' pai!**\n```VOU CONTAR TUDO PRO '
+                                                                  'PAPAI```'.format(message.author.mention))
+                # --------------============================--------------
+
                 # filtro de quantidade de mensagens salvas por usuario
                 try:
                     # filtro de pergunta repetida a longo prazo

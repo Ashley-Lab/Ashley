@@ -1,19 +1,14 @@
-import time
 import discord
 
 from discord.ext import commands
 from config import data as config
-from asyncio import TimeoutError, sleep
+from asyncio import sleep
 from resources.utility import include
 
 
 class SystemMessage(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.ping_test = {}
-        self.time = None
-        self.user_cont_msg = {}
-        self.user_cont_word = {}
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -29,77 +24,6 @@ class SystemMessage(commands.Cog):
                 perms = ctx.channel.permissions_for(ctx.me)
                 if not perms.send_messages or not perms.read_messages:
                     return
-
-                if 'denky' in message.content.lower() and data_guild['ia_config']['auto_msg']:
-                    if message.author.id != self.bot.owner_id and "pet " not in message.content.lower():
-                        for c in range(0, len(config['questions']['denky_r'])):
-                            if config['questions']['denky_r'][c] in message.content:
-                                return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu'
-                                                                  ' pai!**\n```VOU CONTAR TUDO PRO '
-                                                                  'PAPAI```'.format(message.author.mention))
-
-                if data_guild['ia_config']['auto_msg']:
-                    if message.author.id not in self.ping_test:
-                        self.ping_test[message.author.id] = {"p": False, "t": time.time()}
-                    try:
-                        if message.mentions[0] == self.bot.user and self.ping_test[message.author.id]['p'] is False:
-                            self.ping_test[message.author.id]['t'] = time.time() + 60
-                            self.time = self.ping_test[message.author.id]['t']
-                            if "ash " not in message.content.lower():
-                                end_time = time.time() + 60
-                                count_ashley = 0
-                                self.ping_test[message.author.id]['p'] = True
-
-                                def check(m):
-                                    return m.author.id == message.author.id
-
-                                while time.time() < end_time:
-                                    _1 = "<:safada:530029764061298699> "
-                                    _2 = "<:pqp:530031187331121152> "
-                                    _3 = "<:afs:530031864350507028> "
-                                    if count_ashley == 0:
-                                        if time.time() < self.time:
-                                            await message.channel.send(f'{_1}``SE VC PRECISA DE AJUDA USE`` '
-                                                                       f'**ASH AJUDA**')
-                                    elif count_ashley == 1:
-                                        if time.time() < self.time:
-                                            await message.channel.send(f'{_2}``EM QUE POSSO AJUDA-LO?``')
-                                    elif count_ashley == 2:
-                                        if time.time() < self.time:
-                                            await message.channel.send(f'{_2}``DE NOVO CORAÇÃO?``')
-                                    elif count_ashley == 3:
-                                        if time.time() < self.time:
-                                            await message.channel.send(f'{_3}``VOCÊ SABE QUE É CHATO FICAR '
-                                                                       f'MARCANDO?``')
-                                    else:
-                                        if time.time() < self.time:
-                                            await message.channel.send('<a:pingada:520418507817615364>'
-                                                                       ' ``PARA PELO AMOR DE DEUS!``')
-                                            self.time = time.time() - 1
-
-                                    message_ = await self.bot.wait_for('message', check=check, timeout=30.0)
-
-                                    if "<@!478977311266570242>" in message_.content:
-                                        if '?' not in message_.content and "ash " not in message_.content.lower():
-                                            count_ashley += 1
-                                        else:
-                                            if time.time() < self.time:
-                                                await message.channel.send(f'{_1}``OI '
-                                                                           f'{message.author.name.upper()} '
-                                                                           f'ESTOU AQUI PARA TE AJUDAR, USE:`` '
-                                                                           f'**ASH AJUDA**')
-                                    else:
-                                        if time.time() < self.time:
-                                            await message.channel.send(f'<a:hi:520418511856730123> '
-                                                                       f'{message.author.mention} ``NÃO SEJA '
-                                                                       f'TIMIDO, USE:`` **ASH AJUDA**')
-                                self.ping_test[message.author.id]['p'] = False
-                    except IndexError:
-                        self.ping_test[message.author.id]['p'] = False
-                    except TimeoutError:
-                        self.ping_test[message.author.id]['p'] = False
-                    except discord.Forbidden:
-                        self.ping_test[message.author.id]['p'] = False
 
                 if message.guild.id == self.bot.config['config']['default_guild']:
                     if message.channel.id == 543589223467450398:

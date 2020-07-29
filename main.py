@@ -100,7 +100,7 @@ class Ashley(commands.AutoShardedBot):
         if ctx.guild is not None:
             data_guild = await self.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
-            if isinstance(ctx.author, discord.Member) and data_guild is not None:
+            if data_user is not None and data_guild is not None:
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
                 self.user_commands[ctx.author.id] += 1
@@ -108,17 +108,16 @@ class Ashley(commands.AutoShardedBot):
                 if data_user['security']['status']:
                     update_guild['data']['commands'] += 1
                 await self.db.update_data(data_guild, update_guild, 'guilds')
-                if data_user is not None:
-                    if (self.guilds_commands[ctx.guild.id] % 10) == 0:
-                        for data in await self.db.get_announcements():
-                            if data['data']['status']:
-                                self.announcements.append(data["data"]["announce"])
-                        announce = choice(self.announcements)
-                        embed = discord.Embed(
-                            color=0x000000,
-                            description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
-                                        f'```{announce}```')
-                        await ctx.send(embed=embed)
+                if (self.guilds_commands[ctx.guild.id] % 10) == 0:
+                    for data in await self.db.get_announcements():
+                        if data['data']['status']:
+                            self.announcements.append(data["data"]["announce"])
+                    announce = choice(self.announcements)
+                    embed = discord.Embed(
+                        color=0x000000,
+                        description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
+                                    f'```{announce}```')
+                    await ctx.send(embed=embed)
                 commands_log = self.get_channel(575688812068339717)
                 await commands_log.send(f"``O membro`` {ctx.author.name} ``acabou de usar o comando`` "
                                         f"**{str(ctx.command).upper()}** ``dentro da guilda`` {ctx.guild.name} ``na "
@@ -137,11 +136,10 @@ class Ashley(commands.AutoShardedBot):
                     chance = randint(1, 100)
                     quant = randint(1, 3)
                     if chance <= 50:
-                        if not data_user['security']['status']:
-                            return
-                        update_user['inventory']['rank_point'] += quant
-                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
-                                       f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
+                        if data_user['security']['status']:
+                            update_user['inventory']['rank_point'] += quant
+                            await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
+                                           f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
                 if (update_user['user']['commands'] % 10) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
@@ -150,11 +148,10 @@ class Ashley(commands.AutoShardedBot):
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
                     if chance <= 20:
-                        if not data_user['security']['status']:
-                            return
-                        update_user['inventory']['medal'] += 1
-                        await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
-                                       f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
+                        if data_user['security']['status']:
+                            update_user['inventory']['medal'] += 1
+                            await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
+                                           f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
                         update_user['user']['titling'] = self.titling[key]
@@ -164,11 +161,7 @@ class Ashley(commands.AutoShardedBot):
                     await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
 
                 _chance = randint(1, 200)
-                if _chance <= 2:
-
-                    if not data_user['security']['status']:
-                        return
-
+                if _chance <= 2 and data_user['security']['status']:
                     BOX = choice(self.boxes)
                     box_type = self.boxes.index(BOX)
                     if ctx.guild.id not in self.box:
@@ -193,6 +186,12 @@ class Ashley(commands.AutoShardedBot):
                 data_user = await self.db.get_data("user_id", ctx.author.id, "users")
                 update_user = data_user
                 update_user['security']['commands'] += 1
+
+                try:
+                    update_user['security']['commands_today'] += 1
+                except KeyError:
+                    update_user['security']['commands_today'] = 1
+
                 update_user['security']['last_command'] = dt.today()
                 update_user['security']['last_channel'] = ctx.channel.id
                 await self.db.update_data(data_user, update_user, 'users')
@@ -211,8 +210,6 @@ class Ashley(commands.AutoShardedBot):
 
                 if data_user['config']['vip']:
                     try:
-                        if str(ctx.command) == "daily vip":
-                            return
                         epoch = dt.utcfromtimestamp(0)
                         cooldown = data_user["cooldown"]["daily vip"]
                         time_diff = (dt.utcnow() - epoch).total_seconds() - cooldown
@@ -223,27 +220,33 @@ class Ashley(commands.AutoShardedBot):
                                 update_['config']['vip'] = False
                                 await self.db.update_data(data_, update_, 'users')
                                 if ctx.guild.id == 519894833783898112:
-                                    return await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} '
-                                                          f'``INFELIZMENTE VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``')
-                                await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
-                                               f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
-                                               f' para receber seu proximo dia de vip!**')
+                                    await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} '
+                                                   f'``INFELIZMENTE VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``')
+                                else:
+                                    await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
+                                                   f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
+                                                   f' para receber seu proximo dia de vip!**')
+                                if str(ctx.command) == "daily vip":
+                                    await ctx.send("<:alert_status:519896811192844288>│``USE O COMANDO`` **ASH VIP** "
+                                                   "``NOVAMENTE...``")
                             else:
                                 if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                                     if ctx.guild.id == 519894833783898112:
-                                        return await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode "
-                                                              "ganhar VIP DIARIO ENTRANDO NO MEU SERVIDOR!``")
-                                    await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode ganhar "
-                                                   "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando "
-                                                   "ASH INVITE**")
+                                        await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE"
+                                                       " VC ESTA AQUI E USE O COMANDO`` **ASH VIP**")
+                                    else:
+                                        await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode ganhar "
+                                                       "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando "
+                                                       "ASH INVITE**")
                     except KeyError:
                         if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                             if ctx.guild.id == 519894833783898112:
-                                return await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE VC ESTA"
-                                                      " AQUI E USE O COMANDO`` **ASH VIP**")
-                            await ctx.send("<:alert_status:519896811192844288>**│** ``Agora você pode ganhar "
-                                           "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
-                                           "INVITE**")
+                                await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE VC ESTA"
+                                               " AQUI E USE O COMANDO`` **ASH VIP**")
+                            else:
+                                await ctx.send("<:alert_status:519896811192844288>**│** ``Agora você pode ganhar "
+                                               "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
+                                               "INVITE**")
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
