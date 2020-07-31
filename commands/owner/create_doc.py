@@ -83,9 +83,8 @@ class CreateDoc(commands.Cog):
                                                      f'**Modo de Uso:** ' \
                                                      f'`{ctx.prefix + str(ctx.command) + " " + c.signature}`'
 
-        index = '\n\n# Commands\n\n'
+        index = header + '\n\n# Commands\n\n'
         data = ''
-        index += header
 
         for cog in sorted(cogs):
             index += '- [{0}](#{1})\n'.format(cog, (cog + ' Commands').replace(' ', '-').lower())

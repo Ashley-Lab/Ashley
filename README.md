@@ -1,8 +1,4 @@
 
-
-# Commands
-
-
 # 🧙‍♀️Ashley🧝‍♀️
 <p align="center">
 <img height="384" src="https://i.imgur.com/3gxnqkI.png">
@@ -36,6 +32,10 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 - Denky#5960 (Daniel Amaral)
 - Bublee#9482 (Geórgia Bezerra)
+
+
+# Commands
+
 - [ActionsClass](#actionsclass-commands)
   - [add_ban](#add_ban)
   - [add_vip](#add_vip)
