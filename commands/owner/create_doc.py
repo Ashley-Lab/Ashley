@@ -55,19 +55,16 @@ class CreateDoc(commands.Cog):
     @commands.command(name='make_doc', aliases=['create_doc', 'cd', 'md'])
     async def make_doc(self, ctx):
         """apenas desenvolvedores"""
-        cogs = {name: {} for name in ctx.bot.cogs.keys()}
+        cogs = {name: {} for name in ctx.bot.cogs.keys() if name not in make_doc_blocked}
 
         all_commands = []
-        for command in ctx.bot.commands:
+        for command in [name for name in ctx.bot.commands if name.qualified_name not in make_doc_blocked]:
             all_commands.append(command)
             if isinstance(command, commands.Group):
                 all_commands.extend(command.commands)
 
         for c in all_commands:
             if c.cog_name not in cogs or c.help is None:
-                continue
-
-            if c.qualified_name in make_doc_blocked:
                 continue
 
             if c.qualified_name not in cogs[c.cog_name]:

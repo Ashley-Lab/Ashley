@@ -63,13 +63,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [card](#card)
 - [ChannelClass](#channelclass-commands)
   - [channel](#channel)
-- [ChannelCreate](#channelcreate-commands)
-- [ChannelDelete](#channeldelete-commands)
-- [ChannelPinUpdate](#channelpinupdate-commands)
-- [ChannelUpdate](#channelupdate-commands)
 - [CharadeClass](#charadeclass-commands)
   - [whats](#whats)
-- [CommandErrorHandler](#commanderrorhandler-commands)
 - [ConfigClass](#configclass-commands)
   - [config](#config)
   - [config guild](#config-guild)
@@ -94,7 +89,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [draw](#draw)
 - [Economy](#economy-commands)
   - [economy](#economy)
-- [EmojiUpdate](#emojiupdate-commands)
 - [EvalSintax](#evalsintax-commands)
   - [eval](#eval)
 - [FacebookClass](#facebookclass-commands)
@@ -113,14 +107,12 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [gif](#gif)
 - [GuildBank](#guildbank-commands)
   - [treasure](#treasure)
-- [GuildUpdate](#guildupdate-commands)
 - [HeadsOrTails](#headsortails-commands)
   - [hot](#hot)
 - [Helper](#helper-commands)
   - [help](#help)
 - [HugClass](#hugclass-commands)
   - [hug](#hug)
-- [IaInteractions](#iainteractions-commands)
 - [IaResponseClass](#iaresponseclass-commands)
   - [ia](#ia)
 - [InstagramClass](#instagramclass-commands)
@@ -149,14 +141,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [MarriedSystem](#marriedsystem-commands)
   - [divorce](#divorce)
   - [marry](#marry)
-- [MemberBanClass](#memberbanclass-commands)
-- [MemberUpdate](#memberupdate-commands)
-- [OnMemberJoin](#onmemberjoin-commands)
-- [OnMemberRemove](#onmemberremove-commands)
-- [OnMessageDelete](#onmessagedelete-commands)
-- [OnMessageEdit](#onmessageedit-commands)
-- [OnReady](#onready-commands)
-- [OnTypingClass](#ontypingclass-commands)
 - [OpenClass](#openclass-commands)
   - [gift](#gift)
   - [open](#open)
@@ -191,17 +175,13 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [reload](#reload)
 - [RepeatCommand](#repeatcommand-commands)
   - [repeat_command](#repeat_command)
-- [RoleCreate](#rolecreate-commands)
-- [RoleDelete](#roledelete-commands)
 - [RoleInfo](#roleinfo-commands)
   - [roleinfo](#roleinfo)
-- [RoleUpdate](#roleupdate-commands)
 - [SaySomething](#saysomething-commands)
   - [say](#say)
   - [say channel](#say-channel)
 - [ServerInfo](#serverinfo-commands)
   - [serverinfo](#serverinfo)
-- [Shards](#shards-commands)
 - [SkillClass](#skillclass-commands)
   - [skill](#skill)
   - [skill add](#skill-add)
@@ -217,7 +197,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [staff kick](#staff-kick)
   - [staff report](#staff-report)
   - [staff slowmode](#staff-slowmode)
-- [SystemMessage](#systemmessage-commands)
 - [Thinkers](#thinkers-commands)
   - [thinker](#thinker)
 - [TopClass](#topclass-commands)
@@ -236,7 +215,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [transfer](#transfer)
 - [TwitterClass](#twitterclass-commands)
   - [twitter](#twitter)
-- [UnBanClass](#unbanclass-commands)
 - [UnloadCog](#unloadcog-commands)
   - [unload](#unload)
 - [UserBank](#userbank-commands)
@@ -248,7 +226,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [create_gift](#create_gift)
   - [lover](#lover)
   - [unlover](#unlover)
-- [VoiceClass](#voiceclass-commands)
 - [WhatsappClass](#whatsappclass-commands)
   - [whatsapp](#whatsapp)
 
@@ -366,22 +343,12 @@ Use ash box e siga as instruções
 
 >**Modo de Uso:** `ash make_doc [locker]`
 
-## ChannelCreate
-
-## ChannelDelete
-
-## ChannelPinUpdate
-
-## ChannelUpdate
-
 ## CharadeClass
 
 #### whats
 >**Descrição:** Use ash whats ou ash charada e tente adivinhar a resposta certa. foco em tente
 
 >**Modo de Uso:** `ash make_doc `
-
-## CommandErrorHandler
 
 ## ConfigClass
 
@@ -493,8 +460,6 @@ Use ash economy
 
 >**Modo de Uso:** `ash make_doc `
 
-## EmojiUpdate
-
 ## EvalSintax
 
 #### eval
@@ -569,8 +534,6 @@ Use ash treasure
 
 >**Modo de Uso:** `ash make_doc `
 
-## GuildUpdate
-
 ## HeadsOrTails
 
 #### hot
@@ -592,8 +555,6 @@ Use ash treasure
 Use ash hug <@usuario a sua escolha>
 
 >**Modo de Uso:** `ash make_doc `
-
-## IaInteractions
 
 ## IaResponseClass
 
@@ -708,22 +669,6 @@ Use ash divorce <@prostiranha em questão>
 Use ash marry <@pessoa desejada>
 
 >**Modo de Uso:** `ash make_doc [member]`
-
-## MemberBanClass
-
-## MemberUpdate
-
-## OnMemberJoin
-
-## OnMemberRemove
-
-## OnMessageDelete
-
-## OnMessageEdit
-
-## OnReady
-
-## OnTypingClass
 
 ## OpenClass
 
@@ -862,10 +807,6 @@ Use ash register guild e siga as instruções do comando(use # pra marcar os can
 
 >**Modo de Uso:** `ash make_doc <times> <command>`
 
-## RoleCreate
-
-## RoleDelete
-
 ## RoleInfo
 
 #### roleinfo
@@ -873,8 +814,6 @@ Use ash register guild e siga as instruções do comando(use # pra marcar os can
 Use ash roleinfo <@cargo_em_questão>
 
 >**Modo de Uso:** `ash make_doc [role]`
-
-## RoleUpdate
 
 ## SaySomething
 
@@ -896,8 +835,6 @@ Use ash say <mensagem desejada>
 Use ash serverinfo
 
 >**Modo de Uso:** `ash make_doc `
-
-## Shards
 
 ## SkillClass
 
@@ -972,8 +909,6 @@ use ash staff report <report>
 Use ash staff slowmode
 
 >**Modo de Uso:** `ash make_doc [timer]`
-
-## SystemMessage
 
 ## Thinkers
 
@@ -1062,8 +997,6 @@ Use ash twitter <mensagem desejada>
 
 >**Modo de Uso:** `ash make_doc [resp]`
 
-## UnBanClass
-
 ## UnloadCog
 
 #### unload
@@ -1108,8 +1041,6 @@ Use ash userinfo <@usuario em questão>
 >**Descrição:** Esse nem eu sei...
 
 >**Modo de Uso:** `ash make_doc `
-
-## VoiceClass
 
 ## WhatsappClass
 
