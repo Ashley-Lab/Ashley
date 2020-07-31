@@ -78,7 +78,7 @@ class CreateDoc(commands.Cog):
                 cogs[c.cog_name][c.qualified_name] = f'#### {c.qualified_name}\n>' \
                                                      f'**Descrição:** {help_}\n\n>' \
                                                      f'**Modo de Uso:** ' \
-                                                     f'`{ctx.prefix + str(ctx.command) + " " + c.signature}`'
+                                                     f'`{ctx.prefix + c.qualified_name + " " + c.signature}`'
 
         index = header + '\n\n# Commands\n\n'
         data = ''
