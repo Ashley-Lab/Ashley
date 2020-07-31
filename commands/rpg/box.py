@@ -30,7 +30,7 @@ class BoxClass(commands.Cog):
     @commands.group(name='box', aliases=['caixa'])
     async def box(self, ctx):
         """Comando usado pra comprar e abrir booster boxes
-        Use ash box e siga as instruções"""
+                Use ash box e siga as instruções"""
         if ctx.invoked_subcommand is None:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             if data is not None:
@@ -96,6 +96,7 @@ ITEMS:
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
+        """Esse nem eu sei..."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:
@@ -150,6 +151,7 @@ ITEMS:
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='booster', aliases=['pacote'])
     async def _booster(self, ctx):
+        """Esse nem eu sei..."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:

@@ -1,3 +1,8 @@
+
+
+# Commands
+
+
 # 🧙‍♀️Ashley🧝‍♀️
 <p align="center">
 <img height="384" src="https://i.imgur.com/3gxnqkI.png">
@@ -31,9 +36,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 - Denky#5960 (Daniel Amaral)
 - Bublee#9482 (Geórgia Bezerra)
-
-# Commands
-
 - [ActionsClass](#actionsclass-commands)
   - [add_ban](#add_ban)
   - [add_vip](#add_vip)
@@ -55,6 +57,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [botinfo](#botinfo)
 - [BoxClass](#boxclass-commands)
   - [box](#box)
+  - [box booster](#box-booster)
+  - [box buy](#box-buy)
 - [CardsClass](#cardsclass-commands)
   - [card](#card)
 - [ChannelClass](#channelclass-commands)
@@ -173,6 +177,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [ReceptionClass](#receptionclass-commands)
   - [reception](#reception)
 - [RecipeClass](#recipeclass-commands)
+  - [craft](#craft)
+  - [recipe](#recipe)
 - [Reflection](#reflection-commands)
   - [reflect](#reflect)
 - [RegisterAnnounce](#registerannounce-commands)
@@ -333,6 +339,16 @@ Use ash botinfo
 #### box
 >**Descrição:** Comando usado pra comprar e abrir booster boxes
 Use ash box e siga as instruções
+
+>**Modo de Uso:** `ash make_doc `
+
+#### box booster
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash make_doc `
+
+#### box buy
+>**Descrição:** Esse nem eu sei...
 
 >**Modo de Uso:** `ash make_doc `
 
@@ -786,6 +802,16 @@ Use ash reception ou ash rp e siga as instruções no comando(use # pra marcar o
 >**Modo de Uso:** `ash make_doc `
 
 ## RecipeClass
+
+#### craft
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash make_doc [item]`
+
+#### recipe
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash make_doc `
 
 ## Reflection
 

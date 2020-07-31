@@ -19,6 +19,7 @@ class RecipeClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='craft', aliases=['construir'])
     async def craft(self, ctx, *, item=None):
+        """Esse nem eu sei..."""
         global resp
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         recipes = self.bot.config['recipes']
@@ -188,6 +189,7 @@ class RecipeClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='recipe', aliases=['receita'])
     async def recipe(self, ctx):
+        """Esse nem eu sei..."""
         recipes = self.bot.config['recipes']
         embed = ['Recipes', self.color, '``Para craftar um item use:`` **ash craft nome_do_item**\n\n']
         await paginator(self.bot, self.bot.items, recipes, embed, ctx)

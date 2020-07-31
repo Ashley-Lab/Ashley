@@ -354,3 +354,29 @@ X / \
 X 
 ===========
 ```''']
+
+make_doc_blocked = [
+        "ChannelCreate",
+        "ChannelDelete",
+        "ChannelPinUpdate",
+        "ChannelUpdate",
+        "CommandErrorHandler",
+        "EmojiUpdate",
+        "GuildUpdate",
+        "IaInteractions",
+        "MemberBanClass",
+        "MemberUpdate",
+        "OnMemberJoin",
+        "OnMemberRemove",
+        "OnMessageDelete",
+        "OnMessageEdit",
+        "OnReady",
+        "OnTypingClass",
+        "RoleCreate",
+        "RoleDelete",
+        "RoleUpdate",
+        "Shards",
+        "SystemMessage",
+        "UnBanClass",
+        "VoiceClass"
+]
