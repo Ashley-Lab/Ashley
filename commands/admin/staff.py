@@ -19,7 +19,7 @@ class StaffAdmin(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.group(hidden=True)
+    @commands.group(name='staff')
     async def staff(self, ctx):
         """Comando usado pra retornar a lista de comandos pra staff
         Use ash staff"""

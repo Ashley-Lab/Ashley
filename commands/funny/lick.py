@@ -19,6 +19,10 @@ class LickClass(commands.Cog):
         """Comando de gifs de lambida
         Use ash lick <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             lickimg = ['https://media1.tenor.com/images/5f73f2a7b302a3800b3613095f8a5c40/tenor.gif?itemid=10005495',
                        'https://media1.tenor.com/images/0c608b33607b4e92350198b53c8940c7/tenor.gif?itemid=16735374',
                        'https://media1.tenor.com/images/ec2ca0bf12d7b1a30fea702b59e5a7fa/tenor.gif?itemid=13417195',

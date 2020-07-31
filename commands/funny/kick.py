@@ -19,6 +19,10 @@ class KickClass(commands.Cog):
         """Comando de gifs de chute
         Use ash kick <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             kickimg = ['https://media1.tenor.com/images/cc217519af48fe13bea6004afb36f1f2/tenor.gif?itemid=5738223',
                        'https://media1.tenor.com/images/2427d33c1c97a12b5ed4eda5ca2c63b7/tenor.gif?itemid=16733357',
                        'https://media1.tenor.com/images/fb2a19c9b689123e6254ad9ac6719e96/tenor.gif?itemid=4922649',

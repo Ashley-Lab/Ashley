@@ -19,6 +19,10 @@ class SlapClass(commands.Cog):
         """Comando de gifs de tapa
         Use ash slap <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             slapimg = ['https://media1.tenor.com/images/9ea4fb41d066737c0e3f2d626c13f230/tenor.gif?itemid=7355956',
                        'https://media1.tenor.com/images/53d180f129f51575a46b6d3f0f5eeeea/tenor.gif?itemid=5373994',
                        'https://media1.tenor.com/images/153b2f1bfd3c595c920ce60f1553c5f7/tenor.gif?itemid=10936993',

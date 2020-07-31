@@ -32,7 +32,7 @@ class EvalSintax(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True)
+    @commands.command(name='eval')
     async def eval(self, ctx, *, body: str):
         """apenas desenvolvedores"""
         env = {

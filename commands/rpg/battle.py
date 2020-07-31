@@ -51,6 +51,11 @@ class Battle(commands.Cog):
                 break
 
             atk = await player.turn(monster.status['hp'], self.bot, ctx)
+
+            if atk == "COMANDO-CANCELADO":
+                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito`` '
+                                      '**COMANDO CANCELADO**')
+
             await sleep(1)
             if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
                 await monster.damage(atk, player.status['atk'], ctx, player.name)
@@ -68,6 +73,11 @@ class Battle(commands.Cog):
                 break
 
             atk = await monster.turn(monster.status['hp'], self.bot, ctx)
+
+            if atk == "COMANDO-CANCELADO":
+                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito`` '
+                                      '**COMANDO CANCELADO**')
+
             await sleep(1)
             if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
                 await player.damage(atk, monster.status['atk'], ctx, monster.name)

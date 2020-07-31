@@ -16,6 +16,10 @@ class SaySomething(commands.Cog):
     async def say(self, ctx, *, msg: str = None):
         """comando usado pra ash enviar uma mensagem
         Use ash say <mensagem desejada>"""
+        try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
         if ctx.invoked_subcommand is None:
             if msg is None:
                 return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU FALAR``')

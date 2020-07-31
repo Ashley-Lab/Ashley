@@ -19,6 +19,10 @@ class KissClass(commands.Cog):
         """Comando de gifs de beijo
         Use ash kiss <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             kissimg = ['https://media1.tenor.com/images/ef4a0bcb6e42189dc12ee55e0d479c54/tenor.gif?itemid=12143127',
                        'https://media1.tenor.com/images/b8d0152fbe9ecc061f9ad7ff74533396/tenor.gif?itemid=5372258',
                        'https://media1.tenor.com/images/778d51aca07848160ad9b52e6df37b30/tenor.gif?itemid=16737083',

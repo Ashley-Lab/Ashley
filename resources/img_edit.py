@@ -115,6 +115,9 @@ def profile(data_):
     # load dashboard image
     global avatar_marry
     image = Image.open("images/dashboards/profile.png").convert('RGBA')
+    if len(data_['artifacts'].keys()) == 24:
+        like = choice(['profile_obelisk', 'profile_ra', 'profile_slifer'])
+        image = Image.open(f"images/dashboards/{like}.png").convert('RGBA')
     show = ImageDraw.Draw(image)
 
     # load fonts

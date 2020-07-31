@@ -12,7 +12,7 @@ class RepeatCommand(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True, aliases=['rc'])
+    @commands.command(name='repeat_command', aliases=['rc'])
     async def repeat_command(self, ctx, times: int, *, command):
         """apenas desenvolvedores"""
         msg = copy.copy(ctx.message)

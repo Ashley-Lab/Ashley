@@ -301,6 +301,10 @@ class Database(object):
                 if kwargs.get("vip") and data_user['config']['vip']:
                     return True
                 elif kwargs.get("vip") and data_user['config']['vip'] is False:
+                    if ctx.guild.id == 519894833783898112:
+                        raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS USUARIOS COM VIP ATIVO "
+                                                    "PODEM USAR ESSE COMANDO``\n **Para ganhar seu vip diário use "
+                                                    "ASH INVITE**")
                     raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS USUARIOS COM VIP ATIVO PODEM "
                                                 "USAR ESSE COMANDO``\n **Para ganhar seu vip diário use ASH INVITE "
                                                 "entre no meu canal de suporte e use o comando ASH VIP**")

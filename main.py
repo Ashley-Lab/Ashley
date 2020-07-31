@@ -222,13 +222,12 @@ class Ashley(commands.AutoShardedBot):
                                 if ctx.guild.id == 519894833783898112:
                                     await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} '
                                                    f'``INFELIZMENTE VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``')
+                                    await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE"
+                                                   " VC ESTA AQUI E USE O COMANDO`` **ASH VIP**")
                                 else:
                                     await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
                                                    f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
                                                    f' para receber seu proximo dia de vip!**')
-                                if str(ctx.command) == "daily vip":
-                                    await ctx.send("<:alert_status:519896811192844288>│``USE O COMANDO`` **ASH VIP** "
-                                                   "``NOVAMENTE...``")
                             else:
                                 if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                                     if ctx.guild.id == 519894833783898112:

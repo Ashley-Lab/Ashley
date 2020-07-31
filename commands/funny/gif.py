@@ -31,6 +31,10 @@ class GetGif(commands.Cog):
     async def gif(self, ctx, *, tag: str = None):
         """comando usado pra pesquizar gifs
         Use ash gif <palavra chave>"""
+        try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
         if tag is None:
             return await ctx.send('<:negate:520418505993093130>│``DIGITE UMA TAG PARA O GIF``')
         try:

@@ -13,7 +13,7 @@ class TotComandos(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command()
+    @commands.command(name='total_de_comandos', aliases=['tdc'])
     async def total_de_comandos(self, ctx):
         """apenas desenvolvedores"""
         embed = discord.Embed(color=self.color)

@@ -79,7 +79,9 @@ class Helper(commands.Cog):
             msg.content = 'ash ' + command_help
             ctx_ = await self.bot.get_context(msg)
             if ctx_.command is not None:
-                await ctx.send(f"```{ctx_.command.help}```")
+                if ctx_.command.help is not None:
+                    return await ctx.send(f"```{ctx_.command.help}```")
+                await ctx.send("<:alert_status:519896811192844288>│``Comando Ainda nao tem uma ajuda definida``")
             else:
                 await ctx.send("<:alert_status:519896811192844288>│``Comando Inválido``")
 

@@ -34,7 +34,7 @@ class IaInteractions(commands.Cog):
             data_guild = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             user_data = await self.bot.db.get_data("user_id", message.author.id, "users")
             dg, ud = data_guild, user_data
-            if dg is not None and ud is not None and dg['ia_config']['auto_msg'] and ud['user']['ia_response']:
+            if dg is not None and ud is not None and dg['ia_config']['auto_msg']:
 
                 # filtro de comandos ( para nao haver iteração em cima de comandos )
                 # -----------======================-----------
@@ -57,6 +57,13 @@ class IaInteractions(commands.Cog):
                 chance = randint(1, 100)
                 chance_not = randint(1, 100)
                 # --------------============================--------------
+
+                # desativação da auto resposta
+                # -----------======================-----------
+                if not ud['user']['ia_response']:
+                    chance = 0
+                    chance_not = 0
+                # -----------======================-----------
 
                 # filtro de mensagem contra o criador kkkk
 

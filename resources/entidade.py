@@ -118,8 +118,7 @@ class Entity(object):
                         while reaction[1].id != ctx.author.id:
                             reaction = await bot.wait_for('reaction_add', timeout=30.0)
                     except TimeoutError:
-                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito e`` **PERDEU'
-                                              ' A VEZ**')
+                        return "COMANDO-CANCELADO"
                     emo = "<:pass:692967573649752194>"
                     emoji_ = str(emo).replace('<:', '').replace(emo[emo.rfind(':'):], '')
                     try:

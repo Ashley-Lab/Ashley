@@ -15,6 +15,10 @@ class Inverse(commands.Cog):
     async def palin(self, ctx):
         """comando usado pra enviar palindromos
         Use ash palin"""
+        try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
         palin = self.bot.config['palin']['list']
         answer = choice(palin)
         await ctx.send('''```Markdown\n [>]: {}```'''.format(answer.upper()))

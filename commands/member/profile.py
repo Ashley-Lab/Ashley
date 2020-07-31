@@ -70,7 +70,10 @@ class ProfileSystem(commands.Cog):
             vip[0].append(True)
         else:
             vip[0].append(False)
-        vip[0].append(False)
+        if n_data['rpg']['vip']:
+            vip[0].append(True)
+        else:
+            vip[0].append(False)
 
         if n_data['user']['married']:
             try:

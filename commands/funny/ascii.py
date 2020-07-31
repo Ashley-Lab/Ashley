@@ -15,6 +15,10 @@ class AsciiText(commands.Cog):
     async def ascii(self, ctx, *, msg="Digite Algo"):
         """Usado pra gerar um texto ascii
         Use ash ascii <texto desejado>"""
+        try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
         f = Figlet(font='slant')
         text = f.renderText(msg)
         await ctx.send("```{}```".format(text))

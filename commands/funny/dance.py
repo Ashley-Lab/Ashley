@@ -19,6 +19,10 @@ class DanceClass(commands.Cog):
         """Comando de gifs de dança
         Use ash dance <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             dance_img = ['https://media1.tenor.com/images/56350dfdcd3a5fa4fd66e9e87f9574bb/tenor.gif?itemid=4718162',
                          'https://media1.tenor.com/images/9ee571803fdbea520d723280a6c2c573/tenor.gif?itemid=15054962',
                          'https://media1.tenor.com/images/d119cd830e553054eadc9aa7f05ef888/tenor.gif?itemid=14040294',

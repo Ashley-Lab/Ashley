@@ -8,6 +8,11 @@ from resources.db import Database
 from resources.utility import convert_item_name
 
 coin, cost, plus = 0, 0, 0
+git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
+       "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
+       "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
+       "https://media1.tenor.com/images/17e1414f1dc91bc1f76159d7c3fa03ea/tenor.gif?itemid=15744166",
+       "https://media1.tenor.com/images/39c363015f2ae22f212f9cd8df2a1063/tenor.gif?itemid=15894886"]
 
 
 class UserBank(commands.Cog):
@@ -259,6 +264,19 @@ class UserBank(commands.Cog):
             update["artifacts"][reward] = awards[reward]
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f"<:confirmado:519896822072999937>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
+
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            if len(data['artifacts'].keys()) == 24 and not update['rpg']['vip']:
+                update['rpg']['vip'] = True
+                img = choice(git)
+                embed = discord.Embed(color=self.bot.color)
+                embed.set_image(url=img)
+                await ctx.send(embed=embed)
+                await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE COMPLETOU TODOS OS ARTEFATOS!``"
+                               f" ✨ **AGORA VC É VIP NO RPG** ✨")
+            await self.bot.db.update_data(data, update, 'users')
+
         else:
             money = randint(10, 30)
             msg = await self.bot.db.add_money(ctx, money, True)

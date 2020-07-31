@@ -19,6 +19,10 @@ class PushClass(commands.Cog):
         """Comando de gifs de empurrão
         Use ash push <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             pushimg = ['https://media1.tenor.com/images/a8e2bfdbf0d3e4fb8c52fab9e4cb249e/tenor.gif?itemid=16131433',
                        'https://media1.tenor.com/images/b7f788f5b4c5cf79df1bbe9a421e4826/tenor.gif?itemid=5634617',
                        'https://media1.tenor.com/images/afec3a41fea91183852f5447edfaea68/tenor.gif?itemid=15996103',

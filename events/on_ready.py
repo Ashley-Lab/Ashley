@@ -154,6 +154,8 @@ class OnReady(commands.Cog):
                                 update['security']['blocked'] = False
                         except KeyError:
                             pass
+                        except AttributeError:
+                            pass
 
                         if not update['security']['blocked']:
                             update['security']['commands'] = 0

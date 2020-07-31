@@ -15,6 +15,10 @@ class Thinkers(commands.Cog):
     async def thinker(self, ctx):
         """comando usado pra enviar uma frase do pensador
         Use ash thinker"""
+        try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
         thinker = self.bot.config['thinker']['list']
         answer = choice(thinker)
         await ctx.send("Assim diz o **pensador**: ``{}``".format(answer))

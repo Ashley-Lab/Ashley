@@ -34,189 +34,187 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 
 # Commands
 
-- [ActionsClass Commands](#actionsclass-commands)
-- [AllEmoji Commands](#allemoji-commands)
+- [ActionsClass](#actionsclass-commands)
+  - [add_ban](#add_ban)
+  - [add_vip](#add_vip)
+  - [remove_ban](#remove_ban)
+  - [remove_vip](#remove_vip)
+- [AllEmoji](#allemoji-commands)
   - [emojis](#emojis)
-- [AsciiText Commands](#asciitext-commands)
+- [AsciiText](#asciitext-commands)
   - [ascii](#ascii)
-- [AutoDelete Commands](#autodelete-commands)
+- [AutoDelete](#autodelete-commands)
   - [gossip](#gossip)
-- [Avatar Commands](#avatar-commands)
+- [Avatar](#avatar-commands)
   - [avatar](#avatar)
-- [Battle Commands](#battle-commands)
+- [Battle](#battle-commands)
   - [battle](#battle)
-- [Booket Commands](#booket-commands)
+- [Booket](#booket-commands)
   - [bok](#bok)
-- [BotInfo Commands](#botinfo-commands)
+- [BotInfo](#botinfo-commands)
   - [botinfo](#botinfo)
-- [BoxClass Commands](#boxclass-commands)
+- [BoxClass](#boxclass-commands)
   - [box](#box)
-- [CardsClass Commands](#cardsclass-commands)
+- [CardsClass](#cardsclass-commands)
   - [card](#card)
-- [ChannelCreate Commands](#channelcreate-commands)
-- [ChannelDelete Commands](#channeldelete-commands)
-- [ChannelPinUpdate Commands](#channelpinupdate-commands)
-- [ChannelUpdate Commands](#channelupdate-commands)
-- [CharadeClass Commands](#charadeclass-commands)
+- [ChannelClass](#channelclass-commands)
+  - [channel](#channel)
+- [ChannelCreate](#channelcreate-commands)
+- [ChannelDelete](#channeldelete-commands)
+- [ChannelPinUpdate](#channelpinupdate-commands)
+- [ChannelUpdate](#channelupdate-commands)
+- [CharadeClass](#charadeclass-commands)
   - [whats](#whats)
-- [CommandErrorHandler Commands](#commanderrorhandler-commands)
-- [ConfigClass Commands](#configclass-commands)
+- [CommandErrorHandler](#commanderrorhandler-commands)
+- [ConfigClass](#configclass-commands)
   - [config](#config)
   - [config guild](#config-guild)
   - [config log](#config-log)
   - [config report](#config-report)
-- [CreateDoc Commands](#createdoc-commands)
-- [DadoClass Commands](#dadoclass-commands)
+- [CreateDoc](#createdoc-commands)
+  - [make_doc](#make_doc)
+- [DadoClass](#dadoclass-commands)
   - [roll](#roll)
-- [DailyClass Commands](#dailyclass-commands)
+- [DailyClass](#dailyclass-commands)
   - [daily](#daily)
   - [daily coin](#daily-coin)
+  - [daily energy](#daily-energy)
   - [daily vip](#daily-vip)
   - [daily work](#daily-work)
   - [rec](#rec)
-- [DanceClass Commands](#danceclass-commands)
+- [DanceClass](#danceclass-commands)
   - [dance](#dance)
-- [DoorClass Commands](#doorclass-commands)
+- [DoorClass](#doorclass-commands)
   - [door](#door)
-  - [locked](#locked)
-  - [locker](#locker)
-  - [unlocked](#unlocked)
-- [DrawUsers Commands](#drawusers-commands)
+- [DrawUsers](#drawusers-commands)
   - [draw](#draw)
-- [Economy Commands](#economy-commands)
+- [Economy](#economy-commands)
   - [economy](#economy)
-- [EmojiUpdate Commands](#emojiupdate-commands)
-- [EvalSintax Commands](#evalsintax-commands)
-- [FacebookClass Commands](#facebookclass-commands)
+- [EmojiUpdate](#emojiupdate-commands)
+- [EvalSintax](#evalsintax-commands)
+  - [eval](#eval)
+- [FacebookClass](#facebookclass-commands)
   - [facebook](#facebook)
-- [FarmClass Commands](#farmclass-commands)
+- [FarmClass](#farmclass-commands)
   - [hell](#hell)
   - [respawn](#respawn)
   - [teleport](#teleport)
-- [FeedBackClass Commands](#feedbackclass-commands)
+- [FeedBackClass](#feedbackclass-commands)
   - [feedback](#feedback)
-- [ForceCass Commands](#forcecass-commands)
+- [ForceCass](#forcecass-commands)
   - [hangman](#hangman)
-- [GameThinker Commands](#gamethinker-commands)
+- [GameThinker](#gamethinker-commands)
   - [guess](#guess)
-- [GetGif Commands](#getgif-commands)
+- [GetGif](#getgif-commands)
   - [gif](#gif)
-- [GuildBank Commands](#guildbank-commands)
+- [GuildBank](#guildbank-commands)
   - [treasure](#treasure)
-- [GuildUpdate Commands](#guildupdate-commands)
-- [HeadsOrTails Commands](#headsortails-commands)
+- [GuildUpdate](#guildupdate-commands)
+- [HeadsOrTails](#headsortails-commands)
   - [hot](#hot)
-- [Helper Commands](#helper-commands)
+- [Helper](#helper-commands)
   - [help](#help)
-- [HugClass Commands](#hugclass-commands)
+- [HugClass](#hugclass-commands)
   - [hug](#hug)
-- [IaInteractions Commands](#iainteractions-commands)
-- [IaResponseClass Commands](#iaresponseclass-commands)
+- [IaInteractions](#iainteractions-commands)
+- [IaResponseClass](#iaresponseclass-commands)
   - [ia](#ia)
-- [InstagramClass Commands](#instagramclass-commands)
+- [InstagramClass](#instagramclass-commands)
   - [instagram](#instagram)
-- [InventoryClass Commands](#inventoryclass-commands)
+- [InventoryClass](#inventoryclass-commands)
   - [inventory](#inventory)
-- [Inverse Commands](#inverse-commands)
+- [Inverse](#inverse-commands)
   - [palin](#palin)
-- [InviteClass Commands](#inviteclass-commands)
+- [InviteClass](#inviteclass-commands)
   - [invite](#invite)
-- [JoKenPo Commands](#jokenpo-commands)
+- [JoKenPo](#jokenpo-commands)
   - [jkp](#jkp)
-- [KickClass Commands](#kickclass-commands)
+- [KickClass](#kickclass-commands)
   - [kick](#kick)
-- [KissClass Commands](#kissclass-commands)
+- [KissClass](#kissclass-commands)
   - [kiss](#kiss)
-- [LickClass Commands](#lickclass-commands)
+- [LickClass](#lickclass-commands)
   - [lick](#lick)
-- [LoadCog Commands](#loadcog-commands)
-- [LogClass Commands](#logclass-commands)
+- [LoadCog](#loadcog-commands)
+  - [load](#load)
+- [LogClass](#logclass-commands)
   - [logger](#logger)
   - [logger edit](#logger-edit)
-- [LogoutCog Commands](#logoutcog-commands)
-- [MarriedSystem Commands](#marriedsystem-commands)
+- [LogoutCog](#logoutcog-commands)
+  - [logout](#logout)
+- [MarriedSystem](#marriedsystem-commands)
   - [divorce](#divorce)
   - [marry](#marry)
-- [MemberBanClass Commands](#memberbanclass-commands)
-- [MemberUpdate Commands](#memberupdate-commands)
-- [MusicDefault Commands](#musicdefault-commands)
-  - [clear](#clear)
-  - [connect](#connect)
-  - [now_playing](#now_playing)
-  - [pause](#pause)
-  - [play](#play)
-  - [queue](#queue)
-  - [remove](#remove)
-  - [repeat](#repeat)
-  - [resume](#resume)
-  - [shuffle](#shuffle)
-  - [skip](#skip)
-  - [stop](#stop)
-  - [volume](#volume)
-- [OnMemberJoin Commands](#onmemberjoin-commands)
-- [OnMemberRemove Commands](#onmemberremove-commands)
-- [OnMessageDelete Commands](#onmessagedelete-commands)
-- [OnMessageEdit Commands](#onmessageedit-commands)
-- [OnReady Commands](#onready-commands)
-- [OnTypingClass Commands](#ontypingclass-commands)
-- [OpenClass Commands](#openclass-commands)
+- [MemberBanClass](#memberbanclass-commands)
+- [MemberUpdate](#memberupdate-commands)
+- [OnMemberJoin](#onmemberjoin-commands)
+- [OnMemberRemove](#onmemberremove-commands)
+- [OnMessageDelete](#onmessagedelete-commands)
+- [OnMessageEdit](#onmessageedit-commands)
+- [OnReady](#onready-commands)
+- [OnTypingClass](#ontypingclass-commands)
+- [OpenClass](#openclass-commands)
   - [gift](#gift)
   - [open](#open)
-- [Pet Commands](#pet-commands)
+- [Pet](#pet-commands)
   - [pet](#pet)
-- [PingMS Commands](#pingms-commands)
+- [PingMS](#pingms-commands)
   - [ping](#ping)
-- [PokemonClass Commands](#pokemonclass-commands)
+- [PokemonClass](#pokemonclass-commands)
   - [pokemon](#pokemon)
-- [ProfileSystem Commands](#profilesystem-commands)
+- [ProfileSystem](#profilesystem-commands)
   - [profile](#profile)
-- [PunchClass Commands](#punchclass-commands)
+- [PunchClass](#punchclass-commands)
   - [punch](#punch)
-- [PushClass Commands](#pushclass-commands)
+- [PushClass](#pushclass-commands)
   - [push](#push)
-- [RankingClass Commands](#rankingclass-commands)
+- [RankingClass](#rankingclass-commands)
   - [rank](#rank)
-- [ReceptionClass Commands](#receptionclass-commands)
+- [ReceptionClass](#receptionclass-commands)
   - [reception](#reception)
-- [Reflection Commands](#reflection-commands)
+- [RecipeClass](#recipeclass-commands)
+- [Reflection](#reflection-commands)
   - [reflect](#reflect)
-- [RegisterAnnounce Commands](#registerannounce-commands)
+- [RegisterAnnounce](#registerannounce-commands)
   - [announce](#announce)
   - [verify](#verify)
-- [RegisterClass Commands](#registerclass-commands)
+- [RegisterClass](#registerclass-commands)
   - [register](#register)
   - [register guild](#register-guild)
-- [ReloadCog Commands](#reloadcog-commands)
-- [RepeatCommand Commands](#repeatcommand-commands)
-- [RoleCreate Commands](#rolecreate-commands)
-- [RoleDelete Commands](#roledelete-commands)
-- [RoleInfo Commands](#roleinfo-commands)
+- [ReloadCog](#reloadcog-commands)
+  - [reload](#reload)
+- [RepeatCommand](#repeatcommand-commands)
+  - [repeat_command](#repeat_command)
+- [RoleCreate](#rolecreate-commands)
+- [RoleDelete](#roledelete-commands)
+- [RoleInfo](#roleinfo-commands)
   - [roleinfo](#roleinfo)
-- [RoleUpdate Commands](#roleupdate-commands)
-- [SaySomething Commands](#saysomething-commands)
+- [RoleUpdate](#roleupdate-commands)
+- [SaySomething](#saysomething-commands)
   - [say](#say)
   - [say channel](#say-channel)
-- [ServerInfo Commands](#serverinfo-commands)
+- [ServerInfo](#serverinfo-commands)
   - [serverinfo](#serverinfo)
-- [Shards Commands](#shards-commands)
-- [SkillClass Commands](#skillclass-commands)
+- [Shards](#shards-commands)
+- [SkillClass](#skillclass-commands)
   - [skill](#skill)
   - [skill add](#skill-add)
   - [skill reset](#skill-reset)
-- [SlapClass Commands](#slapclass-commands)
+- [SlapClass](#slapclass-commands)
   - [slap](#slap)
-- [SourceGit Commands](#sourcegit-commands)
+- [SourceGit](#sourcegit-commands)
   - [source](#source)
-- [StaffAdmin Commands](#staffadmin-commands)
+- [StaffAdmin](#staffadmin-commands)
+  - [staff](#staff)
   - [staff ban](#staff-ban)
   - [staff delete](#staff-delete)
   - [staff kick](#staff-kick)
   - [staff report](#staff-report)
   - [staff slowmode](#staff-slowmode)
-- [SystemMessage Commands](#systemmessage-commands)
-- [Thinkers Commands](#thinkers-commands)
+- [SystemMessage](#systemmessage-commands)
+- [Thinkers](#thinkers-commands)
   - [thinker](#thinker)
-- [TopClass Commands](#topclass-commands)
+- [TopClass](#topclass-commands)
   - [top](#top)
   - [top black](#top-black)
   - [top command](#top-command)
@@ -226,879 +224,871 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [top purple](#top-purple)
   - [top xp](#top-xp)
   - [top yellow](#top-yellow)
-- [TotComandos Commands](#totcomandos-commands)
+- [TotComandos](#totcomandos-commands)
   - [total_de_comandos](#total_de_comandos)
-- [TransferClass Commands](#transferclass-commands)
+- [TransferClass](#transferclass-commands)
   - [transfer](#transfer)
-- [TwitterClass Commands](#twitterclass-commands)
+- [TwitterClass](#twitterclass-commands)
   - [twitter](#twitter)
-- [UnBanClass Commands](#unbanclass-commands)
-- [UnloadCog Commands](#unloadcog-commands)
-- [UserBank Commands](#userbank-commands)
+- [UnBanClass](#unbanclass-commands)
+- [UnloadCog](#unloadcog-commands)
+  - [unload](#unload)
+- [UserBank](#userbank-commands)
   - [ticket](#ticket)
   - [wallet](#wallet)
-- [UserInfo Commands](#userinfo-commands)
+- [UserInfo](#userinfo-commands)
   - [userinfo](#userinfo)
-- [UtilityClass Commands](#utilityclass-commands)
+- [UtilityClass](#utilityclass-commands)
+  - [create_gift](#create_gift)
   - [lover](#lover)
   - [unlover](#unlover)
-- [VoiceClass Commands](#voiceclass-commands)
-- [WhatsappClass Commands](#whatsappclass-commands)
+- [VoiceClass](#voiceclass-commands)
+- [WhatsappClass](#whatsappclass-commands)
   - [whatsapp](#whatsapp)
 
-## ActionsClass Commands
+## ActionsClass
 
-## AllEmoji Commands
+#### add_ban
+>**Descrição:** apenas desenvolvedores
+exemplo: ash add_ban <id> <reason>
+
+>**Modo de Uso:** `ash make_doc [id_] [reason=SEM REGISTRAR O MOTIVO!]`
+
+#### add_vip
+>**Descrição:** apenas desenvolvedores
+exemplo: ash add_vip <id> <user or guild 'default guild'>
+
+>**Modo de Uso:** `ash make_doc [id_] [target=guild]`
+
+#### remove_ban
+>**Descrição:** apenas desenvolvedores
+exemplo: ash add_ban <id>
+
+>**Modo de Uso:** `ash make_doc [id_]`
+
+#### remove_vip
+>**Descrição:** apenas desenvolvedores
+exemplo: ash remove_vip <id> <user or guild 'default guild'>
+
+>**Modo de Uso:** `ash make_doc [id_] [target=guild]`
+
+## AllEmoji
 
 #### emojis
->**Description:** comando usado pra gerar uma lista dos emojis da sua guild
+>**Descrição:** comando usado pra gerar uma lista dos emojis da sua guild
 Use ash emojis
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## AsciiText Commands
+## AsciiText
 
 #### ascii
->**Description:** Usado pra gerar um texto ascii
+>**Descrição:** Usado pra gerar um texto ascii
 Use ash ascii <texto desejado>
 
->**Usage:** `ash [msg=Digite Algo]`
+>**Modo de Uso:** `ash make_doc [msg=Digite Algo]`
 
-## AutoDelete Commands
+## AutoDelete
 
 #### gossip
->**Description:** envia uma mensagem a sua escolha que é apagada 5 segundos depois
+>**Descrição:** envia uma mensagem a sua escolha que é apagada 5 segundos depois
 Use ash gossip <mensagem desejada>
 
->**Usage:** `ash [msg=coloque uma fofoca aqui]`
+>**Modo de Uso:** `ash make_doc [msg=coloque uma fofoca aqui]`
 
-## Avatar Commands
+## Avatar
 
 #### avatar
->**Description:** Comando usado pra ter uma imagem ampliada do avatar de um usuario
+>**Descrição:** Comando usado pra ter uma imagem ampliada do avatar de um usuario
 Use ash avatar <usuario em questão>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Battle Commands
+## Battle
 
 #### battle
->**Description:** Comando usado pra batalhar no rpg da ashley
+>**Descrição:** Comando usado pra batalhar no rpg da ashley
 Use ash battle
 
->**Usage:** `ash [lower_net=disable]`
+>**Modo de Uso:** `ash make_doc [lower_net=disable]`
 
-## Booket Commands
+## Booket
 
 #### bok
->**Description:** eu não vou explicar oq isso faz
+>**Descrição:** eu não vou explicar oq isso faz
 Use ash bok <@pessoa que vc é casado/a>
 
->**Usage:** `ash [member]`
+>**Modo de Uso:** `ash make_doc [member]`
 
-## BotInfo Commands
+## BotInfo
 
 #### botinfo
->**Description:** Comando para ter informações sobre a Ashley
+>**Descrição:** Comando para ter informações sobre a Ashley
 Use ash botinfo
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## BoxClass Commands
+## BoxClass
 
 #### box
->**Description:** Comando usado pra comprar e abrir booster boxes
+>**Descrição:** Comando usado pra comprar e abrir booster boxes
 Use ash box e siga as instruções
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## CardsClass Commands
+## CardsClass
 
 #### card
->**Description:** use ash cards e tente adivinhar que carta de yugioh esta na tela
+>**Descrição:** use ash cards e tente adivinhar que carta de yugioh esta na tela
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## ChannelCreate Commands
+## ChannelClass
 
-## ChannelDelete Commands
+#### channel
+>**Descrição:** Esse nem eu sei...
 
-## ChannelPinUpdate Commands
+>**Modo de Uso:** `ash make_doc [locker]`
 
-## ChannelUpdate Commands
+## ChannelCreate
 
-## CharadeClass Commands
+## ChannelDelete
+
+## ChannelPinUpdate
+
+## ChannelUpdate
+
+## CharadeClass
 
 #### whats
->**Description:** Use ash whats ou ash charada e tente adivinhar a resposta certa. foco em tente
+>**Descrição:** Use ash whats ou ash charada e tente adivinhar a resposta certa. foco em tente
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## CommandErrorHandler Commands
+## CommandErrorHandler
 
-## ConfigClass Commands
+## ConfigClass
 
 #### config
->**Description:** Comando usado pra configurar alguns settings da ashley
+>**Descrição:** Comando usado pra configurar alguns settings da ashley
 Use ash config pra ver as configurações disponiveis
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### config guild
->**Description:** Comando usado pra configurar sua guilda/server na Ashley
+>**Descrição:** Comando usado pra configurar sua guilda/server na Ashley
 Use ash config guild e siga as instruções do comando(use # pra marcar canais)
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### config log
->**Description:** Comando usado pra configurar os logs da ashley
+>**Descrição:** Comando usado pra configurar os logs da ashley
 Use ash config log e siga as instruções do comando
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### config report
->**Description:** Comando usado pra configurar o report da Ashley
+>**Descrição:** Comando usado pra configurar o report da Ashley
 Use ash config report e siga as instruções do comando(use # pra marcar os canais)
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## CreateDoc Commands
+## CreateDoc
 
-## DadoClass Commands
+#### make_doc
+>**Descrição:** apenas desenvolvedores
+
+>**Modo de Uso:** `ash make_doc `
+
+## DadoClass
 
 #### roll
->**Description:** Comando usado pra rolar um dado
+>**Descrição:** Comando usado pra rolar um dado
 Use ash roll xdy, x sendo o numero de dados e y o numero do dado
 
->**Usage:** `ash [dice=none]`
+>**Modo de Uso:** `ash make_doc [dice=none]`
 
-## DailyClass Commands
+## DailyClass
 
 #### daily
->**Description:** Comando usado pra retornar uma lista de todos os subcomandos de daily
+>**Descrição:** Comando usado pra retornar uma lista de todos os subcomandos de daily
 Use ash daily
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### daily coin
->**Description:** Comando usado pra ganhar coins de jogo da Ashley
+>**Descrição:** Comando usado pra ganhar coins de jogo da Ashley
 Use ash daily coin
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
+
+#### daily energy
+>**Descrição:** Comando usado pra ganhar coins de jogo da Ashley
+Use ash daily energy
+
+>**Modo de Uso:** `ash make_doc `
 
 #### daily vip
->**Description:** Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
+>**Descrição:** Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
 Use ash daily vip
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### daily work
->**Description:** Comando usado pra ganhar o dinheiro da Ashley diariamente
+>**Descrição:** Comando usado pra ganhar o dinheiro da Ashley diariamente
 Use ash daily work
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### rec
->**Description:** Comando usado pra dar um rec da Ashley pra algum usuario
+>**Descrição:** Comando usado pra dar um rec da Ashley pra algum usuario
 Use ash rec <usuario desejado>
 
->**Usage:** `ash [member]`
+>**Modo de Uso:** `ash make_doc [member]`
 
-## DanceClass Commands
+## DanceClass
 
 #### dance
->**Description:** Comando de gifs de dança
+>**Descrição:** Comando de gifs de dança
 Use ash dance <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## DoorClass Commands
+## DoorClass
 
 #### door
->**Description:** Esse nem eu sei...
+>**Descrição:** Esse nem eu sei...
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-#### locked
->**Description:** Esse nem eu sei...
-
->**Usage:** `ash `
-
-#### locker
->**Description:** Esse nem eu sei...
-
->**Usage:** `ash `
-
-#### unlocked
->**Description:** Esse nem eu sei...
-
->**Usage:** `ash `
-
-## DrawUsers Commands
+## DrawUsers
 
 #### draw
->**Description:** Comando de sorteio pro server inteiro
+>**Descrição:** Comando de sorteio pro server inteiro
 Use ash draw
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Economy Commands
+## Economy
 
 #### economy
->**Description:** Comando usado pra ver a quantidade total de dinheiro da ashley
+>**Descrição:** Comando usado pra ver a quantidade total de dinheiro da ashley
 Use ash economy
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## EmojiUpdate Commands
+## EmojiUpdate
 
-## EvalSintax Commands
+## EvalSintax
 
-## FacebookClass Commands
+#### eval
+>**Descrição:** apenas desenvolvedores
+
+>**Modo de Uso:** `ash make_doc <body>`
+
+## FacebookClass
 
 #### facebook
->**Description:** Comando totalmente demente de facebook
+>**Descrição:** Comando totalmente demente de facebook
 Use ash facebook <mensagem desejada>
 
->**Usage:** `ash [resp]`
+>**Modo de Uso:** `ash make_doc [resp]`
 
-## FarmClass Commands
+## FarmClass
 
 #### hell
->**Description:** Comando usado pra ir pro canal hell do server da ashley
+>**Descrição:** Comando usado pra ir pro canal hell do server da ashley
 Use ash hell
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### respawn
->**Description:** Comando usado pra voltar pras areas normais do servidor da asheley
+>**Descrição:** Comando usado pra voltar pras areas normais do servidor da asheley
 Use ash respawn
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### teleport
->**Description:** Comando usado pra acessar certas areas do servidor da ashley
+>**Descrição:** Comando usado pra acessar certas areas do servidor da ashley
 Use ash teleport e reaja pra no emoji correspondente
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## FeedBackClass Commands
+## FeedBackClass
 
 #### feedback
->**Description:** Comando usado pra dar feedback direto pros desenvolvedores
+>**Descrição:** Comando usado pra dar feedback direto pros desenvolvedores
 Use ash feedback <mensagem desejada>
 
->**Usage:** `ash [msg]`
+>**Modo de Uso:** `ash make_doc [msg]`
 
-## ForceCass Commands
+## ForceCass
 
 #### hangman
->**Description:** Use ash hangman ou ash forca pra começar o jogo
+>**Descrição:** Use ash hangman ou ash forca pra começar o jogo
 Siga as instruções do comando e tente adivinhar
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## GameThinker Commands
+## GameThinker
 
 #### guess
->**Description:** Use ash guess ou ash adivinhe, e tente acertar o numero que ela pensou
+>**Descrição:** Use ash guess ou ash adivinhe, e tente acertar o numero que ela pensou
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## GetGif Commands
+## GetGif
 
 #### gif
->**Description:** comando usado pra pesquizar gifs
+>**Descrição:** comando usado pra pesquizar gifs
 Use ash gif <palavra chave>
 
->**Usage:** `ash [tag]`
+>**Modo de Uso:** `ash make_doc [tag]`
 
-## GuildBank Commands
+## GuildBank
 
 #### treasure
->**Description:** Comando usado pra ver a quantia de dinheiro de um server
+>**Descrição:** Comando usado pra ver a quantia de dinheiro de um server
 Use ash treasure
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## GuildUpdate Commands
+## GuildUpdate
 
-## HeadsOrTails Commands
+## HeadsOrTails
 
 #### hot
->**Description:** use ash hot ou ash moeda, cara ou coroa, acho que não preciso explicar
+>**Descrição:** use ash hot ou ash moeda, cara ou coroa, acho que não preciso explicar
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Helper Commands
+## Helper
 
 #### help
->**Description:** há fala serio!
+>**Descrição:** há fala serio!
 
->**Usage:** `ash [command_help]`
+>**Modo de Uso:** `ash make_doc [command_help]`
 
-## HugClass Commands
+## HugClass
 
 #### hug
->**Description:** Comando de gifs de abraço
+>**Descrição:** Comando de gifs de abraço
 Use ash hug <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## IaInteractions Commands
+## IaInteractions
 
-## IaResponseClass Commands
+## IaResponseClass
 
 #### ia
->**Description:** comando para habilitar/desabilitar a iteração com a IA da ashley
+>**Descrição:** comando para habilitar/desabilitar a iteração com a IA da ashley
 use ash ia ou ash ai
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## InstagramClass Commands
+## InstagramClass
 
 #### instagram
->**Description:** Comando totalmente demente de instagram
+>**Descrição:** Comando totalmente demente de instagram
 Use ash instagram <mensagem desejada>
 
->**Usage:** `ash [resp]`
+>**Modo de Uso:** `ash make_doc [resp]`
 
-## InventoryClass Commands
+## InventoryClass
 
 #### inventory
->**Description:** Comando usado pra ver seu inventario
+>**Descrição:** Comando usado pra ver seu inventario
 Use ash i ou ash inventory
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Inverse Commands
+## Inverse
 
 #### palin
->**Description:** comando usado pra enviar palindromos
+>**Descrição:** comando usado pra enviar palindromos
 Use ash palin
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## InviteClass Commands
+## InviteClass
 
 #### invite
->**Description:** comando usado pra gerar um convite pro server da ashley
+>**Descrição:** comando usado pra gerar um convite pro server da ashley
 Use ash invite
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## JoKenPo Commands
+## JoKenPo
 
 #### jkp
->**Description:** Use ash jkp ou ash jokenpo
+>**Descrição:** Use ash jkp ou ash jokenpo
 Escolha pedra papel ou tesoura e torça pela sua sorte
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## KickClass Commands
+## KickClass
 
 #### kick
->**Description:** Comando de gifs de chute
+>**Descrição:** Comando de gifs de chute
 Use ash kick <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## KissClass Commands
+## KissClass
 
 #### kiss
->**Description:** Comando de gifs de beijo
+>**Descrição:** Comando de gifs de beijo
 Use ash kiss <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## LickClass Commands
+## LickClass
 
 #### lick
->**Description:** Comando de gifs de lambida
+>**Descrição:** Comando de gifs de lambida
 Use ash lick <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## LoadCog Commands
+## LoadCog
 
-## LogClass Commands
+#### load
+>**Descrição:** apenas desenvolvedores
+
+>**Modo de Uso:** `ash make_doc <cog>`
+
+## LogClass
 
 #### logger
->**Description:** Usado pra mostrar os logs
+>**Descrição:** Usado pra mostrar os logs
 Use ash logger
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### logger edit
->**Description:** Usado pra ativar ou desativar logs
+>**Descrição:** Usado pra ativar ou desativar logs
 Use ash logger edit <log desejado> e siga as instruções do comando
 
->**Usage:** `ash [log]`
+>**Modo de Uso:** `ash make_doc [log]`
 
-## LogoutCog Commands
+## LogoutCog
 
-## MarriedSystem Commands
+#### logout
+>**Descrição:** apenas desenvolvedores
+
+>**Modo de Uso:** `ash make_doc [reason]`
+
+## MarriedSystem
 
 #### divorce
->**Description:** Comando usado pra se divorciar
+>**Descrição:** Comando usado pra se divorciar
 Use ash divorce <@prostiranha em questão>
 
->**Usage:** `ash [member]`
+>**Modo de Uso:** `ash make_doc [member]`
 
 #### marry
->**Description:** Comando usado pra pedir alguem em casamento
+>**Descrição:** Comando usado pra pedir alguem em casamento
 Use ash marry <@pessoa desejada>
 
->**Usage:** `ash [member]`
+>**Modo de Uso:** `ash make_doc [member]`
 
-## MemberBanClass Commands
+## MemberBanClass
 
-## MemberUpdate Commands
+## MemberUpdate
 
-## MusicDefault Commands
+## OnMemberJoin
 
-#### clear
->**Description:** Comando usado pra limpar a queue
-Use ash clear
+## OnMemberRemove
 
->**Usage:** `ash `
+## OnMessageDelete
 
-#### connect
->**Description:** Comando usado pra fazer a Ashley se conectar a um canal de voz
-use ash conneect
+## OnMessageEdit
 
->**Usage:** `ash [channel]`
+## OnReady
 
-#### now_playing
->**Description:** Comando usado pra ver que musica esta tocando no momento
-Use ash nowplaying
+## OnTypingClass
 
->**Usage:** `ash `
-
-#### pause
->**Description:** Comando usado pra fazer a Ashley pausar as musicas
-Use ash pause
-
->**Usage:** `ash `
-
-#### play
->**Description:** Comando usado pra fazer a Ashley tocar musica/adicionar uma musica na queue
-Use ash play
-
->**Usage:** `ash [search=Ashley escape the fate]`
-
-#### queue
->**Description:** Comando usado pra ver a situação atual da queue
-Use ash queue
-
->**Usage:** `ash `
-
-#### remove
->**Description:** Comando usado pra remover uma musica da queue
-Use ash remove <numero da musica no queue>
-
->**Usage:** `ash [index=-1]`
-
-#### repeat
->**Description:** Comando usado pra repetir a queue atual
-Use ash repeat
-
->**Usage:** `ash `
-
-#### resume
->**Description:** Comando usado pra fazer a Ashley voltar a tocar as musicas pausadas
-Use ash resume
-
->**Usage:** `ash `
-
-#### shuffle
->**Description:** Comando usado pra misturar a ordem das musicas
-Use ash shuffle
-
->**Usage:** `ash `
-
-#### skip
->**Description:** Comando usado pra pular uma musica
-Use ash skip
-
->**Usage:** `ash `
-
-#### stop
->**Description:** Comando usado pra fazer a ashley parar de tocar musica
-Use ash stop
-
->**Usage:** `ash `
-
-#### volume
->**Description:** Comando usado pra mudar o volume da Ashley
-Use ash volume <numero de 1 a 100>
-
->**Usage:** `ash [vol=100.0]`
-
-## OnMemberJoin Commands
-
-## OnMemberRemove Commands
-
-## OnMessageDelete Commands
-
-## OnMessageEdit Commands
-
-## OnReady Commands
-
-## OnTypingClass Commands
-
-## OpenClass Commands
+## OpenClass
 
 #### gift
->**Description:** Evento de Caixas...
+>**Descrição:** Evento de Caixas...
 
->**Usage:** `ash [gift]`
+>**Modo de Uso:** `ash make_doc [gift]`
 
 #### open
->**Description:** Evento de Caixas...
+>**Descrição:** Evento de Caixas...
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Pet Commands
+## Pet
 
 #### pet
->**Description:** Comando usado pra se comunicar com pet
+>**Descrição:** Comando usado pra se comunicar com pet
 Use ash pet <pergunta ou qualquer besteira>
 
->**Usage:** `ash [msg=Oiiiii]`
+>**Modo de Uso:** `ash make_doc [msg=Oiiiii]`
 
-## PingMS Commands
+## PingMS
 
 #### ping
->**Description:** comando pra verificar a latencia do bot
+>**Descrição:** comando pra verificar a latencia do bot
 Use ash ping
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## PokemonClass Commands
+## PokemonClass
 
 #### pokemon
->**Description:** QUEM É ESSE POKEMON?
+>**Descrição:** QUEM É ESSE POKEMON?
 Use ash pokemon ou ash poke pra jogar
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## ProfileSystem Commands
+## ProfileSystem
 
 #### profile
->**Description:** Comando usado pra ver o seu perfil da ashley
+>**Descrição:** Comando usado pra ver o seu perfil da ashley
 Use ash profile <@usuario em questão se não colocar vera seu proprio perfil>
 
->**Usage:** `ash [member]`
+>**Modo de Uso:** `ash make_doc [member]`
 
-## PunchClass Commands
+## PunchClass
 
 #### punch
->**Description:** Comando de gifs de soco
+>**Descrição:** Comando de gifs de soco
 Use ash punch <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## PushClass Commands
+## PushClass
 
 #### push
->**Description:** Comando de gifs de empurrão
+>**Descrição:** Comando de gifs de empurrão
 Use ash push <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## RankingClass Commands
+## RankingClass
 
 #### rank
->**Description:** Mostra seu rank da Ashley
+>**Descrição:** Mostra seu rank da Ashley
 Use ash rank
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## ReceptionClass Commands
+## ReceptionClass
 
 #### reception
->**Description:** comando pra configurar o welcome
+>**Descrição:** comando pra configurar o welcome
 Use ash reception ou ash rp e siga as instruções no comando(use # pra marcar os canais)
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Reflection Commands
+## RecipeClass
+
+## Reflection
 
 #### reflect
->**Description:** use ash reflita e apressie uma frase pra refletir
+>**Descrição:** use ash reflita e apressie uma frase pra refletir
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## RegisterAnnounce Commands
+## RegisterAnnounce
 
 #### announce
->**Description:** Usado pra anunciar na ashley
+>**Descrição:** Usado pra anunciar na ashley
 Exemplo: ash announce <texto do anuncio aqui>
 seu texto será analizado por um dos desenvolvedores por questoes de segurança
 
->**Usage:** `ash [announce]`
+>**Modo de Uso:** `ash make_doc [announce]`
 
 #### verify
->**Description:** apenas desenvolvedores
+>**Descrição:** apenas desenvolvedores
 mostra a lista de anuncios pendentes
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## RegisterClass Commands
+## RegisterClass
 
 #### register
->**Description:** Usado pra registrar um usuario na ashley Exemplo: "ash register" 
+>**Descrição:** Usado pra registrar um usuario na ashley Exemplo: "ash register" 
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### register guild
->**Description:** Usado pra registrar seu servidor na ashley
+>**Descrição:** Usado pra registrar seu servidor na ashley
 Use ash register guild e siga as instruções do comando(use # pra marcar os canais)
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## ReloadCog Commands
+## ReloadCog
 
-## RepeatCommand Commands
+#### reload
+>**Descrição:** apenas desenvolvedores
 
-## RoleCreate Commands
+>**Modo de Uso:** `ash make_doc <cog>`
 
-## RoleDelete Commands
+## RepeatCommand
 
-## RoleInfo Commands
+#### repeat_command
+>**Descrição:** apenas desenvolvedores
+
+>**Modo de Uso:** `ash make_doc <times> <command>`
+
+## RoleCreate
+
+## RoleDelete
+
+## RoleInfo
 
 #### roleinfo
->**Description:** comando que gera uma lista de informações sobre certo cargo
+>**Descrição:** comando que gera uma lista de informações sobre certo cargo
 Use ash roleinfo <@cargo_em_questão>
 
->**Usage:** `ash [role]`
+>**Modo de Uso:** `ash make_doc [role]`
 
-## RoleUpdate Commands
+## RoleUpdate
 
-## SaySomething Commands
+## SaySomething
 
 #### say
->**Description:** comando usado pra ash enviar uma mensagem
+>**Descrição:** comando usado pra ash enviar uma mensagem
 Use ash say <mensagem desejada>
 
->**Usage:** `ash [msg]`
+>**Modo de Uso:** `ash make_doc [msg]`
 
 #### say channel
->**Description:** apenas desenvolvedores
+>**Descrição:** apenas desenvolvedores
 
->**Usage:** `ash <channel> [text]`
+>**Modo de Uso:** `ash make_doc <channel> [text]`
 
-## ServerInfo Commands
+## ServerInfo
 
 #### serverinfo
->**Description:** comando que gera uma lista de informações da sua guild
+>**Descrição:** comando que gera uma lista de informações da sua guild
 Use ash serverinfo
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## Shards Commands
+## Shards
 
-## SkillClass Commands
+## SkillClass
 
 #### skill
->**Description:** Comando usado pra ver seus status no rpg da Ashley
+>**Descrição:** Comando usado pra ver seus status no rpg da Ashley
 Use ash skill
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### skill add
->**Description:** Comando usado pra distribuir seus status no rpg da Ashley
+>**Descrição:** Comando usado pra distribuir seus status no rpg da Ashley
 Use ash skill add e siga as instruções do comando
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### skill reset
->**Description:** Comando usado pra resetar seus status
+>**Descrição:** Comando usado pra resetar seus status
 Use ash skill reset
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## SlapClass Commands
+## SlapClass
 
 #### slap
->**Description:** Comando de gifs de tapa
+>**Descrição:** Comando de gifs de tapa
 Use ash slap <@usuario a sua escolha>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## SourceGit Commands
+## SourceGit
 
 #### source
->**Description:** Usado pra enviar codigos da ashley
+>**Descrição:** Usado pra enviar codigos da ashley
 Use ash source <comando desejado>
 
->**Usage:** `ash [command]`
+>**Modo de Uso:** `ash make_doc [command]`
 
-## StaffAdmin Commands
+## StaffAdmin
+
+#### staff
+>**Descrição:** Comando usado pra retornar a lista de comandos pra staff
+Use ash staff
+
+>**Modo de Uso:** `ash make_doc `
 
 #### staff ban
->**Description:** Comando usado pra banir usuarios
+>**Descrição:** Comando usado pra banir usuarios
 Use ash staff ban <@usario a ser banido>
 
->**Usage:** `ash [member] [reason]`
+>**Modo de Uso:** `ash make_doc [member] [reason]`
 
 #### staff delete
->**Description:** Comando usado pra apagar varias mensagens em um canal
+>**Descrição:** Comando usado pra apagar varias mensagens em um canal
 Use ash staff delete <numero de mensagens a se apagar>
 
->**Usage:** `ash <number>`
+>**Modo de Uso:** `ash make_doc <number>`
 
 #### staff kick
->**Description:** Comando usado pra kickar usuarios
+>**Descrição:** Comando usado pra kickar usuarios
 Use ash staff kick <@usuario a ser kickado>
 
->**Usage:** `ash [member] [reason]`
+>**Modo de Uso:** `ash make_doc [member] [reason]`
 
 #### staff report
->**Description:** Comando usado pra reportar algo pra staff do servidor
+>**Descrição:** Comando usado pra reportar algo pra staff do servidor
 use ash staff report <report>
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### staff slowmode
->**Description:** Comando usado pra ligar o slowmode em um canal
+>**Descrição:** Comando usado pra ligar o slowmode em um canal
 Use ash staff slowmode
 
->**Usage:** `ash [timer]`
+>**Modo de Uso:** `ash make_doc [timer]`
 
-## SystemMessage Commands
+## SystemMessage
 
-## Thinkers Commands
+## Thinkers
 
 #### thinker
->**Description:** comando usado pra enviar uma frase do pensador
+>**Descrição:** comando usado pra enviar uma frase do pensador
 Use ash thinker
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## TopClass Commands
+## TopClass
 
 #### top
->**Description:** Comando usado pra retornar a lista de subcomandos de top
+>**Descrição:** Comando usado pra retornar a lista de subcomandos de top
 Use ash top
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top black
->**Description:** Comando usado pra retornar o top 20 em questão de ethernia negra da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de ethernia negra da Ashley
 Use ash top preto
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top command
->**Description:** Comando usado pra retornar o top 20 em questão de comandos usados
+>**Descrição:** Comando usado pra retornar o top 20 em questão de comandos usados
 Use ash top command
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top level
->**Description:** Comando usado pra retornar o top 20 em questão de level da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de level da Ashley
 Use ash top level
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top money
->**Description:** Comando usado pra retornar o top 20 em questão de ethernia da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de ethernia da Ashley
 Use ash top ethernia
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top point
->**Description:** Comando usado pra retornar o top 20 em questão de pontos da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de pontos da Ashley
 Use ash top point
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top purple
->**Description:** Comando usado pra retornar o top 20 em questão de ethernia roxa da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de ethernia roxa da Ashley
 Use ash top roxo
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top xp
->**Description:** Comando usado pra retornar o top 20 em questão de xp da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de xp da Ashley
 Use ash top xp
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### top yellow
->**Description:** Comando usado pra retornar o top 20 em questão de ethernia amarela da Ashley
+>**Descrição:** Comando usado pra retornar o top 20 em questão de ethernia amarela da Ashley
 Use ash top amarelo
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## TotComandos Commands
+## TotComandos
 
 #### total_de_comandos
->**Description:** apenas desenvolvedores
+>**Descrição:** apenas desenvolvedores
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## TransferClass Commands
+## TransferClass
 
 #### transfer
->**Description:** comando usado pra transferir sua conta da ashley de um server pro outro
+>**Descrição:** comando usado pra transferir sua conta da ashley de um server pro outro
 Use ash transfer
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## TwitterClass Commands
+## TwitterClass
 
 #### twitter
->**Description:** Comando totalmente demente de twitter
+>**Descrição:** Comando totalmente demente de twitter
 Use ash twitter <mensagem desejada>
 
->**Usage:** `ash [resp]`
+>**Modo de Uso:** `ash make_doc [resp]`
 
-## UnBanClass Commands
+## UnBanClass
 
-## UnloadCog Commands
+## UnloadCog
 
-## UserBank Commands
+#### unload
+>**Descrição:** apenas desenvolvedores
+
+>**Modo de Uso:** `ash make_doc <cog>`
+
+## UserBank
 
 #### ticket
->**Description:** raspadinha da sorte da ashley
+>**Descrição:** raspadinha da sorte da ashley
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### wallet
->**Description:** Comando usado para verificar quanto dinheiro você tem
+>**Descrição:** Comando usado para verificar quanto dinheiro você tem
 Use ash wallet
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## UserInfo Commands
+## UserInfo
 
 #### userinfo
->**Description:** comando que da uma lista de informações sobre o usuario
+>**Descrição:** comando que da uma lista de informações sobre o usuario
 Use ash userinfo <@usuario em questão>
 
->**Usage:** `ash [member]`
+>**Modo de Uso:** `ash make_doc [member]`
 
-## UtilityClass Commands
+## UtilityClass
+
+#### create_gift
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash make_doc [time]`
 
 #### lover
->**Description:** Esse nem eu sei...
+>**Descrição:** Esse nem eu sei...
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
 #### unlover
->**Description:** Esse nem eu sei...
+>**Descrição:** Esse nem eu sei...
 
->**Usage:** `ash `
+>**Modo de Uso:** `ash make_doc `
 
-## VoiceClass Commands
+## VoiceClass
 
-## WhatsappClass Commands
+## WhatsappClass
 
 #### whatsapp
->**Description:** Comando totalmente demente de whatsapp
+>**Descrição:** Comando totalmente demente de whatsapp
 Use ash whatsapp <mensagem desejada>
 
->**Usage:** `ash [resp]`
+>**Modo de Uso:** `ash make_doc [resp]`

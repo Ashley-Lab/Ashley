@@ -13,7 +13,7 @@ class ActionsClass(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True)
+    @commands.command(name='add_vip')
     async def add_vip(self, ctx, id_: int = None, target: str = "guild"):
         """apenas desenvolvedores
         exemplo: ash add_vip <id> <user or guild 'default guild'>"""
@@ -37,7 +37,7 @@ class ActionsClass(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True)
+    @commands.command(name='remove_vip')
     async def remove_vip(self, ctx, id_: int = None, target: str = "guild"):
         """apenas desenvolvedores
         exemplo: ash remove_vip <id> <user or guild 'default guild'>"""
@@ -61,7 +61,7 @@ class ActionsClass(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True)
+    @commands.command(name='add_ban')
     async def add_ban(self, ctx, id_: int = None, *, reason: str = "SEM REGISTRAR O MOTIVO!"):
         """apenas desenvolvedores
         exemplo: ash add_ban <id> <reason>"""
@@ -87,7 +87,7 @@ class ActionsClass(commands.Cog):
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(hidden=True)
+    @commands.command(name='remove_ban')
     async def remove_ban(self, ctx, id_: int = None):
         """apenas desenvolvedores
         exemplo: ash add_ban <id>"""

@@ -12,7 +12,7 @@ class OpenClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.legend = {"-": -1, "Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5,
-                       "Legendary": 6, "Heroic": 7, "Divine": 8, "Sealed": 9}
+                       "Legendary": 6, "Heroic": 7, "Divine": 8, "Sealed": 9, "For Pet": 10}
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

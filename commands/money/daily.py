@@ -146,17 +146,6 @@ class DailyClass(commands.Cog):
     async def _vip(self, ctx):
         """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
         Use ash daily vip"""
-        data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        if data_['config']['vip']:
-            try:
-                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update_ = data_
-                del data_['cooldown'][str(ctx.command)]
-                await self.bot.db.update_data(data_, update_, 'users')
-            except KeyError:
-                pass
-            return await ctx.send('<:negate:520418505993093130>│``VOCE JA É VIP``')
-
         if ctx.guild.id != self.bot.config['config']['default_guild']:
             try:
                 data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")

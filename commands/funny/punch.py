@@ -19,6 +19,10 @@ class PunchClass(commands.Cog):
         """Comando de gifs de soco
         Use ash punch <@usuario a sua escolha>"""
         try:
+            await ctx.message.delete()
+        except discord.errors.Forbidden:
+            pass
+        try:
             punchimg = ['https://media1.tenor.com/images/0d0afe2df6c9ff3499a81bf0dab1d27c/tenor.gif?itemid=15580060',
                         'https://media1.tenor.com/images/fb449fd335e73798806747062e2a8af7/tenor.gif?itemid=16733847',
                         'https://media1.tenor.com/images/c621075def6ca41785ef4aaea20cc3a2/tenor.gif?itemid=7679409',
