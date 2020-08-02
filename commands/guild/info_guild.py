@@ -59,7 +59,7 @@ class ServerInfo(commands.Cog):
         if data['vip']:
             status = "<:vip_guild:546020055440425016>"
         else:
-            status = "<:negate:520418505993093130>"
+            status = "<:negate:721581573396496464>"
         try:
             cmds = str(data['data']['commands']) + " comandos contabilizados no total"
         except KeyError:

@@ -31,12 +31,12 @@ class SourceGit(commands.Cog):
                 if obj is None:
                     embed = discord.Embed(
                         color=self.color,
-                        description=f"<:negate:520418505993093130>│``NÃO CONSEGUIR ENCONTRAR O COMANDO {cmd}!``")
+                        description=f"<:negate:721581573396496464>│``NÃO CONSEGUIR ENCONTRAR O COMANDO {cmd}!``")
                     return await ctx.send(embed=embed)
             except AttributeError:
                 embed = discord.Embed(
                     color=self.color,
-                    description=f"<:negate:520418505993093130>│``{obj.name} ESSE COMANDO NÃO TEM SUB-COMANDOS!``")
+                    description=f"<:negate:721581573396496464>│``{obj.name} ESSE COMANDO NÃO TEM SUB-COMANDOS!``")
                 return await ctx.send(embed=embed)
 
         src = obj.callback.__code__

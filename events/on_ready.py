@@ -186,7 +186,7 @@ class OnReady(commands.Cog):
                             data_member = await self.bot.db.get_data("user_id", member.id, "users")
                             update_member = data_member
                             if data_member is None:
-                                await channel__.send(f"<:negate:520418505993093130>│{member.name} ``FOI SORTEADO"
+                                await channel__.send(f"<:alert:739251822920728708>│{member.name} ``FOI SORTEADO"
                                                      f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
                                 continue
                             coins = randint(10, 15)

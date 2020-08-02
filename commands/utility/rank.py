@@ -44,7 +44,7 @@ class RankingClass(commands.Cog):
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
                                   '**COMANDO CANCELADO**')
 
         try:
@@ -52,17 +52,17 @@ class RankingClass(commands.Cog):
             if valor > 20:
                 valor = 20
         except ValueError:
-            return await ctx.send("<:negate:520418505993093130>│``Digite apenas Números!``")
+            return await ctx.send("<:negate:721581573396496464>│``Digite apenas Números!``")
 
         data = await self.bot.db.get_data("user_id", user.id, "users")
         update = data
         if data is not None:
             update['user']['stars'] = valor
             await self.bot.db.update_data(data, update, "users")
-            await ctx.send(f'<:confirmado:519896822072999937>│**{valor}** ``Estrelas Registradas!``',
+            await ctx.send(f'<:confirmed:721581574461587496>│**{valor}** ``Estrelas Registradas!``',
                            delete_after=10.0)
         else:
-            await ctx.send('<:negate:520418505993093130>│``Usuário não encontrado!``', delete_after=10.0)
+            await ctx.send('<:negate:721581573396496464>│``Usuário não encontrado!``', delete_after=10.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -78,7 +78,7 @@ class RankingClass(commands.Cog):
         data = await self.bot.db.get_data("user_id", user.id, "users")
 
         if data is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
 
         star_ = "star_default"

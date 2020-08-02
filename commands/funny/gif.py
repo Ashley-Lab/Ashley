@@ -36,17 +36,17 @@ class GetGif(commands.Cog):
         except discord.errors.Forbidden:
             pass
         if tag is None:
-            return await ctx.send('<:negate:520418505993093130>│``DIGITE UMA TAG PARA O GIF``')
+            return await ctx.send('<:negate:721581573396496464>│``DIGITE UMA TAG PARA O GIF``')
         try:
             answer = gif_api(tag)
             if answer is None:
-                return await ctx.send('<:negate:520418505993093130>│``DIGITE UMA TAG VALIDA PARA O GIF``')
+                return await ctx.send('<:negate:721581573396496464>│``DIGITE UMA TAG VALIDA PARA O GIF``')
             embed_gif = discord.Embed(title="\n", description='\n', color=self.color)
             embed_gif.set_image(url=answer)
             embed_gif.set_footer(text=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             await ctx.send(embed=embed_gif)
         except None:
-            await ctx.send('<:negate:520418505993093130>│``Não encontrei nenhuma gif para essa tag!``')
+            await ctx.send('<:negate:721581573396496464>│``Não encontrei nenhuma gif para essa tag!``')
 
 
 def setup(bot):

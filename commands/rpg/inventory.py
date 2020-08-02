@@ -28,7 +28,7 @@ class InventoryClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @inventory.command(name='quest', aliases=['missao'])
     async def _quest(self, ctx):
-        return await ctx.send("<:negate:520418505993093130>│``O inventário de missões ainda não está disponível!``")
+        return await ctx.send("<:negate:721581573396496464>│``O inventário de missões ainda não está disponível!``")
 
 
 def setup(bot):

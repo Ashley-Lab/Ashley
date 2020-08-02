@@ -55,7 +55,7 @@ class SystemMessage(commands.Cog):
             else:
                 try:
                     if message.mentions[0] == self.bot.user or include(message.content, ['ashley', 'ash']):
-                        await message.channel.send('<:negate:520418505993093130>│``Sua guilda ainda não está '
+                        await message.channel.send('<:negate:721581573396496464>│``Sua guilda ainda não está '
                                                    'registrada, por favor digite:`` **ash register guild** '
                                                    '``para cadastrar sua guilda no meu`` **banco de dados!**')
                 except IndexError:

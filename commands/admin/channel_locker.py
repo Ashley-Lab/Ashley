@@ -62,7 +62,7 @@ class ChannelClass(commands.Cog):
             await self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
         else:
-            return await ctx.send("<:negate:520418505993093130>│``OPÇÃO INVALIDA!``")
+            return await ctx.send("<:negate:721581573396496464>│``OPÇÃO INVALIDA!``")
 
 
 def setup(bot):

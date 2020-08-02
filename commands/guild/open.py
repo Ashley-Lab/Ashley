@@ -24,7 +24,7 @@ class OpenClass(commands.Cog):
             try:
                 BOX = choice(self.bot.box[ctx.guild.id]['boxes'])
             except IndexError:
-                return await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem presentes disponiveis!``\n"
+                return await ctx.send(f"<:negate:721581573396496464>│``Esse Servidor não tem presentes disponiveis!``\n"
                                       f"``TODOS OS PRESENTES FORAM UTILIZADOS, AGUARDE UM NOVO PRESENTE DROPAR E FIQUE "
                                       f"ATENTO!``")
             I_BOX = self.bot.box[ctx.guild.id]['boxes'].index(BOX)
@@ -37,7 +37,7 @@ class OpenClass(commands.Cog):
             gt(gift, f"{time} SEGUNDOS")
             await ctx.send(file=discord.File('giftcard.png'))
         else:
-            await ctx.send(f"<:negate:520418505993093130>│``Esse Servidor não tem presentes disponiveis...``\n"
+            await ctx.send(f"<:negate:721581573396496464>│``Esse Servidor não tem presentes disponiveis...``\n"
                            f"**OBS:** se eu for reiniciada, todos os presentes disponiveis sao resetados. Isso é feito"
                            f" por medidas de segurança da minha infraestrutura!")
 
@@ -48,20 +48,20 @@ class OpenClass(commands.Cog):
     async def gift(self, ctx, *, gift=None):
         """Evento de Caixas..."""
         if gift is None:
-            return await ctx.send("<:negate:520418505993093130>│``Você precisa digitar um numero de GIFT!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa digitar um numero de GIFT!``")
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if not data_user['security']['status']:
-            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+            return await ctx.send("<:negate:721581573396496464>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
         reward = await open_gift(self.bot, gift.upper())
 
         if reward is None:
-            return await ctx.send("<:negate:520418505993093130>│``Você precisa digitar um numero de GIFT VALIDO!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa digitar um numero de GIFT VALIDO!``")
 
         if not reward['validity']:
-            return await ctx.send("<:negate:520418505993093130>│``ESSE GIFT ESTÁ COM O TEMPO EXPIRADO!``")
+            return await ctx.send("<:negate:721581573396496464>│``ESSE GIFT ESTÁ COM O TEMPO EXPIRADO!``")
 
         await ctx.send("🎊 **PARABENS** 🎉 ``VC USOU SEU GIFT COM SUCESSO!!``")
         answer_ = await self.bot.db.add_money(ctx, reward['money'], True)

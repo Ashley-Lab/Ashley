@@ -35,7 +35,7 @@ class KickClass(commands.Cog):
                 chance = 1
 
             if ctx.message.mentions[0].id == self.bot.user.id:
-                return await ctx.send('<:negate:520418505993093130>│``Você quer me bater com meu proprio recurso?``')
+                return await ctx.send('<:pqp:530031187331121152>│``Você quer me bater com meu proprio recurso?``')
 
             if chance <= 10:
                 kick = 'https://media1.tenor.com/images/9494639a2ffe5afef9d045d949bf35ee/tenor.gif?itemid=12960265'
@@ -63,7 +63,7 @@ class KickClass(commands.Cog):
             kickemb.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=kickemb)
         except IndexError:
-            await ctx.send('<:negate:520418505993093130>│``Você precisa mencionar um usuário específico para '
+            await ctx.send('<:negate:721581573396496464>│``Você precisa mencionar um usuário específico para '
                            'chutar!``')
 
 

@@ -110,6 +110,7 @@ async def paginator(bot, items, inventory, embed, ctx):
     cont = 0
     cont_i = 0
     description = ''
+    em = bot.config['emojis']
 
     if str(ctx.command) == "inventory":
         dict_ = dict()
@@ -129,7 +130,7 @@ async def paginator(bot, items, inventory, embed, ctx):
                 string = f'{items[key][0]} ``{inventory[key]}{("⠀" * (5 - len(str(inventory[key]))))}`` ' \
                          f'``{items[key][1]}{("-" * (30 - len(items[key][1])))}>`` **{rarity.lower()}**\n'
             except KeyError:
-                string = f"<:negate:520418505993093130> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
+                string = f"<:negate:721581573396496464> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
         else:
             cost = "".join(f"{items[i[0]][0]} {i[0]}: **{i[1]}** **│** " for i in inventory[key]['cost'])
             reward = "".join(f"{items[i[0]][0]} {i[0]}: **{i[1]}** **│** " for i in inventory[key]['reward'])
@@ -146,8 +147,13 @@ async def paginator(bot, items, inventory, embed, ctx):
             cont_i = 0
     descriptions.append(description)
     cont = 0
-    emojis = ['⬅', '➡', '✖']
-    msg = await ctx.send('<:alert_status:519896811192844288>│``Aguarde...``')
+
+    if str(ctx.command) == "inventory":
+        emojis = [em["1"][1], em["1"][0], em["1"][2]]
+    else:
+        emojis = [em["2"][1], em["2"][0], em["2"][2]]
+
+    msg = await ctx.send('<:alert:739251822920728708>│``Aguarde...``')
     for c in emojis:
         await msg.add_reaction(c)
     while True:
@@ -169,11 +175,14 @@ async def paginator(bot, items, inventory, embed, ctx):
                 reaction = await bot.wait_for('reaction_add', timeout=30.0)
             except TimeoutError:
                 break
-        if reaction[0].emoji == '⬅' and cont > 0:
+        emoji = str(emojis[0]).replace('<:', '').replace(emojis[0][emojis[0].rfind(':'):], '')
+        if reaction[0].emoji.name == emoji and cont > 0:
             cont -= 1
-        if reaction[0].emoji == '➡' and cont < len(descriptions) - 1:
+        emoji = str(emojis[1]).replace('<:', '').replace(emojis[1][emojis[1].rfind(':'):], '')
+        if reaction[0].emoji.name == emoji and cont < len(descriptions) - 1:
             cont += 1
-        if reaction[0].emoji == '✖':
+        emoji = str(emojis[2]).replace('<:', '').replace(emojis[2][emojis[2].rfind(':'):], '')
+        if reaction[0].emoji.name == emoji:
             break
     await msg.delete()
 

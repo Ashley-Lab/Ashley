@@ -41,7 +41,7 @@ class PunchClass(commands.Cog):
                 chance = 1
 
             if ctx.message.mentions[0].id == self.bot.user.id:
-                return await ctx.send('<:negate:520418505993093130>│``Você quer me bater com meu proprio recurso?``')
+                return await ctx.send('<:pqp:530031187331121152>│``Você quer me bater com meu proprio recurso?``')
 
             if chance <= 10:
                 punch = choice(fail)
@@ -69,7 +69,7 @@ class PunchClass(commands.Cog):
             punchemb.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=punchemb)
         except IndexError:
-            await ctx.send('<:negate:520418505993093130>│``Você precisa mencionar um usuário específico para '
+            await ctx.send('<:negate:721581573396496464>│``Você precisa mencionar um usuário específico para '
                            'socar!``')
 
 

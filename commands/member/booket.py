@@ -24,10 +24,10 @@ class Booket(commands.Cog):
             data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             data_member = await self.bot.db.get_data("user_id", member.id, "users")
             if data_member is None:
-                return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+                return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                       '``esse usuário não está cadastrado!``', delete_after=5.0)
             if member.id == ctx.author.id:
-                return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE FAZER SEXO COM VOCÊ MESMO! ISSO '
+                return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO PODE FAZER SEXO COM VOCÊ MESMO! ISSO '
                                       'SERIA MASTUBARÇÃO...``')
 
             if data_user['user']['married'] is True and data_member['user']['married'] is True:
@@ -65,13 +65,13 @@ class Booket(commands.Cog):
                                    ':smirk: :flushed:'.format(ctx.author.mention, mens.mention),
                                    file=discord.File('marrysend.png'))
                 else:
-                    await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
+                    await ctx.send("<:alert:739251822920728708>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
             elif data_member['user']['married'] is False:
-                return await ctx.send('<:negate:520418505993093130>│``ELE(A) NÃO ESTA CASADO(A)!``')
+                return await ctx.send('<:alert:739251822920728708>│``ELE(A) NÃO ESTA CASADO(A)!``')
             else:
-                return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO ESTA CASADO(A)!``')
+                return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO ESTA CASADO(A)!``')
         else:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem.``')
+            return await ctx.send('<:alert:739251822920728708>│``Você precisa mencionar alguem.``')
 
 
 def setup(bot):

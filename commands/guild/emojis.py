@@ -51,7 +51,7 @@ class AllEmoji(commands.Cog):
                 embed1.add_field(name="Emojis [ PARTE 4 ]", value=emojis_4)
                 await ctx.send(embed=embed1)
         except discord.errors.HTTPException:
-            await ctx.send('Você não tem emojis em seu servidor!')
+            await ctx.send('<:negate:721581573396496464>|``Você não tem emojis em seu servidor!``')
 
 
 def setup(bot):

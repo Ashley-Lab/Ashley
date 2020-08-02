@@ -37,7 +37,7 @@ class KissClass(commands.Cog):
             kissemb.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=kissemb)
         except IndexError:
-            await ctx.send('<:negate:520418505993093130>│``Você precisa mencionar um usuário específico para '
+            await ctx.send('<:negate:721581573396496464>│``Você precisa mencionar um usuário específico para '
                            'beijar!``')
 
 

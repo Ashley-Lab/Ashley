@@ -87,7 +87,7 @@ class ConfigClass(commands.Cog):
                     update['log_config']['log'] = False
 
             await self.bot.db.update_data(data, update, "guilds")
-            await ctx.send('<:confirmado:519896822072999937>│**PARABENS** : '
+            await ctx.send('<:confirmed:721581574461587496>│**PARABENS** : '
                            '``CONFIGURAÇÃO REALIZADA COM SUCESSO!``', delete_after=5.0)
 
     @check_it(no_pm=True, manage_guild=True)
@@ -125,7 +125,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_2.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``ActionLog ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``ActionLog ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -145,7 +145,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_4.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``BotNews ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``BotNews ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -177,11 +177,11 @@ class ConfigClass(commands.Cog):
                         list_.append(numbers[int(letter)])
                     await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:** " + str(list_))
 
-                    msg = await ctx.send('<:confirmado:519896822072999937>│``Contador de membros ativado!``')
+                    msg = await ctx.send('<:confirmed:721581574461587496>│``Contador de membros ativado!``')
                     await sleep(2)
 
                 except discord.Forbidden:
-                    await ctx.send("<:negate:520418505993093130>│``Não tenho permissão para editar canais "
+                    await ctx.send("<:negate:721581573396496464>│``Não tenho permissão para editar canais "
                                    "nesse servidor!``", delete_after=5.0)
             else:
                 values.append(-1)
@@ -203,7 +203,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_8.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``Registro de entrada de Membros ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``Registro de entrada de Membros ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -225,7 +225,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_10.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``Registro de Saida de Membros ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``Registro de Saida de Membros ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -247,7 +247,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_12.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``Sorteio de Membros ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``Sorteio de Membros ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -271,7 +271,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_14.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``Log de Programação de Ashley ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``Log de Programação de Ashley ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -289,8 +289,7 @@ class ConfigClass(commands.Cog):
             if resp_15.content == '1':
                 await msg.delete()
 
-                msg = await ctx.send(
-                    '<:confirmado:519896822072999937>│``Serviço de Interação com Membros ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``Serviço de Interação com Membros ativado!``')
                 await sleep(2)
 
             await msg.delete()
@@ -335,7 +334,7 @@ class ConfigClass(commands.Cog):
             await sleep(2)
             await msg.delete()
 
-            await ctx.send('<:confirmado:519896822072999937>│**PARABENS** : '
+            await ctx.send('<:confirmed:721581574461587496>│**PARABENS** : '
                            '``CONFIGURAÇÃO REALIZADA COM SUCESSO!``', delete_after=5.0)
 
     @check_it(no_pm=True, manage_guild=True)
@@ -371,7 +370,7 @@ class ConfigClass(commands.Cog):
                 values.append(resp_2.channel_mentions[0].id)
                 await msg.delete()
 
-                msg = await ctx.send('<:confirmado:519896822072999937>│``Report ativado!``')
+                msg = await ctx.send('<:confirmed:721581574461587496>│``Report ativado!``')
                 await sleep(2)
             else:
                 values.append(-1)
@@ -401,40 +400,40 @@ class ConfigClass(commands.Cog):
             await sleep(2)
             await msg.delete()
 
-            await ctx.send('<:confirmado:519896822072999937>│**PARABENS** : '
+            await ctx.send('<:confirmed:721581574461587496>│**PARABENS** : '
                            '``CONFIGURAÇÃO REALIZADA COM SUCESSO!``', delete_after=5.0)
 
     @_guild.error
     async def _guild_error(self, ctx, error):
         if error.__str__() in ERRORS[4]:
-            return await ctx.send('<:negate:520418505993093130>│``Você não marcou um canal de texto:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Você não marcou um canal de texto:`` '
                                   '**COMANDO CANCELADO**')
         if error.__str__() in ERRORS[5]:
-            return await ctx.send("<:oc_status:519896814225457152>│``Tempo esgotado, por favor tente novamente.``")
+            return await ctx.send("<:negate:721581573396496464>│``Tempo esgotado, por favor tente novamente.``")
         if error.__str__() in ERRORS[6]:
-            return await ctx.send('<:negate:520418505993093130>│``Você precisa de uma permissão especifica:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
                                   '**manage_guild / Gerenciar Servidor**')
 
     @_log.error
     async def _log_error(self, ctx, error):
         if error.__str__() in ERRORS[4]:
-            return await ctx.send('<:negate:520418505993093130>│``Você não marcou um canal de texto:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Você não marcou um canal de texto:`` '
                                   '**COMANDO CANCELADO**')
         if error.__str__() in ERRORS[5]:
-            return await ctx.send("<:oc_status:519896814225457152>│``Tempo esgotado, por favor tente novamente.``")
+            return await ctx.send("<:negate:721581573396496464>│``Tempo esgotado, por favor tente novamente.``")
         if error.__str__() in ERRORS[6]:
-            return await ctx.send('<:negate:520418505993093130>│``Você precisa de uma permissão especifica:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
                                   '**manage_guild / Gerenciar Servidor**')
 
     @_report.error
     async def _guild_error(self, ctx, error):
         if error.__str__() in ERRORS[4]:
-            return await ctx.send('<:negate:520418505993093130>│``Você não marcou um canal de texto:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Você não marcou um canal de texto:`` '
                                   '**COMANDO CANCELADO**')
         if error.__str__() in ERRORS[5]:
-            return await ctx.send("<:oc_status:519896814225457152>│``Tempo esgotado, por favor tente novamente.``")
+            return await ctx.send("<:negate:721581573396496464>│``Tempo esgotado, por favor tente novamente.``")
         if error.__str__() in ERRORS[7]:
-            return await ctx.send('<:negate:520418505993093130>│``Você precisa de uma permissão especifica:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
                                   '**manage_guild / Gerenciar Servidor**')
 
 

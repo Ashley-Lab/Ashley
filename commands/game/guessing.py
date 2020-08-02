@@ -36,7 +36,7 @@ class GameThinker(commands.Cog):
                 update = data
                 update['config']['playing'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito, o número que eu '
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito, o número que eu '
                                       'tinha escolhido era`` **{}**.'.format(number))
 
             update['inventory']['coins'] -= 10
@@ -57,11 +57,11 @@ class GameThinker(commands.Cog):
                         await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:
-                    await ctx.send("<:negate:520418505993093130>│``O numero que eu pensei foi`` **{}** "
+                    await ctx.send("<:negate:721581573396496464>│``O numero que eu pensei foi`` **{}** "
                                    "``e o número que vc falou foi`` **{}**"
                                    " ``Infelizmente Você PERDEU!``".format(number, resposta.content))
             else:
-                await ctx.send("<:oc_status:519896814225457152>│``Você não digitou um número válido!`` "
+                await ctx.send("<:negate:721581573396496464>│``Você não digitou um número válido!`` "
                                "**Tente Novamente!**")
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
@@ -69,9 +69,9 @@ class GameThinker(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
 
 
 def setup(bot):

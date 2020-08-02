@@ -20,12 +20,12 @@ class UnloadCog(commands.Cog):
             self.bot.unload_extension('{}'.format(cog))
             embed = discord.Embed(
                 color=self.color,
-                description=f'<:confirmado:519896822072999937>│Extenção **{cog}**, parada com sucesso!')
+                description=f'<:confirmed:721581574461587496>│Extenção **{cog}**, parada com sucesso!')
             await ctx.send(embed=embed)
         except ModuleNotFoundError as e:
             embed = discord.Embed(
                 color=discord.Color.red(),
-                description=f'<:oc_status:519896814225457152>│Falha ao parar a extenção **{cog}**. \n```{e}```')
+                description=f'<:negate:721581573396496464>│Falha ao parar a extenção **{cog}**. \n```{e}```')
             await ctx.send(embed=embed)
 
 

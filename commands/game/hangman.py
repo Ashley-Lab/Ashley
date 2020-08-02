@@ -67,7 +67,7 @@ Dica: **{}**'''.format(senha, dica))
                         update = data
                         update['config']['playing'] = False
                         await self.bot.db.update_data(data, update, 'users')
-                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+                        return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
                                               '**COMANDO CANCELADO**')
 
                 if senha.count('_') <= 3 or resp.content.upper() == 'S':
@@ -93,7 +93,7 @@ Dica: **{}**'''.format(senha, dica))
                             update['config']['playing'] = False
                             await self.bot.db.update_data(data, update, 'users')
                             return await ctx.send(
-                                '<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                                '<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                 ' CANCELADO**')
 
                         if resp.content.lower() == palavra.lower():
@@ -109,12 +109,12 @@ Dica: **{}**'''.format(senha, dica))
                             update = data
                             update['config']['playing'] = False
                             await self.bot.db.update_data(data, update, 'users')
-                            return await ctx.send("<:oc_status:519896814225457152>│``Infelizmente você perdeu`` "
+                            return await ctx.send("<:negate:721581573396496464>│``Infelizmente você perdeu`` "
                                                   "**Tente Novamente!**")
                         elif senha.count('_') > 0:
 
                             self.trying[ctx.author.id] += 1
-                            await ctx.send('<:oc_status:519896814225457152>│``InfelizmenteVocê errou a palavra...``')
+                            await ctx.send('<:negate:721581573396496464>│``InfelizmenteVocê errou a palavra...``')
                             break
 
                 if senha.count('_') > 3:
@@ -132,7 +132,7 @@ Dica: **{}**'''.format(senha, dica))
                                               '**COMANDO CANCELADO**')
 
                     if tentativa in digitadas:
-                        await ctx.send("<:alert_status:519896811192844288>│``Você já tentou esta letra!``")
+                        await ctx.send("<:alert:739251822920728708>│``Você já tentou esta letra!``")
                         continue
                     else:
                         digitadas += tentativa
@@ -140,7 +140,7 @@ Dica: **{}**'''.format(senha, dica))
                             acertos += tentativa
                         else:
                             errors[ctx.author.id] += 1
-                            await ctx.send("<:oc_status:519896814225457152>│``A palavra não tem essa letra!``")
+                            await ctx.send("<:alert:739251822920728708>│``A palavra não tem essa letra!``")
 
                     await ctx.send(enforcado[errors[ctx.author.id]])
 
@@ -149,14 +149,14 @@ Dica: **{}**'''.format(senha, dica))
                         update = data
                         update['config']['playing'] = False
                         await self.bot.db.update_data(data, update, 'users')
-                        return await ctx.send(f"<:oc_status:519896814225457152>│``INFORCADO`` **Tente Novamente!**"
+                        return await ctx.send(f"<:negate:721581573396496464>│``INFORCADO`` **Tente Novamente!**"
                                               f"\n A palavra era **{palavra.upper()}**")
 
         else:
             if data['config']['playing']:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
 
 
 def setup(bot):

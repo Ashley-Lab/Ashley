@@ -5,7 +5,14 @@ from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError, sleep
 
-legend = {"Comum": 600, "Incomum": 500, "Raro": 400, "Super Raro": 300, "Ultra Raro": 200, "Secret": 100}
+legend = {
+            "Comum": [600, [0.01, 0.02, 0.07, 0.10, 0.20, 0.60]],
+            "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.30, 0.30]],
+            "Raro": [400, [0.03, 0.07, 0.15, 0.20, 0.25, 0.30]],
+            "Super Raro": [300, [0.04, 0.8, 0.20, 0.28, 0.20, 0.20]],
+            "Ultra Raro": [200, [0.05, 0.10, 0.25, 0.30, 0.15, 0.15]],
+            "Secret": [100, [0.10, 0.20, 0.30, 0.25, 0.10, 0.05]]
+        }
 
 
 class BoxClass(commands.Cog):
@@ -45,15 +52,15 @@ class BoxClass(commands.Cog):
                     i = data['box']['status']['i']
                     c = data['box']['status']['c']
 
-                    size_full = legend[rarity]
+                    size_full = legend[rarity][0]
                     size_now = data['box']['status']['size']
 
-                    l_s = int(size_full * 0.05)
-                    l_ur = int(size_full * 0.10)
-                    l_sr = int(size_full * 0.15)
-                    l_r = int(size_full * 0.20)
-                    l_i = int(size_full * 0.20)
-                    l_c = int(size_full * 0.30)
+                    l_s = int(size_full * legend[rarity][1][0])
+                    l_ur = int(size_full * legend[rarity][1][1])
+                    l_sr = int(size_full * legend[rarity][1][2])
+                    l_r = int(size_full * legend[rarity][1][3])
+                    l_i = int(size_full * legend[rarity][1][4])
+                    l_c = int(size_full * legend[rarity][1][5])
 
                     images = {'Secret': 'https://i.imgur.com/qjenk0j.png',
                               'Ultra Raro': 'https://i.imgur.com/fdudP2k.png',
@@ -88,7 +95,7 @@ ITEMS:
                     box.set_footer(text="Ashley ® Todos os direitos reservados.")
                     await ctx.send(embed=box)
                 else:
-                    await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
+                    await ctx.send("<:alert:739251822920728708>│``Você não tem uma box ativa...``\n"
                                    "``Para ativar sua box use o comando:`` **ash box buy**")
 
     @check_it(no_pm=True)
@@ -100,7 +107,7 @@ ITEMS:
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:
-            return await ctx.send('<:negate:520418505993093130>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
 
         update['config']['buying'] = True
         await self.bot.db.update_data(data, update, 'users')
@@ -108,10 +115,10 @@ ITEMS:
         def check_option(m):
             return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
-        await ctx.send("<:alert_status:519896811192844288>│``Comprando a sua box...``")
+        msg = await ctx.send("<a:loading:520418506567843860>│``Comprando a sua box...``")
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if data['box']['status']['active']:
-            await ctx.send("<:alert_status:519896811192844288>│``ATENÇÃO: VOCE JA TEM UMA BOX ATIVA NA SUA CONTA!``\n"
+            await ctx.send("<:alert:739251822920728708>│``ATENÇÃO: VOCE JA TEM UMA BOX ATIVA NA SUA CONTA!``\n"
                            "``PARA ABRIR SUA BOX USE O COMANDO`` **ASH BOX BOOSTER**\n"
                            "``AGORA VOCE QUER RESETAR SUA BOX PARA OBTER UMA RARIDADE MAIOR?``\n"
                            "**1** para ``SIM`` ou **0** para ``NÃO``")
@@ -125,22 +132,25 @@ ITEMS:
                     update = data
                     update['config']['buying'] = False
                     await self.bot.db.update_data(data, update, 'users')
-                    return await ctx.send('<:negate:520418505993093130>│**COMANDO CANCELADO PELO USUARIO!**')
+                    await msg.delete()
+                    return await ctx.send('<:negate:721581573396496464>│**COMANDO CANCELADO PELO USUARIO!**')
             except TimeoutError:
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                 update = data
                 update['config']['buying'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                await msg.delete()
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
         else:
             await self.bot.booster.buy_box(self.bot, ctx)
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if data['box']['status']['active']:
-            await ctx.send(f"<:on_status:519896814799945728>│``SUA BOX TEM A RARIDADE:`` "
+            await ctx.send(f"<:confirmed:721581574461587496>│``SUA BOX TEM A RARIDADE:`` "
                            f"**{data['box']['status']['rarity']}**")
 
+        await msg.delete()
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         update['config']['buying'] = False
@@ -155,13 +165,13 @@ ITEMS:
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:
-            return await ctx.send('<:negate:520418505993093130>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
 
         update['config']['buying'] = True
         await self.bot.db.update_data(data, update, 'users')
 
-        await ctx.send("<:alert_status:519896811192844288>│``Comprando booster...``")
-        await ctx.send("<:alert_status:519896811192844288>│``Quantos boosters você deseja comprar?``")
+        msg = await ctx.send("<a:loading:520418506567843860>│``Comprando booster...``")
+        await ctx.send("<:alert:739251822920728708>│``Quantos boosters você deseja comprar?``")
 
         def check(m):
             return m.author.id == ctx.author.id and m.content.isdigit()
@@ -173,7 +183,8 @@ ITEMS:
             update = data
             update['config']['buying'] = False
             await self.bot.db.update_data(data, update, 'users')
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+            await msg.delete()
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                   ' CANCELADO**')
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -183,14 +194,16 @@ ITEMS:
             update = data
             update['config']['buying'] = False
             await self.bot.db.update_data(data, update, 'users')
-            return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar mais que 10 boosters"
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar mais que 10 boosters"
                                   " de uma vez...``")
         elif num < 1:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
             update['config']['buying'] = False
             await self.bot.db.update_data(data, update, 'users')
-            return await ctx.send("<:negate:520418505993093130>│``Você não pode comprar 0 ou menos boosters``")
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar 0 ou menos boosters``")
 
         if data['box']['status']['active']:
             price = 500
@@ -208,7 +221,8 @@ ITEMS:
                 update = data
                 update['config']['buying'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send("<:negate:520418505993093130>│``Você não tem dinheiro o suficiente...``")
+                await msg.delete()
+                return await ctx.send("<:negate:721581573396496464>│``Você não tem dinheiro o suficiente...``")
             for _ in range(num):
                 if data['box']['status']['active']:
                     await self.bot.booster.buy_booster(self.bot, ctx)
@@ -218,10 +232,13 @@ ITEMS:
                     update = data
                     update['config']['buying'] = False
                     await self.bot.db.update_data(data, update, 'users')
-                    return await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
+                    await msg.delete()
+                    return await ctx.send("<:negate:721581573396496464>│``Você não tem uma box ativa...``\n"
                                           "``Para ativar sua box use o comando:`` **ash box buy**")
-            await ctx.send("<:on_status:519896814799945728>│``Obrigado pelas compras, volte sempre!``")
+            await msg.delete()
+            await ctx.send("<:confirmed:721581574461587496>│``Obrigado pelas compras, volte sempre!``")
         else:
+            await msg.delete()
             await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
                            "``Para ativar sua box use o comando:`` **ash box buy**")
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

@@ -62,7 +62,7 @@ class EvalSintax(commands.Cog):
         except None:
             value = stdout.getvalue()
             if any([i in str(value) for i in [_auth['_t__ashley'], _auth['db_url']]]):
-                return await ctx.send(f"<:alert_status:519896811192844288> | ``You crazy man?`` {ctx.author.mention}")
+                return await ctx.send(f"<:alert:739251822920728708> | ``You crazy man?`` {ctx.author.mention}")
             await ctx.send('```py\n{}{}\n```'.format(value, format_exc()))
         else:
             value = stdout.getvalue()
@@ -74,16 +74,16 @@ class EvalSintax(commands.Cog):
                 if value:
                     if any([i in str(value) for i in [_auth['_t__ashley'], _auth['db_url']]]):
                         return await ctx.send(
-                            f"<:alert_status:519896811192844288> | ``You crazy man?`` {ctx.author.mention}")
+                            f"<:alert:739251822920728708> | ``You crazy man?`` {ctx.author.mention}")
                     await ctx.send('```py\n%s\n```' % value)
             else:
                 self._last_result = ret
                 if any([i in str(value) for i in [_auth['_t__ashley'], _auth['db_url']]]):
                     return await ctx.send(
-                        f"<:alert_status:519896811192844288> | ``You crazy man?`` {ctx.author.mention}")
+                        f"<:alert:739251822920728708> | ``You crazy man?`` {ctx.author.mention}")
                 if any([i in str(ret) for i in [_auth['_t__ashley'], _auth['db_url']]]):
                     return await ctx.send(
-                        f"<:alert_status:519896811192844288> | ``You crazy man?`` {ctx.author.mention}")
+                        f"<:alert:739251822920728708> | ``You crazy man?`` {ctx.author.mention}")
                 await ctx.send('```py\n%s%s\n```' % (value, ret))
 
 

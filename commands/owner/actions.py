@@ -20,18 +20,18 @@ class ActionsClass(commands.Cog):
         if target == "guild":
             guild = await self.bot.db.get_data("guild_id", id_, "guilds")
             if guild is None:
-                return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
+                return await ctx.send("<:alert:739251822920728708>│``GUILDA INVALIDA!``")
             await self.bot.data.add_vip(target="guilds", guild_id=id_, state=True)
         elif target == "user":
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
-                return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
+                return await ctx.send("<:alert:739251822920728708>│``USUÁRIO INVALIDO!``")
             await self.bot.data.add_vip(target="users", user_id=id_, state=True)
         else:
-            return await ctx.send("<:oc_status:519896814225457152>│``OPÇÃO INVALIDA!``")
+            return await ctx.send("<:alert:739251822920728708>│``OPÇÃO INVALIDA!``")
         embed = discord.Embed(
             color=self.color,
-            description=f'<:confirmado:519896822072999937>│``Vip Adicionado com sucesso!``')
+            description=f'<:confirmed:721581574461587496>│``Vip Adicionado com sucesso!``')
         await ctx.send(embed=embed)
 
     @check_it(no_pm=True, is_owner=True)
@@ -44,18 +44,18 @@ class ActionsClass(commands.Cog):
         if target == "guild":
             guild = await self.bot.db.get_data("guild_id", id_, "guilds")
             if guild is None:
-                return await ctx.send("<:oc_status:519896814225457152>│``GUILDA INVALIDA!``")
+                return await ctx.send("<:alert:739251822920728708>│``GUILDA INVALIDA!``")
             await self.bot.data.add_vip(target="guilds", guild_id=id_, state=False)
         elif target == "user":
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
-                return await ctx.send("<:oc_status:519896814225457152>│``USUÁRIO INVALIDO!``")
+                return await ctx.send("<:alert:739251822920728708>│``USUÁRIO INVALIDO!``")
             await self.bot.data.add_vip(target="users", user_id=id_, state=False)
         else:
-            return await ctx.send("<:oc_status:519896814225457152>│``OPÇÃO INVALIDA!``")
+            return await ctx.send("<:alert:739251822920728708>│``OPÇÃO INVALIDA!``")
         embed = discord.Embed(
             color=discord.Color.red(),
-            description=f'<:confirmado:519896822072999937>│``Vip retirado com sucesso!``')
+            description=f'<:confirmed:721581574461587496>│``Vip retirado com sucesso!``')
         await ctx.send(embed=embed)
 
     @check_it(no_pm=True, is_owner=True)
@@ -66,22 +66,22 @@ class ActionsClass(commands.Cog):
         """apenas desenvolvedores
         exemplo: ash add_ban <id> <reason>"""
         if id_ is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``O ID NÃO PODE SER VAZIO!``")
+            return await ctx.send("<:alert:739251822920728708>│``O ID NÃO PODE SER VAZIO!``")
         guild = await self.bot.db.get_data("guild_id", id_, "guilds")
         if guild is None:
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
-                return await ctx.send("<:oc_status:519896814225457152>│``ID INVALIDO!``")
+                return await ctx.send("<:alert:739251822920728708>│``ID INVALIDO!``")
         answer = await self.bot.ban_(id_, reason)
         if answer:
             embed = discord.Embed(
                 color=discord.Color.red(),
-                description=f'<:confirmado:519896822072999937>│``Banimento adicionado com sucesso!``')
+                description=f'<:confirmed:721581574461587496>│``Banimento adicionado com sucesso!``')
             await ctx.send(embed=embed)
         else:
             embed = discord.Embed(
                 color=discord.Color.red(),
-                description=f'<:oc_status:519896814225457152>│``Esse ID já está dentro da lista negra!``')
+                description=f'<:alert:739251822920728708>│``Esse ID já está dentro da lista negra!``')
             await ctx.send(embed=embed)
 
     @check_it(no_pm=True, is_owner=True)
@@ -92,22 +92,22 @@ class ActionsClass(commands.Cog):
         """apenas desenvolvedores
         exemplo: ash add_ban <id>"""
         if id_ is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``O ID NÃO PODE SER VAZIO!``")
+            return await ctx.send("<:alert:739251822920728708>│``O ID NÃO PODE SER VAZIO!``")
         guild = await self.bot.db.get_data("guild_id", id_, "guilds")
         if guild is None:
             user = await self.bot.db.get_data("user_id", id_, "users")
             if user is None:
-                return await ctx.send("<:oc_status:519896814225457152>│``ID INVALIDO!``")
+                return await ctx.send("<:alert:739251822920728708>│``ID INVALIDO!``")
         answer = await self.bot.un_ban_(id_)
         if answer:
             embed = discord.Embed(
                 color=discord.Color.red(),
-                description=f'<:confirmado:519896822072999937>│``Banimento revogado com sucesso!``')
+                description=f'<:confirmed:721581574461587496>│``Banimento revogado com sucesso!``')
             await ctx.send(embed=embed)
         else:
             embed = discord.Embed(
                 color=discord.Color.red(),
-                description=f'<:oc_status:519896814225457152>│``Esse ID não está dentro da lista negra!``')
+                description=f'<:alert:739251822920728708>│``Esse ID não está dentro da lista negra!``')
             await ctx.send(embed=embed)
 
 

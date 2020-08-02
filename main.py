@@ -51,13 +51,10 @@ class Ashley(commands.AutoShardedBot):
         self.server_ = "HEROKU"
         self.progress = "V.7 -> 038.8%"
         self.prefix_ = "'ash.', 'ash '"
-        self.bl_item = ['medal', 'rank_point']
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.staff = [235937029106434048, 300592580381376513]
-        self.testers = [390244145643651073, 617739561488875522]
         self.version = "API: " + str(discord.__version__) + " | BOT: 7.3.88 | PROGRESS: " + str(self.progress)
-        self.shortcut = {'ash coin': 'ash daily coin', 'ash work': 'ash daily work', 'ash vip': 'ash daily vip',
-                         'ash energy': 'ash daily energy'}
+        self.shortcut = config['attribute']['shortcut']
         self.data_cog = {}
         self.box = {}
         self.msg_cont = 0
@@ -115,7 +112,7 @@ class Ashley(commands.AutoShardedBot):
                     announce = choice(self.announcements)
                     embed = discord.Embed(
                         color=0x000000,
-                        description=f'<:confirmado:519896822072999937>│**ANUNCIO**\n '
+                        description=f'<:confirmed:721581574461587496>│**ANUNCIO**\n '
                                     f'```{announce}```')
                     await ctx.send(embed=embed)
                 commands_log = self.get_channel(575688812068339717)
@@ -143,7 +140,7 @@ class Ashley(commands.AutoShardedBot):
                 if (update_user['user']['commands'] % 10) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
-                        await ctx.send(f"<:negate:520418505993093130>│``{_name} SUA GUILDA DE CADASTRO FOI DELETADA, "
+                        await ctx.send(f"<:negate:721581573396496464>│``{_name} SUA GUILDA DE CADASTRO FOI DELETADA, "
                                        f"TENTE USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
@@ -220,30 +217,30 @@ class Ashley(commands.AutoShardedBot):
                                 update_['config']['vip'] = False
                                 await self.db.update_data(data_, update_, 'users')
                                 if ctx.guild.id == 519894833783898112:
-                                    await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} '
+                                    await ctx.send(f'<:negate:721581573396496464>│{ctx.author.mention} '
                                                    f'``INFELIZMENTE VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``')
-                                    await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE"
+                                    await ctx.send("<:alert:739251822920728708>**│** ``APROVEITE QUE"
                                                    " VC ESTA AQUI E USE O COMANDO`` **ASH VIP**")
                                 else:
-                                    await ctx.send(f'<:negate:520418505993093130>│{ctx.author.mention} ``INFELIZMENTE'
+                                    await ctx.send(f'<:negate:721581573396496464>│{ctx.author.mention} ``INFELIZMENTE'
                                                    f' VOCÊ ACABOU DE PERDER SEU VIP DIARIO!``\n **Vá no meu servidor'
                                                    f' para receber seu proximo dia de vip!**')
                             else:
                                 if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                                     if ctx.guild.id == 519894833783898112:
-                                        await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE"
+                                        await ctx.send("<:alert:739251822920728708>**│** ``APROVEITE QUE"
                                                        " VC ESTA AQUI E USE O COMANDO`` **ASH VIP**")
                                     else:
-                                        await ctx.send("<:alert_status:519896811192844288>**│** ``Você pode ganhar "
+                                        await ctx.send("<:alert:739251822920728708>**│** ``Você pode ganhar "
                                                        "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando "
                                                        "ASH INVITE**")
                     except KeyError:
                         if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                             if ctx.guild.id == 519894833783898112:
-                                await ctx.send("<:alert_status:519896811192844288>**│** ``APROVEITE QUE VC ESTA"
+                                await ctx.send("<:alert:739251822920728708>**│** ``APROVEITE QUE VC ESTA"
                                                " AQUI E USE O COMANDO`` **ASH VIP**")
                             else:
-                                await ctx.send("<:alert_status:519896811192844288>**│** ``Agora você pode ganhar "
+                                await ctx.send("<:alert:739251822920728708>**│** ``Agora você pode ganhar "
                                                "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
                                                "INVITE**")
 
@@ -335,7 +332,7 @@ class Ashley(commands.AutoShardedBot):
                     await self.process_commands(message)
             else:
                 if ctx.command is not None:
-                    await message.channel.send("<:alert_status:519896811192844288>|``NAO POSSO EXECUTAR COMANDOS NESSE"
+                    await message.channel.send("<:alert:739251822920728708>|``NAO POSSO EXECUTAR COMANDOS NESSE"
                                                " CANAL!``")
 
     @staticmethod
@@ -350,7 +347,7 @@ class Ashley(commands.AutoShardedBot):
         if not perms.manage_webhooks:
             if not perms.send_messages:
                 return
-            return await ctx.send(f'<:negate:520418505993093130>│``Eu não tenho a permissão de:`` '
+            return await ctx.send(f'<:negate:721581573396496464>│``Eu não tenho a permissão de:`` '
                                   f'**Gerenciar Webhooks**')
 
         avatar = open(avatar_dir, 'rb')

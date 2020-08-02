@@ -53,7 +53,7 @@ class Battle(commands.Cog):
             atk = await player.turn(monster.status['hp'], self.bot, ctx)
 
             if atk == "COMANDO-CANCELADO":
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito`` '
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito`` '
                                       '**COMANDO CANCELADO**')
 
             await sleep(1)
@@ -75,7 +75,7 @@ class Battle(commands.Cog):
             atk = await monster.turn(monster.status['hp'], self.bot, ctx)
 
             if atk == "COMANDO-CANCELADO":
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito`` '
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito`` '
                                       '**COMANDO CANCELADO**')
 
             await sleep(1)

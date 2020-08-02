@@ -33,7 +33,7 @@ class RoleInfo(commands.Cog):
         """comando que gera uma lista de informações sobre certo cargo
         Use ash roleinfo <@cargo_em_questão>"""
         if not role:
-            return await ctx.send('<:negate:520418505993093130>│``Você precisa colocar um cargo para ver as '
+            return await ctx.send('<:alert:739251822920728708>│``Você precisa colocar um cargo para ver as '
                                   'informações!``')
 
         created_at = role.created_at.strftime("%d %b %Y %H:%M")
@@ -142,7 +142,7 @@ class RoleInfo(commands.Cog):
                     except discord.HTTPException:
                         pass
         except asyncio.TimeoutError:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                   ' CANCELADO**')
 
 

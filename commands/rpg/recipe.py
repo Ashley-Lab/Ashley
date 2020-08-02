@@ -21,9 +21,15 @@ class RecipeClass(commands.Cog):
     async def craft(self, ctx, *, item=None):
         """Esse nem eu sei..."""
         global resp
-        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         recipes = self.bot.config['recipes']
+
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
+        if data['config']['buying']:
+            return await ctx.send('<:alert:739251822920728708>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
+
+        update['config']['buying'] = True
+        await self.bot.db.update_data(data, update, 'users')
 
         if item is not None:
 
@@ -59,7 +65,7 @@ class RecipeClass(commands.Cog):
                         tempmax = update['inventory'][c[0]] // c[1]
                     except KeyError:
                         tempmax = 0
-                        await ctx.send(f'<:negate:520418505993093130>|``Você não tem o item`` **{c[0]}**')
+                        await ctx.send(f'<:alert:739251822920728708>|``Você não tem o item`` **{c[0]}**')
                     if maximo is None or maximo > tempmax:
                         maximo = tempmax
 
@@ -83,7 +89,11 @@ class RecipeClass(commands.Cog):
                     while reaction[1].id != ctx.author.id or reaction[0].emoji not in emojis:
                         reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
                 except TimeoutError:
-                    return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito! Comando '
+                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update = data
+                    update['config']['buying'] = False
+                    await self.bot.db.update_data(data, update, 'users')
+                    return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito! Comando '
                                           'cancelado.``', delete_after=5.0)
 
                 if reaction[0].emoji == '▶':
@@ -91,11 +101,21 @@ class RecipeClass(commands.Cog):
                         for c in recipe['cost']:
                             if update['inventory'][c[0]] >= c[1]:
                                 update['inventory'][c[0]] -= c[1]
+                                if update['inventory'][c[0]] < 1:
+                                    del update['inventory'][c[0]]
                             else:
-                                return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                                update = data
+                                update['config']['buying'] = False
+                                await self.bot.db.update_data(data, update, 'users')
+                                return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                                       'necessarios.``')
                     except KeyError:
-                        return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                               'necessarios.``')
 
                     for c in recipe['reward']:
@@ -105,11 +125,15 @@ class RecipeClass(commands.Cog):
                             update['inventory'][c[0]] = c[1]
 
                 elif reaction[0].emoji == '⏩':
-                    await ctx.send('<:alert_status:519896811192844288>│``Quantas receitas você quer fazer?``')
+                    await ctx.send('<:alert:739251822920728708>│``Quantas receitas você quer fazer?``')
                     try:
                         resp = await self.bot.wait_for('message', check=check, timeout=30.0)
                     except TimeoutError:
-                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                               ' CANCELADO**')
 
                     while True:
@@ -118,7 +142,11 @@ class RecipeClass(commands.Cog):
                         try:
                             resp = await self.bot.wait_for('message', check=check, timeout=30.0)
                         except TimeoutError:
-                            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+                            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            update = data
+                            update['config']['buying'] = False
+                            await self.bot.db.update_data(data, update, 'users')
+                            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
                                                   '**COMANDO CANCELADO**')
 
                     try:
@@ -127,18 +155,32 @@ class RecipeClass(commands.Cog):
                         pass
 
                     if resp < 1:
-                        return await ctx.send('<:negate:520418505993093130>|``Voce nao pode craftar 0 item...``')
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        return await ctx.send('<:alert:739251822920728708>|``Voce nao pode craftar 0 item...``')
 
                     try:
                         for _ in range(resp):
                             for c in recipe['cost']:
                                 if update['inventory'][c[0]] >= c[1]:
                                     update['inventory'][c[0]] -= c[1]
+                                    if update['inventory'][c[0]] < 1:
+                                        del update['inventory'][c[0]]
                                 else:
-                                    return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                                    update = data
+                                    update['config']['buying'] = False
+                                    await self.bot.db.update_data(data, update, 'users')
+                                    return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                                           'necessarios.``')
                     except KeyError:
-                        return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                               'necessarios.``')
 
                     for c in recipe['reward']:
@@ -149,7 +191,11 @@ class RecipeClass(commands.Cog):
 
                 elif reaction[0].emoji == '⏭':
                     if maximo < 1:
-                        return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                               'necessarios.``')
 
                     try:
@@ -157,11 +203,21 @@ class RecipeClass(commands.Cog):
                             for c in recipe['cost']:
                                 if update['inventory'][c[0]] >= c[1]:
                                     update['inventory'][c[0]] -= c[1]
+                                    if update['inventory'][c[0]] < 1:
+                                        del update['inventory'][c[0]]
                                 else:
-                                    return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                                    update = data
+                                    update['config']['buying'] = False
+                                    await self.bot.db.update_data(data, update, 'users')
+                                    return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                                           'necessarios.``')
                     except KeyError:
-                        return await ctx.send('<:negate:520418505993093130>|``Você não tem todos os itens '
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        return await ctx.send('<:alert:739251822920728708>|``Você não tem todos os itens '
                                               'necessarios.``')
 
                     for c in recipe['reward']:
@@ -172,6 +228,10 @@ class RecipeClass(commands.Cog):
 
                 if reaction[0].emoji == "❌":
                     await msg.delete()
+                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update = data
+                    update['config']['buying'] = False
+                    await self.bot.db.update_data(data, update, 'users')
                     return
 
                 await msg.delete()
@@ -179,10 +239,14 @@ class RecipeClass(commands.Cog):
                 await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM`` ✨ **{item.upper()}** ✨ "
                                f"``FOI CRAFTADO FEITO COM SUCESSO!``")
             else:
-                await ctx.send('<:negate:520418505993093130>|``Esse item não existe ou nao é craftavel.``')
+                await ctx.send('<:negate:721581573396496464>|``Esse item não existe ou nao é craftavel.``')
         else:
-            await ctx.send('<:negate:520418505993093130>|``DIGITE UM NOME DE UM ITEM. CASO NAO SAIBA USE O COMANDO:``'
+            await ctx.send('<:negate:721581573396496464>|``DIGITE UM NOME DE UM ITEM. CASO NAO SAIBA USE O COMANDO:``'
                            ' **ASH RECIPE** ``PARA VER A LISTA DE ITENS CRAFTAVEIS!``')
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        update['config']['buying'] = False
+        await self.bot.db.update_data(data, update, 'users')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

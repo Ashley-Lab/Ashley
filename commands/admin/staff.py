@@ -52,11 +52,11 @@ class StaffAdmin(commands.Cog):
         """Comando usado pra apagar varias mensagens em um canal
         Use ash staff delete <numero de mensagens a se apagar>"""
         if number > 100:
-            return await ctx.send("<:negate:520418505993093130>│``Você nao pode apagar mais do que 100 mensagens``")
+            return await ctx.send("<:negate:721581573396496464>│``Você nao pode apagar mais do que 100 mensagens``")
         try:
             await ctx.message.channel.purge(limit=number)
         except discord.Forbidden:
-            await ctx.send("<:negate:520418505993093130>│``Não tenho permissão para apagar mensagens nesse "
+            await ctx.send("<:negate:721581573396496464>│``Não tenho permissão para apagar mensagens nesse "
                            "servidor!``")
 
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -69,17 +69,17 @@ class StaffAdmin(commands.Cog):
         try:
             user = ctx.message.mentions[0]
             if reason is None or member is None:
-                return await ctx.send("<:negate:520418505993093130>│``Você precisa dizer um motivo para banir esse "
+                return await ctx.send("<:negate:721581573396496464>│``Você precisa dizer um motivo para banir esse "
                                       "usuário!``")
             elif user.id == ctx.author.id:
-                return await ctx.send("<:negate:520418505993093130>│``Você não pode banir a si mesmo!``")
+                return await ctx.send("<:negate:721581573396496464>│``Você não pode banir a si mesmo!``")
             await ctx.guild.ban(user, delete_message_days=1, reason=reason)
-            await ctx.send("<:confirmado:519896822072999937>│``O usuario(a)`` <@{}> ``foi banido com sucesso do "
+            await ctx.send("<:confirmed:721581574461587496>│``O usuario(a)`` <@{}> ``foi banido com sucesso do "
                            "servidor.``".format(user.id))
         except IndexError:
-            await ctx.send("<:alert_status:519896811192844288>│``Você deve especificar um usuario para banir!``")
+            await ctx.send("<:alert:739251822920728708>│``Você deve especificar um usuario para banir!``")
         except discord.Forbidden:
-            await ctx.send("<:negate:520418505993093130>│``Não posso banir o usuário, o cargo dele está acima de mim "
+            await ctx.send("<:negate:721581573396496464>│``Não posso banir o usuário, o cargo dele está acima de mim "
                            "ou não tenho permissão para banir membros!``")
 
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -92,17 +92,17 @@ class StaffAdmin(commands.Cog):
         try:
             user = ctx.message.mentions[0]
             if reason is None or member is None:
-                return await ctx.send("<:negate:520418505993093130>│``Você precisa dizer um motivo para kickar esse "
+                return await ctx.send("<:negate:721581573396496464>│``Você precisa dizer um motivo para kickar esse "
                                       "usuário!``")
             elif user.id == ctx.author.id:
-                return await ctx.send("<:negate:520418505993093130>│``Você não pode banir a si mesmo!``")
+                return await ctx.send("<:negate:721581573396496464>│``Você não pode banir a si mesmo!``")
             await ctx.guild.kick(user, reason=reason)
-            await ctx.send("<:confirmado:519896822072999937>│``O usuario(a)`` <@{}> ``foi expulso com sucesso do "
+            await ctx.send("<:confirmed:721581574461587496>│``O usuario(a)`` <@{}> ``foi expulso com sucesso do "
                            "servidor.``".format(user.id))
         except IndexError:
-            await ctx.send("<:alert_status:519896811192844288>│``Você deve especificar um usuario para expulsar!``")
+            await ctx.send("<:alert:739251822920728708>│``Você deve especificar um usuario para expulsar!``")
         except discord.Forbidden:
-            await ctx.send("<:negate:520418505993093130>│``Não posso expulsar o usuário, o cargo dele está acima de"
+            await ctx.send("<:negate:721581573396496464>│``Não posso expulsar o usuário, o cargo dele está acima de"
                            " mim ou não tenho permissão para banir membros!``")
 
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -118,13 +118,13 @@ class StaffAdmin(commands.Cog):
                     await ctx.channel.edit(slowmode_delay=2)
                     embed = discord.Embed(
                         color=self.color,
-                        description="<:confirmado:519896822072999937>│``MODO DALEY ATIVADO!``")
+                        description="<:confirmed:721581574461587496>│``MODO DALEY ATIVADO!``")
                     await ctx.send(embed=embed)
                 else:
                     await ctx.channel.edit(slowmode_delay=0)
                     embed = discord.Embed(
                         color=self.color,
-                        description="<:confirmado:519896822072999937>│``MODO DALEY DESATIVADO!``")
+                        description="<:confirmed:721581574461587496>│``MODO DALEY DESATIVADO!``")
                     await ctx.send(embed=embed)
             elif timer.isdigit():
                 if int(timer) > 120:
@@ -133,17 +133,17 @@ class StaffAdmin(commands.Cog):
                 if int(timer) == 0:
                     embed = discord.Embed(
                         color=self.color,
-                        description="<:confirmado:519896822072999937>│``MODO DALEY DESATIVADO!``")
+                        description="<:confirmed:721581574461587496>│``MODO DALEY DESATIVADO!``")
                     await ctx.send(embed=embed)
                 else:
                     embed = discord.Embed(
                         color=self.color,
-                        description="<:confirmado:519896822072999937>│``MODO DALEY ATIVADO!``")
+                        description="<:confirmed:721581574461587496>│``MODO DALEY ATIVADO!``")
                     await ctx.send(embed=embed)
             else:
-                await ctx.send("<:negate:520418505993093130>│``POR FAVOR DIGITE UM NUMERO``")
+                await ctx.send("<:negate:721581573396496464>│``POR FAVOR DIGITE UM NUMERO``")
         except discord.Forbidden:
-            await ctx.send("<:negate:520418505993093130>│``NÃO TENHO PERMISSÃO PARA ALTERAR ESSE CANAL``")
+            await ctx.send("<:negate:721581573396496464>│``NÃO TENHO PERMISSÃO PARA ALTERAR ESSE CANAL``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -167,28 +167,28 @@ class StaffAdmin(commands.Cog):
                 try:
                     member = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
-                    return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
+                    return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_1.delete()
                 msg_2 = await ctx.author.send('<:stream_status:519896814825242635>│``Qual o motivo da denuncia?`` '
                                               '{}'.format(ctx.author.mention))
                 try:
                     report = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
-                    return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
+                    return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_2.delete()
                 msg_3 = await ctx.author.send('<:stream_status:519896814825242635>│``Que dia aconteceu isso?`` '
                                               '{}'.format(ctx.author.mention))
                 try:
                     day = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
-                    return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
+                    return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_3.delete()
                 msg_4 = await ctx.author.send('<:stream_status:519896814825242635>│``Link da prova já hospedada '
                                               'senhor`` {}:'.format(ctx.author.mention))
                 try:
                     file = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
-                    return await ctx.author.send('<:oc_status:519896814225457152>│``Desculpe, você demorou muito!``')
+                    return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_4.delete()
                 embed = discord.Embed(colour=self.color,
                                       description="O Úsuario: {} acabou de denunciar um "
@@ -201,42 +201,38 @@ class StaffAdmin(commands.Cog):
                 embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                 canal = self.bot.get_channel(data['func_config']['report_id'])
                 await canal.send(embed=embed)
-                await ctx.author.send('<:confirmado:519896822072999937>│``FORMULARIO FINALIZADO COM SUCESSO!``',
+                await ctx.author.send('<:confirmed:721581574461587496>│``FORMULARIO FINALIZADO COM SUCESSO!``',
                                       delete_after=5.0)
             else:
-                await ctx.author.send("<:negate:520418505993093130>│``Recurso Desabilitado, peça para um ADM "
+                await ctx.author.send("<:negate:721581573396496464>│``Recurso Desabilitado, peça para um ADM "
                                       "habilizar o recurso usando`` **ash config report**")
 
         except discord.errors.Forbidden:
-            await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE NÃO TENHO PERMISSÃO DE ENVIAR A MENSAGEM '
+            await ctx.send('<:negate:721581573396496464>│``INFELIZMENTE NÃO TENHO PERMISSÃO DE ENVIAR A MENSAGEM '
                            'PRA VOCÊ!``')
         except KeyError:
-            await ctx.send("<:negate:520418505993093130>│``Recurso Desabilitado, peça para um ADM "
+            await ctx.send("<:negate:721581573396496464>│``Recurso Desabilitado, peça para um ADM "
                            "habilizar o recurso usando`` **ash config report**")
 
     @_ban.error
     async def _ban_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('<:negate:520418505993093130>│``Você não '
-                           'tem permissão para usar esse comando!``')
+            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
 
     @_kick.error
     async def _kick_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('<:negate:520418505993093130>│``Você não '
-                           'tem permissão para usar esse comando!``')
+            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
 
     @_delete.error
     async def _delete_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('<:negate:520418505993093130>│``Você não '
-                           'tem permissão para usar esse comando!``')
+            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
 
     @_slowmode.error
     async def _delete_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('<:negate:520418505993093130>│``Você não '
-                           'tem permissão para usar esse comando!``')
+            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
 
 
 def setup(bot):

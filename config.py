@@ -29,6 +29,9 @@ with open("data/config.json", encoding="utf-8") as config:
 with open("data/ctf.json", encoding="utf-8") as ctf:
     ctf = json.load(ctf)
 
+with open("data/emojis.json", encoding="utf-8") as emojis:
+    emojis = json.load(emojis)
+
 with open("data/equips.json", encoding="utf-8") as equips:
     equips = json.load(equips)
 
@@ -87,6 +90,7 @@ data = {
     "classes": classes,
     "config": config,
     "ctf": ctf,
+    "emojis": emojis,
     "equips": equips,
     "forca": forca,
     "icons": icons,

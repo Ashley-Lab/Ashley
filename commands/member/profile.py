@@ -41,7 +41,7 @@ class ProfileSystem(commands.Cog):
         update = data
 
         if data is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
 
         try:
@@ -81,7 +81,7 @@ class ProfileSystem(commands.Cog):
                 married = user.avatar_url_as(format="png")
             except AttributeError:
                 married = "https://w-dog.net/wallpapers/2/13/487318654230690/abandoned-church-the-altar-interior.jpg"
-                await ctx.send("<:alert_status:519896811192844288>│``VOCE TA CASADO COM ALGUEM QUE NAO EXISTE MAIS, "
+                await ctx.send("<:alert:739251822920728708>│``VOCE TA CASADO COM ALGUEM QUE NAO EXISTE MAIS, "
                                "FAÇA UM FAVOR PRA VC MESMO E PEÇA O DIVORCIO!``")
         else:
             married = None
@@ -118,24 +118,24 @@ class ProfileSystem(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if text is None:
-            return await ctx.send("<:alert_status:519896811192844288>│``DIGITE ALGO PARA COLOCAR NO SEU PERFIL, "
+            return await ctx.send("<:alert:739251822920728708>│``DIGITE ALGO PARA COLOCAR NO SEU PERFIL, "
                                   "LOGO APÓS O COMANDO!``")
 
         text = remove_acentos_e_caracteres_especiais(text)
         if text == "":
             text = "PRECISO DIGITAR ALGO DESCENTE..."
-        await ctx.send(f"<:alert_status:519896811192844288>│``SEU TEXTO VAI FICAR ASSIM:``\n{text}")
+        await ctx.send(f"<:alert:739251822920728708>│``SEU TEXTO VAI FICAR ASSIM:``\n{text}")
 
         if len(text) > 200:
-            return await ctx.send("<:alert_status:519896811192844288>│``SEU TEXTO NAO PODE TER MAIS QUE 200 "
+            return await ctx.send("<:alert:739251822920728708>│``SEU TEXTO NAO PODE TER MAIS QUE 200 "
                                   "CARACTERES``")
 
         if data['user']['about'] and len(text) <= 200:
             update['user']['about'] = text
             await self.bot.db.update_data(data, update, 'users')
-            await ctx.send("<:confirmado:519896822072999937>│``TEXTO SOBRE VOCÊ ATUALIZADO COM SUCESSO!``")
+            await ctx.send("<:confirmed:721581574461587496>│``TEXTO SOBRE VOCÊ ATUALIZADO COM SUCESSO!``")
         else:
-            return await ctx.send("<:alert_status:519896811192844288>│``TEXTO MUITO GRANDE``")
+            return await ctx.send("<:alert:739251822920728708>│``TEXTO MUITO GRANDE``")
 
 
 def setup(bot):

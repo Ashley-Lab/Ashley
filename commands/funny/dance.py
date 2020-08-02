@@ -38,7 +38,7 @@ class DanceClass(commands.Cog):
             dance_embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=dance_embed)
         except IndexError:
-            await ctx.send('<:negate:520418505993093130>│``Você precisa mencionar um usuário específico para '
+            await ctx.send('<:negate:721581573396496464>│``Você precisa mencionar um usuário específico para '
                            'dançar!``')
 
 

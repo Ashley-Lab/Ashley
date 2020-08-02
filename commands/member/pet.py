@@ -56,7 +56,7 @@ class Pet(commands.Cog):
             web_hook.send_()
             await web_hook_.delete()
         except discord.Forbidden:
-            await ctx.send("<:oc_status:519896814225457152>│``Não tenho permissão de gerenciar WEBHOOKS nesse "
+            await ctx.send("<:alert:739251822920728708>│``Não tenho permissão de gerenciar WEBHOOKS nesse "
                            "servidor.``")
 
 

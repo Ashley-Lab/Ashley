@@ -69,21 +69,21 @@ class UserBank(commands.Cog):
     @commands.command(name='pay', aliases=['pagar'])
     async def pay(self, ctx, member: discord.Member = None, amount: int = None):
         if member is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mencionar alguem.``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem.``")
         if amount is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa dizer uma quantia.``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantia.``")
         if member.id == ctx.author.id:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você não pode pagar a si mesmo.``")
+            return await ctx.send("<:alert:739251822920728708>│``Você não pode pagar a si mesmo.``")
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         data_member = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
         update_member = data_member
         if data_member is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
         if data_member['config']['playing']:
-            return await ctx.send("<:alert_status:519896811192844288>│``O membro está jogando, aguarde para quando"
+            return await ctx.send("<:alert:739251822920728708>│``O membro está jogando, aguarde para quando"
                                   " ele estiver livre!``")
 
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
@@ -103,7 +103,7 @@ class UserBank(commands.Cog):
             return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {self.format_num(amount)} DE '
                                   f'ETHERNYAS PARA {member.name} COM SUCESSO!``')
         else:
-            return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
+            return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
                                   f"ETHERNYAS!``")
 
     @check_it(no_pm=True)
@@ -112,19 +112,19 @@ class UserBank(commands.Cog):
     @commands.command(name='give', aliases=['dar'])
     async def give(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
         if member is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa mencionar alguem!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if amount is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você precisa dizer uma quantia!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantia!``")
         if member.id == ctx.author.id:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você não pode dar um item a si mesmo!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você não pode dar um item a si mesmo!``")
         if item is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você esqueceu de falar o nome do item para dar!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você esqueceu de falar o nome do item para dar!``")
 
         item_key = convert_item_name(item, self.bot.items)
         if item_key is None:
-            return await ctx.send("<:oc_status:519896814225457152>│``Item Inválido!``")
-        if item_key in self.bot.bl_item:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você não pode dar esse tipo de item.``")
+            return await ctx.send("<:alert:739251822920728708>│``Item Inválido!``")
+        if self.bot.items[item_key][2] is False:
+            return await ctx.send("<:alert:739251822920728708>│``Você não pode dar esse tipo de item.``")
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         data_member = await self.bot.db.get_data("user_id", member.id, "users")
@@ -132,10 +132,10 @@ class UserBank(commands.Cog):
         update_member = data_member
 
         if data_member is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
         if data_member['config']['playing']:
-            return await ctx.send("<:alert_status:519896811192844288>│``O membro está jogando, aguarde para quando"
+            return await ctx.send("<:alert:739251822920728708>│``O membro está jogando, aguarde para quando"
                                   " ele estiver livre!``")
 
         item_name = self.bot.items[item_key][1]
@@ -143,19 +143,21 @@ class UserBank(commands.Cog):
         if item_key in data_user['inventory']:
             if data_user['inventory'][item_key] >= amount:
                 update_user['inventory'][item_key] -= amount
+                if update_user['inventory'][item_key] < 1:
+                    del update_user['inventory'][item_key]
                 try:
                     update_member['inventory'][item_key] += amount
                 except KeyError:
                     update_member['inventory'][item_key] = amount
                 await self.bot.db.update_data(data_user, update_user, 'users')
                 await self.bot.db.update_data(data_member, update_member, 'users')
-                return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC DEU {amount} DE {item_name.upper()} '
-                                      f'PARA {member.name} COM SUCESSO!``')
+                return await ctx.send(f'<:confirmed:721581574461587496>│``PARABENS, VC DEU {amount} DE '
+                                      f'{item_name.upper()} PARA {member.name} COM SUCESSO!``')
             else:
-                return await ctx.send(f"<:oc_status:519896814225457152>│``VOCÊ NÃO TEM ESSA QUANTIDADE DISPONIVEL DE "
+                return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM ESSA QUANTIDADE DISPONIVEL DE "
                                       f"{item_name.upper()}!``")
         else:
-            return await ctx.send("<:oc_status:519896814225457152>│``Você não tem esse item no seu inventario!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você não tem esse item no seu inventario!``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -188,7 +190,7 @@ class UserBank(commands.Cog):
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                   ' CANCELADO**')
 
         if int(answer.content) == 1:
@@ -205,19 +207,23 @@ class UserBank(commands.Cog):
             plus = 3
 
         if data['treasure'][coin] < cost:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você não tem pedras suficientes.`` '
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '
                                   '**COMANDO CANCELADO**')
 
         # DATA DO MEMBRO
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
         update_user['treasure'][coin] -= cost
+        if update_user['treasure'][coin] < 0:
+            update_user['treasure'][coin] = 0
         await self.bot.db.update_data(data_user, update_user, 'users')
 
         # DATA NATIVA DO SERVIDOR
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_guild_native['data'][f"total_{coin}"] -= cost
+        if update_guild_native['data'][f"total_{coin}"] < 0:
+            update_guild_native['data'][f"total_{coin}"] = 0
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         msg = await ctx.send("<a:loading:520418506567843860>│``RASPANDO TICKET...``")
@@ -229,7 +235,7 @@ class UserBank(commands.Cog):
         exodia = ["braço_direito", "braço_esquerdo", "perna_direita", "perna_esquerda", "the_one"]
         reliquia = ["anel", "balança", "chave", "colar", "enigma", "olho", "vara"]
         lucky = "EXODIA" if reward in exodia else "RELIQUIA" if reward in reliquia else "ARMADURA"
-        a = await ctx.send(f"<:alert_status:519896811192844288>│``SUA SORTE ESTÁ PARA:`` **{lucky}**")
+        a = await ctx.send(f"<:alert:739251822920728708>│``SUA SORTE ESTÁ PARA:`` **{lucky}**")
 
         msg = await ctx.send("<a:loading:520418506567843860>│``SEU PREMIO FOI...``")
         await sleep(3)
@@ -263,7 +269,7 @@ class UserBank(commands.Cog):
             update = data
             update["artifacts"][reward] = awards[reward]
             await self.bot.db.update_data(data, update, 'users')
-            await ctx.send(f"<:confirmado:519896822072999937>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
+            await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
 
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data

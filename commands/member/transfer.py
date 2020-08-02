@@ -27,7 +27,7 @@ class TransferClass(commands.Cog):
         d = c.replace('v', '.')
 
         if data_user['guild_id'] == ctx.guild.id:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você já está casdastrado nessa guilda!``')
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você já está casdastrado nessa guilda!``')
 
         def check(m):
             if m.author.id == ctx.guild.owner.id:
@@ -43,7 +43,7 @@ class TransferClass(commands.Cog):
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
                                   '**COMANDO CANCELADO**')
 
         if answer.content.upper() == "S":
@@ -63,10 +63,10 @@ class TransferClass(commands.Cog):
             await self.bot.db.update_data(data_user, update_user, 'users')
             await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             await self.bot.db.update_data(data_guild_future, update_guild_future, 'guilds')
-            await ctx.send(f'<:confirmado:519896822072999937>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
+            await ctx.send(f'<:confirmed:721581574461587496>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
                            f' aceito com sucesso, você agora faz parte da guilda`` **{ctx.guild.name}**')
         else:
-            await ctx.send('<:negate:520418505993093130>│``Desculpe, seu pedido de transferencia foi negado!``')
+            await ctx.send('<:negate:721581573396496464>│``Desculpe, seu pedido de transferencia foi negado!``')
 
 
 def setup(bot):

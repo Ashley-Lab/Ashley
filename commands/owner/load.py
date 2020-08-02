@@ -20,12 +20,12 @@ class LoadCog(commands.Cog):
             self.bot.load_extension('{}'.format(cog))
             embed = discord.Embed(
                 color=self.color,
-                description=f'<:confirmado:519896822072999937>│Extenção **{cog}**, carregada com sucesso!')
+                description=f'<:confirmed:721581574461587496>│Extenção **{cog}**, carregada com sucesso!')
             await ctx.send(embed=embed)
         except ModuleNotFoundError as e:
             embed = discord.Embed(
                 color=discord.Color.red(),
-                description=f'<:oc_status:519896814225457152>│Falha ao carregar a extenção **{cog}**. \n```{e}```')
+                description=f'<:negate:721581573396496464>│Falha ao carregar a extenção **{cog}**. \n```{e}```')
             await ctx.send(embed=embed)
 
 

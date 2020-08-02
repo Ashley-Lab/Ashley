@@ -40,7 +40,7 @@ class HugClass(commands.Cog):
             await ctx.send(embed=hug_embed)
         except IndexError:
             await ctx.send(
-                '<:negate:520418505993093130>│``Você precisa mencionar um usuário específico para abraçar!``')
+                '<:negate:721581573396496464>│``Você precisa mencionar um usuário específico para abraçar!``')
 
 
 def setup(bot):

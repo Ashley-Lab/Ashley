@@ -48,7 +48,7 @@ class CardsClass(commands.Cog):
                 update = data
                 update['config']['playing'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
             update['inventory']['coins'] -= 1
@@ -62,7 +62,7 @@ class CardsClass(commands.Cog):
                                f' **{card["nome"]}** ``e vc respondeu`` **{answer.content}** ``Ganhou 4 pontos!``')
                 update['config']['points'] += 4
             else:
-                await ctx.send(f'<:negate:520418505993093130>│``A carta era`` **{card["nome"]}** ``e vc respondeu`` '
+                await ctx.send(f'<:negate:721581573396496464>│``A carta era`` **{card["nome"]}** ``e vc respondeu`` '
                                f'**{answer.content}** ``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
 
                 if update['config']['points'] - 8 >= 0:
@@ -74,9 +74,9 @@ class CardsClass(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
 
 
 def setup(bot):

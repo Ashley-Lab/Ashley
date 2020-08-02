@@ -18,11 +18,11 @@ class UtilityClass(commands.Cog):
     async def create_gift(self, ctx, time=None):
         """Esse nem eu sei..."""
         if time is None:
-            return await ctx.send("<:alert_status:519896811192844288>│``Digite o tempo de cooldown do gift.``")
+            return await ctx.send("<:alert:739251822920728708>│``Digite o tempo de cooldown do gift.``")
         try:
             time = int(time)
         except ValueError:
-            return await ctx.send("<:alert_status:519896811192844288>│``O tempo de cooldown deve ser em numeros.``")
+            return await ctx.send("<:alert:739251822920728708>│``O tempo de cooldown deve ser em numeros.``")
 
         gift = await register_gift(self.bot, time)
         gt(gift, f"{time} SEGUNDOS")
@@ -42,16 +42,16 @@ class UtilityClass(commands.Cog):
                 if role is not None:
                     if role not in [r for r in ctx.author.roles]:
                         await ctx.author.add_roles(role)
-                        await ctx.send("<:confirmado:519896822072999937>│``VOCE AGORA É UM LOVER MEU!! FALE NO "
+                        await ctx.send("<:confirmed:721581574461587496>│``VOCE AGORA É UM LOVER MEU!! FALE NO "
                                        "CHAT_VIP PARA COMEMORAR!!``")
                     else:
-                        await ctx.send("<:alert_status:519896811192844288>│``VOCE JA É UM LOVER MEU! MAS OBG POR "
+                        await ctx.send("<:alert:739251822920728708>│``VOCE JA É UM LOVER MEU! MAS OBG POR "
                                        "TANTO AMOR``")
                 else:
-                    await ctx.send("<:alert_status:519896811192844288>│``O MEU CARGO NAO EXISTE MAIS, PEÇA PRA UM ADM"
+                    await ctx.send("<:alert:739251822920728708>│``O MEU CARGO NAO EXISTE MAIS, PEÇA PRA UM ADM"
                                    " CRIAR O CARGO NOVAMENTE!``")
             except discord.Forbidden:
-                await ctx.send("<:oc_status:519896814225457152>│``NAO TENHO PERMISSÃO DE ADICIONAR CARGOS!``")
+                await ctx.send("<:negate:721581573396496464>│``NAO TENHO PERMISSÃO DE ADICIONAR CARGOS!``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -65,15 +65,15 @@ class UtilityClass(commands.Cog):
                 if role is not None:
                     if role in [r for r in ctx.author.roles]:
                         await ctx.author.remove_roles(role)
-                        await ctx.send("<:confirmado:519896822072999937>│``QUE PENA, VOCE NAO ME AMA MAIS?!``")
+                        await ctx.send("<:confirmed:721581574461587496>│``QUE PENA, VOCE NAO ME AMA MAIS?!``")
                     else:
-                        await ctx.send("<:alert_status:519896811192844288>│``VOCE NAO TEM MAIS O MEU CARGO, POXA..."
+                        await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM MAIS O MEU CARGO, POXA..."
                                        " ME ODEIA TANTO ASSIM?``")
                 else:
-                    await ctx.send("<:alert_status:519896811192844288>│``O MEU CARGO NAO EXISTE MAIS, PEÇA PRA UM ADM"
+                    await ctx.send("<:alert:739251822920728708>│``O MEU CARGO NAO EXISTE MAIS, PEÇA PRA UM ADM"
                                    " CRIAR O CARGO NOVAMENTE!``")
             except discord.Forbidden:
-                await ctx.send("<:oc_status:519896814225457152>│``NAO TENHO PERMISSÃO DE RETIRAR CARGOS!``")
+                await ctx.send("<:negate:721581573396496464>│``NAO TENHO PERMISSÃO DE RETIRAR CARGOS!``")
 
 
 def setup(bot):

@@ -38,7 +38,7 @@ class HeadsOrTails(commands.Cog):
                 update = data
                 update['config']['playing'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
             update['inventory']['coins'] -= 10
@@ -61,7 +61,7 @@ class HeadsOrTails(commands.Cog):
                         await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:
-                    await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
+                    await ctx.send('<:negate:721581573396496464>│``INFELIZMENTE VOCE PERDEU!``')
             if choice_ == '2':
                 msg_r = await ctx.send("Coroa!")
                 await msg_r.add_reaction('👑')
@@ -75,16 +75,16 @@ class HeadsOrTails(commands.Cog):
                         await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 else:
-                    await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE VOCE PERDEU!``')
+                    await ctx.send('<:negate:721581573396496464>│``INFELIZMENTE VOCE PERDEU!``')
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
             update['config']['playing'] = False
             await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
 
 
 def setup(bot):

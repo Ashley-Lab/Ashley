@@ -26,18 +26,18 @@ class MarriedSystem(commands.Cog):
         """Comando usado pra pedir alguem em casamento
         Use ash marry <@pessoa desejada>"""
         if member is None:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem.``')
+            return await ctx.send('<:alert:739251822920728708>│``Você precisa mencionar alguem.``')
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         data_member = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
         update_member = data_member
         if data_member is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!`` **Você so pode se casar com membros '
                                   'cadastrados!**', delete_after=5.0)
         if member.id == ctx.author.id:
-            return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE CASAR CONSIGO MESMO!``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO PODE CASAR CONSIGO MESMO!``')
 
         if data_user['user']['marrieding'] is False and data_member['user']['marrieding'] is False:
             update_user['user']['marrieding'] = True
@@ -45,9 +45,9 @@ class MarriedSystem(commands.Cog):
             await self.bot.db.update_data(data_user, update_user, 'users')
             await self.bot.db.update_data(data_member, update_member, 'users')
         elif data_user['user']['marrieding'] is True:
-            return await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
         elif data_member['user']['marrieding'] is True:
-            return await ctx.send('<:negate:520418505993093130>│{} `` JÁ ESTÁ EM PROCESSO DE '
+            return await ctx.send('<:alert:739251822920728708>│{} `` JÁ ESTÁ EM PROCESSO DE '
                                   'CASAMENTO!``'.format(member.mention))
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -69,7 +69,7 @@ class MarriedSystem(commands.Cog):
                 update_member['user']['marrieding'] = False
                 await self.bot.db.update_data(data_user, update_user, 'users')
                 await self.bot.db.update_data(data_member, update_member, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, ele(a) demorou muito pra responder:'
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, ele(a) demorou muito pra responder:'
                                       '`` **COMANDO CANCELADO**')
 
             if answer.content.upper() not in ['SIM', 'S', 'CLARO']:
@@ -77,7 +77,7 @@ class MarriedSystem(commands.Cog):
                 update_member['user']['marrieding'] = False
                 await self.bot.db.update_data(data_user, update_user, 'users')
                 await self.bot.db.update_data(data_member, update_member, 'users')
-                return await ctx.send(f'<:oc_status:519896814225457152>│{ctx.author.mention} ``VOCE FOI '
+                return await ctx.send(f'<:negate:721581573396496464>│{ctx.author.mention} ``VOCE FOI '
                                       f'REJEITADO...``')
             else:
                 update_user['user']['married'] = True
@@ -100,13 +100,13 @@ class MarriedSystem(commands.Cog):
             update_member['user']['marrieding'] = False
             await self.bot.db.update_data(data_user, update_user, 'users')
             await self.bot.db.update_data(data_member, update_member, 'users')
-            return await ctx.send('<:negate:520418505993093130>│``ELE(A) JÁ ESTA CASADO(A)!``')
+            return await ctx.send('<:alert:739251822920728708>│``ELE(A) JÁ ESTA CASADO(A)!``')
         else:
             update_user['user']['marrieding'] = False
             update_member['user']['marrieding'] = False
             await self.bot.db.update_data(data_user, update_user, 'users')
             await self.bot.db.update_data(data_member, update_member, 'users')
-            return await ctx.send('<:negate:520418505993093130>│``VOCE JÁ ESTA CASADO(A)!``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCE JÁ ESTA CASADO(A)!``')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -126,11 +126,11 @@ class MarriedSystem(commands.Cog):
         update_member = data_member
 
         if data_member is None:
-            return await ctx.send('<:alert_status:519896811192844288>│**ATENÇÃO** : '
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
         if member is not None:
             if member.id == ctx.author.id:
-                return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO PODE SE SEPARAR DE VOCÊ MESMO!``')
+                return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO PODE SE SEPARAR DE VOCÊ MESMO!``')
         else:
             pass
 
@@ -146,7 +146,7 @@ class MarriedSystem(commands.Cog):
                     return await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.mention} **agora "
                                           f"vocês estão SEPARADOS!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
                 else:
-                    return await ctx.send("<:negate:520418505993093130>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
+                    return await ctx.send("<:alert:739251822920728708>│``VOCÊ NÃO ESTÁ CASADO COM ESSA PESSOA!``")
             else:
                 update_user['user']['married'] = False
                 update_user['user']['married_at'] = None
@@ -160,7 +160,7 @@ class MarriedSystem(commands.Cog):
             return await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **agora você"
                                   f" está SEPARADO(A)!** ``ESCOLHA MELHOR DA PROXIMA VEZ!``")
         else:
-            return await ctx.send('<:negate:520418505993093130>│``VOCE NÃO ESTA CASADO(A)!``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO ESTA CASADO(A)!``')
 
 
 def setup(bot):

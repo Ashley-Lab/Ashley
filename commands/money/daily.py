@@ -54,7 +54,7 @@ class DailyClass(commands.Cog):
         update_user = data_user
 
         if not data_user['security']['status']:
-            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+            return await ctx.send("<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
         coin = randint(50, 100)
@@ -73,7 +73,7 @@ class DailyClass(commands.Cog):
         update_user = data_user
 
         if not data_user['security']['status']:
-            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+            return await ctx.send("<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
         patent = update_user['user']['patent']
@@ -106,7 +106,7 @@ class DailyClass(commands.Cog):
 
                 if not data_user['security']['status']:
                     return await ctx.send(
-                        "<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                        "<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                         "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
                 if data_user['user']['ranking'] == "Bronze":
@@ -116,7 +116,7 @@ class DailyClass(commands.Cog):
                 elif data_user['user']['ranking'] == "Gold":
                     money = randint(240 + min_, 2400 + max_)
                 msg = await self.bot.db.add_money(ctx, money)
-                await ctx.send(f'<:on_status:519896814799945728>│``Você trabalhou duro e acabou de ganhar:`` \n'
+                await ctx.send(f'<:confirmed:721581574461587496>│``Você trabalhou duro e acabou de ganhar:`` \n'
                                f'{msg}\n'
                                f'``Obs:`` **{max_ + min_}** ``de ETHERNYAS a mais por usar {min_} comandos.``')
             else:
@@ -127,7 +127,7 @@ class DailyClass(commands.Cog):
                     await self.bot.db.update_data(data_, update_, 'users')
                 except KeyError:
                     pass
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ AINDA NÃO USOU + DE 20 COMANDOS DA '
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ AINDA NÃO USOU + DE 20 COMANDOS DA '
                                'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
         else:
             try:
@@ -137,7 +137,7 @@ class DailyClass(commands.Cog):
                 await self.bot.db.update_data(data_, update_, 'users')
             except KeyError:
                 pass
-            await ctx.send('<:negate:520418505993093130>│``O SERVIDOR ATUAL AINDA NÃO USOU + DE 50 COMANDOS DA '
+            await ctx.send('<:alert:739251822920728708>│``O SERVIDOR ATUAL AINDA NÃO USOU + DE 50 COMANDOS DA '
                            'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
 
     @check_it(no_pm=True)
@@ -155,7 +155,7 @@ class DailyClass(commands.Cog):
             except KeyError:
                 pass
 
-            return await ctx.send('<:negate:520418505993093130>│``Você só pode pegar o premio de vip diario dentro '
+            return await ctx.send('<:alert:739251822920728708>│``Você só pode pegar o premio de vip diario dentro '
                                   'do meu servidor de suporte, para isso use o comando ASH INVITE para receber no '
                                   'seu privado o link do meu servidor.``')
 
@@ -163,7 +163,7 @@ class DailyClass(commands.Cog):
         update_ = data_
         update_['config']['vip'] = True
         await self.bot.db.update_data(data_, update_, 'users')
-        await ctx.send(f'<:on_status:519896814799945728>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
+        await ctx.send(f'<:confirmed:721581574461587496>│{ctx.author.mention} ``ACABOU DE RECEBER 24 HORAS DE '
                        f'VIP!``\n **Aproveite seu tempo e venha buscar mais amanha!**')
 
     @check_it(no_pm=True)
@@ -174,19 +174,19 @@ class DailyClass(commands.Cog):
         """Comando usado pra dar um rec da Ashley pra algum usuario
         Use ash rec <usuario desejado>"""
         if member is None:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem!``')
+            return await ctx.send('<:alert:739251822920728708>│``Você precisa mencionar alguem!``')
 
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
 
         if not data_user['security']['status']:
-            return await ctx.send("<:negate:520418505993093130>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+            return await ctx.send("<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                                   "DEMAIS`` **ESSE TIPO DE USUARIO NAO PODE RECEBER RECOMENDAÇÃO...**'")
 
         if member.id == ctx.author.id:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você não pode dar REC em si mesmo!``')
+            return await ctx.send('<:alert:739251822920728708>│``Você não pode dar REC em si mesmo!``')
         if data_user is None:
-            return await ctx.send('<:oc_status:519896814225457152>│``Você precisa mencionar alguem cadastrado no meu '
+            return await ctx.send('<:alert:739251822920728708>│``Você precisa mencionar alguem cadastrado no meu '
                                   'banco de dados!``')
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -198,7 +198,7 @@ class DailyClass(commands.Cog):
 
             if update['cooldown']['rec']['cont'] < 6 and abs((date_old - date_now).days) < 2:
                 if member.id in update['cooldown']['rec']['list']:
-                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você já deu REC nesse membro hoje!``")
+                    return await ctx.send(f"<:alert:739251822920728708>│``Você já deu REC nesse membro hoje!``")
                 update['cooldown']['rec']['cont'] += 1
                 update['cooldown']['rec']['list'].append(member.id)
                 await self.bot.db.update_data(data, update, 'users')
@@ -207,7 +207,7 @@ class DailyClass(commands.Cog):
                     update['cooldown']['rec'] = {"cont": 1, "date": datetime.today(), "list": [member.id]}
                     await self.bot.db.update_data(data, update, 'users')
                 else:
-                    return await ctx.send(f"<:oc_status:519896814225457152>│``Você ultrapassou suas "
+                    return await ctx.send(f"<:alert:739251822920728708>│``Você ultrapassou suas "
                                           f"recomendações por hoje!``")
         except KeyError:
             update['cooldown']['rec'] = {"cont": 1, "date": datetime.today(), "list": [member.id]}
@@ -234,7 +234,7 @@ class DailyClass(commands.Cog):
                                        '"ASH ANNOUNCE" E USAR O SISTEMA DE MUSICA!``')
 
         await self.bot.db.update_data(data_user, update_user, 'users')
-        await ctx.send(f'<:on_status:519896814799945728>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
+        await ctx.send(f'<:confirmed:721581574461587496>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')
 
 

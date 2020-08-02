@@ -44,7 +44,7 @@ class JoKenPo(commands.Cog):
                 update = data
                 update['config']['playing'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito, eu tinha '
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito, eu tinha '
                                       'escolhido:`` **{}**.'.format(jkp))
 
             update['inventory']['coins'] -= 10
@@ -78,7 +78,7 @@ class JoKenPo(commands.Cog):
                         await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                        '{}'.format(response))
                 elif jkp == "Papel":
-                    await ctx.send("<:negate:520418505993093130>│``{}, você escolheu`` **{}** ``e eu "
+                    await ctx.send("<:negate:721581573396496464>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``perde para`` "
                                    "**{}** ``VOCÊ PERDEU!!``".format(ctx.author, player_, jkp, player_, jkp))
 
@@ -99,14 +99,14 @@ class JoKenPo(commands.Cog):
                                    "escolhi`` **{}, {}** ``empata com`` "
                                    "**{}** ``EMPATAMOS.``".format(ctx.author, player_, jkp, player_, jkp))
                 elif jkp == "Tesoura":
-                    await ctx.send("<:negate:520418505993093130>│``{}, você escolheu`` **{}** ``e eu "
+                    await ctx.send("<:negate:721581573396496464>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``perde para`` "
                                    "**{}** ``VOCÊ PERDEU!!``".format(ctx.author, player_, jkp, player_, jkp))
 
             elif resposta.content == "3":  # jogador escolheu "Tesoura"
 
                 if jkp == "Pedra":
-                    await ctx.send("<:negate:520418505993093130>│``{}, você escolheu`` **{}** ``e eu "
+                    await ctx.send("<:negate:721581573396496464>│``{}, você escolheu`` **{}** ``e eu "
                                    "escolhi`` **{}, {}** ``perde para`` "
                                    "**{}** ``VOCÊ PERDEU!!``".format(ctx.author, player_, jkp, player_, jkp))
                 elif jkp == "Papel":
@@ -130,9 +130,9 @@ class JoKenPo(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
         else:
             if data['config']['playing']:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
 
 
 def setup(bot):

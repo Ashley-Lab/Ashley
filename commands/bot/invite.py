@@ -27,10 +27,10 @@ class InviteClass(commands.Cog):
                 description=f'<:safada:530029764061298699>│[CLIQUE AQUI PARA ME ADICIONAR NO SEU '
                             f'SERVIDOR]({self.url})')
 
-            await ctx.author.send("<:confirmado:519896822072999937>│https://discord.gg/rYT6QrM")
+            await ctx.author.send("<:confirmed:721581574461587496>│https://discord.gg/rYT6QrM")
             await ctx.author.send(embed=embed)
         except discord.errors.Forbidden:
-            await ctx.send('<:negate:520418505993093130>│``INFELIZMENTE NÃO FOI POSSIVEL ENVIAR A MENSAGEM PRA VOCÊ``')
+            await ctx.send('<:negate:721581573396496464>│``INFELIZMENTE NÃO FOI POSSIVEL ENVIAR A MENSAGEM PRA VOCÊ``')
 
 
 def setup(bot):

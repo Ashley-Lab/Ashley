@@ -50,7 +50,7 @@ class CharadeClass(commands.Cog):
                 update = data
                 update['config']['playing'] = False
                 await self.bot.db.update_data(data, update, 'users')
-                return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` **COMANDO'
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
             update['inventory']['coins'] -= 1
@@ -71,7 +71,7 @@ class CharadeClass(commands.Cog):
                 update['config']['points'] += 4
 
             else:
-                await ctx.send(f'<:negate:520418505993093130>│``A resposta era `` '
+                await ctx.send(f'<:negate:721581573396496464>│``A resposta era `` '
                                f'**{self.charade[charade].lower().replace("resposta: ", "")}** ``e vc '
                                f'respondeu`` **{answer.content.lower()}** '
                                f'``INFELIZMENTE VOCE PERDEU! LOGO PERDE 8 PONTOS``')
@@ -86,9 +86,9 @@ class CharadeClass(commands.Cog):
 
         else:
             if data['config']['playing']:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ JÁ ESTÁ JOGANDO!``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:negate:520418505993093130>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
 
 
 def setup(bot):

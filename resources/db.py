@@ -135,7 +135,7 @@ class Database(object):
         update_guild_native['data']['total_money'] -= amount
         await self.bot.db.update_data(data_user, update_user, 'users')
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-        return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
+        return f"<:confirmed:721581574461587496>│**{amount}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
 
     async def give_money(self, ctx, amount: int = 0):
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -146,7 +146,7 @@ class Database(object):
         update_guild_native['data']['total_money'] += amount
         await self.bot.db.update_data(data_user, update_user, 'users')
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-        return f"<:confirmado:519896822072999937>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
+        return f"<:confirmed:721581574461587496>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
 
     async def add_money(self, ctx, amount, ext=False):
 
@@ -255,7 +255,7 @@ class Database(object):
             update_user = data_user
 
             if data_guild is None:
-                raise commands.CheckFailure('<:negate:520418505993093130>│``Sua guilda ainda não está registrada, por '
+                raise commands.CheckFailure('<:alert:739251822920728708>│``Sua guilda ainda não está registrada, por '
                                             'favor digite:`` **ash register guild** ``para cadastrar sua guilda '
                                             'no meu`` **banco de dados!**')
 
@@ -266,7 +266,7 @@ class Database(object):
                                     - update_user["cooldown"][str(ctx.command)]
                         time_left = kwargs.get("time") - time_diff
                         if time_diff < kwargs.get("time"):
-                            raise commands.CheckFailure(f'<:negate:520418505993093130>│**Aguarde**: `Você deve '
+                            raise commands.CheckFailure(f'<:alert:739251822920728708>│**Aguarde**: `Você deve '
                                                         f'esperar` **{{}}** `para usar esse comando '
                                                         f'novamente!`'.format(parse_duration(int(time_left))))
 
@@ -291,7 +291,7 @@ class Database(object):
                 if kwargs.get("g_vip") and data_guild['vip']:
                     return True
                 elif kwargs.get("g_vip") and data_guild['vip'] is False:
-                    raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS SERVIDORES COM VIP ATIVO PODEM "
+                    raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS SERVIDORES COM VIP ATIVO PODEM "
                                                 "USAR ESSE COMANDO``\n **Para ganhar seu vip ATIVO DE SERVIDOR, O LIDER"
                                                 " DA GUILDA precisa alcançar pelo menos 10 das 20 estrelas de "
                                                 "recomendação**\n **OBS:** ``para ganhar recomendação é necessário usar"
@@ -302,16 +302,16 @@ class Database(object):
                     return True
                 elif kwargs.get("vip") and data_user['config']['vip'] is False:
                     if ctx.guild.id == 519894833783898112:
-                        raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS USUARIOS COM VIP ATIVO "
+                        raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO "
                                                     "PODEM USAR ESSE COMANDO``\n **Para ganhar seu vip diário use "
                                                     "ASH INVITE**")
-                    raise commands.CheckFailure("<:negate:520418505993093130>│``APENAS USUARIOS COM VIP ATIVO PODEM "
+                    raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO PODEM "
                                                 "USAR ESSE COMANDO``\n **Para ganhar seu vip diário use ASH INVITE "
                                                 "entre no meu canal de suporte e use o comando ASH VIP**")
 
                 return True
             else:
-                raise commands.CheckFailure(f'<:negate:520418505993093130>│``Você ainda não está registrado, '
+                raise commands.CheckFailure(f'<:alert:739251822920728708>│``Você ainda não está registrado, '
                                             f'por favor use`` **ash register**.')
         else:
             return True
@@ -429,7 +429,7 @@ class DataInteraction(object):
             }
         }
         await self.db.push_data(data, "announcements")
-        await ctx.send('<:confirmado:519896822072999937>│``Anuncio cadastrado com sucesso!``\n```AGUARDE APROVAÇÃO```')
+        await ctx.send('<:confirmed:721581574461587496>│``Anuncio cadastrado com sucesso!``\n```AGUARDE APROVAÇÃO```')
         pending = self.bot.get_channel(619969149791240211)
         msg = f"{ctx.author.id}: **{ctx.author.name}** ``ADICIONOU UM NOVO ANUNCIO PARA APROVAÇÃO!``"
         await pending.send(msg)

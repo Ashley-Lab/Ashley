@@ -59,10 +59,10 @@ class FarmClass(commands.Cog):
                     updates['config']['provinces'] = None
                     await self.bot.db.update_data(record, updates, "users")
                 else:
-                    await ctx.send("<:alert_status:519896811192844288>│``VOCE NAO TEM CARGOS NO BANCO DE "
+                    await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM CARGOS NO BANCO DE "
                                    "DADOS!``")
         else:
-            await ctx.send("<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu servidor** "
+            await ctx.send("<:negate:721581573396496464>│``Desculpe, mas apenas os`` **Membros do meu servidor** "
                            "``podem usar esse comando!``")
 
     @check_it(no_pm=True)
@@ -92,12 +92,12 @@ class FarmClass(commands.Cog):
                         await ctx.author.add_roles(role)
 
                     else:
-                        await ctx.send("<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
+                        await ctx.send("<:negate:721581573396496464>│``Desculpe, mas apenas os`` **Membros do meu "
                                        "servidor** ``podem usar esse comando!``")
                 else:
-                    await ctx.send(f'<:oc_status:519896814225457152>│``Você já está no inferno!``')
+                    await ctx.send(f'<:negate:721581573396496464>│``Você já está no inferno!``')
             else:
-                await ctx.send(f'<:oc_status:519896814225457152>│``Você está numa provincia! '
+                await ctx.send(f'<:negate:721581573396496464>│``Você está numa provincia! '
                                f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
                                f'ir para o sub-mundo primeiro``')
 
@@ -149,7 +149,7 @@ class FarmClass(commands.Cog):
                             if area == resposta_area:
                                 break
                             if area >= 30:
-                                await ctx.send("<:oc_status:519896814225457152>│``Você demorou demais pra "
+                                await ctx.send("<:negate:721581573396496464>│``Você demorou demais pra "
                                                "escolher`` **COMANDO CANCELADO!**")
                                 break
                             area += 1
@@ -168,14 +168,14 @@ class FarmClass(commands.Cog):
                             await ctx.author.add_roles(role)
                         await botmsg.delete()
                     else:
-                        await ctx.send("<:oc_status:519896814225457152>│``Desculpe, mas apenas os`` **Membros do meu "
+                        await ctx.send("<:negate:721581573396496464>│``Desculpe, mas apenas os`` **Membros do meu "
                                        "servidor** ``podem usar esse comando!``")
                 else:
-                    await ctx.send(f'<:oc_status:519896814225457152>│``Você já está numa provincia! '
+                    await ctx.send(f'<:negate:721581573396496464>│``Você já está numa provincia! '
                                    f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
                                    f'ir para outra provincia primeiro``')
             else:
-                await ctx.send(f'<:oc_status:519896814225457152>│``Você está no sub-mundo! '
+                await ctx.send(f'<:negate:721581573396496464>│``Você está no sub-mundo! '
                                f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
                                f'ir para uma provincia primeiro``')
 

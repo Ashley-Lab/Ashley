@@ -21,7 +21,7 @@ class FacebookClass(commands.Cog):
         """Comando totalmente demente de facebook
         Use ash facebook <mensagem desejada>"""
         if resp is None:
-            return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
+            return await ctx.send('<:alert:739251822920728708>│``DIGITE ALGO PARA EU POSTAR``')
 
         rede = [[20, (89, 74)], [(218, 166), (91, 128)],
                 [['', (90, 93), 9], ['', (112, 74), 7],
@@ -46,7 +46,7 @@ class FacebookClass(commands.Cog):
                 cont += len(c)
         if resp.count('''
 ''') > rede[4]:
-            await ctx.send('<:alert_status:519896811192844288>│``Sua mensagem foi muito grande!``')
+            await ctx.send('<:alert:739251822920728708>│``Sua mensagem foi muito grande!``')
         else:
             avatarurl = requests.get(ctx.author.avatar_url_as(format="png"))
             avatar = Image.open(BytesIO(avatarurl.content)).convert('RGBA')

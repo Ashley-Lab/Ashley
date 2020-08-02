@@ -17,11 +17,11 @@ class LogoutCog(commands.Cog):
     async def logout(self, ctx, *, reason: str = None):
         """apenas desenvolvedores"""
         if reason is None:
-            return await ctx.send('<:negate:520418505993093130>│``DIGA UM MOTIVO PARA ME DESLIGAR!``')
-        self.bot.shutdown(reason)
+            return await ctx.send('<:alert:739251822920728708>│``DIGA UM MOTIVO PARA ME DESLIGAR!``')
+        await self.bot.shutdown(reason)
         embed = discord.Embed(
             color=self.color,
-            description=f'<:confirmado:519896822072999937>│**Logging out...**')
+            description=f'<:confirmed:721581574461587496>│**Logging out...**')
         await ctx.send(embed=embed)
         await self.bot.logout()
 

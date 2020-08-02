@@ -14,7 +14,14 @@ class Booster(object):
         self.legend = {"Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5}
         self.bl = {"Comum": "c", "Incomum": "i", "Raro": "r", "Super Raro": "sr", "Ultra Raro": "ur",
                    "Secret": "secret"}
-        self.rarity = {"Comum": 600, "Incomum": 500, "Raro": 400, "Super Raro": 300, "Ultra Raro": 200, "Secret": 100}
+        self.rarity = {
+            "Comum": [600, [0.01, 0.02, 0.07, 0.10, 0.20, 0.60]],
+            "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.30, 0.30]],
+            "Raro": [400, [0.03, 0.07, 0.15, 0.20, 0.25, 0.30]],
+            "Super Raro": [300, [0.04, 0.8, 0.20, 0.28, 0.20, 0.20]],
+            "Ultra Raro": [200, [0.05, 0.10, 0.25, 0.30, 0.15, 0.15]],
+            "Secret": [100, [0.10, 0.20, 0.30, 0.25, 0.10, 0.05]]
+        }
 
         # booster configs
         self.booster_choice = {"Comum": 0, "Incomum": 0, "Raro": 0, "Super Raro": 0, "Ultra Raro": 0, "Secret": 0}
@@ -48,21 +55,21 @@ class Booster(object):
         self.i = 0
         self.c = 0
 
-    def define_limit(self, size):
+    def define_limit(self, rarity):
         # Limites dos itens
-        self.l_secret = int(size * 0.05)
-        self.l_ur = int(size * 0.10)
-        self.l_sr = int(size * 0.15)
-        self.l_r = int(size * 0.20)
-        self.l_i = int(size * 0.20)
-        self.l_c = int(size * 0.30)
+        self.l_secret = int(rarity[0] * rarity[1][0])
+        self.l_ur = int(rarity[0] * rarity[1][1])
+        self.l_sr = int(rarity[0] * rarity[1][2])
+        self.l_r = int(rarity[0] * rarity[1][3])
+        self.l_i = int(rarity[0] * rarity[1][4])
+        self.l_c = int(rarity[0] * rarity[1][5])
 
     @property
     def create_box(self):
         rarity = choice(list(self.rarity.keys()))
-        size = self.rarity[rarity]
+        size = self.rarity[rarity][0]
         self.reset_counts()
-        self.define_limit(size)
+        self.define_limit(self.rarity[rarity])
         self.box['status']['rarity'] = rarity
         self.box['status']['size'] = size
         self.box['items'] = dict()
@@ -135,7 +142,7 @@ class Booster(object):
         if data['treasure']['money'] > 2000:
             answer = await bot.db.take_money(ctx, 2000)
         else:
-            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR "
+            return await ctx.send("<:alert:739251822920728708>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR "
                                   "A BOX!\nVOCÊ PRECISA DE 2.000 ETHERNYAS PARA COMPRAR UMA BOX.``")
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -168,7 +175,7 @@ class Booster(object):
     async def buy_booster(self, bot, ctx):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         if not data['box']['status']['active']:
-            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
+            return await ctx.send("<:alert:739251822920728708>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
 
         price = 500
         if data['user']['ranking'] == "Bronze":
@@ -181,7 +188,7 @@ class Booster(object):
             price -= 50
 
         if data['treasure']['money'] < price:
-            return await ctx.send("<:alert_status:519896811192844288>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
+            return await ctx.send("<:alert:739251822920728708>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
                                   "\nVOCÊ PRECISA DE 500 ETHENYAS PARA COMPRAR UM BOOSTER.``")
 
         answer = await bot.db.take_money(ctx, price)
@@ -191,12 +198,13 @@ class Booster(object):
 
         item = self.buy_item(data['box'])
         if item is None:
-            return await ctx.send("<:negate:520418505993093130>│``VOCÊ FALHOU EM COMPRAR O ITEM...``")
+            return await ctx.send("<:negate:721581573396496464>│``VOCÊ FALHOU EM COMPRAR O ITEM...``")
 
         for k, v in self.items.items():
             if v == item['data']:
                 self.key_item = k
 
+        Empty = False
         rarity = list(self.legend.keys())[list(self.legend.values()).index(item['data'][3])]
         update['box']['status'][self.bl[rarity]] -= 1
         update['box']['status']['size'] -= 1
@@ -204,13 +212,7 @@ class Booster(object):
 
         if update['box']['status']['size'] <= 0:
             update['box']['status']['active'] = False
-
-            reward = list()
-            op = ['soul_crystal_of_love', 'soul_crystal_of_hope', 'soul_crystal_of_hate']
-            reward.append(choice(op))
-            response = await bot.db.add_reward(ctx, reward)
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
-                           f"``COMO PREMIO VOCE ACABA DE GANHAR ESSE ITEM:`` ✨ **{response.upper()}** ✨")
+            Empty = True
 
         try:
             update['inventory'][self.key_item] += 1
@@ -218,6 +220,14 @@ class Booster(object):
             update['inventory'][self.key_item] = 1
 
         await bot.db.update_data(data, update, 'users')
+
+        if Empty:
+            reward = list()
+            op = ['soul_crystal_of_love', 'soul_crystal_of_hope', 'soul_crystal_of_hate']
+            reward.append(choice(op))
+            response = await bot.db.add_reward(ctx, reward)
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
+                           f"``COMO PREMIO VOCE ACABA DE GANHAR UM ITEM:`` ✨ **HEROIC** ✨\n{response.upper()}")
 
         if rarity.lower() in ["ultra raro", "secret"]:
             return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM "

@@ -21,7 +21,7 @@ class TwitterClass(commands.Cog):
         """Comando totalmente demente de twitter
         Use ash twitter <mensagem desejada>"""
         if resp is None:
-            return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU POSTAR``')
+            return await ctx.send('<:alert:739251822920728708>│``DIGITE ALGO PARA EU POSTAR``')
 
         rede = [[23, (18, 15)], [(296, 149), (17, 120)],
                 [['', (14, 48), 14], ['', (49, 16), 10], ['', (49, 29), 8]], 36, 3]
@@ -45,7 +45,7 @@ class TwitterClass(commands.Cog):
                 cont += len(c)
         if resp.count('''
 ''') > rede[4]:
-            await ctx.send('<:alert_status:519896811192844288>│``Sua mensagem foi muito grande!``')
+            await ctx.send('<:alert:739251822920728708>│``Sua mensagem foi muito grande!``')
         else:
             avatarurl = requests.get(ctx.author.avatar_url_as(format="png"))
             avatar = Image.open(BytesIO(avatarurl.content)).convert('RGBA')

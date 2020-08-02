@@ -25,12 +25,12 @@ def check_it(**kwargs):
             if ctx.command.name == "help" or ctx.command.name == "ajuda":
                 return True
             else:
-                raise commands.NoPrivateMessage('<:negate:520418505993093130>│``Você não pode mandar comandos em '
+                raise commands.NoPrivateMessage('<:alert:739251822920728708>│``Você não pode mandar comandos em '
                                                 'mensagens privadas!``')
 
         if not (isinstance(ctx.channel, (discord.DMChannel, discord.GroupChannel))) and kwargs.get('is_nsfw', False):
             if ctx.channel.is_nsfw() is False:
-                raise commands.CheckFailure("<:negate:520418505993093130>│``Esse comando apenas pode ser usado"
+                raise commands.CheckFailure("<:alert:739251822920728708>│``Esse comando apenas pode ser usado"
                                             " em um canal`` **nsfw!!**")
 
         if ctx.author.id == data['config']['owner_id'] and kwargs.get('is_owner', False):
@@ -38,12 +38,12 @@ def check_it(**kwargs):
         elif ctx.author.id in ctx.bot.staff and kwargs.get('is_owner', False):
             pass
         elif ctx.author.id != data['config']['owner_id'] and kwargs.get('is_owner', False):
-            raise commands.CheckFailure("<:negate:520418505993093130>│``Apenas meu criador pode usar esse comando!``")
+            raise commands.CheckFailure("<:alert:739251822920728708>│``Apenas meu criador pode usar esse comando!``")
 
         if kwargs.get("check_role", False):
             role = discord.utils.find(lambda r: r.name in kwargs.get("roles", []), ctx.author.roles)
             if role is None:
-                raise commands.CheckFailure("<:negate:520418505993093130>│``Você precisa de um cargo "
+                raise commands.CheckFailure("<:alert:739251822920728708>│``Você precisa de um cargo "
                                             "específico para usar esse comando!``")
 
         if kwargs.get('no_pm', False) or kwargs.get('is_owner', False) or kwargs.get('is_nsfw', False):

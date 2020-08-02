@@ -23,12 +23,7 @@ class SaySomething(commands.Cog):
         if ctx.invoked_subcommand is None:
             if msg is None:
                 return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU FALAR``')
-            try:
-                await ctx.message.delete()
-            except discord.errors.Forbidden:
-                pass
-            finally:
-                await ctx.send('```{}```'.format(msg.upper()))
+            await ctx.send('```{}```'.format(msg.upper()))
 
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -37,7 +32,7 @@ class SaySomething(commands.Cog):
     async def _channel(self, ctx, channel: commands.TextChannelConverter, *, text: str = None):
         """apenas desenvolvedores"""
         if text is None:
-            return await ctx.send('<:negate:520418505993093130>│``DIGITE ALGO PARA EU FALAR``')
+            return await ctx.send('<:negate:721581573396496464>│``DIGITE ALGO PARA EU FALAR``')
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
