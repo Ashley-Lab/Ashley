@@ -21,16 +21,12 @@ class Helper(commands.Cog):
 
     async def add_reactions(self, user: discord.Member):
         self.cont += 1
-        await botmsg[user.id].add_reaction('🏛')
-        await botmsg[user.id].add_reaction('🎵')
-        await botmsg[user.id].add_reaction('🎙')
-        await botmsg[user.id].add_reaction('🎲')
+        await botmsg[user.id].add_reaction('🧭')
         await botmsg[user.id].add_reaction('🌎')
-        await botmsg[user.id].add_reaction('🌏')
-        await botmsg[user.id].add_reaction('🌍')
         await botmsg[user.id].add_reaction('💰')
-        await botmsg[user.id].add_reaction('🚓')
-        await botmsg[user.id].add_reaction('🛡')
+        await botmsg[user.id].add_reaction('🎲')
+        await botmsg[user.id].add_reaction('🎙️')
+        await botmsg[user.id].add_reaction('👮🏽‍♂️')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -48,20 +44,41 @@ class Helper(commands.Cog):
         if command_help is None:
             self.status()
             embed = discord.Embed(
-                title="-==Choice Area==-\n"
-                      "Obs, para detalhar o comando use: ash help <command>\n"
-                      "Exemplo: <ash help say> ou <ash help top xp>",
+                title="-==Artigo de Ajuda==-\nPara detalhar o comando use: ash help <command>",
                 color=self.color,
-                description=f"- For **Main**: click in :classical_building:\n"
-                            f"- For **Music**: click in :musical_note:\n"
-                            f"- For **Iterations IA**: click in :microphone2:\n"
-                            f"- For **Games**: click in :game_die:\n"
-                            f"- For **General Pt1**: click in :earth_americas:\n"
-                            f"- For **General Pt2**: click in :earth_asia:\n"
-                            f"- For **General Pt3**: click in :earth_africa:\n"
-                            f"- For **Economy**: click in :moneybag:\n"
-                            f"- For **Staffs**: click in :police_car:\n"
-                            f"- For **Owner**: click in :shield:")
+                description=f"Olá {ctx.author.name}, eu sou a **Ashley**, um bot de diversão e jogos, "
+                            f"incluindo RPG de turnos e sistemas de economia e moderação completos!")
+
+            embed.add_field(name="**Um pouco acerca dos meus sistemas**",
+                            value=">>> Possuo um sistema de economia muito completo e fechado, ou seja, o meu dono "
+                                  "não tem controle sobre ele. É um sistema que tem vindo a ser atualizado ao longo "
+                                  "do tempo para que possa ser o mais semelhante possível à economia real.\nExiste "
+                                  "também um sistema de RPG, que se baseia em juntar itens para criar equipamentos "
+                                  "melhores e batalhar contra monstros mais fortes!\nPor fim, mas não menos "
+                                  "importante, temos o sistema de moderação avançado, feito com rigor de forma a "
+                                  "impedir que jogadores abusivos arruinem a experiência de todos os usuários.",
+                            inline=False)
+
+            embed.add_field(name="**Entretenimento**",
+                            value=">>> Existem categorias de entretenimento que contêm (mini)jogos e outros diversos. "
+                                  "Se você é um colecionador, irá adorar o meu sistema de coleção de artefactos e de "
+                                  "Pets!\nO sistema de Pets consiste em capturar, cuidar e evoluí-los, de forma a "
+                                  "torná-los os seus melhores amigos. Nenhum esforço é em vão, eles irão compensar "
+                                  "você por se dedicar tanto a eles!", inline=False)
+
+            embed.add_field(name="**Categorias**",
+                            value=">>> 🌎 — Diversos\n💰 — Economia\n🎲 — Entretenimento\n🎙️ — Interações com a IA\n👮🏽‍♂"
+                                  "️ — Staff\n\n_Para obter uma lista de comandos referentes a cada categoria, basta "
+                                  "clicar na reação abaixo correspondente._\n\n_Para voltar à página inicial, reaja "
+                                  "com 🧭_", inline=False)
+
+            embed.add_field(name="**Estado dos comandos**",
+                            value=">>> Todos os comandos possuem um estado para que seja fácil entender se estão "
+                                  "disponíveis ou não para uso.\nAbaixo está uma lista com referências aos diversos "
+                                  "estados, que aparecerão antes do nome dos comandos.\n\n`🟢  Disponível           "
+                                  "   `\n`🟡  Com possíveis problemas `\n`🔴  Desativado              `\n`🟣  VIP  "
+                                  "                   `", inline=False)
+
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="http://sisadm2.pjf.mg.gov.br/imagem/ajuda.png")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -116,31 +133,21 @@ class Helper(commands.Cog):
             await botmsg[user.id].edit(embed=ajuda)
             await self.add_reactions(user)
 
-        if reaction.emoji == "🎵" and reaction.message.id == botmsg[user.id].id:
-            ajuda = discord.Embed(
-                title="Commands Status",
-                color=self.color,
-                description=f"<:on_status:519896814799945728>│On\n<:alert_status:519896811192844288>│Alert\n"
-                            f"<:oc_status:519896814225457152>│Off\n<:stream_status:519896814825242635>│Vip")
-            ajuda.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-            ajuda.set_thumbnail(
-                url="http://icons.iconarchive.com/icons/raindropmemory/summer-love-cicadas/256/Music-1-icon.png")
-            ajuda.add_field(name="Music Commands:",
-                            value=f"{self.st[31]}│**join** ``or`` **entrar**\n"
-                                  f"{self.st[31]}│**play** ``or`` **tocar**\n"
-                                  f"{self.st[31]}│**pause** ``or`` **pausar**\n"
-                                  f"{self.st[31]}│**resume** ``or`` **retornar**\n"
-                                  f"{self.st[31]}│**skip** ``or`` **pular**\n"
-                                  f"{self.st[31]}│**playlist** ``or`` **lista**\n"
-                                  f"{self.st[31]}│**current** ``or`` **tocando**\n"
-                                  f"{self.st[31]}│**volume** ``or`` **vol**\n"
-                                  f"{self.st[31]}│**stop** ``or`` **parar**\n"
-                                  f"{self.st[31]}│**shuffle** ``or`` **embaralhar**\n"
-                                  f"{self.st[31]}│**clear** ``or`` **limpar**\n"
-                                  f"{self.st[31]}│**remove** ``or`` **remover**\n"
-                                  f"{self.st[31]}│**repeat** ``or`` **repetir**")
-            ajuda.set_footer(text="Ashley ® Todos os direitos reservados.")
-            await botmsg[user.id].edit(embed=ajuda)
+        if reaction.emoji == "💰" and reaction.message.id == botmsg[user.id].id:
+            link = "http://icons.iconarchive.com/icons/raindropmemory/summer-love-cicadas/256/Music-1-icon.png"
+            embed = discord.Embed(title="Commands Status", color=self.color)
+            embed.set_author(name="Ashley — Comandos de Economia", icon_url=self.bot.user.avatar_url)
+            embed.set_thumbnail(url=link)
+            embed.add_field(name="\u200B",
+                            value=f"{self.st[28]} `economia` Mostra a quantidade total de ETHERNYAS e pedras do Bot.\n"
+                                  f"{self.st[29]} `tesouro ` Mostra a quantidade de ETHERNYAS e pedras no servidor.\n"
+                                  f"{self.st[30]} `carteira` Mostra a quantidade das suas ETHERNYAS e pedras.\n"
+                                  f"{self.st[30]} `pagar   ` Paga uma quantia de ETHERNYAS a um usuário.\n"
+                                  f"{self.st[30]} `dar     ` Oferece uma quantidade de um item a um usuário.\n"
+                                  f"{self.st[66]} `diario  ` Lista todos os sub-comandos de recompensas diárias.\n"
+                                  f"`🔴` `loja    ` Abre um menu com diversos itens para compra.")
+            embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+            await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
 
         if reaction.emoji == "🎙" and reaction.message.id == botmsg[user.id].id:

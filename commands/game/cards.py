@@ -16,7 +16,7 @@ class CardsClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='card', aliases=['carta', 'yugioh'])
-    async def cards(self, ctx):
+    async def card(self, ctx):
         """use ash cards e tente adivinhar que carta de yugioh esta na tela"""
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

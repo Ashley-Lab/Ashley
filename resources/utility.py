@@ -175,14 +175,17 @@ async def paginator(bot, items, inventory, embed, ctx):
                 reaction = await bot.wait_for('reaction_add', timeout=30.0)
             except TimeoutError:
                 break
-        emoji = str(emojis[0]).replace('<:', '').replace(emojis[0][emojis[0].rfind(':'):], '')
-        if reaction[0].emoji.name == emoji and cont > 0:
-            cont -= 1
-        emoji = str(emojis[1]).replace('<:', '').replace(emojis[1][emojis[1].rfind(':'):], '')
-        if reaction[0].emoji.name == emoji and cont < len(descriptions) - 1:
-            cont += 1
-        emoji = str(emojis[2]).replace('<:', '').replace(emojis[2][emojis[2].rfind(':'):], '')
-        if reaction[0].emoji.name == emoji:
+        try:
+            emoji = str(emojis[0]).replace('<:', '').replace(emojis[0][emojis[0].rfind(':'):], '')
+            if reaction[0].emoji.name == emoji and cont > 0:
+                cont -= 1
+            emoji = str(emojis[1]).replace('<:', '').replace(emojis[1][emojis[1].rfind(':'):], '')
+            if reaction[0].emoji.name == emoji and cont < len(descriptions) - 1:
+                cont += 1
+            emoji = str(emojis[2]).replace('<:', '').replace(emojis[2][emojis[2].rfind(':'):], '')
+            if reaction[0].emoji.name == emoji:
+                break
+        except AttributeError:
             break
     await msg.delete()
 

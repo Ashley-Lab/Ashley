@@ -98,13 +98,51 @@ class Ashley(commands.AutoShardedBot):
             data_guild = await self.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if data_user is not None and data_guild is not None:
+                update_user = data_user
+                update_user['security']['commands'] += 1
+
+                try:
+                    update_user['security']['commands_today'] += 1
+                except KeyError:
+                    update_user['security']['commands_today'] = 1
+
+                update_user['security']['last_command'] = dt.today()
+                update_user['security']['last_channel'] = ctx.channel.id
+                await self.db.update_data(data_user, update_user, 'users')
+
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
-                self.user_commands[ctx.author.id] += 1
                 update_guild = data_guild
                 if data_user['security']['status']:
                     update_guild['data']['commands'] += 1
+
+                if (update_guild['data']['commands'] // 1000) > 5 and update_guild['data']['ranking'] == "Bronze":
+                    min_ = 1 + (update_guild['data']['commands'] // 1000)
+                    chance = randint(min_, 200)
+                    if chance < min_:
+                        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+                        update_user = data_user
+                        update_user['inventory']['coins'] += 100
+                        await self.db.update_data(data_user, update_user, 'users')
+                        update_guild['data']['ranking'] = "Silver"
+                        await ctx.send(f'🎊 **PARABENS** 🎉 {ctx.author} ``você upou sua guilda para o ranking`` '
+                                       f'**Silver** ``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
+                                       f'partir de agora e `` **+100** ``Fichas para jogar``')
+                elif (update_guild['data']['commands'] // 1000) > 10 and update_guild['data']['ranking'] == "Silver":
+                    min_ = 1 + (update_guild['data']['commands'] // 1000)
+                    chance = randint(min_, 200)
+                    if chance < min_:
+                        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+                        update_user = data_user
+                        update_user['inventory']['coins'] += 200
+                        await self.db.update_data(data_user, update_user, 'users')
+                        update_guild['data']['ranking'] = "Gold"
+                        await ctx.send(f'🎊 **PARABENS** 🎉 {ctx.author} ``você upou sua guilda para o ranking`` '
+                                       f'**Gold** ``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
+                                       f'partir de agora e `` **+200** ``Fichas para jogar``')
+
                 await self.db.update_data(data_guild, update_guild, 'guilds')
+
                 if (self.guilds_commands[ctx.guild.id] % 10) == 0:
                     for data in await self.db.get_announcements():
                         if data['data']['status']:
@@ -127,6 +165,7 @@ class Ashley(commands.AutoShardedBot):
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             if isinstance(ctx.author, discord.Member) and data_user is not None:
                 update_user = data_user
+                self.user_commands[ctx.author.id] += 1
                 if data_user['security']['status']:
                     update_user['user']['commands'] += 1
                 if (update_user['user']['commands'] % 2) == 0:
@@ -152,6 +191,10 @@ class Ashley(commands.AutoShardedBot):
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
                         update_user['user']['titling'] = self.titling[key]
+
+                if str(ctx.command).lower() in ['card', 'whats', 'hot', 'guess', 'hangman', 'jkp', 'pokemon']:
+                    update_user['config']['playing'] = False
+
                 await self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
@@ -179,19 +222,6 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                     embed.set_thumbnail(url=BOX)
                     await ctx.send(embed=embed)
-
-                data_user = await self.db.get_data("user_id", ctx.author.id, "users")
-                update_user = data_user
-                update_user['security']['commands'] += 1
-
-                try:
-                    update_user['security']['commands_today'] += 1
-                except KeyError:
-                    update_user['security']['commands_today'] = 1
-
-                update_user['security']['last_command'] = dt.today()
-                update_user['security']['last_channel'] = ctx.channel.id
-                await self.db.update_data(data_user, update_user, 'users')
 
                 data_user = await self.db.get_data("user_id", ctx.author.id, "users")
                 update_user = data_user
@@ -387,6 +417,7 @@ if __name__ == "__main__":
     bot = Ashley(command_prefix=prefix, description=description_ashley, pm_help=True, case_insensitive=True)
     bot.remove_command('help')
     cont = 0
+    emojis = {"ON": "``🟢``", "IDLE": "``🟡``", "OFF": "``🔴``", "VIP": "``🟣``"}
 
     print("\033[1;35m( >> ) | Iniciando...\033[m\n")
     print("\033[1;35m( >> ) | Iniciando carregamento de extensões...\033[m")
@@ -397,18 +428,18 @@ if __name__ == "__main__":
                 if '@' not in name.strip() and '#' not in name.strip():
                     bot.load_extension(name.strip())
                     if name.strip() not in bot.vip_cog:
-                        bot.data_cog[name.strip()] = "<:on_status:519896814799945728>"
+                        bot.data_cog[name.strip()] = emojis['ON']
                     else:
-                        bot.data_cog[name.strip()] = "<:stream_status:519896814825242635>"
+                        bot.data_cog[name.strip()] = emojis['VIP']
                     cont += 1
                 else:
                     if '#' not in name.strip():
                         print(f'\033[1;36m( ☢️ ) | Cog: \033[1;34m{name.strip()}\033[1;36m não foi carregada!\33[m')
-                        bot.data_cog[name.strip()] = "<:oc_status:519896814225457152>"
+                        bot.data_cog[name.strip()] = emojis['OFF']
             except Exception as e:
                 if '#' not in name.strip():
                     print(f"\033[1;31m( ❌ ) | Cog: \033[1;34m{name}\033[1;31m teve um [Erro] : \033[1;35m{e}\33[m")
-                    bot.data_cog[name.strip()] = "<:alert_status:519896811192844288>"
+                    bot.data_cog[name.strip()] = emojis['IDLE']
                     traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
                 continue
     f.close()

@@ -38,7 +38,7 @@ class TransferClass(commands.Cog):
 
         await ctx.send(f'{ctx.guild.owner.mention} ``o membro`` {ctx.author.mention} ``quer associar sua conta do meu '
                        f'sistema na sua guilda.``\n ``A conta dele contem exatos`` **R${d} de Ethernyas** ``você deseja'
-                       f' recebe-lo? Responsta com`` **[S/N]**', delete_after=60.0)
+                       f' recebe-lo? Responda com`` **[S/N]**', delete_after=60.0)
 
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
@@ -47,19 +47,9 @@ class TransferClass(commands.Cog):
                                   '**COMANDO CANCELADO**')
 
         if answer.content.upper() == "S":
-            total = 1 * update_user['treasure']['bronze']
-            total += 10 * update_user['treasure']['silver']
-            total += 100 * update_user['treasure']['gold']
-            update_guild_native['data']['total_money'] -= total
-            update_guild_future['data']['total_money'] += total
-            update_guild_native['data']['total_gold'] -= update_user['treasure']['gold']
-            update_guild_future['data']['total_gold'] += update_user['treasure']['gold']
-            update_guild_native['data']['total_silver'] -= update_user['treasure']['silver']
-            update_guild_future['data']['total_silver'] += update_user['treasure']['silver']
-            update_guild_native['data']['total_bronze'] -= update_user['treasure']['bronze']
-            update_guild_future['data']['total_bronze'] += update_user['treasure']['bronze']
+            update_guild_native['data']['total_money'] -= update_user['treasure']['money']
+            update_guild_future['data']['total_money'] += update_user['treasure']['money']
             update_user["guild_id"] = ctx.guild.id
-            update_user["guild_name"] = ctx.guild.name
             await self.bot.db.update_data(data_user, update_user, 'users')
             await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             await self.bot.db.update_data(data_guild_future, update_guild_future, 'guilds')

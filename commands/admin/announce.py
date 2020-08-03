@@ -26,6 +26,7 @@ class RegisterAnnounce(commands.Cog):
             await self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send("<:negate:721581573396496464>│``Apenas donos de Guilda vip podem usar esse "
                                   "comando!``")
+
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         if data_guild['vip'] is False:
             data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -34,11 +35,15 @@ class RegisterAnnounce(commands.Cog):
             await self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send("<:negate:721581573396496464>│``Você é o líder da guilda, mas sua Guilda ainda "
                                   "nao é VIP, você precisa conquistar 10 estrelas para tornar sua guilda VIP!``")
+
         if announce is None:
-            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update_ = data_
-            del update_['cooldown'][str(ctx.command)]
-            await self.bot.db.update_data(data_, update_, 'users')
+            try:
+                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update_ = data_
+                del update_['cooldown'][str(ctx.command)]
+                await self.bot.db.update_data(data_, update_, 'users')
+            except KeyError:
+                pass
             return await ctx.send('<:negate:721581573396496464>│``Você precisa colocar um anuncio, para que eu'
                                   ' adicione no banco de dados!``')
 

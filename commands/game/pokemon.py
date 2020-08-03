@@ -16,7 +16,7 @@ class PokemonClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='pokemon', aliases=['poke'])
-    async def cards(self, ctx):
+    async def pokemon(self, ctx):
         """QUEM É ESSE POKEMON?
         Use ash pokemon ou ash poke pra jogar"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

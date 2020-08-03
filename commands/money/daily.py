@@ -218,20 +218,60 @@ class DailyClass(commands.Cog):
         if (update_user['user']['rec'] % 2) == 0:
             chance = randint(1, 100)
             if chance <= 25:
-                update_user['user']['stars'] += 1
-                await ctx.send(f'<:rank:519896825411665930>│{member.mention} ``GANHOU 1 ESTRELA!`` 🎊 **PARABENS** 🎉 '
-                               f'**APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM O COMANDO:** '
-                               f'``ASH RANK``')
-                if update_user['user']['stars'] >= 10:
-                    data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-                    update_guild = data_guild
-                    if data_guild['vip'] is False and member.id == ctx.guild.owner.id:
-                        update_guild['vip'] = True
-                        await self.bot.db.update_data(data_guild, update_guild, 'guilds')
-                        await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
-                                       '**O LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
-                                       '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '
-                                       '"ASH ANNOUNCE" E USAR O SISTEMA DE MUSICA!``')
+                if update_user['user']['stars'] < 20:
+
+                    update_user['user']['stars'] += 1
+                    await ctx.send(f'<:rank:519896825411665930>│{member.mention} ``GANHOU 1 ESTRELA!`` '
+                                   f'🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM '
+                                   f'O COMANDO:** ``ASH RANK``')
+
+                    if update_user['user']['stars'] >= 10:
+                        data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+                        update_guild = data_guild
+                        if data_guild['vip'] is False and member.id == ctx.guild.owner.id:
+                            update_guild['vip'] = True
+                            await self.bot.db.update_data(data_guild, update_guild, 'guilds')
+                            await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
+                                           '**O LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
+                                           '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '
+                                           '"ASH ANNOUNCE" E USAR O SISTEMA DE MUSICA!``')
+
+                    if chance < 6:
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+
+                        if update['user']['stars'] < 20:
+
+                            update['user']['stars'] += 1
+                            await self.bot.db.update_data(data, update, 'users')
+                            await ctx.send(f'<:rank:519896825411665930>│{ctx.author.mention} ``TAMBEM GANHOU 1 '
+                                           f'ESTRELA!`` 🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA '
+                                           f'ESTRELINHA NOVA COM O COMANDO:** ``ASH RANK``')
+
+                        else:
+                            response = await self.bot.db.add_reward(ctx, ['?-Bollash'])
+                            await ctx.send(f'<a:fofo:524950742487007233>│{ctx.author.mention} ``COMO NEM VOCE NEM`` '
+                                           f'{member.mention} ``POREM MAIS GANHAR ESTRELAS POR JA TEREM TODAS AS 20``'
+                                           f' ``VOCE GANHOU`` ✨ **ITENS PARA PET** ✨ {response}')
+
+                else:
+                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                    update = data
+
+                    if update['user']['stars'] < 20:
+
+                        update['user']['stars'] += 1
+                        await self.bot.db.update_data(data, update, 'users')
+                        await ctx.send(f'<:rank:519896825411665930>│{ctx.author.mention} ``GANHOU 1 ESTRELA, PORQUE`` '
+                                       f'{member.mention} ``JA TEM TODAS AS 20 ESTRELAS DISPONIVEIS``'
+                                       f'🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA '
+                                       f'COM O COMANDO:** ``ASH RANK``')
+
+                    else:
+                        response = await self.bot.db.add_reward(ctx, ['?-Bollash'])
+                        await ctx.send(f'<a:fofo:524950742487007233>│{ctx.author.mention} ``COMO NEM VOCE NEM`` '
+                                       f'{member.mention} ``POREM MAIS GANHAR ESTRELAS POR JA TEREM TODAS AS 20``'
+                                       f' ``VOCE GANHOU`` ✨ **ITENS PARA PET** ✨ {response}')
 
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:confirmed:721581574461587496>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '

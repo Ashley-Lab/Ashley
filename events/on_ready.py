@@ -67,7 +67,7 @@ class OnReady(commands.Cog):
                     if not update['security']['status']:
                         continue
 
-                    if update['security']['commands_today'] > 900:
+                    if update['security']['commands_today'] > 2000:
                         try:
                             update['security']['status'] = not update['security']['status']
                             update['security']['blocked'] = not update['security']['blocked']
