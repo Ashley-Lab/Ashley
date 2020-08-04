@@ -58,7 +58,7 @@ class RecipeClass(commands.Cog):
                         quant = data['inventory'][c[0]]
                     except KeyError:
                         quant = 0
-                    description += f'\n{self.bot.items[c[0]][0]} ``{c[0]}:`` **{c[1]}**/{quant}'
+                    description += f'\n{self.bot.items[c[0]][0]} ``{c[0]}`` **{c[1]}**/{quant}'
 
                 for c in recipe['cost']:
                     try:
@@ -85,9 +85,9 @@ class RecipeClass(commands.Cog):
                     await msg.add_reaction(c)
 
                 try:
-                    reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
+                    reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
                     while reaction[1].id != ctx.author.id or reaction[0].emoji not in emojis:
-                        reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
+                        reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
                 except TimeoutError:
                     data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                     update = data
@@ -127,7 +127,7 @@ class RecipeClass(commands.Cog):
                 elif reaction[0].emoji == '⏩':
                     await ctx.send('<:alert:739251822920728708>│``Quantas receitas você quer fazer?``')
                     try:
-                        resp = await self.bot.wait_for('message', check=check, timeout=30.0)
+                        resp = await self.bot.wait_for('message', check=check, timeout=60.0)
                     except TimeoutError:
                         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
@@ -140,7 +140,7 @@ class RecipeClass(commands.Cog):
                         if int(resp.content) <= maximo:
                             break
                         try:
-                            resp = await self.bot.wait_for('message', check=check, timeout=30.0)
+                            resp = await self.bot.wait_for('message', check=check, timeout=60.0)
                         except TimeoutError:
                             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                             update = data
@@ -234,10 +234,16 @@ class RecipeClass(commands.Cog):
                     await self.bot.db.update_data(data, update, 'users')
                     return
 
+                quantidade = 1
+                if reaction[0].emoji == '⏩':
+                    quantidade = resp
+                if reaction[0].emoji == '⏭':
+                    quantidade = maximo
+
                 await msg.delete()
                 await self.bot.db.update_data(data, update, 'users')
                 await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM`` ✨ **{item.upper()}** ✨ "
-                               f"``FOI CRAFTADO FEITO COM SUCESSO!``")
+                               f"``FOI CRAFTADO FEITO`` **{quantidade}X** ``COM SUCESSO!``")
             else:
                 await ctx.send('<:negate:721581573396496464>|``Esse item não existe ou nao é craftavel.``')
         else:

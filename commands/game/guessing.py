@@ -8,7 +8,7 @@ from resources.db import Database
 class GameThinker(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.extra = ['Melted_Bone', 'Life_Crystal', 'Energy', 'Death_Blow', 'Stone_of_Soul', 'Vital_Force']
+        self.extra = ['Melted_Bone', 'Life_Crystal', 'Death_Blow', 'Stone_of_Soul', 'Vital_Force']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -41,9 +41,9 @@ class GameThinker(commands.Cog):
 
             update['inventory']['coins'] -= 10
             await self.bot.db.update_data(data, update, 'users')
-            reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
+            reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark', 'Energy']
             change = randint(15, 100)
-            if change == 15:
+            if change == 50:
                 reward.append(choice(self.extra))
 
             if resposta.content in ["0", "1", "2", "3", "4", "5"]:

@@ -86,7 +86,8 @@ ITEMS:
 <SIZE: {}/{}>```'''.format(rarity, status, s, l_s, ur, l_ur, sr, l_sr, r, l_r, i, l_i, c, l_c, size_now, size_full)
                     box = discord.Embed(
                         title="{}'s box:\n"
-                              "``PARA ABRIR SUA BOX USE O COMANDO`` **ASH BOX BOOSTER**".format(ctx.author.name),
+                              "``PARA ABRIR SUA BOX USE O COMANDO``\n"
+                              "**ASH BOX BOOSTER**".format(ctx.author.name),
                         color=self.color,
                         description=description
                     )

@@ -258,6 +258,7 @@ class Helper(commands.Cog):
                                   f"{self.st[96]} `open    ` Abra um presente e descubra algo incrivel.\n"
                                   f"{self.st[97]} `craft   ` Crie seus itens para ser o melhor no rpg.\n"
                                   f"{self.st[97]} `recipe  ` Olhe todas as receitas disponiveis.\n"
+                                  f"`🟡` `derreter` Use seus artefatos, para criar um item.\n"  # {self.st[99]}
                                   f"{self.st[88]} `i       ` Abre seu inventario e veja tudo o que tem.\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)

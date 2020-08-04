@@ -10,7 +10,7 @@ player_ = ""
 class JoKenPo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.extra = ['Melted_Bone', 'Life_Crystal', 'Energy', 'Death_Blow', 'Stone_of_Soul', 'Vital_Force']
+        self.extra = ['Melted_Bone', 'Life_Crystal', 'Death_Blow', 'Stone_of_Soul', 'Vital_Force']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -49,9 +49,9 @@ class JoKenPo(commands.Cog):
 
             update['inventory']['coins'] -= 10
             await self.bot.db.update_data(data, update, 'users')
-            reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
+            reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark', 'Energy']
             change = randint(10, 100)
-            if change == 10:
+            if change == 50:
                 reward.append(choice(self.extra))
 
             if resposta.content == "1":

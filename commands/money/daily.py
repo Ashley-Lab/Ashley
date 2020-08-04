@@ -179,15 +179,16 @@ class DailyClass(commands.Cog):
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
 
-        if not data_user['security']['status']:
-            return await ctx.send("<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
-                                  "DEMAIS`` **ESSE TIPO DE USUARIO NAO PODE RECEBER RECOMENDAÇÃO...**'")
-
         if member.id == ctx.author.id:
             return await ctx.send('<:alert:739251822920728708>│``Você não pode dar REC em si mesmo!``')
+
         if data_user is None:
             return await ctx.send('<:alert:739251822920728708>│``Você precisa mencionar alguem cadastrado no meu '
                                   'banco de dados!``')
+
+        if not data_user['security']['status']:
+            return await ctx.send("<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
+                                  "DEMAIS`` **ESSE TIPO DE USUARIO NAO PODE RECEBER RECOMENDAÇÃO...**'")
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data

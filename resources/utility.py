@@ -10,7 +10,7 @@ responses = config['answers']
 questions = config['questions']
 color_embed = None
 legend = {"-": -1, "Comum": 0, "Incomum": 1, "Raro": 2, "Super Raro": 3, "Ultra Raro": 4, "Secret": 5,
-          "Legendary": 6, "Heroic": 7, "Divine": 8, "Sealed": 9, "For Pet": 10}
+          "Legendary": 6, "Heroic": 7, "Divine": 8, "Sealed": 9, "For Pet": 10, "God": 11}
 
 
 def include(string_, list_):
@@ -132,10 +132,12 @@ async def paginator(bot, items, inventory, embed, ctx):
             except KeyError:
                 string = f"<:negate:721581573396496464> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
         else:
-            cost = "".join(f"{items[i[0]][0]} {i[0]}: **{i[1]}** **│** " for i in inventory[key]['cost'])
-            reward = "".join(f"{items[i[0]][0]} {i[0]}: **{i[1]}** **│** " for i in inventory[key]['reward'])
+            cost = "".join(f"{items[i[0]][0]} {items[i[0]][1]}: **{i[1]}** **│** " for i in inventory[key]['cost'])
+            reward = "".join(f"{items[i[0]][0]} {items[i[0]][1]}: **{i[1]}** **│** " for i in inventory[key]['reward'])
             icon = inventory[key]['reward'][0][0]
-            string = f"{items[icon][0]} ``{key.upper()}``\n**Custo:** {cost[:-7]} \n **Recompença:** {reward[:-7]}\n\n"
+            string = f"{items[icon][0]} ``{key.upper()}``\n" \
+                     f"**Custo:**\n {cost[:-7]} \n " \
+                     f"**Recompensa:**\n {reward[:-7]}\n\n"
         cont += len(string)
         if cont <= 1500 and cont_i < 20:
             description += string
@@ -167,12 +169,12 @@ async def paginator(bot, items, inventory, embed, ctx):
         Embed.set_footer(text="Ashley ® Todos os direitos reservados.  [Pag {}/{}]".format(cont + 1, len(descriptions)))
         await msg.edit(embed=Embed, content='')
         try:
-            reaction = await bot.wait_for('reaction_add', timeout=30.0)
+            reaction = await bot.wait_for('reaction_add', timeout=60.0)
         except TimeoutError:
             break
         while reaction[1].id != ctx.author.id:
             try:
-                reaction = await bot.wait_for('reaction_add', timeout=30.0)
+                reaction = await bot.wait_for('reaction_add', timeout=60.0)
             except TimeoutError:
                 break
         try:

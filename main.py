@@ -195,6 +195,9 @@ class Ashley(commands.AutoShardedBot):
                 if str(ctx.command).lower() in ['card', 'whats', 'hot', 'guess', 'hangman', 'jkp', 'pokemon']:
                     update_user['config']['playing'] = False
 
+                if str(ctx.command).lower() in ['box buy', 'box booster']:
+                    update_user['config']['buying'] = False
+
                 await self.db.update_data(data_user, update_user, 'users')
                 if isinstance(ctx.author, discord.Member) and data is not None:
                     msg = await self.db.add_money(ctx, 6, True)
@@ -273,6 +276,7 @@ class Ashley(commands.AutoShardedBot):
                                 await ctx.send("<:alert:739251822920728708>**│** ``Agora você pode ganhar "
                                                "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
                                                "INVITE**")
+                await self.data.level_up(ctx)
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
@@ -321,7 +325,6 @@ class Ashley(commands.AutoShardedBot):
 
         if message.guild is not None and str(message.author.id) not in self.blacklist:
             await self.data.add_experience(message, randint(5, 15))
-            await self.data.level_up(message)
 
             run_command = False
             data_guild = await self.db.get_data("guild_id", message.guild.id, "guilds")

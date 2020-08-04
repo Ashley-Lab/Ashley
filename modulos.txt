@@ -97,4 +97,5 @@ commands.member.ia_response
 commands.guild.open
 commands.rpg.recipe
 commands.ashley.utility
+commands.rpg.melted
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1
