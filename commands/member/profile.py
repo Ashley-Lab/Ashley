@@ -7,9 +7,7 @@ from resources.db import Database
 from resources.utility import parse_duration
 from resources.img_edit import profile, remove_acentos_e_caracteres_especiais
 
-user = None
 time_left = None
-rec = 0
 
 
 class ProfileSystem(commands.Cog):
@@ -35,14 +33,14 @@ class ProfileSystem(commands.Cog):
         if member is None:
             member = ctx.author
 
-        global time_left, user, rec
+        global time_left
 
         data = await self.bot.db.get_data("user_id", member.id, "users")
-        update = data
-
         if data is None:
             return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
+
+        data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
 
         try:
             epoch = dt.utcfromtimestamp(0)
@@ -52,30 +50,29 @@ class ProfileSystem(commands.Cog):
         except KeyError:
             time_left = None
 
-        await self.bot.db.update_data(data, update, 'users')
-        n_data = await self.bot.db.get_data("user_id", member.id, "users")
-
-        a = '{:,.2f}'.format(float(n_data['treasure']['money']))
+        a = '{:,.2f}'.format(float(data['treasure']['money']))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')
         d = c.replace('v', '.')
 
         vip = [[], f"{time_left}"]
-        if n_data['config']['vip']:
-            vip[0].append(True)
-        else:
-            vip[0].append(False)
-        data_ = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-        if data_['vip']:
-            vip[0].append(True)
-        else:
-            vip[0].append(False)
-        if n_data['rpg']['vip']:
+
+        if data['config']['vip']:
             vip[0].append(True)
         else:
             vip[0].append(False)
 
-        if n_data['user']['married']:
+        if data_guild['vip']:
+            vip[0].append(True)
+        else:
+            vip[0].append(False)
+
+        if data['rpg']['vip']:
+            vip[0].append(True)
+        else:
+            vip[0].append(False)
+
+        if data['user']['married']:
             try:
                 user = self.bot.get_user(data['user']['married_at'])
                 married = user.avatar_url_as(format="png")
@@ -90,17 +87,17 @@ class ProfileSystem(commands.Cog):
             "avatar_member": member.avatar_url_as(format="png"),
             "avatar_married": married,
             "name": remove_acentos_e_caracteres_especiais(member.display_name),
-            "xp": n_data['user']['experience'],
-            "level": str(n_data['user']['level']),
+            "xp": data['user']['experience'],
+            "level": str(data['user']['level']),
             "vip": vip,
-            "rec": str(n_data['user']['rec']),
-            "coin": str(self.number_convert(n_data['inventory']['coins'])),
-            "commands": str(self.number_convert(n_data['user']['commands'])),
-            "entitlement": str(n_data['user']['titling']),
-            "about": remove_acentos_e_caracteres_especiais(n_data['user']['about']),
+            "rec": str(data['user']['rec']),
+            "coin": str(self.number_convert(data['inventory']['coins'])),
+            "commands": str(self.number_convert(data['user']['commands'])),
+            "entitlement": str(data['user']['titling']),
+            "about": remove_acentos_e_caracteres_especiais(data['user']['about']),
             "wallet": str(d),
-            "pet": n_data['pet']['pet_equipped'],
-            "artifacts": n_data['artifacts']
+            "pet": data['pet']['pet_equipped'],
+            "artifacts": data['artifacts']
         }
 
         profile(data_profile)

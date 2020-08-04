@@ -218,7 +218,7 @@ class Helper(commands.Cog):
                                   f"{self.st[87]} `rifa    ` Tente conseguir um **ARTEFATO** para seu perfil.\n"
                                   f"{self.st[87]} `transfer` Transfere sua conta para outro servidor.\n"
                                   f"{self.st[66]} `diario  ` Lista os comandos de recompensas diárias.\n"
-                                  f"`🔴` `loja    ` Abre um menu com diversos itens para compra.")
+                                  f"`🔴` `loja    ` ...")  # em desenvolvimento
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -249,16 +249,16 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos do RPG", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="⚔",
-                            value=f"{self.st[43]} `skill   ` ...\n"
-                                  f"{self.st[43]} `batalha ` ...\n"
-                                  f"{self.st[4]} `caixa   ` ...\n"
-                                  f"{self.st[66]} `diario  ` ...\n"
-                                  f"{self.st[30]} `rec     ` ...\n"
-                                  f"{self.st[96]} `gift    ` ...\n"
-                                  f"{self.st[96]} `open    ` ...\n"
-                                  f"{self.st[97]} `craft   ` ...\n"
-                                  f"{self.st[97]} `recipe  ` ...\n"
-                                  f"{self.st[88]} `i       ` ...\n")
+                            value=f"`🔴` `skill   ` ...\n"  # {self.st[43]}
+                                  f"{self.st[43]} `batalha ` Batalhe contra monstros poderosos.\n"
+                                  f"{self.st[4]} `caixa   ` Compre itens para criar suas armaduras.\n"
+                                  f"{self.st[66]} `diario  ` Reinvidique seus premios diarios.\n"
+                                  f"{self.st[30]} `rec     ` De ate 5 recomendações para seus amigos.\n"
+                                  f"{self.st[96]} `gift    ` Use seu codigo promocional.\n"
+                                  f"{self.st[96]} `open    ` Abra um presente e descubra algo incrivel.\n"
+                                  f"{self.st[97]} `craft   ` Crie seus itens para ser o melhor no rpg.\n"
+                                  f"{self.st[97]} `recipe  ` Olhe todas as receitas disponiveis.\n"
+                                  f"{self.st[88]} `i       ` Abre seu inventario e veja tudo o que tem.\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -271,7 +271,7 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos de PET", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="🐻",
-                            value=f"{self.st[76]} `pet     ` ...\n")
+                            value=f"`🔴` `pet     ` ...\n")  # {self.st[76]}
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -283,24 +283,24 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos Diversos", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="http://www.pngall.com/wp-content/uploads/2016/06/Earth-Free-PNG-Image-180x180.png")
             embed.add_field(name="🌎",
-                            value=f"{self.st[24]} `reflita ` ...\n"
-                                  f"{self.st[16]} `pensador` ...\n"
-                                  f"{self.st[14]} `palin   ` ...\n"
-                                  f"{self.st[15]} `diga    ` ...\n"
-                                  f"{self.st[10]} `textao  ` ...\n"
-                                  f"{self.st[12]} `fofoca  ` ...\n"
-                                  f"{self.st[13]} `abraço  ` ...\n"
-                                  f"{self.st[71]} `beijo   ` ...\n"
-                                  f"{self.st[72]} `lambida ` ...\n"
-                                  f"{self.st[80]} `dançar  ` ...\n"
-                                  f"{self.st[89]} `facebook` ...\n"
-                                  f"{self.st[90]} `insta   ` ...\n"
-                                  f"{self.st[91]} `twitter ` ...\n"
-                                  f"{self.st[92]} `zap     ` ...\n"
-                                  f"{self.st[70]} `chute   ` ...\n"
-                                  f"{self.st[74]} `empurrao` ...\n"
-                                  f"{self.st[75]} `tapa    ` ...\n"
-                                  f"{self.st[73]} `soco    ` ...\n")
+                            value=f"{self.st[24]} `reflita ` Tenha seu momento de reflexão diario.\n"
+                                  f"{self.st[16]} `pensador` Uma frase aleatoria, para voce se divertir.\n"
+                                  f"{self.st[14]} `palin   ` Frases que sao a mesma coisa de tras pra frente.\n"
+                                  f"{self.st[15]} `diga    ` Me faça dizer algo, não seja timido.\n"
+                                  f"{self.st[10]} `textao  ` Me faça dizer algo bem grande.\n"
+                                  f"{self.st[12]} `fofoca  ` Revele aquela fofoca, depois eu apago. rsrs\n"
+                                  f"{self.st[13]} `abraço  ` De um abraço em quem voce ama.\n"
+                                  f"{self.st[71]} `beijo   ` De uma beijoca na sua paixao.\n"
+                                  f"{self.st[72]} `lambida ` Depois de uma lambida, tudo fica mais feliz.\n"
+                                  f"{self.st[80]} `dançar  ` Dance com seu perceiro preferido.\n"
+                                  f"{self.st[89]} `facebook` Simule uma postagem no facebook.\n"
+                                  f"{self.st[90]} `insta   ` Simule uma postagem no instagram.\n"
+                                  f"{self.st[91]} `twitter ` Simule uma postagem no twitter.\n"
+                                  f"{self.st[92]} `zap     ` Simule uma postagem no whatsapp.\n"
+                                  f"{self.st[70]} `chute   ` Desconte sua raiva em alguem.\n"
+                                  f"{self.st[74]} `empurrao` Empurre aquela pessoa que te fez mal.\n"
+                                  f"{self.st[75]} `tapa    ` De um tapa na cada da sociedade.\n"
+                                  f"{self.st[73]} `soco    ` Um murro para desestressar\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -313,24 +313,24 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos de Utilidade", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="📢",
-                            value=f"{self.st[11]} `gif       ` ...\n"
-                                  f"{self.st[5]} `ping      ` ...\n"
-                                  f"{self.st[47]} `rolar     ` ...\n"
-                                  f"{self.st[2]} `feedback  ` ...\n"
-                                  f"{self.st[21]} `serverinfo` ...\n"
-                                  f"{self.st[26]} `userinfo  ` ...\n"
-                                  f"{self.st[22]} `roleinfo  ` ...\n"
-                                  f"{self.st[3]} `botinfo   ` ...\n"
-                                  f"{self.st[78]} `perfil    ` ...\n"
-                                  f"{self.st[45]} `sorteio   ` ...\n"
-                                  f"{self.st[8]} `convite   ` ...\n"
-                                  f"{self.st[20]} `emoji     ` ...\n"
-                                  f"{self.st[44]} `avatar    ` ...\n"
-                                  f"{self.st[79]} `casar     ` ...\n"
-                                  f"{self.st[82]} `bok       ` ...\n"
-                                  f"{self.st[79]} `separar   ` ...\n"
-                                  f"{self.st[46]} `rank      ` ...\n"
-                                  f"{self.st[67]} `top       ` ...")
+                            value=f"{self.st[11]} `gif       ` Pesquise um gif bem bonitinho.\n"
+                                  f"{self.st[5]} `ping      ` Veja minha latencia, estou sempre pronta.\n"
+                                  f"{self.st[47]} `rolar     ` Role um dado no padrao quantidade_X_lados.\n"
+                                  f"{self.st[2]} `feedback  ` Deixe sua sugestão ou relate um bug.\n"
+                                  f"{self.st[21]} `serverinfo` Informações uteis sobre o **Servidor**.\n"
+                                  f"{self.st[26]} `userinfo  ` Informações uteis sobre o **Usuario**.\n"
+                                  f"{self.st[22]} `roleinfo  ` Informações uteis sobre um **Cargo**.\n"
+                                  f"{self.st[3]} `botinfo   ` Informações uteis sobre **EUZINHA**.\n"
+                                  f"{self.st[78]} `perfil    ` Veja seu perfil, lindao e bonitao.\n"
+                                  f"{self.st[45]} `sorteio   ` Faça um sorteio de um membro.\n"
+                                  f"{self.st[8]} `convite   ` Entre no meu servidor de suporte.\n"
+                                  f"{self.st[20]} `emoji     ` Veja todos os emojis do servidor.\n"
+                                  f"{self.st[44]} `avatar    ` Olhe sua foto toda lindona.\n"
+                                  f"{self.st[79]} `casar     ` Case com o amor da sua vida.\n"
+                                  f"{self.st[82]} `bok       ` Comando exclusivo para casados. +18\n"
+                                  f"{self.st[79]} `separar   ` Se nao deu certo, se separe...\n"
+                                  f"{self.st[46]} `rank      ` Veja seu rank no meu sistema.\n"
+                                  f"{self.st[67]} `top       ` Todos os tops disponiveis para voce.")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -344,16 +344,16 @@ class Helper(commands.Cog):
             embed.add_field(name="👮🏽‍♂️",
                             value=f"`🔴` `reception      ` ...\n"  # {self.st[94]}
                                   f"`🔴` `door           ` ...\n"  # {self.st[48]}
-                                  f"{self.st[39]} `source         ` ...\n"
-                                  f"{self.st[32]} `announce       ` ...\n"
-                                  f"{self.st[1]} `staff delete   ` ...\n"
-                                  f"{self.st[1]} `staff ban      ` ...\n"
-                                  f"{self.st[1]} `staff kick     ` ...\n"
-                                  f"{self.st[1]} `staff slowmode ` ...\n"
-                                  f"{self.st[1]} `staff report   ` ...\n"
-                                  f"{self.st[0]} `config         ` ...\n"
-                                  f"{self.st[42]} `log            ` ...\n"
-                                  f"{self.st[31]} `channel        ` ...")
+                                  f"{self.st[39]} `source         ` Olhe meu codigo fonte.\n"
+                                  f"{self.st[32]} `announce       ` Mande um anuncio para eu divulgar.\n"
+                                  f"{self.st[1]} `staff delete   ` Exclua ate as ultimas 100 mensagens.\n"
+                                  f"{self.st[1]} `staff ban      ` Bana um membro incoveniente.\n"
+                                  f"{self.st[1]} `staff kick     ` Espulçe um engraçadinho que se achou.\n"
+                                  f"{self.st[1]} `staff slowmode ` Ative o modo lento em um canal.\n"
+                                  f"{self.st[1]} `staff report   ` Reporte um membro para um moderador.\n"
+                                  f"{self.st[0]} `config         ` Veja minhas configurações.\n"
+                                  f"{self.st[42]} `log            ` Ative ou desative alguns dos logs.\n"
+                                  f"{self.st[31]} `channel        ` Sistema de bloqueio de comandos.")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -366,19 +366,19 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos Owner", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="🛡",
-                            value=f"{self.st[33]} ``md        `` ...\n"
-                                  f"{self.st[32]} ``verify    `` ...\n"
-                                  f"{self.st[40]} ``tdc       `` ...\n"
-                                  f"{self.st[34]} ``eval      `` ...\n"
-                                  f"{self.st[38]} ``rc        `` ...\n"
-                                  f"{self.st[35]} ``load      `` ...\n"
-                                  f"{self.st[41]} ``unload    `` ...\n"
-                                  f"{self.st[37]} ``reload    `` ...\n"
-                                  f"{self.st[36]} ``logout    `` ...\n"
-                                  f"{self.st[86]} ``add_ban   `` ...\n"
-                                  f"{self.st[86]} ``remove_ban`` ...\n"
-                                  f"{self.st[86]} ``add_vip   `` ...\n"
-                                  f"{self.st[86]} ``remove_vip`` ...\n")
+                            value=f"{self.st[33]} ``md        `` Criar o arquivo README.\n"
+                                  f"{self.st[32]} ``verify    `` Verificar um ANUNCIO.\n"
+                                  f"{self.st[40]} ``tdc       `` Total de Comandos Usados.\n"
+                                  f"{self.st[34]} ``eval      `` Programar com o bot ligado.\n"
+                                  f"{self.st[38]} ``rc        `` Repetir comandos.\n"
+                                  f"{self.st[35]} ``load      `` Carregar um dos COGS.\n"
+                                  f"{self.st[41]} ``unload    `` Desativar um dos COGS.\n"
+                                  f"{self.st[37]} ``reload    `` Recarregar um dos COGS.\n"
+                                  f"{self.st[36]} ``logout    `` Desligar a ashley.\n"
+                                  f"{self.st[86]} ``add_ban   `` Banir um membro ou guilda.\n"
+                                  f"{self.st[86]} ``remove_ban`` Desbanir um membro ou guilda.\n"
+                                  f"{self.st[86]} ``add_vip   `` Tornar um membro ou guilda vip.\n"
+                                  f"{self.st[86]} ``remove_vip`` Retirar o vip de um membro ou guilda.\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
