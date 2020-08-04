@@ -26,69 +26,14 @@ class ConfigClass(commands.Cog):
         Use ash config pra ver as configurações disponiveis"""
         if ctx.invoked_subcommand is None:
             self.status()
-            top = discord.Embed(title="Commands Status", color=self.color,
-                                description=f"<:on_status:519896814799945728>│On\n"
-                                            f"<:alert_status:519896811192844288>│Alert\n"
-                                            f"<:oc_status:519896814225457152>│Off\n"
-                                            f"<:stream_status:519896814825242635>│Vip")
-            top.add_field(name="Configs Commands:",
-                          value=f"``PREFIX:`` **config** ``+``\n"
-                                f"{self.st[0]}│**guild** ``or`` **server**\n"
-                                f"{self.st[0]}│**report** ``or`` **reportar**\n"
-                                f"{self.st[0]}│**log**")
+            top = discord.Embed(color=self.color)
+            top.add_field(name="Config Commands:",
+                          value=f"{self.st[0]} `config guild` ...\n"
+                                f"{self.st[0]} `config report` ...")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=top)
-
-    @check_it(no_pm=True, manage_guild=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @config.command(name='log')
-    async def _log(self, ctx):
-        """Comando usado pra configurar os logs da ashley
-        Use ash config log e siga as instruções do comando"""
-        changes = {}
-        configs = ['log', 'log_channel_id', 'msg_delete', 'msg_edit', 'channel_edit_topic', 'channel_edit_name',
-                   'channel_created', 'channel_deleted', 'channel_edit', 'role_created', 'role_deleted',
-                   'role_edit', 'guild_update', 'member_edit_avatar', 'member_edit_nickname',
-                   'member_voice_entered', 'member_voice_exit', 'member_ban', 'member_unBan', 'emoji_update']
-        data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-        update = data
-        if data is not None:
-            for config in configs:
-                def check_option(m):
-                    return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
-
-                def check_channel(m):
-                    return m.author == ctx.author and m.channel_mentions[0].id
-
-                if "log" in changes.keys():
-                    if changes['log'] is False:
-                        continue
-
-                if config != "log_channel_id":
-                    question = await ctx.send(f'<:stream_status:519896814825242635>│``Você deseja ativar o(a) '
-                                              f'{config}`` **1** para ``SIM`` ou **0** para ``NÃO``')
-                    answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
-                    changes[config] = bool(int(answer.content))
-                else:
-                    question = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal de LOG``')
-                    answer = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
-                    changes[config] = answer.content
-
-                await question.delete()
-
-            if "log" in changes.keys():
-                if changes['log']:
-                    for config in configs:
-                        update['log_config'][config] = changes[config]
-                else:
-                    update['log_config']['log'] = False
-
-            await self.bot.db.update_data(data, update, "guilds")
-            await ctx.send('<:confirmed:721581574461587496>│**PARABENS** : '
-                           '``CONFIGURAÇÃO REALIZADA COM SUCESSO!``', delete_after=5.0)
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -278,7 +223,7 @@ class ConfigClass(commands.Cog):
             await msg.delete()
 
             msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o meu '
-                                 'Serviço de Interação com Membros?``\n'
+                                 'Serviço de Interação com Membros (SIM)?``\n'
                                  '```Esse serviço ativa as minhas interações com Inteligencia Artifical,'
                                  'meu sistema de perguntas e respostas alem de varias outras coisas legais e '
                                  'divertidas que eu posso fazer.```\n'
@@ -405,17 +350,6 @@ class ConfigClass(commands.Cog):
 
     @_guild.error
     async def _guild_error(self, ctx, error):
-        if error.__str__() in ERRORS[4]:
-            return await ctx.send('<:negate:721581573396496464>│``Você não marcou um canal de texto:`` '
-                                  '**COMANDO CANCELADO**')
-        if error.__str__() in ERRORS[5]:
-            return await ctx.send("<:negate:721581573396496464>│``Tempo esgotado, por favor tente novamente.``")
-        if error.__str__() in ERRORS[6]:
-            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
-                                  '**manage_guild / Gerenciar Servidor**')
-
-    @_log.error
-    async def _log_error(self, ctx, error):
         if error.__str__() in ERRORS[4]:
             return await ctx.send('<:negate:721581573396496464>│``Você não marcou um canal de texto:`` '
                                   '**COMANDO CANCELADO**')

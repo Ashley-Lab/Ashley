@@ -11,9 +11,9 @@ class SourceGit(commands.Cog):
         self.bot = bot
         self.color = self.bot.color
 
-    @check_it(no_pm=True)
+    @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='source')
     async def source(self, ctx, command: str = None):
         """Usado pra enviar codigos da ashley

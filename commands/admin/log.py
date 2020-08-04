@@ -32,6 +32,8 @@ class LogClass(commands.Cog):
                 color=self.bot.color
             )
             await ctx.send(embed=embed)
+            await ctx.send("<:alert:739251822920728708>│``PARA EDITAR O ESTADO DE UM LOG USE:`` "
+                           "**ASH LOG EDIT <NOME DO LOG>**")
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
