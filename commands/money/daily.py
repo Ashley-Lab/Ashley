@@ -28,23 +28,19 @@ class DailyClass(commands.Cog):
         Use ash daily"""
         if ctx.invoked_subcommand is None:
             self.status()
-            daily = discord.Embed(title="Commands Status", color=self.color,
-                                  description=f"<:on_status:519896814799945728>│On\n"
-                                              f"<:alert_status:519896811192844288>│Alert\n"
-                                              f"<:oc_status:519896814225457152>│Off\n"
-                                              f"<:stream_status:519896814825242635>│Vip")
+            daily = discord.Embed(color=self.color)
             daily.add_field(name="Daily Commands:",
-                            value=f"``PREFIX:`` **daily** ``or`` **diario** ``+``\n"
-                                  f"{self.st[66]}│**coin** ``or`` **ficha**\n"
-                                  f"{self.st[66]}│**energy** ``or`` **energia**\n"
-                                  f"{self.st[66]}│**work** ``or`` **trabalho**\n"
-                                  f"{self.st[66]}│**vip**")
+                            value=f"{self.st[66]} `daily coin` Receba suas fichas diarias.\n"
+                                  f"{self.st[66]} `daily energy` Receba suas energias diarias.\n"
+                                  f"{self.st[66]} `daily work` Trabalhe duro e receba seu salario.\n"
+                                  f"{self.st[66]} `daily vip` Receba seu vip diario.")
             daily.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             daily.set_thumbnail(url=self.bot.user.avatar_url)
             daily.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=daily)
 
     @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='coin', aliases=['ficha'])
     async def _coin(self, ctx):
@@ -57,13 +53,14 @@ class DailyClass(commands.Cog):
             return await ctx.send("<:alert:739251822920728708>│'``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
-        coin = randint(50, 100)
+        coin = randint(250, 500)
         update_user['inventory']['coins'] += coin
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                        f'<:coin:519896843388452864> **{coin}** ``fichas!``')
 
     @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='energy', aliases=['energia'])
     async def _energy(self, ctx):
@@ -77,7 +74,7 @@ class DailyClass(commands.Cog):
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
         patent = update_user['user']['patent']
-        energy = randint(5, 15)
+        energy = randint(25, 50)
         energy += patent * 2
         try:
             update_user['inventory']['Energy'] += energy
@@ -89,6 +86,7 @@ class DailyClass(commands.Cog):
                        f'``pela sua patente. Olhe seu inventario usando o comando:`` **ash i**')
 
     @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='work', aliases=['trabalho'])
     async def _work(self, ctx):
@@ -141,6 +139,7 @@ class DailyClass(commands.Cog):
                            'ASHLEY DESDE A ULTIMA VEZ EM QUE ELA FICOU ONLINE!``')
 
     @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='vip')
     async def _vip(self, ctx):
@@ -277,6 +276,9 @@ class DailyClass(commands.Cog):
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:confirmed:721581574461587496>│{member.mention} ``ACABOU DE RECEBER +1 REC DE `` '
                        f'{ctx.author.mention}')
+
+        response = await self.bot.db.add_reward(ctx, ['Energy', 'Energy', 'Energy', 'Energy', 'Energy'])
+        await ctx.send(F'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ENERGIA 5x** ✨ {response}')
 
 
 def setup(bot):

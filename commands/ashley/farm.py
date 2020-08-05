@@ -98,7 +98,7 @@ class FarmClass(commands.Cog):
                     await ctx.send(f'<:negate:721581573396496464>│``Você já está no inferno!``')
             else:
                 await ctx.send(f'<:negate:721581573396496464>│``Você está numa provincia! '
-                               f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
+                               f'Retorne usando`` **(ash respawn)** ``para conseguir '
                                f'ir para o sub-mundo primeiro``')
 
     @check_it(no_pm=True)
@@ -172,11 +172,11 @@ class FarmClass(commands.Cog):
                                        "servidor** ``podem usar esse comando!``")
                 else:
                     await ctx.send(f'<:negate:721581573396496464>│``Você já está numa provincia! '
-                                   f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
+                                   f'Retorne usando`` **(ash respawn)** ``para conseguir '
                                    f'ir para outra provincia primeiro``')
             else:
                 await ctx.send(f'<:negate:721581573396496464>│``Você está no sub-mundo! '
-                               f'Retorne usando`` **({self.bot.prefix_} + respawn)** ``para conseguir '
+                               f'Retorne usando`` **(ash respawn)** ``para conseguir '
                                f'ir para uma provincia primeiro``')
 
     @commands.Cog.listener()

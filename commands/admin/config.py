@@ -28,8 +28,8 @@ class ConfigClass(commands.Cog):
             self.status()
             top = discord.Embed(color=self.color)
             top.add_field(name="Config Commands:",
-                          value=f"{self.st[0]} `config guild` ...\n"
-                                f"{self.st[0]} `config report` ...")
+                          value=f"{self.st[0]} `config guild` Configura da guilda com meus recursos.\n"
+                                f"{self.st[0]} `config report` Configura um canal de report.")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")

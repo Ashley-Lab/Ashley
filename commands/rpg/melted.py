@@ -62,7 +62,7 @@ class MeltedClass(commands.Cog):
                 cost[i_] = self.cost[i_]
 
         if len(cost) > 0:
-            msg = f"\n".join([f"{self.i[key][0]} **{self.i[key][1]}**" for key in cost.keys()])
+            msg = f"\n".join([f"{self.i[key][0]} **{key.upper()}**" for key in cost.keys()])
             return await ctx.send(f"<:alert:739251822920728708>│``Lhe faltam esses itens para derreter um arfetafo:``"
                                   f"\n{msg}\n``OLHE SEU INVENTARIO E VEJA A QUANTIDADE QUE ESTÁ FALTANDO.``")
 

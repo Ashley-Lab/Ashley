@@ -36,22 +36,26 @@ class UtilityClass(commands.Cog):
     @commands.command(name='lover', aliases=['al'])
     async def lover(self, ctx):
         """Esse nem eu sei..."""
-        if ctx.guild.id == 643936732236087306:
-            try:
-                role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
-                if role is not None:
-                    if role not in [r for r in ctx.author.roles]:
-                        await ctx.author.add_roles(role)
-                        await ctx.send("<:confirmed:721581574461587496>│``VOCE AGORA É UM LOVER MEU!! FALE NO "
-                                       "CHAT_VIP PARA COMEMORAR!!``")
-                    else:
-                        await ctx.send("<:alert:739251822920728708>│``VOCE JA É UM LOVER MEU! MAS OBG POR "
-                                       "TANTO AMOR``")
+        if ctx.guild.id == 519894833783898112:
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            if data['config']['provinces'] is not None or ctx.channel.id == 576795574783705104:
+                return await ctx.send(f'<:negate:721581573396496464>│``Você está numa provincia ou no inferno! '
+                                      f'Retorne usando`` **(ash respawn)** ``para conseguir '
+                                      f'pegar meu cargo``')
+
+        try:
+            role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
+            if role is not None:
+                if role not in [r for r in ctx.author.roles]:
+                    await ctx.author.add_roles(role)
+                    await ctx.send("<:confirmed:721581574461587496>│``VOCE AGORA É UM LOVER MEU!!``")
                 else:
-                    await ctx.send("<:alert:739251822920728708>│``O MEU CARGO NAO EXISTE MAIS, PEÇA PRA UM ADM"
-                                   " CRIAR O CARGO NOVAMENTE!``")
-            except discord.Forbidden:
-                await ctx.send("<:negate:721581573396496464>│``NAO TENHO PERMISSÃO DE ADICIONAR CARGOS!``")
+                    await ctx.send("🌺``VOCE JA É UM LOVER MEU! MAS OBG POR TANTO AMOR``🌸")
+            else:
+                await ctx.send(f"<:alert:739251822920728708>│``PEÇA PRA UM ADMINISTRADOR CRIAR UM CARGO CHAMADO:`` "
+                               f"**</Ash_Lovers>** ``PARA ESSE SERVIDOR DESFRUTAR DOS MEUS SERVIÇOS DE PING.``")
+        except discord.Forbidden:
+            await ctx.send("<:negate:721581573396496464>│``NAO TENHO PERMISSÃO DE ADICIONAR CARGOS!``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -59,21 +63,51 @@ class UtilityClass(commands.Cog):
     @commands.command(name='unlover', aliases=['ual'])
     async def unlover(self, ctx):
         """Esse nem eu sei..."""
-        if ctx.guild.id == 643936732236087306:
-            try:
-                role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
-                if role is not None:
-                    if role in [r for r in ctx.author.roles]:
-                        await ctx.author.remove_roles(role)
-                        await ctx.send("<:confirmed:721581574461587496>│``QUE PENA, VOCE NAO ME AMA MAIS?!``")
-                    else:
-                        await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM MAIS O MEU CARGO, POXA..."
-                                       " ME ODEIA TANTO ASSIM?``")
+        if ctx.guild.id == 519894833783898112:
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            if data['config']['provinces'] is not None or ctx.channel.id == 576795574783705104:
+                return await ctx.send(f'<:negate:721581573396496464>│``Você está numa provincia ou no inferno! '
+                                      f'Retorne usando`` **(ash respawn)** ``para conseguir '
+                                      f'pegar meu cargo``')
+
+        try:
+            role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
+            if role is not None:
+                if role in [r for r in ctx.author.roles]:
+                    await ctx.author.remove_roles(role)
+                    await ctx.send("<:confirmed:721581574461587496>│``QUE PENA, VOCE NAO ME AMA MAIS?!``")
                 else:
-                    await ctx.send("<:alert:739251822920728708>│``O MEU CARGO NAO EXISTE MAIS, PEÇA PRA UM ADM"
-                                   " CRIAR O CARGO NOVAMENTE!``")
-            except discord.Forbidden:
-                await ctx.send("<:negate:721581573396496464>│``NAO TENHO PERMISSÃO DE RETIRAR CARGOS!``")
+                    await ctx.send("<:cry:530735037243719687>│``VOCE NAO TEM MAIS O MEU CARGO, POXA..."
+                                   " ME ODEIA TANTO ASSIM?``")
+            else:
+                await ctx.send(f"<:alert:739251822920728708>│``PEÇA PRA UM ADMINISTRADOR CRIAR UM CARGO CHAMADO:``"
+                               f" **</Ash_Lovers>** ``PARA ESSE SERVIDOR DESFRUTAR DOS MEUS SERVIÇOS DE PING.``")
+        except discord.Forbidden:
+            await ctx.send("<:negate:721581573396496464>│``NAO TENHO PERMISSÃO DE RETIRAR CARGOS!``")
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.command(name='status', aliases=['estado'])
+    async def status(self, ctx):
+        """Esse nem eu sei..."""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        user = self.bot.user_commands[ctx.author.id]
+        guild = self.bot.guilds_commands[ctx.guild.id]
+        embed = discord.Embed(color=self.bot.color)
+        embed.add_field(name="-== STATUS DO USUARIO ==-",
+                        value=f"`{'🟢' if data['user']['marrieding'] else '🔴'}` `Casando` Se for verde esta ativado\n"
+                              f"`{'🟢' if data['config']['playing'] else '🔴'}` `Jogando` Se for verde esta ativado\n"
+                              f"`{'🟢' if data['config']['battle'] else '🔴'}` `Batalhando` Se for verde esta ativado\n"
+                              f"`{'🟢' if data['config']['buying'] else '🔴'}` `Comprando` Se for verde esta ativado\n"
+                              f"`{'🟢' if data['config']['provinces'] is not None else '🔴'}` `Provincia` "
+                              f"Se for verde esta ativado\n"
+                              f"**{user}** `Comando que o usuario usou desde que o bot iniciou`\n"
+                              f"**{guild}** `Comando que a guilda usou desde que o bot iniciou`")
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
+        embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

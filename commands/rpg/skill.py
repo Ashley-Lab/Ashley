@@ -14,7 +14,7 @@ class SkillClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.group(name='skill', aliases=['habilidade', 'status'])
+    @commands.group(name='skill', aliases=['habilidade'])
     async def skill(self, ctx):
         """Comando usado pra ver seus status no rpg da Ashley
         Use ash skill"""

@@ -204,7 +204,7 @@ class Ashley(commands.AutoShardedBot):
                     await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
 
                 _chance = randint(1, 200)
-                if _chance <= 2 and data_user['security']['status']:
+                if _chance <= 4 and data_user['security']['status']:
                     BOX = choice(self.boxes)
                     box_type = self.boxes.index(BOX)
                     if ctx.guild.id not in self.box:
@@ -225,6 +225,16 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                     embed.set_thumbnail(url=BOX)
                     await ctx.send(embed=embed)
+
+                    role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
+                    msg = "<:alert:739251822920728708>│``CRIE UM CARGO CHAMADO`` **</Ash_Lovers>** ``PARA SER" \
+                          " PINGADO QUANDO UM PRESENTE DROPAR.``"
+                    if role is not None:
+                        msg = f"<:confirmed:721581574461587496>│``Olha só gente, dropou um presente...`` " \
+                              f"{role.mention}\n **Obs:** ``se voce tambem quiser ser pingado use o comando``" \
+                              f" **ASH LOVER** ``ou se vc nao quiser mais ser pingado, use o comando`` " \
+                              f"**ASH UNLOVER**."
+                    await ctx.send(msg)
 
                 data_user = await self.db.get_data("user_id", ctx.author.id, "users")
                 update_user = data_user

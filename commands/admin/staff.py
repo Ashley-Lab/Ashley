@@ -25,28 +25,21 @@ class StaffAdmin(commands.Cog):
         Use ash staff"""
         if ctx.invoked_subcommand is None:
             self.status()
-            embed = discord.Embed(
-                title="Commands Status",
-                color=self.color,
-                description=f"<:on_status:519896814799945728>│On\n"
-                f"<:alert_status:519896811192844288>│Alert\n"
-                f"<:oc_status:519896814225457152>│Off\n"
-                f"<:stream_status:519896814825242635>│Vip")
-            embed.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
+            embed = discord.Embed(color=self.color)
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             embed.set_thumbnail(url="http://mieinfo.com/wp-content/uploads/2013/08/policia-mie.png")
             embed.add_field(name="Staffs Commands:",
-                            value=f"``PREFIX:`` **config** ``+``\n"
-                                  f"{self.st[1]}│**delete** ``or`` **limpar**\n"
-                                  f"{self.st[1]}│**ban** ``or`` **banir**\n"
-                                  f"{self.st[1]}│**kick** ``or`` **expulsar**\n"
-                                  f"{self.st[1]}│**slowmode** ``or`` **modolento**\n"
-                                  f"{self.st[1]}│**report** ``or`` **denuncia**\n")
+                            value=f"{self.st[1]} `staff delete` Exclua ate as ultimas 100 mensagens.\n"
+                                  f"{self.st[1]} `staff ban` Bana um membro incoveniente.\n"
+                                  f"{self.st[1]} `staff kick` Espulse um engraçadinho que se achou.\n"
+                                  f"{self.st[1]} `staff slowmode` Ative o modo lento em um canal.\n"
+                                  f"{self.st[1]} `staff report` Reporte um membro para um moderador.\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await ctx.send(embed=embed)
 
+    @check_it(no_pm=True, manage_messages=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @check_it(no_pm=True, manage_messages=True)
     @staff.command(name='delete', aliases=["limpar", "purge", "apagar"])
     async def _delete(self, ctx, number: int):
         """Comando usado pra apagar varias mensagens em um canal
@@ -59,9 +52,9 @@ class StaffAdmin(commands.Cog):
             await ctx.send("<:negate:721581573396496464>│``Não tenho permissão para apagar mensagens nesse "
                            "servidor!``")
 
+    @check_it(no_pm=True, ban_members=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @check_it(no_pm=True, ban_members=True)
     @staff.command(name='ban', aliases=['banir'])
     async def _ban(self, ctx, member=None, *, reason: str = None):
         """Comando usado pra banir usuarios
@@ -82,9 +75,9 @@ class StaffAdmin(commands.Cog):
             await ctx.send("<:negate:721581573396496464>│``Não posso banir o usuário, o cargo dele está acima de mim "
                            "ou não tenho permissão para banir membros!``")
 
+    @check_it(no_pm=True, kick_members=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @check_it(no_pm=True, kick_members=True)
     @staff.command(name='kick', aliases=['expulsar'])
     async def _kick(self, ctx, member=None, *, reason: str = None):
         """Comando usado pra kickar usuarios
@@ -105,9 +98,9 @@ class StaffAdmin(commands.Cog):
             await ctx.send("<:negate:721581573396496464>│``Não posso expulsar o usuário, o cargo dele está acima de"
                            " mim ou não tenho permissão para banir membros!``")
 
+    @check_it(no_pm=True, manage_channels=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @check_it(no_pm=True, manage_channels=True)
     @staff.command(name='slowmode', aliases=['modolento'])
     async def _slowmode(self, ctx, timer: str = None):
         """Comando usado pra ligar o slowmode em um canal

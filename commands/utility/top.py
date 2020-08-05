@@ -24,21 +24,16 @@ class TopClass(commands.Cog):
         Use ash top"""
         if ctx.invoked_subcommand is None:
             self.status()
-            top = discord.Embed(title="Commands Status", color=self.color,
-                                description=f"<:on_status:519896814799945728>│On\n"
-                                f"<:alert_status:519896811192844288>│Alert\n"
-                                f"<:oc_status:519896814225457152>│Off\n"
-                                f"<:stream_status:519896814825242635>│Vip")
+            top = discord.Embed(color=self.color)
             top.add_field(name="Top Commands:",
-                          value=f"``PREFIX:`` **top** ``+``\n"
-                                f"{self.st[67]}│**xp** ``or`` **exp**\n"
-                                f"{self.st[67]}│**level** ``or`` **nivel**\n"
-                                f"{self.st[67]}│**money** ``or`` **dinheiro**\n"
-                                f"{self.st[67]}│**ethernya black** ``or`` **eb**\n"
-                                f"{self.st[67]}│**ethernya purple** ``or`` **ep**\n"
-                                f"{self.st[67]}│**ethernya yellow** ``or`` **ey**\n"
-                                f"{self.st[67]}│**command** ``or`` **comando**\n"
-                                f"{self.st[67]}│**point** ``or`` **ponto**\n")
+                          value=f"{self.st[67]} `top xp` Top 20 dos usuarios com maiores XP.\n"
+                                f"{self.st[67]} `top level` Top 20 dos usuarios com maiores LEVEIS.\n"
+                                f"{self.st[67]} `top money` Top 20 dos usuarios com mais ETHERNYAS.\n"
+                                f"{self.st[67]} `top eb` Top 20 dos usuarios com mais PEDRAS PRETAS.\n"
+                                f"{self.st[67]} `top ep` Top 20 dos usuarios com mais PEDRAS ROXAS.\n"
+                                f"{self.st[67]} `top ey` Top 20 dos usuarios com mais PEDRAS AMARELAS.\n"
+                                f"{self.st[67]} `top command` Top 20 dos usuarios com mais COMANDOS.\n"
+                                f"{self.st[67]} `top point` Top 20 dos usuarios com mais PONTOS.\n")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
             top.set_footer(text="Ashley ® Todos os direitos reservados.")

@@ -213,6 +213,7 @@ class Helper(commands.Cog):
                             value=f"{self.st[28]} `economia` Mostra a quantidade total de **ETHERNYAS** do Bot.\n"
                                   f"{self.st[29]} `tesouro ` Mostra a quantidade de **ETHERNYAS** no servidor.\n"
                                   f"{self.st[30]} `carteira` Mostra a quantidade das suas **ETHERNYAS**.\n"
+                                  f"{self.st[29]} `guild   ` Comandos que usa o tesouro da guilda.\n"
                                   f"{self.st[30]} `pagar   ` Paga uma quantia de **ETHERNYAS** a um usuário.\n"
                                   f"{self.st[30]} `dar     ` Oferece uma quantidade de um **ITEM** a um usuário.\n"
                                   f"{self.st[87]} `rifa    ` Tente conseguir um **ARTEFATO** para seu perfil.\n"
@@ -254,6 +255,8 @@ class Helper(commands.Cog):
                                   f"{self.st[4]} `caixa   ` Compre itens para criar suas armaduras.\n"
                                   f"{self.st[66]} `diario  ` Reinvidique seus premios diarios.\n"
                                   f"{self.st[30]} `rec     ` De ate 5 recomendações para seus amigos.\n"
+                                  f"{self.st[98]} `lover     ` Ganha meu cargo de amor.\n"
+                                  f"{self.st[98]} `unlover   ` Perde meu cargo de amor.\n"
                                   f"{self.st[96]} `gift    ` Use seu codigo promocional.\n"
                                   f"{self.st[96]} `open    ` Abra um presente e descubra algo incrivel.\n"
                                   f"{self.st[97]} `craft   ` Crie seus itens para ser o melhor no rpg.\n"
@@ -314,7 +317,10 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos de Utilidade", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="📢",
-                            value=f"{self.st[11]} `gif       ` Pesquise um gif bem bonitinho.\n"
+                            value=f"{self.st[79]} `casar     ` Case com o amor da sua vida.\n"
+                                  f"{self.st[82]} `bok       ` Comando exclusivo para casados. +18\n"
+                                  f"{self.st[79]} `separar   ` Se nao deu certo, se separe...\n"
+                                  f"{self.st[11]} `gif       ` Pesquise um gif bem bonitinho.\n"
                                   f"{self.st[5]} `ping      ` Veja minha latencia, estou sempre pronta.\n"
                                   f"{self.st[47]} `rolar     ` Role um dado no padrao quantidade_X_lados.\n"
                                   f"{self.st[2]} `feedback  ` Deixe sua sugestão ou relate um bug.\n"
@@ -327,9 +333,6 @@ class Helper(commands.Cog):
                                   f"{self.st[8]} `convite   ` Entre no meu servidor de suporte.\n"
                                   f"{self.st[20]} `emoji     ` Veja todos os emojis do servidor.\n"
                                   f"{self.st[44]} `avatar    ` Olhe sua foto toda lindona.\n"
-                                  f"{self.st[79]} `casar     ` Case com o amor da sua vida.\n"
-                                  f"{self.st[82]} `bok       ` Comando exclusivo para casados. +18\n"
-                                  f"{self.st[79]} `separar   ` Se nao deu certo, se separe...\n"
                                   f"{self.st[46]} `rank      ` Veja seu rank no meu sistema.\n"
                                   f"{self.st[67]} `top       ` Todos os tops disponiveis para voce.")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -349,9 +352,10 @@ class Helper(commands.Cog):
                                   f"{self.st[32]} `announce       ` Mande um anuncio para eu divulgar.\n"
                                   f"{self.st[1]} `staff delete   ` Exclua ate as ultimas 100 mensagens.\n"
                                   f"{self.st[1]} `staff ban      ` Bana um membro incoveniente.\n"
-                                  f"{self.st[1]} `staff kick     ` Espulçe um engraçadinho que se achou.\n"
+                                  f"{self.st[1]} `staff kick     ` Espulse um engraçadinho que se achou.\n"
                                   f"{self.st[1]} `staff slowmode ` Ative o modo lento em um canal.\n"
                                   f"{self.st[1]} `staff report   ` Reporte um membro para um moderador.\n"
+                                  f"{self.st[98]} `status         ` Veja seus estados em tempo real.\n"
                                   f"{self.st[0]} `config         ` Veja minhas configurações.\n"
                                   f"{self.st[42]} `log            ` Ative ou desative alguns dos logs.\n"
                                   f"{self.st[31]} `channel        ` Sistema de bloqueio de comandos.")
@@ -376,6 +380,7 @@ class Helper(commands.Cog):
                                   f"{self.st[41]} ``unload    `` Desativar um dos COGS.\n"
                                   f"{self.st[37]} ``reload    `` Recarregar um dos COGS.\n"
                                   f"{self.st[36]} ``logout    `` Desligar a ashley.\n"
+                                  f"{self.st[98]} ``cg        `` Cria um GIFT instantaneo.\n"
                                   f"{self.st[86]} ``add_ban   `` Banir um membro ou guilda.\n"
                                   f"{self.st[86]} ``remove_ban`` Desbanir um membro ou guilda.\n"
                                   f"{self.st[86]} ``add_vip   `` Tornar um membro ou guilda vip.\n"

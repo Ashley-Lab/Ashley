@@ -56,19 +56,15 @@ async def open_gift(bot, gift):
         else:
             validity = False
 
-        if validity:
-            await bot.db.delete_data({"_id": _id}, "gift")
-
-        ethernyas = randint(250, 275)
-        coins = randint(10, 30)
-        items = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark']
+        ethernyas = randint(250, 300)
+        coins = randint(50, 100)
+        items = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark', 'Energy']
 
         rare = None
         chance = randint(1, 100)
         if chance <= 50:
-            all_i = config['items']
-            item = choice([x for x in all_i.keys() if all_i[x][3] == 5 or all_i[x][3] == 6])
-            rare = all_i[item]
+            item = choice(['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur'])
+            rare = [item, 'Crystal_of_Energy']
 
         return {"money": ethernyas, "coins": coins, "items": items, "rare": rare, "validity": validity}
 

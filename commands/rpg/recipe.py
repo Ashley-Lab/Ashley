@@ -243,7 +243,7 @@ class RecipeClass(commands.Cog):
                 await msg.delete()
                 await self.bot.db.update_data(data, update, 'users')
                 await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM`` ✨ **{item.upper()}** ✨ "
-                               f"``FOI CRAFTADO FEITO`` **{quantidade}X** ``COM SUCESSO!``")
+                               f"``FOI CRAFTADO`` **{quantidade}X** ``COM SUCESSO!``")
             else:
                 await ctx.send('<:negate:721581573396496464>|``Esse item não existe ou nao é craftavel.``')
         else:

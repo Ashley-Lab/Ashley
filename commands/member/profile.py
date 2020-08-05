@@ -83,6 +83,11 @@ class ProfileSystem(commands.Cog):
         else:
             married = None
 
+        try:
+            coins = data['inventory']['coins']
+        except KeyError:
+            coins = 0
+
         data_profile = {
             "avatar_member": member.avatar_url_as(format="png"),
             "avatar_married": married,
@@ -91,7 +96,7 @@ class ProfileSystem(commands.Cog):
             "level": str(data['user']['level']),
             "vip": vip,
             "rec": str(data['user']['rec']),
-            "coin": str(self.number_convert(data['inventory']['coins'])),
+            "coin": str(self.number_convert(coins)),
             "commands": str(self.number_convert(data['user']['commands'])),
             "entitlement": str(data['user']['titling']),
             "about": remove_acentos_e_caracteres_especiais(data['user']['about']),

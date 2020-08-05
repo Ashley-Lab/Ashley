@@ -9,7 +9,7 @@ class AsciiText(commands.Cog):
         self.bot = bot
 
     @check_it(no_pm=True)
-    @commands.command(name='ascii', aliases=['textao'])
+    @commands.command(name='ascii', aliases=['textao', 'textão'])
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     async def ascii(self, ctx, *, msg="Digite Algo"):

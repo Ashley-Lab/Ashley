@@ -67,7 +67,7 @@ class OnReady(commands.Cog):
                     if not update['security']['status']:
                         continue
 
-                    if update['security']['commands_today'] > 2000:
+                    if update['security']['commands_today'] > 2500:
                         try:
                             update['security']['status'] = not update['security']['status']
                             update['security']['blocked'] = not update['security']['blocked']
@@ -109,20 +109,20 @@ class OnReady(commands.Cog):
                         await channel_.send(f'```O USUARIO {data["user_id"]} FOI DETECTADO POSSIVELMENTE USANDO MACRO\n'
                                             f'Na Data e Hora: {data_}```')
                         try:
-                            if update['security']['strikes'] < 6:
+                            if update['security']['strikes'] < 11:
                                 if update['security']['last_channel'] is not None:
                                     channel_ = self.bot.get_channel(update['security']['last_channel'])
                                     await channel_.send(f'<a:blue:525032762256785409>│``EI TENHA CALMA VOCE TA '
                                                         f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER '
                                                         f'BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
                                                         f'<a:blue:525032762256785409>'
-                                                        f'**AVISO {update["security"]["strikes"]}/5**')
+                                                        f'**AVISO {update["security"]["strikes"]}/10**')
                         except KeyError:
                             pass
                     else:
                         update['security']['commands'] = 0
 
-                    if update['security']['strikes'] == 6:
+                    if update['security']['strikes'] == 11:
                         update['security']['status'] = not update['security']['status']
                         channel_ = self.bot.get_channel(737467830571761786)
                         await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA POSSIVELMENTE USANDO MACRO E FOI '
@@ -236,6 +236,18 @@ class OnReady(commands.Cog):
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                             embed.set_thumbnail(url=BOX)
                             await channel__.send(embed=embed)
+
+                            guild__ = self.bot.get_guild(data['guild_id'])
+                            role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", guild__.roles)
+                            msg = "<:alert:739251822920728708>│``CRIE UM CARGO CHAMADO`` **</Ash_Lovers>** ``PARA SER" \
+                                  " PINGADO QUANDO UM PRESENTE DROPAR.``"
+                            if role is not None:
+                                msg = f"<:confirmed:721581574461587496>│``Olha só gente, dropou um presente...`` " \
+                                      f"{role.mention}\n **Obs:** ``se voce tambem quiser ser pingado use o comando``" \
+                                      f" **ASH LOVER** ``ou se vc nao quiser mais ser pingado, use o comando`` " \
+                                      f"**ASH UNLOVER**."
+                            await channel__.send(msg)
+
             await asyncio.sleep(300)
 
     async def change_status(self):
@@ -282,6 +294,16 @@ class OnReady(commands.Cog):
         await self.bot.atr_initialize()
         print("\033[1;35m( ✔ ) | Atributos assincronos inicializados com sucesso!\033[m\n")
 
+        print("\n\033[1;35m( >> ) | Iniciando exclusão dos gifts sem validade...\033[m")
+        all_data = await self.bot.db.get_all_data("gift")
+        cont = 0
+        for data in all_data:
+            if await verify_cooldown(self.bot, data['_id'], data['validity'], True):
+                await self.bot.db.delete_data({"_id": data['_id']}, "gift")
+                cont += 1
+        print(f'\033[1;32m( 🔶 ) | Exclusão de \033[1;34m{cont} Gifts\033[1;32m foi feita com sucesso!\33[m')
+        print("\033[1;35m( ✔ ) | Exclusão dos gifts sem validade finalizados!\033[m\n")
+
         print("\n\033[1;35m( >> ) | Iniciando reestruturação de variaveis internas...\033[m")
         all_data = await self.bot.db.get_all_data("users")
         for data in all_data:
@@ -291,10 +313,10 @@ class OnReady(commands.Cog):
             update['config']['buying'] = False
             update['user']['marrieding'] = False
             await self.bot.db.update_data(data, update, "users")
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita sucesso!\33[m')
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita sucesso!\33[m')
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita sucesso!\33[m')
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita com sucesso!\33[m')
         print("\033[1;35m( ✔ ) | Reestruturação de variaveis internas Finalizadas!\033[m\n")
 
         print("\n\033[1;35m( >> ) | Iniciando reestruturação do banco de dados...\033[m")
@@ -312,7 +334,7 @@ class OnReady(commands.Cog):
                 else:
                     update[key] = user_data_structure[key]
             await self.bot.db.update_data(data, update, "users")
-        print('\033[1;32m( 🔶 ) | Reestruturação dos \033[1;34mUSUARIOS\033[1;32m foi feita sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Reestruturação dos \033[1;34mUSUARIOS\033[1;32m foi feita com sucesso!\33[m')
         all_data = await self.bot.db.get_all_data("guilds")
         for data in all_data:
             update = data
@@ -327,7 +349,7 @@ class OnReady(commands.Cog):
                 else:
                     update[key] = guild_data_structure[key]
             await self.bot.db.update_data(data, update, "guilds")
-        print('\033[1;32m( 🔶 ) | Reestruturação dos \033[1;34mSERVIDORES\033[1;32m foi feita sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Reestruturação dos \033[1;34mSERVIDORES\033[1;32m foi feita com sucesso!\33[m')
         print("\033[1;35m( ✔ ) | Reestruturação do banco de dados finalizada!\033[m\n")
 
         print("\n\033[1;35m( >> ) | Iniciando carregamento dos loops internos...\033[m")
