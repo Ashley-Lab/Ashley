@@ -34,7 +34,7 @@ class FarmClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='respawn', aliases=['return'])
+    @commands.command(name='respawn', aliases=['return', 'retornar'])
     async def respawn(self, ctx):
         """Comando usado pra voltar pras areas normais do servidor da asheley
         Use ash respawn"""
@@ -60,7 +60,8 @@ class FarmClass(commands.Cog):
                     await self.bot.db.update_data(record, updates, "users")
                 else:
                     await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM CARGOS NO BANCO DE "
-                                   "DADOS!``")
+                                   "DADOS!``\n**Obs:** ``Se voce estiver preso sem poder retornar, saia do servidor"
+                                   " e entre novamente.``")
         else:
             await ctx.send("<:negate:721581573396496464>│``Desculpe, mas apenas os`` **Membros do meu servidor** "
                            "``podem usar esse comando!``")
@@ -143,7 +144,7 @@ class FarmClass(commands.Cog):
                         global msg_area_id
                         msg_area_id = botmsg.id
                         area = 0
-                        while True:
+                        while not self.bot.is_closed():
                             if escolheu is True and area > resposta_area:
                                 area = 0
                             if area == resposta_area:

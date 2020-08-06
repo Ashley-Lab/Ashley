@@ -26,7 +26,7 @@ class InventoryClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @inventory.command(name='quest', aliases=['missao'])
+    @inventory.command(name='quest', aliases=['missao', 'q'])
     async def _quest(self, ctx):
         return await ctx.send("<:negate:721581573396496464>│``O inventário de missões ainda não está disponível!``")
 

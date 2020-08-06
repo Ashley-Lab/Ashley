@@ -46,7 +46,8 @@ class OnReady(commands.Cog):
                        'meu feitiço na sua vida!', '😢 + 💸 = 😍 & 🍫']
 
     async def security_macro(self):
-        while True:
+        await self.bot.wait_until_ready()
+        while not self.bot.is_closed():
             if await verify_cooldown(self.bot, "security_macro", 300):
                 date_ = date.localtime()
                 data_ = date_format(dt.now())
@@ -66,6 +67,19 @@ class OnReady(commands.Cog):
 
                     if not update['security']['status']:
                         continue
+
+                    if update['security']['commands_today'] > (2500 / 100 * 85):
+                        if update['security']['commands_today'] < 2500:
+                            try:
+                                if update['security']['last_channel'] is not None:
+                                    channel_ = self.bot.get_channel(update['security']['last_channel'])
+                                    if channel_ is not None:
+                                        cmds = update['security']['commands_today']
+                                        await channel_.send(f'<a:red:525032764211200002>│``VOCE JA ATINGIU`` **85%**'
+                                                            f' ``DA SUA COTA DIARIA DE COMANDOS:`` **{cmds}/2500** '
+                                                            f'``SE CONTINUAR ASSIM VAI SER BLOQUEADO POR 72 HORAS.``')
+                            except KeyError:
+                                pass
 
                     if update['security']['commands_today'] > 2500:
                         try:
@@ -88,12 +102,12 @@ class OnReady(commands.Cog):
                         try:
                             if update['security']['last_channel'] is not None:
                                 channel_ = self.bot.get_channel(update['security']['last_channel'])
-                                await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
-                                                    f'POIS EXTRAPOLOU OS LIMITES HOJE``<a:red:525032764211200002>'
-                                                    f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS PRIVILEGIOS '
-                                                    f'DE GANHAR OS ITENS** <a:red:525032764211200002>'
-                                                    f'<a:red:525032764211200002> ``ESSE BLOQUEIO FOI MAIS RIGIDO``'
-                                                    f'<a:red:525032764211200002><a:red:525032764211200002>')
+                                if channel_ is not None:
+                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
+                                                        f'POIS EXTRAPOLOU OS LIMITES HOJE``\n<a:red:525032764211200002>'
+                                                        f' **OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
+                                                        f'PRIVILEGIOS DE GANHAR OS ITENS** ``ESSE BLOQUEIO FOI MAIS '
+                                                        f'RIGIDO``')
                         except KeyError:
                             pass
 
@@ -112,11 +126,12 @@ class OnReady(commands.Cog):
                             if update['security']['strikes'] < 11:
                                 if update['security']['last_channel'] is not None:
                                     channel_ = self.bot.get_channel(update['security']['last_channel'])
-                                    await channel_.send(f'<a:blue:525032762256785409>│``EI TENHA CALMA VOCE TA '
-                                                        f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER '
-                                                        f'BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
-                                                        f'<a:blue:525032762256785409>'
-                                                        f'**AVISO {update["security"]["strikes"]}/10**')
+                                    if channel_ is not None:
+                                        await channel_.send(f'<a:red:525032764211200002>│``EI TENHA CALMA VOCE TA '
+                                                            f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER'
+                                                            f' BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
+                                                            f'<a:red:525032764211200002>'
+                                                            f'**AVISO {update["security"]["strikes"]}/10**')
                         except KeyError:
                             pass
                     else:
@@ -131,10 +146,11 @@ class OnReady(commands.Cog):
                         try:
                             if update['security']['last_channel'] is not None:
                                 channel_ = self.bot.get_channel(update['security']['last_channel'])
-                                await channel_.send(f'<a:blue:525032762256785409>│``VOCE FOI BLOQUEADO ATE AS 0 '
-                                                    f'HORAS DO DIA DE HOJE..`` <a:blue:525032762256785409>'
-                                                    f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS PRIVILEGIOS '
-                                                    f'DE GANHAR OS ITENS**')
+                                if channel_ is not None:
+                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO ATE AS 0 '
+                                                        f'HORAS DO DIA DE HOJE..`` <a:red:525032764211200002>'
+                                                        f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
+                                                        f'PRIVILEGIOS DE GANHAR OS ITENS**')
                         except KeyError:
                             pass
 
@@ -168,7 +184,8 @@ class OnReady(commands.Cog):
             await asyncio.sleep(60)
 
     async def draw_member(self):
-        while True:
+        await self.bot.wait_until_ready()
+        while not self.bot.is_closed():
             if await verify_cooldown(self.bot, "draw_member", 7200):
                 for guild in self.bot.guilds:
                     data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
@@ -189,23 +206,36 @@ class OnReady(commands.Cog):
                                 await channel__.send(f"<:alert:739251822920728708>│{member.name} ``FOI SORTEADO"
                                                      f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
                                 continue
-                            coins = randint(10, 15)
+                            c = randint(50, 150)
+                            e = randint(25, 75)
                             embed = discord.Embed(
                                 title="``Fiz o sorteio de um membro``",
                                 colour=self.color,
-                                description="Membro sorteado foi **{}**\n <a:palmas:520418512011788309>│"
-                                            "``Parabens você acaba de ganhar`` **{}** "
-                                            "``coins!!``".format(member.mention, coins))
+                                description=f"Membro sorteado foi **{member.mention}**\n <a:palmas:520418512011788309>│"
+                                            f"``Parabens você acaba de ganhar:``\n"
+                                            f"{self.bot.items['coins'][0]} **{c}** ``{self.bot.items['coins'][1]}``\n"
+                                            f"{self.bot.items['Energy'][0]} **{e}** ``{self.bot.items['Energy'][1]}``")
                             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                             embed.set_thumbnail(url=member.avatar_url)
                             await channel__.send(embed=embed)
-                            update_member['inventory']['coins'] += coins
+
+                            try:
+                                update_member['inventory']['coins'] += c
+                            except KeyError:
+                                update_member['inventory']['coins'] = c
+
+                            try:
+                                update_member['inventory']['Energy'] += e
+                            except KeyError:
+                                update_member['inventory']['Energy'] = e
+
                             await self.bot.db.update_data(data_member, update_member, 'users')
             await asyncio.sleep(300)
 
     async def draw_gift(self):
-        while True:
+        await self.bot.wait_until_ready()
+        while not self.bot.is_closed():
             if await verify_cooldown(self.bot, "draw_gift", 17280):
                 for guild in self.bot.guilds:
                     data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
@@ -215,19 +245,24 @@ class OnReady(commands.Cog):
                             if channel__ is None:
                                 continue
 
-                            BOX = choice(self.bot.boxes)
-                            boxt = self.bot.boxes.index(BOX)
-                            if guild.id not in self.bot.box:
-                                self.bot.box[guild.id] = {"quant": 1, "boxes": [boxt]}
-                            else:
-                                self.bot.box[guild.id]['quant'] += 1
-                                self.bot.box[guild.id]['boxes'].append(boxt)
+                            list_boxes = []
+                            for k, v in self.bot.boxes.items():
+                                list_boxes += [k] * v
+
+                            BOX = choice(list_boxes)
+                            box_type = [k for k in self.bot.boxes.keys()].index(BOX)
+                            for _ in range(box_type + 1):
+                                if guild.id not in self.bot.box:
+                                    self.bot.box[guild.id] = {"quant": 1, "boxes": [box_type]}
+                                else:
+                                    self.bot.box[guild.id]['quant'] += 1
+                                    self.bot.box[guild.id]['boxes'].append(box_type)
 
                             embed = discord.Embed(
                                 title="**Presente Liberado**",
                                 colour=self.color,
-                                description=f"Esse servidor foi gratificado com um presente "
-                                            f"**{self.bot.boxes_l[str(boxt)]}**!\n"
+                                description=f"Esse servidor foi gratificado com {box_type + 1} presente(s) "
+                                            f"**{self.bot.boxes_l[str(box_type)]}**!\n"
                                             f"Para abri-lo é so usar o comando ``ash open``\n"
                                             f"**qualquer membro pode abrir um presente**\n"
                                             f"**Obs:** Essa guilda tem {self.bot.box[guild.id]['quant']} presente(s)"
@@ -251,11 +286,12 @@ class OnReady(commands.Cog):
             await asyncio.sleep(300)
 
     async def change_status(self):
+        await self.bot.wait_until_ready()
         status = cycle(self.status)
         details = cycle(self.details)
         state = cycle(self.state)
         time = cycle(self.time)
-        while True:
+        while not self.bot.is_closed():
             if await verify_cooldown(self.bot, "change_status", 60):
                 current_time = next(time)
                 if current_time == 0:
@@ -298,7 +334,7 @@ class OnReady(commands.Cog):
         all_data = await self.bot.db.get_all_data("gift")
         cont = 0
         for data in all_data:
-            if await verify_cooldown(self.bot, data['_id'], data['validity'], True):
+            if not await verify_cooldown(self.bot, data['_id'], data['validity'], True):
                 await self.bot.db.delete_data({"_id": data['_id']}, "gift")
                 cont += 1
         print(f'\033[1;32m( 🔶 ) | Exclusão de \033[1;34m{cont} Gifts\033[1;32m foi feita com sucesso!\33[m')
@@ -315,8 +351,10 @@ class OnReady(commands.Cog):
             await self.bot.db.update_data(data, update, "users")
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita com sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita com sucesso!\33[m')
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita com sucesso!\33[m')
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita com sucesso!\33[m')
+        print(
+            '\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita com sucesso!\33[m')
+        print(
+            '\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita com sucesso!\33[m')
         print("\033[1;35m( ✔ ) | Reestruturação de variaveis internas Finalizadas!\033[m\n")
 
         print("\n\033[1;35m( >> ) | Iniciando reestruturação do banco de dados...\033[m")

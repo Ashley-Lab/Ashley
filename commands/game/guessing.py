@@ -11,7 +11,7 @@ class GameThinker(commands.Cog):
         self.extra = ['Melted_Bone', 'Life_Crystal', 'Death_Blow', 'Stone_of_Soul', 'Vital_Force']
 
     @check_it(no_pm=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 6.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='guess', aliases=['advinhe', 'adivinhe'])
     async def guess(self, ctx):

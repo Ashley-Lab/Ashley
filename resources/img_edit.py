@@ -98,15 +98,15 @@ def gift(key, time):
     w, h = show.textsize(key, font=font_key)
     x = (x2 - x1 - w) / 2 + x1 + 3
     y = (y2 - y1 - h) / 2 + y1 + 3
-    show.text(xy=(x + 2, y + 2), text=key, fill=(0, 0, 0), font=font_key)
+    show.text(xy=(x + 1, y + 1), text=key, fill=(0, 0, 0), font=font_key)
     show.text(xy=(x, y), text=key, fill=(255, 255, 255), font=font_key)
 
     # alinhamento do retangulo 2
     w, h = show.textsize(time, font=font_time)
     x = (x4 - x3 - w) / 2 + x3
     y = (y4 - y3 - h) / 2 + y3 + 1
-    show.text(xy=(x + 2, y + 2), text=time, fill=(0, 0, 0), font=font_time)
-    show.text(xy=(x, y), text=time, fill=(255, 255, 255), font=font_time)
+    show.text(xy=(x + 1, y + 1), text=time, fill=(255, 255, 255), font=font_time)
+    show.text(xy=(x, y), text=time, fill=(68, 29, 114), font=font_time)
 
     image.save('giftcard.png')
 

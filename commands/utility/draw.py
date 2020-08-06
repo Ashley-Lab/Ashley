@@ -14,7 +14,7 @@ class DrawUsers(commands.Cog):
     @check_it(no_pm=True)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.command(name='draw', aliases=['sorteio'])
+    @commands.command(name='draw', aliases=['sorteio', 'sortear'])
     async def draw(self, ctx):
         """Comando de sorteio pro server inteiro
         Use ash draw"""

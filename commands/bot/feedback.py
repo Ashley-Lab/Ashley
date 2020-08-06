@@ -13,7 +13,7 @@ class FeedBackClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='feedback', aliases=['sugestao', 'report', 'suggestion', 'retorno'])
+    @commands.command(name='feedback', aliases=['sugestao', 'report', 'suggestion'])
     async def feedback(self, ctx, *, msg: str = None):
         """Comando usado pra dar feedback direto pros desenvolvedores
         Use ash feedback <mensagem desejada>"""

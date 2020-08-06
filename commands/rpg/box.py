@@ -5,7 +5,6 @@ from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError, sleep
 
-warn = False
 legend = {
     "Comum": [600, [0.01, 0.02, 0.07, 0.10, 0.20, 0.60]],
     "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.30, 0.30]],
@@ -161,10 +160,9 @@ ITEMS:
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @box.command(name='booster', aliases=['pacote'])
+    @box.command(name='booster', aliases=['pacote', 'abrir', 'open'])
     async def _booster(self, ctx):
         """Esse nem eu sei..."""
-        global warn
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:
@@ -226,20 +224,10 @@ ITEMS:
                 await self.bot.db.update_data(data, update, 'users')
                 await msg.delete()
                 return await ctx.send("<:negate:721581573396496464>│``Você não tem dinheiro o suficiente...``")
-            warn = False
             for _ in range(num):
                 if data['box']['status']['active']:
                     await self.bot.booster.buy_booster(self.bot, ctx)
                     await sleep(0.5)
-                elif not warn:
-                    warn = True
-                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                    update = data
-                    update['config']['buying'] = False
-                    await self.bot.db.update_data(data, update, 'users')
-                    await msg.delete()
-                    await ctx.send("<:negate:721581573396496464>│``Você não tem uma box ativa...``\n"
-                                   "``Para ativar sua box use o comando:`` **ash box buy**")
 
             await msg.delete()
             await ctx.send("<:confirmed:721581574461587496>│``Obrigado pelas compras, volte sempre!``")

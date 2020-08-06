@@ -14,7 +14,7 @@ class KissClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='kiss', aliases=['beijo'])
+    @commands.command(name='kiss', aliases=['beijo', 'beijar', 'beijao', 'beijão'])
     async def kiss(self, ctx):
         """Comando de gifs de beijo
         Use ash kiss <@usuario a sua escolha>"""

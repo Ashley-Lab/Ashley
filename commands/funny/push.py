@@ -14,7 +14,7 @@ class PushClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='push', aliases=['empurrao'])
+    @commands.command(name='push', aliases=['empurrao', 'empurrão', 'empurrar'])
     async def push(self, ctx):
         """Comando de gifs de empurrão
         Use ash push <@usuario a sua escolha>"""

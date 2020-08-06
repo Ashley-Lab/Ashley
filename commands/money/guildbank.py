@@ -74,7 +74,7 @@ class GuildBank(commands.Cog):
               f"servidor!\n {self.bot.money[2]} **{self.format_num(self.gold)}** | " \
               f"{self.bot.money[1]} **{self.format_num(self.silver)}** | " \
               f"{self.bot.money[0]} **{self.format_num(self.bronze)}**\n\n" \
-              f"``SENDO`` **{d_}** ``DISPONIVEL PARA EMPRESTIMOS`` **CONTENDO:**\n" \
+              f"``SENDO`` **{d_}** ``DISPONIVEL PARA COMANDOS DO`` **ASH GUILD** ``AINDA TEM AS PEDRAS``\n" \
               f"{self.bot.money[2]} **{self.format_num(self.gold_)}** | " \
               f"{self.bot.money[1]} **{self.format_num(self.silver_)}** | " \
               f"{self.bot.money[0]} **{self.format_num(self.bronze_)}**"
@@ -101,30 +101,35 @@ class GuildBank(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True, cooldown=True, time=3600))
-    @guild.group(name='reward', aliases=['recompença'])
+    @guild.group(name='reward', aliases=['recompensa'])
     async def _reward(self, ctx):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if ctx.guild.id != data['guild_id']:
-            try:
-                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update_ = data_
-                del data_['cooldown'][str(ctx.command)]
-                await self.bot.db.update_data(data_, update_, 'users')
-            except KeyError:
-                pass
+            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            del update_['cooldown']["guild reward"]
+            await self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send("<:alert:739251822920728708>│``VOCE NAO É REGISTRADO NESSA GUILDA, ESSE COMANDO SO"
-                                  " PODE SER EXECUTADO NA SUA GUILDA DE REGISTRO.``")
+                                  " PODE SER EXECUTADO NA SUA GUILDA DE REGISTRO.``\n**Obs:** ``Se sua guilda de "
+                                  "registro nao existe mais, use o comando`` **ash transfer** ``e entre em outra"
+                                  " guilda para que voce possa usufluir desses serviços``")
 
         amount = 0
         response = '``Caiu pra você:`` \n'
 
         coins = randint(50, 150)
         energy = randint(25, 50)
-        update['inventory']['coins'] += coins
-        response += f"**{coins}**: ``{self.bot.items['coins'][1]}``\n"
-        update['inventory']['Energy'] += energy
-        response += f"**{energy}**: ``{self.bot.items['Energy'][1]}``\n"
+        try:
+            update['inventory']['coins'] += coins
+        except KeyError:
+            update['inventory']['coins'] = coins
+        response += f"{self.bot.items['coins'][0]} ``{coins}`` ``{self.bot.items['coins'][1]}``\n"
+        try:
+            update['inventory']['Energy'] += energy
+        except KeyError:
+            update['inventory']['Energy'] = energy
+        response += f"{self.bot.items['Energy'][0]} ``{energy}`` ``{self.bot.items['Energy'][1]}``\n"
 
         amount += (coins + energy)
 
@@ -138,7 +143,8 @@ class GuildBank(commands.Cog):
         k_energy = 0
         if chance < 51:
             k_energy = randint(1, 3)
-            response += f"**{k_energy}**: ``{self.bot.items['Crystal_of_Energy'][1]}``\n"
+            response += f"{self.bot.items['Crystal_of_Energy'][0]} ``{k_energy}`` " \
+                        f"``{self.bot.items['Crystal_of_Energy'][1]}``\n"
 
         amount += k_energy
 
@@ -150,37 +156,41 @@ class GuildBank(commands.Cog):
         for k, v in items.items():
             try:
                 update['inventory'][k] += v
-                response += f"**{v}**: ``{self.bot.items[k][1]}``\n"
+                response += f"{self.bot.items[k][0]} ``{v}`` ``{self.bot.items[k][1]}``\n"
                 amount += v
             except KeyError:
                 update['inventory'][k] = v
-                response += f"**{v}**: ``{self.bot.items[k][1]}``\n"
+                response += f"{self.bot.items[k][0]} ``{v}`` ``{self.bot.items[k][1]}``\n"
                 amount += v
 
         amount = amount * 500
         response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
 
+        a = '{:,.2f}'.format(float(amount))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+
         # DATA DO SERVIDOR ATUAL
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         update_guild = data_guild
         if update_guild['treasure']['total_money'] > amount:
-            update_guild['treasure']['total_money'] += amount
+            update_guild['treasure']['total_money'] -= amount
             await self.bot.db.update_data(data_guild, update_guild, 'guilds')
         else:
-            try:
-                data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update_ = data_
-                del data_['cooldown'][str(ctx.command)]
-                await self.bot.db.update_data(data_, update_, 'users')
-            except KeyError:
-                pass
+            data_ = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update_ = data_
+            del update_['cooldown']["guild reward"]
+            await self.bot.db.update_data(data_, update_, 'users')
             return await ctx.send(f"<:negate:721581573396496464>│``SUA GUILDA NAO TEM DINHEIRO PARA BANCAR ESSE "
-                                  f"COMANDO ELE IRIA RETIRAR DO TESOURO`` **{amount}** ``DE ETHERNYAS, MAS NAO"
+                                  f"COMANDO ELE IRIA RETIRAR DO TESOURO`` **R${d}** ``DE ETHERNYAS, MAS NAO"
                                   f"DESANIME USE O COMANDO`` **ASH TESOURO** ``E FIQUE TENTE NOVAMENTE!``")
 
         await self.bot.db.update_data(data, update, 'users')
         await ctx.send(f"<a:fofo:524950742487007233>│``POR SER REGISTRADO NESSE SERVIDOR VOCÊ GANHOU`` "
-                       f"✨ **MUITOS ITENS** ✨\n{response}")
+                       f"✨ **MUITOS ITENS** ✨\n{response}\n``Que custou para os cofres do servidor a quantia de`` "
+                       f"**R${d} ETHERNYAS**, ``Para saber quanto ainda tem no saldo do servidor use o comando`` "
+                       f"**ash tesouro**")
 
 
 def setup(bot):

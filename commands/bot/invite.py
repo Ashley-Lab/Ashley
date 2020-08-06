@@ -18,9 +18,6 @@ class InviteClass(commands.Cog):
     async def invite(self, ctx):
         """comando usado pra gerar um convite pro server da ashley
         Use ash invite"""
-        await ctx.send("<:send:519896817320591385>│``Obrigado por querer participar da`` "
-                       "**MINHA COMUNIDADE** ``irei enviar para seu privado um convite "
-                       "para que você possa entrar!``")
         try:
             embed = discord.Embed(
                 color=self.color,
@@ -29,8 +26,12 @@ class InviteClass(commands.Cog):
 
             await ctx.author.send("<:confirmed:721581574461587496>│https://discord.gg/rYT6QrM")
             await ctx.author.send(embed=embed)
+            await ctx.send("<:send:519896817320591385>│``Obrigado por querer participar da`` "
+                           "**MINHA COMUNIDADE** ``enviei para seu privado um convite "
+                           "para que você possa entrar!``")
         except discord.errors.Forbidden:
-            await ctx.send('<:negate:721581573396496464>│``INFELIZMENTE NÃO FOI POSSIVEL ENVIAR A MENSAGEM PRA VOCÊ``')
+            await ctx.send('<:negate:721581573396496464>│``INFELIZMENTE NÃO FOI POSSIVEL ENVIAR A MENSAGEM PRA VOCÊ '
+                           'SEU PRIVADO ESTA SEM ACESSO.``')
 
 
 def setup(bot):

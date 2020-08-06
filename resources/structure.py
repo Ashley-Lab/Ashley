@@ -66,7 +66,7 @@ user_data_structure = {
             "inventory": {
                 "medal": 0,
                 "rank_point": 0,
-                "coins": 10
+                "coins": 100
             },
             "inventory_quest": dict(),
             "artifacts": dict(),

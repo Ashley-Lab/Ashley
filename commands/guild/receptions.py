@@ -82,7 +82,7 @@ class ReceptionClass(commands.Cog):
                     msg = await ctx.send('Defina uma cor pro embed de {}.(em hexadecimal)'.format(c))
                     resp = await self.bot.wait_for('message', check=check)
                     resp = resp.content
-                    while True:
+                    while not self.bot.is_closed():
                         try:
                             color = int(resp, 16)
                             if color is not None:

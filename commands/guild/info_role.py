@@ -101,7 +101,7 @@ class RoleInfo(commands.Cog):
         await msg.add_reaction('➡')
 
         try:
-            while True:
+            while not self.bot.is_closed():
 
                 def check_reaction(r, u):
                     return r.message.id == msg.id and u.id == ctx.author.id

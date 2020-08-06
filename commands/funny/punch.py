@@ -14,7 +14,7 @@ class PunchClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='punch', aliases=['soco'])
+    @commands.command(name='punch', aliases=['soco', 'murro'])
     async def punch(self, ctx):
         """Comando de gifs de soco
         Use ash punch <@usuario a sua escolha>"""

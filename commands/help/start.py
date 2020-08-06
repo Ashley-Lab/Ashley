@@ -217,6 +217,7 @@ class Helper(commands.Cog):
                                   f"{self.st[30]} `pagar   ` Paga uma quantia de **ETHERNYAS** a um usuário.\n"
                                   f"{self.st[30]} `dar     ` Oferece uma quantidade de um **ITEM** a um usuário.\n"
                                   f"{self.st[87]} `rifa    ` Tente conseguir um **ARTEFATO** para seu perfil.\n"
+                                  f"{self.st[87]} `bollash ` Tente dropar uma **BOLLASH** no seu inventario.\n"
                                   f"{self.st[87]} `transfer` Transfere sua conta para outro servidor.\n"
                                   f"{self.st[66]} `diario  ` Lista os comandos de recompensas diárias.\n"
                                   f"`🔴` `loja    ` ...")  # em desenvolvimento
@@ -250,19 +251,20 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos do RPG", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="⚔",
-                            value=f"`🔴` `skill   ` ...\n"  # {self.st[43]}
-                                  f"{self.st[43]} `batalha ` Batalhe contra monstros poderosos.\n"
-                                  f"{self.st[4]} `caixa   ` Compre itens para criar suas armaduras.\n"
-                                  f"{self.st[66]} `diario  ` Reinvidique seus premios diarios.\n"
-                                  f"{self.st[30]} `rec     ` De ate 5 recomendações para seus amigos.\n"
-                                  f"{self.st[98]} `lover     ` Ganha meu cargo de amor.\n"
-                                  f"{self.st[98]} `unlover   ` Perde meu cargo de amor.\n"
-                                  f"{self.st[96]} `gift    ` Use seu codigo promocional.\n"
-                                  f"{self.st[96]} `open    ` Abra um presente e descubra algo incrivel.\n"
-                                  f"{self.st[97]} `craft   ` Crie seus itens para ser o melhor no rpg.\n"
-                                  f"{self.st[97]} `recipe  ` Olhe todas as receitas disponiveis.\n"
-                                  f"`🟡` `derreter` Use seus artefatos, para criar um item.\n"  # {self.st[99]}
-                                  f"{self.st[88]} `i       ` Abre seu inventario e veja tudo o que tem.\n")
+                            value=f"`🔴` `skill      ` ...\n"  # {self.st[43]}
+                                  f"`🔴` `batalha    ` ...\n"  # {self.st[43]}
+                                  f"{self.st[4]} `caixa      ` Compre itens para criar suas armaduras.\n"
+                                  f"{self.st[66]} `diario     ` Reinvidique seus premios diarios.\n"
+                                  f"{self.st[30]} `rec        ` De ate 5 recomendações para seus amigos.\n"
+                                  f"{self.st[98]} `lover      ` Ganha meu cargo de amor.\n"
+                                  f"{self.st[98]} `unlover    ` Perde meu cargo de amor.\n"
+                                  f"{self.st[96]} `gift       ` Use seu codigo promocional.\n"
+                                  f"{self.st[96]} `open       ` Abra um presente e descubra algo incrivel.\n"
+                                  f"{self.st[97]} `craft      ` Crie seus itens para ser o melhor no rpg.\n"
+                                  f"{self.st[97]} `recipe     ` Olhe todas as receitas disponiveis.\n"
+                                  f"{self.st[99]} `derreter   ` Use seus artefatos, para o item GOD.\n"
+                                  f"{self.st[101]} `identificar` Identifique suas ?-Bollash.\n"
+                                  f"{self.st[88]} `i          ` Abre seu inventario e veja tudo o que tem.\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -303,7 +305,7 @@ class Helper(commands.Cog):
                                   f"{self.st[92]} `zap     ` Simule uma postagem no whatsapp.\n"
                                   f"{self.st[70]} `chute   ` Desconte sua raiva em alguem.\n"
                                   f"{self.st[74]} `empurrao` Empurre aquela pessoa que te fez mal.\n"
-                                  f"{self.st[75]} `tapa    ` De um tapa na cada da sociedade.\n"
+                                  f"{self.st[75]} `tapa    ` De um tapa na cara da sociedade.\n"
                                   f"{self.st[73]} `soco    ` Um murro para desestressar\n")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
@@ -381,6 +383,7 @@ class Helper(commands.Cog):
                                   f"{self.st[37]} ``reload    `` Recarregar um dos COGS.\n"
                                   f"{self.st[36]} ``logout    `` Desligar a ashley.\n"
                                   f"{self.st[98]} ``cg        `` Cria um GIFT instantaneo.\n"
+                                  f"{self.st[46]} ``stars     `` Adiciona ou retira estrelas.\n"
                                   f"{self.st[86]} ``add_ban   `` Banir um membro ou guilda.\n"
                                   f"{self.st[86]} ``remove_ban`` Desbanir um membro ou guilda.\n"
                                   f"{self.st[86]} ``add_vip   `` Tornar um membro ou guilda vip.\n"

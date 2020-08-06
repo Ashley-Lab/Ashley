@@ -112,7 +112,7 @@ class Entity(object):
                 for c in range(0, len(atacks)):
                     await msg.add_reaction(emojis[c])
                 await msg.add_reaction('<:pass:692967573649752194>')
-                while True:
+                while not self.bot.is_closed():
                     try:
                         reaction = await bot.wait_for('reaction_add', timeout=30.0)
                         while reaction[1].id != ctx.author.id:
@@ -184,6 +184,7 @@ class Entity(object):
         if effects is not None:
             for c in effects:
                 try:
+                    print(effects, self.effects[c])
                     if 'damage' in self.effects[c]['type']:
                         self.status['hp'] -= self.effects[c]['damage']
                         description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \

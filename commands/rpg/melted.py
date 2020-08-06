@@ -7,6 +7,13 @@ from random import choice
 from asyncio import sleep
 
 
+git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
+       "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
+       "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
+       "https://media1.tenor.com/images/17e1414f1dc91bc1f76159d7c3fa03ea/tenor.gif?itemid=15744166",
+       "https://media1.tenor.com/images/39c363015f2ae22f212f9cd8df2a1063/tenor.gif?itemid=15894886"]
+
+
 class MeltedClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -29,17 +36,19 @@ class MeltedClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='melted', aliases=['derreter'])
+    @commands.command(name='melted', aliases=['derreter', 'melt'])
     async def melted(self, ctx):
         """Esse nem eu sei..."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
+        msg = f"\n".join([f"{self.i[k][0]} ``{v}`` ``{self.i[k][1]}``" for k, v in self.cost.items()])
+        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISAR USAR O COMANDO`` **ASH BOX**"
+
         Embed = discord.Embed(
             title="O CUSTO PARA VOCE DERRETER UM ARTEFATO:",
             color=self.bot.color,
-            description=f"\n".join([f"{self.i[k][0]} ``{v}`` ``{self.i[k][1]}``" for k, v in self.cost.items()])
-        )
+            description=msg)
         Embed.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
         Embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
         Embed.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -51,7 +60,9 @@ class MeltedClass(commands.Cog):
                 artifacts += [i_] * amount
 
         if len(artifacts) < 3:
-            return await ctx.send("<:negate:721581573396496464>│``Voce nao tem o minimo de 3 arfetados...``")
+            return await ctx.send("<:negate:721581573396496464>│``Voce nao tem o minimo de 3 arfetados...``\n"
+                                  "**Obs:** ``VOCE CONSEGUE ARTEFATOS USANDO O COMANDO`` **ASH RIFA** ``E PEGANDO"
+                                  " UM ARTEFATO REPETIDO.``")
 
         cost = {}
         for i_, amount in self.cost.items():
@@ -86,29 +97,43 @@ class MeltedClass(commands.Cog):
             if update['inventory'][i_] < 1:
                 del update['inventory'][i_]
 
-        update['artifacts'][art1] -= art1
-        if update['artifacts'][art1] < 1:
-            del update['artifacts'][art1]
+        await sleep(2)
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo 1/3``")
 
-        update['artifacts'][art2] -= art2
-        if update['artifacts'][art2] < 1:
-            del update['artifacts'][art2]
+        update['inventory'][art1] -= 1
+        if update['inventory'][art1] < 1:
+            del update['inventory'][art1]
 
-        update['artifacts'][art3] -= art3
-        if update['artifacts'][art3] < 1:
-            del update['artifacts'][art3]
+        await sleep(2)
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo 2/3``")
+
+        update['inventory'][art2] -= 1
+        if update['inventory'][art2] < 1:
+            del update['inventory'][art2]
+
+        await sleep(2)
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo 3/3``")
+
+        update['inventory'][art3] -= 1
+        if update['inventory'][art3] < 1:
+            del update['inventory'][art3]
         await msg.edit(content=f"<:confirmed:721581574461587496>│``itens retirados com sucesso...``")
         await sleep(2)
         await msg.edit(content=f"<a:loading:520418506567843860>│``Adicionando o`` <:melted_artifact:739573767260471356>"
                                f" **Melted Artifact** ``para sua conta...``")
         try:
-            update['inventory']['melted_artifact'] += 1
+            update['inventory']['melted_artifact'] += 2
         except KeyError:
-            update['inventory']['melted_artifact'] = 1
+            update['inventory']['melted_artifact'] = 2
         await sleep(2)
-        await msg.edit(content=f"<:confirmed:721581574461587496>│<:melted_artifact:739573767260471356> "
-                               f"**Melted Artifact** ``adicionado com sucesso...``")
-        # await self.bot.db.update_data(data, update, 'users')
+        await msg.edit(content=f"<:confirmed:721581574461587496>│<:melted_artifact:739573767260471356> ``2``"
+                               f"**Melted Artifact** ``adicionado ao seu inventario com sucesso...``")
+
+        img = choice(git)
+        embed = discord.Embed(color=self.bot.color)
+        embed.set_image(url=img)
+        await ctx.send(embed=embed)
+        await self.bot.db.update_data(data, update, 'users')
 
 
 def setup(bot):

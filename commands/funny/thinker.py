@@ -1,3 +1,5 @@
+import discord
+
 from discord.ext import commands
 from random import choice
 from resources.db import Database
@@ -19,9 +21,18 @@ class Thinkers(commands.Cog):
             await ctx.message.delete()
         except discord.errors.Forbidden:
             pass
+
         thinker = self.bot.config['thinker']['list']
         answer = choice(thinker)
-        await ctx.send("Assim diz o **pensador**: ``{}``".format(answer))
+
+        msgs = ['``Assim diz o`` **pensador**', '``UM HOMEM UMA VEZ DISSE``', '``ME DISSERAM UM DIA QUE``',
+                '``OUVIR FALAR QUE``', '``UMA PESSOA ME FALOU ASSIM``', '``UM DIA OUVIR ENQUANTO ANDAVA``']
+        msg = choice(msgs)
+
+        embed = discord.Embed(
+            color=self.bot.color,
+            description=f'<:confirmed:721581574461587496>│{msg}\n``{answer.upper()}``')
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

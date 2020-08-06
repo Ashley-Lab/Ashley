@@ -162,33 +162,69 @@ class Database(object):
         if data_user is not None:
             if update_user['user']['ranking'] == 'Bronze':
                 await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
-                msg = f"**{answer['amount']}** ``Ethernyas``"
+
+                a = '{:,.2f}'.format(float(answer['amount']))
+                b = a.replace(',', 'v')
+                c = b.replace('.', ',')
+                d = c.replace('v', '.')
+
+                msg = f"**R${d}** de ``Ethernyas``"
             elif update_user['user']['ranking'] == 'Silver':
                 if change <= 75:
                     await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
-                    msg = f"**{answer['amount']}** ``Ethernyas``"
+
+                    a = '{:,.2f}'.format(float(answer['amount']))
+                    b = a.replace(',', 'v')
+                    c = b.replace('.', ',')
+                    d = c.replace('v', '.')
+
+                    msg = f"**R${d}** de ``Ethernyas``"
                 else:
                     answer['list'][0] = (answer['list'][0] * 2)
                     answer['list'][1] = (answer['list'][1] * 2)
                     answer['list'][2] = (answer['list'][2] * 2)
                     await self.add_type(ctx, (answer['amount'] * 2), answer['list'])
-                    msg = f"**{answer['amount'] * 2}** ``Ethernyas``"
+
+                    a = '{:,.2f}'.format(float(answer['amount'] * 2))
+                    b = a.replace(',', 'v')
+                    c = b.replace('.', ',')
+                    d = c.replace('v', '.')
+
+                    msg = f"**R${d}** de ``Ethernyas``"
             elif update_user['user']['ranking'] == 'Gold':
                 if change <= 75:
                     await self.add_type(ctx, (answer['amount'] * 1), answer['list'])
-                    msg = f"**{answer['amount']}** ``Ethernyas``"
+
+                    a = '{:,.2f}'.format(float(answer['amount']))
+                    b = a.replace(',', 'v')
+                    c = b.replace('.', ',')
+                    d = c.replace('v', '.')
+
+                    msg = f"**R${d}** de ``Ethernyas``"
                 elif change <= 95:
                     answer['list'][0] = (answer['list'][0] * 2)
                     answer['list'][1] = (answer['list'][1] * 2)
                     answer['list'][2] = (answer['list'][2] * 2)
                     await self.add_type(ctx, (answer['amount'] * 2), answer['list'])
-                    msg = f"**{answer['amount'] * 2}** ``Ethernyas``"
+
+                    a = '{:,.2f}'.format(float(answer['amount'] * 2))
+                    b = a.replace(',', 'v')
+                    c = b.replace('.', ',')
+                    d = c.replace('v', '.')
+
+                    msg = f"**R${d}** de ``Ethernyas``"
                 else:
                     answer['list'][0] = (answer['list'][0] * 3)
                     answer['list'][1] = (answer['list'][1] * 3)
                     answer['list'][2] = (answer['list'][2] * 3)
                     await self.add_type(ctx, (answer['amount'] * 3), answer['list'])
-                    msg = f"**{answer['amount'] * 3}** ``Ethernyas``"
+
+                    a = '{:,.2f}'.format(float(answer['amount'] * 3))
+                    b = a.replace(',', 'v')
+                    c = b.replace('.', ',')
+                    d = c.replace('v', '.')
+
+                    msg = f"**R${d}** de ``Ethernyas``"
             if ext:
                 msg += f"\n``e a quantidade de pedras abaixo:`` " \
                        f"**{answer['list'][0]}**  {self.bot.money[0]} | " \
@@ -210,7 +246,7 @@ class Database(object):
                 update_user['inventory'][item] += amount
             except KeyError:
                 update_user['inventory'][item] = amount
-            response += f"**{amount}**: ``{self.bot.items[item][1]}``\n"
+            response += f"{self.bot.items[item][0]} ``{amount}`` ``{self.bot.items[item][1]}``\n"
         await self.bot.db.update_data(data_user, update_user, 'users')
         response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
         return response
@@ -346,25 +382,31 @@ class DataInteraction(object):
                         if 10 < update['user']['level'] < 20 and update['user']['ranking'] is not None:
                             if change == 200 and update['user']['ranking'] == "Bronze":
                                 update['user']['ranking'] = "Silver"
-                                update['inventory']['coins'] += 100
+                                try:
+                                    update['inventory']['coins'] += 1000
+                                except KeyError:
+                                    update['inventory']['coins'] = 1000
                                 if not message.guild.id == 425864977996578816:
                                     try:
                                         await message.channel.send(
                                             '🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou a``'
-                                            ' **chance** ``de garimpar mais ethernyas a partir de agora e`` **+100** '
+                                            ' **chance** ``de garimpar mais ethernyas a partir de agora e`` **+1000** '
                                             '``Fichas para jogar``'.format(message.author, "Silver"))
                                     except discord.errors.Forbidden:
                                         pass
                         elif 20 < update['user']['level'] < 30 and update['user']['ranking'] is not None:
                             if change == 200 and update['user']['ranking'] == "Silver":
                                 update['user']['ranking'] = "Gold"
-                                update['inventory']['coins'] += 200
+                                try:
+                                    update['inventory']['coins'] += 2000
+                                except KeyError:
+                                    update['inventory']['coins'] = 2000
                                 if not message.guild.id == 425864977996578816:
                                     try:
                                         await message.channel.send(
                                             '🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou a``'
                                             ' **chance** ``de garimpar mais eternyas do que o ranking passado a partir '
-                                            'de agora e`` **+200** ``Fichas para '
+                                            'de agora e`` **+2000** ``Fichas para '
                                             'jogar``'.format(message.author, "Gold"))
                                     except discord.errors.Forbidden:
                                         pass
@@ -390,12 +432,15 @@ class DataInteraction(object):
                 lvl_now = int(experience ** (1 / 5))
                 if lvl_anterior < lvl_now:
                     update['user']['level'] = lvl_now
-                    update['inventory']['coins'] += 20
+                    try:
+                        update['inventory']['coins'] += 200
+                    except KeyError:
+                        update['inventory']['coins'] = 200
                     await self.db.update_data(data, update, "users")
                     if not message.guild.id == 425864977996578816:
                         try:
                             await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e '
-                                                       'ganhou`` **+20** ``Fichas para '
+                                                       'ganhou`` **+200** ``Fichas para '
                                                        'jogar``'.format(message.author, lvl_now))
                         except discord.errors.Forbidden:
                             pass

@@ -13,6 +13,7 @@ class RecipeClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.color = self.bot.color
+        self.i = self.bot.items
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -49,7 +50,7 @@ class RecipeClass(commands.Cog):
                         quant = data['inventory'][c[0]]
                     except KeyError:
                         quant = 0
-                    description += f'\n{self.bot.items[c[0]][0]} ``{c[0]}:`` **{c[1]}**/{quant}'
+                    description += f'\n{self.i[c[0]][0]} **{c[1]}**/``{quant}`` ``{self.i[c[0]][1]}``'
 
                 description += '\n\n**Recompensa:**'
 
@@ -58,7 +59,7 @@ class RecipeClass(commands.Cog):
                         quant = data['inventory'][c[0]]
                     except KeyError:
                         quant = 0
-                    description += f'\n{self.bot.items[c[0]][0]} ``{c[0]}`` **{c[1]}**/{quant}'
+                    description += f'\n{self.i[c[0]][0]} **{c[1]}**/``{quant}`` ``{self.i[c[0]][1]}``'
 
                 for c in recipe['cost']:
                     try:
@@ -136,7 +137,7 @@ class RecipeClass(commands.Cog):
                         return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                               ' CANCELADO**')
 
-                    while True:
+                    while not self.bot.is_closed():
                         if int(resp.content) <= maximo:
                             break
                         try:
@@ -261,7 +262,7 @@ class RecipeClass(commands.Cog):
     async def recipe(self, ctx):
         """Esse nem eu sei..."""
         recipes = self.bot.config['recipes']
-        embed = ['Recipes', self.color, '``Para craftar um item use:`` **ash craft nome_do_item**\n\n']
+        embed = ['Recipes', self.color, '``Para craftar um item use:``\n**ash craft nome_do_item**\n\n']
         await paginator(self.bot, self.bot.items, recipes, embed, ctx)
 
 

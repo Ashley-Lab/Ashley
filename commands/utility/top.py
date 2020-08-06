@@ -120,7 +120,7 @@ class TopClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @top.group(name='point', aliases=['ponto'])
+    @top.group(name='point', aliases=['ponto', 'pontos'])
     async def _point(self, ctx):
         """Comando usado pra retornar o top 20 em questão de pontos da Ashley
         Use ash top point"""
@@ -133,7 +133,7 @@ class TopClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @top.group(name='command', aliases=['comando'])
+    @top.group(name='command', aliases=['comando', 'comandos'])
     async def _command(self, ctx):
         """Comando usado pra retornar o top 20 em questão de comandos usados
         Use ash top command"""

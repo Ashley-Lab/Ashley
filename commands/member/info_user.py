@@ -19,15 +19,18 @@ class UserInfo(commands.Cog):
         Use ash userinfo <@usuario em questão>"""
         if member is None:
             member = ctx.author
+
         data = await self.bot.db.get_data("user_id", member.id, "users")
         if data is not None:
             link = f"https://api-ashley.herokuapp.com/get-users/{data['_id']}"
             database = f"[Clique Aqui]({link})"
         else:
             database = "USUARIO NAO CADASTRADO"
+
         role = ",".join([r.name for r in member.roles if r.name != "@everyone"])
         userjoinedat = str(member.joined_at).split('.', 1)[0]
         usercreatedat = str(member.created_at).split('.', 1)[0]
+
         embed = discord.Embed(
             title=":pushpin:Informações pessoais de:",
             color=self.color,
@@ -35,13 +38,16 @@ class UserInfo(commands.Cog):
         )
         embed.add_field(name=":door:Entrou no server em:", value=userjoinedat, inline=True)
         embed.add_field(name="📅Conta criada em:", value=usercreatedat, inline=True)
-        embed.add_field(name="💻ID:", value=member.id, inline=True)
-        embed.add_field(name=":label:Tag:", value=member.discriminator, inline=True)
+        embed.add_field(name="💻ID:", value=str(member.id), inline=True)
+        embed.add_field(name=":label:Tag:", value=str(member.discriminator), inline=True)
         embed.add_field(name="Cargos:", value=role, inline=True)
         embed.add_field(name="DataBase:", value=database)
         embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
         embed.set_thumbnail(url=member.avatar_url)
-        await ctx.send(embed=embed)
+        try:
+            await ctx.send(embed=embed)
+        except discord.errors.HTTPException:
+            await ctx.send("<:negate:721581573396496464>│``ALGUM DADO FALTANDO NESSE USUARIO!``")
 
 
 def setup(bot):

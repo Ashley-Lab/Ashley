@@ -11,7 +11,7 @@ class SkillClass(commands.Cog):
         self.bot = bot
         self.color = self.bot.color
 
-    @check_it(no_pm=True)
+    @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='skill', aliases=['habilidade'])

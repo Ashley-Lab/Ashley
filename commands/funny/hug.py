@@ -14,7 +14,7 @@ class HugClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='hug', aliases=['abraço'])
+    @commands.command(name='hug', aliases=['abraço', 'abraco'])
     async def hug(self, ctx):
         """Comando de gifs de abraço
         Use ash hug <@usuario a sua escolha>"""

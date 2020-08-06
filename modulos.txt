@@ -98,4 +98,6 @@ commands.guild.open
 commands.rpg.recipe
 commands.ashley.utility
 commands.rpg.melted
+commands.rpg.rpg_start
+commands.rpg.identifier
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

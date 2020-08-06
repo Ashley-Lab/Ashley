@@ -11,7 +11,7 @@ class TransferClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='transfer', aliases=['trans'])
+    @commands.command(name='transfer', aliases=['trans', 'transferencia'])
     async def transfer(self, ctx):
         """comando usado pra transferir sua conta da ashley de um server pro outro
         Use ash transfer"""
@@ -30,15 +30,14 @@ class TransferClass(commands.Cog):
             return await ctx.send('<:negate:721581573396496464>│``Desculpe, você já está casdastrado nessa guilda!``')
 
         def check(m):
-            if m.author.id == ctx.guild.owner.id:
-                if m.channel.id == ctx.channel.id:
-                    if m.content.upper() in ['S', 'N']:
-                        return True
+            perms = ctx.channel.permissions_for(m.author)
+            if m.channel.id == ctx.channel.id and perms.manage_messages and m.content.upper() in ['S', 'N']:
+                return True
             return False
 
-        await ctx.send(f'{ctx.guild.owner.mention} ``o membro`` {ctx.author.mention} ``quer associar sua conta do meu '
-                       f'sistema na sua guilda.``\n ``A conta dele contem exatos`` **R${d} de Ethernyas** ``você deseja'
-                       f' recebe-lo? Responda com`` **[S/N]**', delete_after=60.0)
+        await ctx.send(f'**CAROS ADMINISTRADORES** ``o membro`` {ctx.author.mention} ``quer associar sua conta do meu '
+                       f'sistema na sua guilda. A conta dele contem exatos`` **R${d} de Ethernyas** ``alguem '
+                       f'deseja recebe-lo? Responda com`` **[S/N]**', delete_after=60.0)
 
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)

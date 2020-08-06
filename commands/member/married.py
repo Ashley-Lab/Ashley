@@ -21,7 +21,7 @@ class MarriedSystem(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='marry', aliases=['casar'])
+    @commands.command(name='marry', aliases=['casar', 'casamento'])
     async def marry(self, ctx, member: discord.Member = None):
         """Comando usado pra pedir alguem em casamento
         Use ash marry <@pessoa desejada>"""
@@ -111,7 +111,7 @@ class MarriedSystem(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='divorce', aliases=['separar'])
+    @commands.command(name='divorce', aliases=['separar', 'separação', 'separacao', 'separaçao', 'separacão'])
     async def divorce(self, ctx, member: discord.Member = None):
         """Comando usado pra se divorciar
         Use ash divorce <@prostiranha em questão>"""

@@ -175,7 +175,7 @@ class Booster(object):
     async def buy_booster(self, bot, ctx):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         if not data['box']['status']['active']:
-            return await ctx.send("<:alert:739251822920728708>│``VOCÊ NAO TEM UMA BOX ATIVA NA SUA CONTA!``")
+            return
 
         price = 500
         if data['user']['ranking'] == "Bronze":
@@ -188,8 +188,8 @@ class Booster(object):
             price -= 50
 
         if data['treasure']['money'] < price:
-            return await ctx.send("<:alert:739251822920728708>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
-                                  "\nVOCÊ PRECISA DE 500 ETHENYAS PARA COMPRAR UM BOOSTER.``")
+            return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
+                                  f"\nVOCÊ PRECISA DE {price} ETHENYAS PARA COMPRAR UM BOOSTER.``")
 
         answer = await bot.db.take_money(ctx, price)
         await ctx.send(answer)

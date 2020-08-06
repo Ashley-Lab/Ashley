@@ -54,7 +54,10 @@ class DailyClass(commands.Cog):
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
         coin = randint(250, 500)
-        update_user['inventory']['coins'] += coin
+        try:
+            update_user['inventory']['coins'] += coin
+        except KeyError:
+            update_user['inventory']['coins'] = coin
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                        f'<:coin:519896843388452864> **{coin}** ``fichas!``')
@@ -88,7 +91,7 @@ class DailyClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
-    @daily.group(name='work', aliases=['trabalho'])
+    @daily.group(name='work', aliases=['trabalho', 'trabalhar'])
     async def _work(self, ctx):
         """Comando usado pra ganhar o dinheiro da Ashley diariamente
         Use ash daily work"""
@@ -168,7 +171,7 @@ class DailyClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='rec', aliases=['recomendação'])
+    @commands.command(name='rec', aliases=['recomendação', 'rep', 'reputação'])
     async def rec(self, ctx, member: discord.Member = None):
         """Comando usado pra dar um rec da Ashley pra algum usuario
         Use ash rec <usuario desejado>"""

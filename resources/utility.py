@@ -67,7 +67,7 @@ def embed_creator(description, img_url, monster, hp_max, hp, monster_img, lower_
         description=description,
         color=color_embed
     )
-    if lower_net == 'disable':
+    if not lower_net:
         embed.set_image(url=img_url)
     embed.set_thumbnail(url=f"{monster_img}")
     return embed
@@ -132,12 +132,12 @@ async def paginator(bot, items, inventory, embed, ctx):
             except KeyError:
                 string = f"<:negate:721581573396496464> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
         else:
-            cost = "".join(f"{items[i[0]][0]} {items[i[0]][1]}: **{i[1]}** **│** " for i in inventory[key]['cost'])
-            reward = "".join(f"{items[i[0]][0]} {items[i[0]][1]}: **{i[1]}** **│** " for i in inventory[key]['reward'])
+            cost = "\n".join(f"{items[i[0]][0]} ``{i[1]}`` ``{items[i[0]][1]}``" for i in inventory[key]['cost'])
+            reward = "\n".join(f"{items[i[0]][0]} ``{i[1]}`` ``{items[i[0]][1]}``" for i in inventory[key]['reward'])
             icon = inventory[key]['reward'][0][0]
-            string = f"{items[icon][0]} ``{key.upper()}``\n" \
-                     f"**Custo:**\n {cost[:-7]} \n " \
-                     f"**Recompensa:**\n {reward[:-7]}\n\n"
+            string = f"{items[icon][0]} **{key.upper()}**\n" \
+                     f"**Custo:**\n {cost} \n " \
+                     f"**Recompensa:**\n {reward}\n\n"
         cont += len(string)
         if cont <= 1500 and cont_i < 20:
             description += string
@@ -158,7 +158,7 @@ async def paginator(bot, items, inventory, embed, ctx):
     msg = await ctx.send('<:alert:739251822920728708>│``Aguarde...``')
     for c in emojis:
         await msg.add_reaction(c)
-    while True:
+    while not bot.is_closed():
         Embed = discord.Embed(
             title=embed[0],
             color=embed[1],

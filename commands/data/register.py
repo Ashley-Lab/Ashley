@@ -12,7 +12,7 @@ class RegisterClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.group(name='register', aliases=['registro'])
+    @commands.group(name='register', aliases=['registro', "registrar"])
     async def register(self, ctx):
         """ Usado pra registrar um usuario na ashley Exemplo: "ash register" """
         if ctx.invoked_subcommand is None:
@@ -35,7 +35,7 @@ class RegisterClass(commands.Cog):
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @register.command(name='guild')
+    @register.command(name='guild', aliases=['guilda', "servidor"])
     async def _guild(self, ctx):
         """Usado pra registrar seu servidor na ashley
         Use ash register guild e siga as instruções do comando(use # pra marcar os canais)"""
@@ -49,7 +49,7 @@ class RegisterClass(commands.Cog):
                 return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
             def check_channel(m):
-                while True:
+                while not m.bot.is_closed():
                     try:
                         return m.author == ctx.author and m.channel_mentions[0].id
                     except IndexError:

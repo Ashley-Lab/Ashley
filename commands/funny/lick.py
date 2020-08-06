@@ -14,7 +14,7 @@ class LickClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='lick', aliases=['lambida'])
+    @commands.command(name='lick', aliases=['lambida', 'lamber'])
     async def lick(self, ctx):
         """Comando de gifs de lambida
         Use ash lick <@usuario a sua escolha>"""

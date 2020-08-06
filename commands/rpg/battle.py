@@ -6,7 +6,6 @@ from random import randint, choice
 from resources.entidade import Entity
 from resources.check import check_it
 from resources.db import Database
-from resources.in_test import Class_rpg, choice_equips
 
 
 class Battle(commands.Cog):
@@ -14,20 +13,26 @@ class Battle(commands.Cog):
         self.bot = bot
         self.monsters = self.bot.config['battle']['monsters']
 
-    @check_it(no_pm=True)
+    @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='battle', aliases=['batalha', 'duel', 'duelo'])
-    async def battle(self, ctx, lower_net="disable"):
+    @commands.command(name='battle', aliases=['batalha', 'batalhar'])
+    async def battle(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
-        if lower_net in ['ln', 'lower', 'net', 'n', 'not']:
-            await ctx.send(f"**MODO LOWER NET ATIVADO:**")
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        if update['rpg']['lower_net']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:confirmed:721581574461587496>│``MODO SEM IMAGENS ATIVADO``')
+            await ctx.send(embed=embed)
 
         # preparação para a batalha
-        Class_rpg['lower_net'] = lower_net
-        Class_rpg['Name'] = ctx.author.name
-        Class_rpg['img'] = ctx.author.avatar_url
+        if update['rpg']['Name'] is None or update['rpg']['img']:
+            return
+
         list_items = list(choice_equips(self.bot).values())
         for c in range(5):
             Class_rpg['itens'].append(list_items[c])
@@ -46,7 +51,7 @@ class Battle(commands.Cog):
         monster = Entity(db_monster, False)
 
         # durante a batalha
-        while True:
+        while not self.bot.is_closed():
             if player.status['hp'] <= 0:
                 break
 
@@ -64,7 +69,7 @@ class Battle(commands.Cog):
                     description=f"``{monster.name.upper()} EVADIU``",
                     color=0x000000
                 )
-                if lower_net == 'disable':
+                if not data['rpg']['lower_net']:
                     embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                 embed.set_thumbnail(url=f"{db_monster['img']}")
                 await ctx.send(embed=embed)
@@ -86,7 +91,7 @@ class Battle(commands.Cog):
                     description=f"``{ctx.author.name.upper()} EVADIU``",
                     color=0x000000
                 )
-                if lower_net == 'disable':
+                if not data['rpg']['lower_net']:
                     embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                 embed.set_thumbnail(url=f"{db_player['img']}")
                 await ctx.send(embed=embed)
@@ -99,7 +104,7 @@ class Battle(commands.Cog):
                 color=0x000000
             )
             img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
-            if lower_net == 'disable':
+            if not data['rpg']['lower_net']:
                 embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
@@ -109,7 +114,7 @@ class Battle(commands.Cog):
                 color=0x000000
             )
             img = "https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532"
-            if lower_net == 'disable':
+            if not data['rpg']['lower_net']:
                 embed.set_image(url=img)
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)

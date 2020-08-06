@@ -17,7 +17,7 @@ class ForceCass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='hangman', aliases=['forca'])
+    @commands.command(name='hangman', aliases=['forca', 'jogo da forca'])
     async def hangman(self, ctx):
         """Use ash hangman ou ash forca pra começar o jogo
         Siga as instruções do comando e tente adivinhar"""
@@ -49,7 +49,7 @@ class ForceCass(commands.Cog):
             acertos = [' ', ]
             errors[ctx.author.id] = 0
 
-            while True:
+            while not self.bot.is_closed():
                 senha = ""
                 for letra in palavra:
                     senha += '{}.'.format(letra.upper()) if letra in acertos else "_."
