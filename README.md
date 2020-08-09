@@ -68,7 +68,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [ConfigClass](#configclass-commands)
   - [config](#config)
   - [config guild](#config-guild)
-  - [config log](#config-log)
   - [config report](#config-report)
 - [CreateDoc](#createdoc-commands)
   - [make_doc](#make_doc)
@@ -106,6 +105,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [GetGif](#getgif-commands)
   - [gif](#gif)
 - [GuildBank](#guildbank-commands)
+  - [guild](#guild)
   - [treasure](#treasure)
 - [HeadsOrTails](#headsortails-commands)
   - [hot](#hot)
@@ -115,6 +115,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [hug](#hug)
 - [IaResponseClass](#iaresponseclass-commands)
   - [ia](#ia)
+- [IdentifierClass](#identifierclass-commands)
+  - [identifier](#identifier)
 - [InstagramClass](#instagramclass-commands)
   - [instagram](#instagram)
 - [InventoryClass](#inventoryclass-commands)
@@ -141,6 +143,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [MarriedSystem](#marriedsystem-commands)
   - [divorce](#divorce)
   - [marry](#marry)
+- [MeltedClass](#meltedclass-commands)
+  - [melted](#melted)
 - [OpenClass](#openclass-commands)
   - [gift](#gift)
   - [open](#open)
@@ -177,6 +181,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [repeat_command](#repeat_command)
 - [RoleInfo](#roleinfo-commands)
   - [roleinfo](#roleinfo)
+- [RpgStart](#rpgstart-commands)
+  - [rpg](#rpg)
 - [SaySomething](#saysomething-commands)
   - [say](#say)
   - [say channel](#say-channel)
@@ -218,6 +224,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [UnloadCog](#unloadcog-commands)
   - [unload](#unload)
 - [UserBank](#userbank-commands)
+  - [bollash](#bollash)
   - [ticket](#ticket)
   - [wallet](#wallet)
 - [UserInfo](#userinfo-commands)
@@ -225,6 +232,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [UtilityClass](#utilityclass-commands)
   - [create_gift](#create_gift)
   - [lover](#lover)
+  - [status](#status)
   - [unlover](#unlover)
 - [WhatsappClass](#whatsappclass-commands)
   - [whatsapp](#whatsapp)
@@ -293,7 +301,7 @@ Use ash avatar <usuario em questão>
 >**Descrição:** Comando usado pra batalhar no rpg da ashley
 Use ash battle
 
->**Modo de Uso:** `ash battle [lower_net=disable]`
+>**Modo de Uso:** `ash battle `
 
 ## Booket
 
@@ -363,12 +371,6 @@ Use ash config pra ver as configurações disponiveis
 Use ash config guild e siga as instruções do comando(use # pra marcar canais)
 
 >**Modo de Uso:** `ash config guild `
-
-#### config log
->**Descrição:** Comando usado pra configurar os logs da ashley
-Use ash config log e siga as instruções do comando
-
->**Modo de Uso:** `ash config log `
 
 #### config report
 >**Descrição:** Comando usado pra configurar o report da Ashley
@@ -528,6 +530,12 @@ Use ash gif <palavra chave>
 
 ## GuildBank
 
+#### guild
+>**Descrição:** Comando usado pra retornar uma lista de todos os subcomandos de guild
+Use ash guild
+
+>**Modo de Uso:** `ash guild `
+
 #### treasure
 >**Descrição:** Comando usado pra ver a quantia de dinheiro de um server
 Use ash treasure
@@ -563,6 +571,13 @@ Use ash hug <@usuario a sua escolha>
 use ash ia ou ash ai
 
 >**Modo de Uso:** `ash ia `
+
+## IdentifierClass
+
+#### identifier
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash identifier `
 
 ## InstagramClass
 
@@ -669,6 +684,13 @@ Use ash divorce <@prostiranha em questão>
 Use ash marry <@pessoa desejada>
 
 >**Modo de Uso:** `ash marry [member]`
+
+## MeltedClass
+
+#### melted
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash melted `
 
 ## OpenClass
 
@@ -814,6 +836,13 @@ Use ash register guild e siga as instruções do comando(use # pra marcar os can
 Use ash roleinfo <@cargo_em_questão>
 
 >**Modo de Uso:** `ash roleinfo [role]`
+
+## RpgStart
+
+#### rpg
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash rpg `
 
 ## SaySomething
 
@@ -1006,6 +1035,11 @@ Use ash twitter <mensagem desejada>
 
 ## UserBank
 
+#### bollash
+>**Descrição:** bola para capitura dos pets da ashley
+
+>**Modo de Uso:** `ash bollash `
+
 #### ticket
 >**Descrição:** raspadinha da sorte da ashley
 
@@ -1036,6 +1070,11 @@ Use ash userinfo <@usuario em questão>
 >**Descrição:** Esse nem eu sei...
 
 >**Modo de Uso:** `ash lover `
+
+#### status
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash status `
 
 #### unlover
 >**Descrição:** Esse nem eu sei...
