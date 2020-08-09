@@ -92,7 +92,8 @@ class GuildBank(commands.Cog):
             self.status()
             embed = discord.Embed(color=self.bot.color)
             embed.add_field(name="Guilds Commands:",
-                            value=f"{self.st[29]} `guild reward` Receba suas recompenças a cada hora.\n")
+                            value=f"{self.st[29]} `guild reward` Receba suas recompenças a cada hora.\n"
+                                  f"{self.st[29]} `guild convert` Converta as pedras da guilda em ETHERNYAS.\n")
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             embed.set_thumbnail(url=self.bot.user.avatar_url)
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
@@ -163,7 +164,7 @@ class GuildBank(commands.Cog):
                 response += f"{self.bot.items[k][0]} ``{v}`` ``{self.bot.items[k][1]}``\n"
                 amount += v
 
-        amount = amount * 500
+        amount = amount * 100
         response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
 
         a = '{:,.2f}'.format(float(amount))
@@ -191,6 +192,41 @@ class GuildBank(commands.Cog):
                        f"✨ **MUITOS ITENS** ✨\n{response}\n``Que custou para os cofres do servidor a quantia de`` "
                        f"**R${d} ETHERNYAS**, ``Para saber quanto ainda tem no saldo do servidor use o comando`` "
                        f"**ash tesouro**")
+
+    @check_it(no_pm=True, manage_messages=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, g_vip=True, cooldown=True, time=86400))
+    @guild.group(name='convert', aliases=["converter"])
+    async def _convert(self, ctx):
+
+        # DATA DO SERVIDOR ATUAL
+        data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+        update_guild = data_guild
+        tot = 0
+        for k in ['total_bronze', 'total_silver', 'total_gold']:
+
+            if k == "total_bronze":
+                tot += update_guild['treasure'][k]
+
+            if k == "total_silver":
+                tot += update_guild['treasure'][k] * 10
+
+            if k == "total_gold":
+                tot += update_guild['treasure'][k] * 100
+
+            update_guild['treasure'][k] = 0
+
+        update_guild['treasure']['total_money'] += tot
+        await self.bot.db.update_data(data_guild, update_guild, 'guilds')
+
+        a = '{:,.2f}'.format(float(tot))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+
+        await ctx.send(f'<:confirmed:721581574461587496>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
+                       f' aceito com sucesso, voce converteu todas as pedras do seu servidor em`` '
+                       f'**RS{d}** ``ETHERNYAS``')
 
 
 def setup(bot):

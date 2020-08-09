@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from resources.utility import parse_duration as pd
 from random import randint
 from datetime import datetime
 
@@ -199,19 +200,21 @@ class DailyClass(commands.Cog):
             date_now = datetime.today()
             date_old = update['cooldown']['rec']['date']
 
-            if update['cooldown']['rec']['cont'] < 6 and abs((date_old - date_now).days) < 2:
+            if update['cooldown']['rec']['cont'] < 6 and (date_now - date_old).seconds < 86400:
                 if member.id in update['cooldown']['rec']['list']:
                     return await ctx.send(f"<:alert:739251822920728708>│``Você já deu REC nesse membro hoje!``")
                 update['cooldown']['rec']['cont'] += 1
                 update['cooldown']['rec']['list'].append(member.id)
                 await self.bot.db.update_data(data, update, 'users')
             else:
-                if abs((date_old - date_now).days) > 1:
+                if (date_now - date_old).seconds > 86400:
                     update['cooldown']['rec'] = {"cont": 1, "date": datetime.today(), "list": [member.id]}
                     await self.bot.db.update_data(data, update, 'users')
                 else:
-                    return await ctx.send(f"<:alert:739251822920728708>│``Você ultrapassou suas "
-                                          f"recomendações por hoje!``")
+                    time_left = (date_old - date_now).seconds
+                    return await ctx.send(f"<:alert:739251822920728708>│``Você ultrapassou suas recomendações diarias,"
+                                          f" então deve esperar`` **{pd(int(time_left))}** ``para usar esse comando "
+                                          f"novamente!``")
         except KeyError:
             update['cooldown']['rec'] = {"cont": 1, "date": datetime.today(), "list": [member.id]}
             await self.bot.db.update_data(data, update, 'users')

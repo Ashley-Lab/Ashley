@@ -107,9 +107,26 @@ class OnReady(commands.Cog):
                                                         f'POIS EXTRAPOLOU OS LIMITES HOJE``\n<a:red:525032764211200002>'
                                                         f' **OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
                                                         f'PRIVILEGIOS DE GANHAR OS ITENS** ``ESSE BLOQUEIO FOI MAIS '
-                                                        f'RIGIDO``')
+                                                        f'RIGIDO,`` **SE VOCE CONTINUAR LEVANDO ESSE BLOQUEIO IRÁ SER'
+                                                        f' BANIDO DE USAR MEUS SERVIÇOS** ``AVISO PARA BANIMENTO:`` '
+                                                        f'**update["security"]["strikes_to_ban"]**/10')
                         except KeyError:
                             pass
+
+                    if update['security']['strikes_to_ban'] > 10:
+                        answer = await self.bot.ban_(update['user_id'], "BANIDO POR USAR MACRO!")
+                        if answer:
+                            embed = discord.Embed(
+                                color=discord.Color.red(),
+                                description=f'<:cry:530735037243719687>│``VOCE FOI BANIDO POR USAR MACRO!``'
+                                            f' **SE QUISER CONTESTAR ENTRE NO MEU SERVIDOR DE SUPORTE!**')
+                            try:
+                                if update['security']['last_channel'] is not None:
+                                    channel_ = self.bot.get_channel(update['security']['last_channel'])
+                                    if channel_ is not None:
+                                        await channel_.send(embed=embed)
+                            except KeyError:
+                                pass
 
                     last_verify = date.mktime(last_verify.timetuple())
                     last_command = date.mktime(last_command.timetuple())
@@ -136,6 +153,7 @@ class OnReady(commands.Cog):
                             pass
                     else:
                         update['security']['commands'] = 0
+                        update['security']['strikes'] = 0
 
                     if update['security']['strikes'] == 11:
                         update['security']['status'] = not update['security']['status']

@@ -7,7 +7,7 @@ from random import choice
 from asyncio import sleep
 
 
-class MeltedClass(commands.Cog):
+class IdentifierClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.c = self.bot.color
@@ -100,5 +100,5 @@ class MeltedClass(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(MeltedClass(bot))
-    print('\033[1;32m( 🔶 ) | O comando \033[1;34mMELTED\033[1;32m foi carregado com sucesso!\33[m')
+    bot.add_cog(IdentifierClass(bot))
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mIDENTIFIER\033[1;32m foi carregado com sucesso!\33[m')

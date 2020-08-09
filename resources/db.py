@@ -325,6 +325,13 @@ class Database(object):
                     await self.bot.db.update_data(data_user, update_user, 'users')
 
                 if kwargs.get("g_vip") and data_guild['vip']:
+                    if kwargs.get("vip") and data_user['config']['vip']:
+                        return True
+                    elif kwargs.get("vip") and data_user['config']['vip'] is False:
+                        if ctx.guild.id == 519894833783898112:
+                            raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO "
+                                                        "PODEM USAR ESSE COMANDO``\n **Para ganhar seu vip diário use "
+                                                        "ASH INVITE**")
                     return True
                 elif kwargs.get("g_vip") and data_guild['vip'] is False:
                     raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS SERVIDORES COM VIP ATIVO PODEM "

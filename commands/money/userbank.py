@@ -160,7 +160,7 @@ class UserBank(commands.Cog):
             return await ctx.send("<:alert:739251822920728708>│``Você não tem esse item no seu inventario!``")
 
     @check_it(no_pm=True)
-    @commands.cooldown(1, 3.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='ticket', aliases=['raspadinha', 'rifa'])
     async def ticket(self, ctx):
@@ -291,7 +291,7 @@ class UserBank(commands.Cog):
         await a.delete()
 
     @check_it(no_pm=True)
-    @commands.cooldown(1, 6.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='bollash', aliases=['pokebola', 'boll', 'bola'])
     async def bollash(self, ctx):
