@@ -4,6 +4,7 @@ user_data_structure = {
             "user": {
                 "experience": 0,
                 "level": 1,
+                "xp_time": None,
                 "ranking": "Bronze",
                 "titling": "Vagabond",
                 "patent": 0,
@@ -39,22 +40,18 @@ user_data_structure = {
                 "notes": [{"guild_id": 0, "author": None, "date": None, "note": None}]
             },
             "rpg": {
-                "Name": None,
                 "vip": False,
+                "lower_net": False,
+                "Class": 'Default',
+                "next_class": None,
                 "Level": 1,
                 "XP": 0,
-                "Status": {
-                    "con": 5,
-                    "prec": 5,
-                    "agi": 5,
-                    "atk": 5,
-                    "luk": 0,
-                    "pdh": 0
-                },
-                "Class": 'Default',
+                "Status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 0},
                 "artifacts": dict(),
                 "relics": dict(),
-                "img": None,
+                'items': list(),
+                'equipped_items': list(),
+                "status": False
             },
             "pet": {
                 "status": False,
@@ -91,9 +88,7 @@ guild_data_structure = {
             "vip": False,
             "data": {
                 "commands": 0,
-                "lang": "pt",
                 "ranking": "Bronze",
-                "items": dict(),
                 "accounts": 0,
                 "total_money": 0,
                 "total_gold": 0,
@@ -130,17 +125,6 @@ guild_data_structure = {
             },
             "ia_config": {
                 "auto_msg": False,
-            },
-            "rpg_config": {
-                "rpg": False,
-                "announcement": False,
-                "announcement_id": None,
-                "chat_farm": False,
-                "chat_farm_id": None,
-                "chat_battle": False,
-                "chat_battle_id": None,
-                "chat_pvp": False,
-                "chat_pvp_id": None
             },
             "bot_config": {
                 "ash_news": False,

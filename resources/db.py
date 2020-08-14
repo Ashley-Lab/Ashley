@@ -378,79 +378,62 @@ class DataInteraction(object):
         await self.db.update_data(data, update, "guilds")
 
     async def add_experience(self, message, exp):
-        record = await self.db.get_data("user_id", message.author.id, "users")
-        update = record
-        if record is not None:
-            try:
-                if message.author.id == record["user_id"]:
-                    time_diff = (datetime.datetime.utcnow() - epoch).total_seconds() - record["user"]['xp_time']
-                    if time_diff >= 5:
-                        change = randint(1, 200)
-                        if 10 < update['user']['level'] < 20 and update['user']['ranking'] is not None:
-                            if change == 200 and update['user']['ranking'] == "Bronze":
-                                update['user']['ranking'] = "Silver"
-                                try:
-                                    update['inventory']['coins'] += 1000
-                                except KeyError:
-                                    update['inventory']['coins'] = 1000
-                                if not message.guild.id == 425864977996578816:
-                                    try:
-                                        await message.channel.send(
-                                            '🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou a``'
-                                            ' **chance** ``de garimpar mais ethernyas a partir de agora e`` **+1000** '
-                                            '``Fichas para jogar``'.format(message.author, "Silver"))
-                                    except discord.errors.Forbidden:
-                                        pass
-                        elif 20 < update['user']['level'] < 30 and update['user']['ranking'] is not None:
-                            if change == 200 and update['user']['ranking'] == "Silver":
-                                update['user']['ranking'] = "Gold"
-                                try:
-                                    update['inventory']['coins'] += 2000
-                                except KeyError:
-                                    update['inventory']['coins'] = 2000
-                                if not message.guild.id == 425864977996578816:
-                                    try:
-                                        await message.channel.send(
-                                            '🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou a``'
-                                            ' **chance** ``de garimpar mais eternyas do que o ranking passado a partir '
-                                            'de agora e`` **+2000** ``Fichas para '
-                                            'jogar``'.format(message.author, "Gold"))
-                                    except discord.errors.Forbidden:
-                                        pass
-                        if message.guild.id == update['guild_id']:
-                            update["guild_id"] = message.guild.id
-                            update["guild_name"] = message.guild.name
-                        update["user_name"] = message.author.name
-                        update['user']['experience'] += exp * update['user']['level']
-                        update["user"]['xp_time'] = (datetime.datetime.utcnow() - epoch).total_seconds()
-                        await self.db.update_data(record, update, "users")
-            except KeyError:
-                if message.author.id == record["user_id"]:
-                    update["user"]['xp_time'] = (datetime.datetime.utcnow() - epoch).total_seconds()
-                    await self.db.update_data(record, update, "users")
-
-    async def level_up(self, message):
         data = await self.db.get_data("user_id", message.author.id, "users")
         update = data
-        if data is not None:
-            if message.author.id == data["user_id"]:
-                experience = update['user']['experience']
-                lvl_anterior = update['user']['level']
-                lvl_now = int(experience ** (1 / 5))
-                if lvl_anterior < lvl_now:
-                    update['user']['level'] = lvl_now
-                    try:
-                        update['inventory']['coins'] += 200
-                    except KeyError:
-                        update['inventory']['coins'] = 200
-                    await self.db.update_data(data, update, "users")
-                    if not message.guild.id == 425864977996578816:
-                        try:
-                            await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e '
-                                                       'ganhou`` **+200** ``Fichas para '
-                                                       'jogar``'.format(message.author, lvl_now))
-                        except discord.errors.Forbidden:
-                            pass
+
+        if data is None:
+            return
+
+        if update["user"]['xp_time'] is None:
+            update["user"]['xp_time'] = datetime.datetime.today()
+
+        if (datetime.datetime.today() - update["user"]['xp_time']).seconds > 5:
+            update['user']['experience'] += exp * update['user']['level']
+            update["user"]['xp_time'] = datetime.datetime.today()
+
+        if 10 < update['user']['level'] < 20 and update['user']['ranking'] is not None:
+            if randint(1, 200) == 200 and update['user']['ranking'] == "Bronze":
+                update['user']['ranking'] = "Silver"
+
+                try:
+                    update['inventory']['coins'] += 1000
+                except KeyError:
+                    update['inventory']['coins'] = 1000
+
+                    await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** '
+                                               '``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
+                                               'partir de agora e`` **+1000** ``Fichas para '
+                                               'jogar``'.format(message.author, "Silver"))
+
+        elif 20 < update['user']['level'] < 30 and update['user']['ranking'] is not None:
+            if randint(1, 200) == 200 and update['user']['ranking'] == "Silver":
+                update['user']['ranking'] = "Gold"
+
+                try:
+                    update['inventory']['coins'] += 2000
+                except KeyError:
+                    update['inventory']['coins'] = 2000
+
+                    await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou '
+                                               'a`` **chance** ``de garimpar mais eternyas do que o ranking passado a '
+                                               'partir de agora e`` **+2000** ``Fichas para '
+                                               'jogar``'.format(message.author, "Gold"))
+
+        experience = update['user']['experience']
+        lvl_anterior = update['user']['level']
+        lvl_now = int(experience ** 0.2)
+        if lvl_anterior < lvl_now:
+            update['user']['level'] = lvl_now
+
+            try:
+                update['inventory']['coins'] += 200
+            except KeyError:
+                update['inventory']['coins'] = 200
+
+            await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e ganhou`` **+200** '
+                                       '``Fichas para jogar``'.format(message.author, lvl_now))
+
+        await self.db.update_data(data, update, "users")
 
     async def add_battle(self, ctx):
         data = await self.db.get_data("user_id", ctx.author.id, "users")

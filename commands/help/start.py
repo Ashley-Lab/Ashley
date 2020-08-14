@@ -251,8 +251,8 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos do RPG", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="⚔",
-                            value=f"`🔴` `skill      ` ...\n"  # {self.st[43]}
-                                  f"`🔴` `batalha    ` ...\n"  # {self.st[43]}
+                            value=f"{self.st[43]} `skill      ` Seu painel de progresso do RPG.\n"
+                                  f"{self.st[43]} `batalha    ` Batalhe contra monstros poderosos.\n"
                                   f"{self.st[4]} `caixa      ` Compre itens para criar suas armaduras.\n"
                                   f"{self.st[66]} `diario     ` Reinvidique seus premios diarios.\n"
                                   f"{self.st[30]} `rec        ` De ate 5 recomendações para seus amigos.\n"

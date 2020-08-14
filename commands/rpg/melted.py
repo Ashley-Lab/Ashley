@@ -4,7 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from random import choice
-from asyncio import sleep
+from asyncio import sleep, TimeoutError
 
 
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
@@ -76,6 +76,21 @@ class MeltedClass(commands.Cog):
             msg = f"\n".join([f"{self.i[key][0]} **{key.upper()}**" for key in cost.keys()])
             return await ctx.send(f"<:alert:739251822920728708>│``Lhe faltam esses itens para derreter um arfetafo:``"
                                   f"\n{msg}\n``OLHE SEU INVENTARIO E VEJA A QUANTIDADE QUE ESTÁ FALTANDO.``")
+
+        def check_option(m):
+            return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
+
+        msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODOS OS ITEM NECESSARIOS, DESEJA DERRETER "
+                             f"SEUS ARTEFATOS AGORA?``")
+        try:
+            answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
+        except TimeoutError:
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+        if answer.content == "0":
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+        await msg.delete()
 
         msg = await ctx.send("<a:loading:520418506567843860>│``Escolhendo 3 artefatos para derreter...``")
         await sleep(2)

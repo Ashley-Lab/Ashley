@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from config import data as config
 from asyncio import sleep
-from resources.utility import include
+from resources.utility import include, get_content
 
 
 class SystemMessage(commands.Cog):
@@ -33,7 +33,7 @@ class SystemMessage(commands.Cog):
                                 if data['bot_config']['ash_news']:
                                     channel_ = self.bot.get_channel(data['bot_config']['ash_news_id'])
                                     if channel_ is not None:
-                                        await channel_.send(message.content)
+                                        await channel_.send(get_content(message.content))
                             except discord.Forbidden:
                                 pass
                             await sleep(0.5)

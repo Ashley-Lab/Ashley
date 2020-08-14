@@ -214,6 +214,12 @@ class Booster(object):
             update['box']['status']['active'] = False
             Empty = True
 
+        bonus_ = choice(['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark'])
+        try:
+            update['inventory'][bonus_] += 1
+        except KeyError:
+            update['inventory'][bonus_] = 1
+
         try:
             update['inventory'][self.key_item] += 1
         except KeyError:
@@ -223,7 +229,7 @@ class Booster(object):
 
         if Empty:
             reward = list()
-            op = ['soul_crystal_of_love', 'soul_crystal_of_hope', 'soul_crystal_of_hate']
+            op = ['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur']
             reward.append(choice(op))
             response = await bot.db.add_reward(ctx, reward)
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
@@ -231,7 +237,8 @@ class Booster(object):
 
         if rarity.lower() in ["ultra raro", "secret"]:
             return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM "
-                                  f"``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
-                                  f"TEM O TIER`` ✨ **{rarity.upper()}** ✨")
-        await ctx.send(f"``O ITEM ``{item['data'][0]}**{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
-                       f"TEM O TIER`` **{rarity.upper()}**")
+                                  f"``{item['data'][0]} **{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n"
+                                  f"``ELE TEM O TIER`` ✨ **{rarity.upper()}** ✨ "
+                                  f"``+1`` {self.items[bonus_][0]} **{self.items[bonus_][1]}**")
+        await ctx.send(f"``O ITEM ``{item['data'][0]} **{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
+                       f"TEM O TIER`` **{rarity.upper()}** ``+1`` {self.items[bonus_][0]} **{self.items[bonus_][1]}**")

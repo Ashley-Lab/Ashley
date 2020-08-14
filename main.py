@@ -54,6 +54,7 @@ class Ashley(commands.AutoShardedBot):
         self.staff = [235937029106434048, 300592580381376513]
         self.version = "API: " + str(discord.__version__) + " | BOT: 7.6.75 | PROGRESS: " + str(self.progress)
         self.shortcut = config['attribute']['shortcut']
+        self.block = ['open', 'box', 'box buy', 'box booster', 'gift']
         self.data_cog = {}
         self.box = {}
         self.msg_cont = 0
@@ -122,6 +123,8 @@ class Ashley(commands.AutoShardedBot):
 
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             update_user = data_user
+
+            cmd = str(ctx.command).lower()
 
             if isinstance(ctx.author, discord.Member) and update_user is not None:
                 self.user_commands[ctx.author.id] += 1
@@ -202,8 +205,7 @@ class Ashley(commands.AutoShardedBot):
                                        f'**Gold** ``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
                                        f'partir de agora e `` **+2000** ``Fichas para jogar``')
 
-                _chance = randint(1, 200)
-                if _chance <= 4 and update_user['security']['status']:
+                if randint(1, 200) < 3 and update_user['security']['status'] and cmd not in self.block:
                     list_boxes = []
                     for k, v in self.boxes.items():
                         list_boxes += [k] * v
@@ -229,16 +231,6 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                     embed.set_thumbnail(url=BOX)
                     await ctx.send(embed=embed)
-
-                    role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", ctx.guild.roles)
-                    msg = "<:alert:739251822920728708>│``CRIE UM CARGO CHAMADO`` **</Ash_Lovers>** ``PARA SER" \
-                          " PINGADO QUANDO UM PRESENTE DROPAR.``"
-                    if role is not None:
-                        msg = f"<:confirmed:721581574461587496>│``Olha só gente, dropou um presente...`` " \
-                              f"{role.mention}\n **Obs:** ``se voce tambem quiser ser pingado use o comando``" \
-                              f" **ASH LOVER** ``ou se vc nao quiser mais ser pingado, use o comando`` " \
-                              f"**ASH UNLOVER**."
-                    await ctx.send(msg)
 
                 patent = patent_calculator(update_user['inventory']['rank_point'], update_user['inventory']['medal'])
                 if patent > update_user['user']['patent']:
@@ -292,8 +284,6 @@ class Ashley(commands.AutoShardedBot):
                     msg = await self.db.add_money(ctx, 6, True)
                     await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
 
-                await self.data.level_up(ctx)
-
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
             owner = self.get_user(guild.owner.id)
@@ -329,7 +319,10 @@ class Ashley(commands.AutoShardedBot):
         if message.author.id == self.user.id:
             return
 
-        ctx = await self.get_context(message)
+        msg = copy.copy(message)
+        msg.content = message.content.lower()
+
+        ctx = await self.get_context(msg)
         perms = ctx.channel.permissions_for(ctx.me)
         if not perms.send_messages or not perms.read_messages:
             return
@@ -373,12 +366,9 @@ class Ashley(commands.AutoShardedBot):
                 run_command = True
 
             if run_command:
-                if message.content.lower() in self.shortcut:
-                    msg = copy.copy(message)
+                if msg.content in self.shortcut:
                     msg.content = self.shortcut[message.content.lower()]
-                    await self.process_commands(msg)
-                else:
-                    await self.process_commands(message)
+                await self.process_commands(msg)
             else:
                 if ctx.command is not None:
                     await message.channel.send("<:alert:739251822920728708>|``NAO POSSO EXECUTAR COMANDOS NESSE"
@@ -430,10 +420,7 @@ if __name__ == "__main__":
                          f"**Adicione para seu servidor:**: {config['config']['default_link']}\n" \
                          f"**Servidor de Origem**: {config['config']['default_invite']}\n"
 
-    prefix = ['ash.', 'Ash.', 'aSh.', 'asH.', 'ASh.', 'aSH.', 'ASH.', 'AsH.',
-              'ash ', 'Ash ', 'aSh ', 'asH ', 'ASh ', 'aSH ', 'ASH ', 'AsH ']
-
-    bot = Ashley(command_prefix=prefix, description=description_ashley, pm_help=True, case_insensitive=True)
+    bot = Ashley(command_prefix=['ash.', 'ash '], description=description_ashley, pm_help=True)
     bot.remove_command('help')
     cont = 0
     emojis = {"ON": "``🟢``", "IDLE": "``🟡``", "OFF": "``🔴``", "VIP": "``🟣``"}

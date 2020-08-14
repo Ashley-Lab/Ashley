@@ -32,7 +32,8 @@ def guess_lvl(lvl_g):
 def calc_xp(xp, lvl):
     experience_now = xp
     lvl_now = lvl
-    experience = experience_now
+    xp = 1 if xp == 0 else xp
+    experience = xp
     lvl_guess = lvl_now + 1
 
     while True:
@@ -43,11 +44,12 @@ def calc_xp(xp, lvl):
                 xp_ = experience
                 break
         experience += 1
-
-    xp_b = guess_lvl(lvl)
-
-    percent = int((experience_now - xp_b) * 100 / (xp_ - xp_b))
-    return int(percent / 2), xp_, xp_b
+    xp_b = guess_lvl(2 if lvl == 1 else lvl)
+    try:
+        percent = int(int((experience_now - xp_b) * 100 / (xp_ - xp_b)) / 2)
+    except ZeroDivisionError:
+        percent = 0
+    return percent, xp_, xp_b
 
 
 def remove_acentos_e_caracteres_especiais(word):
@@ -306,3 +308,136 @@ def profile(data_):
 
     # save image
     image.save('profile.png')
+
+
+def skill_points(database):
+    # load dashboard image
+    image = Image.open("images/dashboards/skill_point.png").convert('RGBA')
+    show = ImageDraw.Draw(image)
+
+    # Text Align
+    def text_align(box, text, font_t):
+        nonlocal show
+        x1, y1, x2, y2 = box
+        w, h = show.textsize(text.upper(), font=font_t)
+        x = (x2 - x1 - w) // 2 + x1
+        y = (y2 - y1 - h) // 2 + y1
+        return x, y
+
+    # rectangles' texts
+    rectangles = {
+        "xp": [292, 15, 693, 37],
+        "level": [693, 11, 747, 42],
+        "class": [160, 103, 325, 141],
+        "name": [153, 147, 668, 186],
+
+        "atk": [340, 85, 405, 137],
+        "dex": [428, 85, 493, 137],
+        "acc": [520, 85, 585, 137],
+        "con": [615, 85, 680, 137],
+        "luk": [709, 85, 774, 137],
+
+        "pdh": [33, 506, 120, 585]}
+
+    # locate of skills
+    skills = {
+        "01-d1": [212, 235, 260, 283],
+        "02-c1": [282, 235, 330, 283],
+        "03-c1": [353, 235, 401, 283],
+        "04-c1": [424, 235, 472, 283],
+        "05-c1": [495, 235, 543, 283],
+        "06-c1": [566, 235, 614, 283],
+
+        "11-d2": [212, 306, 260, 354],
+        "12-d2": [282, 306, 330, 354],
+        "13-c2": [353, 306, 401, 354],
+        "14-c2": [424, 306, 472, 354],
+        "15-c2": [495, 306, 543, 354],
+        "16-c2": [566, 306, 614, 354],
+
+        "21-d3": [212, 377, 260, 425],
+        "22-d3": [282, 377, 330, 425],
+        "23-d3": [353, 377, 401, 425],
+        "24-c3": [424, 377, 472, 425],
+        "25-c3": [495, 377, 543, 425],
+        "26-c3": [566, 377, 614, 425],
+
+        "31-d4": [212, 447, 260, 495],
+        "32-d4": [282, 447, 330, 495],
+        "33-d4": [353, 447, 401, 495],
+        "34-d4": [424, 447, 472, 495],
+        "35-c4": [495, 447, 543, 495],
+        "36-c4": [566, 447, 614, 495],
+
+        "41-d5": [212, 519, 260, 567],
+        "42-d5": [282, 519, 330, 567],
+        "43-d5": [353, 519, 401, 567],
+        "44-d5": [424, 519, 472, 567],
+        "45-d5": [495, 519, 543, 567],
+        "46-c5": [566, 519, 614, 567]
+    }
+
+    # add img to main img
+    avatar_user = get_avatar(database['avatar_member'], 132, 132)
+    image.paste(avatar_user, (10, 13), avatar_user)
+
+    # add img vip
+    if database['vip']:
+        vip = Image.open("images/elements/vip_rpg.png").convert('RGBA')
+        image.paste(vip, (214, 57), vip)
+
+    # add percent to bar xp
+    percent = calc_xp(int(database['xp']), int(database['level']))  # XP / LEVEL
+    percent_img = Image.open("images/elements/1porcent.png").convert('RGBA')
+    w_percent, h_percent = percent_img.size
+    ini_x, ini_y = 293, 16
+    for n in range(percent[0]):
+        image.paste(percent_img, (ini_x, ini_y), percent_img)
+        ini_x += w_percent
+
+    # add skill to img
+    for k in skills.keys():
+        c = database['class'] if k[3] == "c" else "default"
+        skill = Image.open(f"images/skills/{c}/{k[4]}.jpg").convert('RGBA')
+        skill = skill.resize((48, 48))
+        image.paste(skill, (skills[k][0] + 1, skills[k][1] + 1), skill)
+
+    # add text to img
+    for k in rectangles.keys():
+        if k == "xp":
+            font_number = ImageFont.truetype("fonts/times.ttf", 24)
+            if database[k] == 0:
+                new_xp = f"{database[k]} / {percent[2]}"
+            else:
+                new_xp = f"{database[k] - percent[2]} / {percent[1] - percent[2]}"
+            database[k] = new_xp
+            x_, y_ = text_align(rectangles[k], database[k], font_number)
+            show.text(xy=(x_ + 1, y_ - 2), text=database[k].upper(), fill=(0, 0, 0), font=font_number)
+            show.text(xy=(x_, y_ - 3), text=database[k].upper(), fill=(255, 255, 255), font=font_number)
+        elif k == "level":
+            font_number = ImageFont.truetype("fonts/times.ttf", 28)
+            x_, y_ = text_align(rectangles[k], database[k], font_number)
+            show.text(xy=(x_ + 1, y_ - 2), text=database[k].upper(), fill=(0, 0, 0), font=font_number)
+            show.text(xy=(x_, y_ - 3), text=database[k].upper(), fill=(255, 255, 255), font=font_number)
+        elif k in ['atk', 'dex', 'acc', 'con', 'luk']:
+            font_number = ImageFont.truetype("fonts/times.ttf", 50)
+            x_, y_ = text_align(rectangles[k], database[k], font_number)
+            show.text(xy=(x_ + 1, y_ - 5), text=database[k].upper(), fill=(0, 0, 0), font=font_number)
+            show.text(xy=(x_, y_ - 6), text=database[k].upper(), fill=(255, 255, 255), font=font_number)
+        elif k == "pdh":
+            font_number = ImageFont.truetype("fonts/times.ttf", 60)
+            x_, y_ = text_align(rectangles[k], database[k], font_number)
+            show.text(xy=(x_ + 1, y_ - 8), text=database[k].upper(), fill=(0, 0, 0), font=font_number)
+            show.text(xy=(x_, y_ - 7), text=database[k].upper(), fill=(255, 255, 255), font=font_number)
+        elif k == "name":
+            font_text = ImageFont.truetype("fonts/bot.otf", 34)
+            x_, y_ = text_align(rectangles[k], database[k], font_text)
+            show.text(xy=(x_ + 1, y_ + 1), text=database[k].upper(), fill=(0, 0, 0), font=font_text)
+            show.text(xy=(x_, y_), text=database[k].upper(), fill=(255, 255, 255), font=font_text)
+        else:
+            font_text = ImageFont.truetype("fonts/bot.otf", 28)
+            x_, y_ = text_align(rectangles[k], database[k], font_text)
+            show.text(xy=(x_ + 1, y_ + 1), text=database[k].upper(), fill=(0, 0, 0), font=font_text)
+            show.text(xy=(x_, y_), text=database[k].upper(), fill=(255, 255, 255), font=font_text)
+
+    image.save("skill_points.png")

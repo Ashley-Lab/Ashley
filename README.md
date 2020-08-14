@@ -877,7 +877,7 @@ Use ash skill
 >**Descrição:** Comando usado pra distribuir seus status no rpg da Ashley
 Use ash skill add e siga as instruções do comando
 
->**Modo de Uso:** `ash skill add `
+>**Modo de Uso:** `ash skill add [status]`
 
 #### skill reset
 >**Descrição:** Comando usado pra resetar seus status

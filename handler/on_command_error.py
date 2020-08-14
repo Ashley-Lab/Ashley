@@ -88,4 +88,4 @@ class CommandErrorHandler(commands.Cog):
 
 def setup(bot):
     bot.add_cog(CommandErrorHandler(bot))
-    print('\033[1;33m( 🔶 ) | O evento \033[1;34mON_COMMAND_ERROR\033[1;33m foi carregado com sucesso!\33[m')
+    print('\033[1;36m( 🔶 ) | O  Handler \033[1;31mON_COMMAND_ERROR\033[1;36m foi carregado com sucesso!\33[m')

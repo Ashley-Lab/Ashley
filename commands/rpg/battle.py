@@ -11,9 +11,8 @@ from resources.db import Database
 class Battle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.monsters = self.bot.config['battle']['monsters']
 
-    @check_it(no_pm=True, is_owner=True)
+    @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='battle', aliases=['batalha', 'batalhar'])
@@ -23,31 +22,25 @@ class Battle(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if update['rpg']['lower_net']:
+        if not data['rpg']['status']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
+            return await ctx.send(embed=embed)
+
+        db = update['rpg']
+        db['Name'] = ctx.author.name
+        db["img"] = ctx.author.avatar_url_as(format="png")
+
+        if db['lower_net']:
             embed = discord.Embed(
                 color=self.bot.color,
                 description='<:confirmed:721581574461587496>│``MODO SEM IMAGENS ATIVADO``')
             await ctx.send(embed=embed)
 
-        # preparação para a batalha
-        if update['rpg']['Name'] is None or update['rpg']['img']:
-            return
-
-        list_items = list(choice_equips(self.bot).values())
-        for c in range(5):
-            Class_rpg['itens'].append(list_items[c])
-        db_player = Class_rpg
-        db_monster = choice(self.monsters)
-        db_monster['Status']['con'] = randint(50, 100)
-        db_monster['Status']['prec'] = randint(25, 50)
-        db_monster['Status']['agi'] = randint(25, 50)
-        db_monster['Status']['atk'] = randint(25, 50)
-        db_monster['Status']['luk'] = randint(25, 50)
-        if lower_net == 'ln':
-            db_monster['lower_net'] = lower_net
-        else:
-            db_monster['lower_net'] = lower_net
-        player = Entity(db_player, True)
+        db_monster = choice(self.bot.config['battle']['monsters'])
+        db_monster['lower_net'] = True if update['rpg']['lower_net'] else False
+        player = Entity(db, True)
         monster = Entity(db_monster, False)
 
         # durante a batalha

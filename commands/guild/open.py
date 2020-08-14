@@ -35,6 +35,9 @@ class OpenClass(commands.Cog):
             await ctx.send(f"> 🎊 **PARABENS** 🎉 ``VOCÊ GANHOU UM GIFT``\n"
                            f"``USE O COMANDO:`` **ASH GIFT** ``PARA RECEBER SEU PRÊMIO!!``")
             gt(gift, f"{time} SEGUNDOS")
+
+            if discord.File('giftcard.png') is None:
+                return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
             await ctx.send(file=discord.File('giftcard.png'))
         else:
             await ctx.send(f"<:negate:721581573396496464>│``Esse Servidor não tem presentes disponiveis...``\n"

@@ -4,13 +4,18 @@ from asyncio import sleep, TimeoutError
 from resources.utility import embed_creator
 from random import randint, choice
 from config import data
-from resources.in_test import skill_level, chance_skill
 
+# RATE MANA / HP
 manatax = 5
 lifetax = 7
+
+# DATABASE SKILL / EQUIP
 classes = data['skills']
-niveis = [10, 20, 30, 40, 50]
 itens = data['equips']
+
+# ...
+niveis = [10, 20, 30, 40, 50]
+levelatacks = [2, 3, 4, 5]
 
 
 class Entity(object):
@@ -21,39 +26,39 @@ class Entity(object):
         self.effects = {}
         self.atacks = {}
         self.atack = None
+        self.chance = False
         self.is_player = is_player
         self.armor = 0
         self.img = db['img']
-        self.chance = False
         self.ln = db['lower_net']
+
         if self.is_player:
-            self.level_skill = skill_level(db['Level'])
+            self.level_skill = db['Level']
         else:
             self.level_skill = 10
-        levelatacks = [2, 3, 4, 5]
+
         if self.is_player:
+            self._ = db['Class']
+
+            if self._ != "default":
+                for k in self.status.keys():
+                    self.status[k] += data['skills'][class_]['modifier'][k]
+
+            for c in db['equipped_items']:
+                self.armor += itens[c[1]][c[0]]['armor']
+                for name in self.status.keys():
+                    self.status[name] += itens[c[1]][c[0]]['modifier'][name]
+
             self.atacks[classes[db['Class']]['0']['name']] = classes[db['Class']]['0']
             for c in range(1, 5):
                 if self.xp > niveis[(levelatacks[c - 1] - 1)]:
                     self.atacks[classes[db['Class']][str(c)]['name']] = classes[db['Class']][str(c)]
         else:
             self.atacks = db['Atacks']
-        if self.is_player:
-            self._ = db['Class']
-            for c in db['itens']:
-                self.armor += itens[c[1]][c[0]]['armor']
-                key = self.status.keys()
-                for name in key:
-                    try:
-                        self.status[name] += itens[c[1]][c[0]]['modifier'][name]
-                    except KeyError:
-                        pass
-        key = self.status.keys()
-        for c in key:
-            try:
-                self.status[c] += classes[db['Class']]['modifier'][c]
-            except KeyError:
-                pass
+
+        for c in self.status.keys():
+            self.status[c] += classes[db['Class']]['modifier'][c]
+
         self.status['hp'] = self.status['con'] * lifetax
         self.status['mp'] = self.status['con'] * manatax
 
@@ -184,7 +189,6 @@ class Entity(object):
         if effects is not None:
             for c in effects:
                 try:
-                    print(effects, self.effects[c])
                     if 'damage' in self.effects[c]['type']:
                         self.status['hp'] -= self.effects[c]['damage']
                         description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
@@ -223,7 +227,7 @@ class Entity(object):
                         if not self.is_player:
                             chance = randint(1, 100)
                             chance += self.status['luk']
-                            if chance >= chance_skill(self.level_skill):
+                            if chance >= 95:
                                 self.effects['turns'] += skill['effs'][self.level_skill - 1][c]['turns']
                             else:
                                 self.chance = False
@@ -234,7 +238,7 @@ class Entity(object):
                         if not self.is_player:
                             chance = randint(1, 100)
                             chance += self.status['luk']
-                            if chance >= chance_skill(self.level_skill):
+                            if chance >= 95:
                                 self.effects[c] = skill['effs'][self.level_skill - 1][c]
                             else:
                                 self.chance = False
