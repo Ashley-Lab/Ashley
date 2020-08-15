@@ -269,7 +269,7 @@ class Entity(object):
             dice2 = int(damage[damage.find('d') + 1:])
             damage = 0
             for c in range(0, dice1):
-                damage += randint(0, dice2)
+                damage += randint(1, dice2)
             damage += enemy_atack
             self.status['hp'] -= damage
             description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'

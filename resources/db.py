@@ -437,21 +437,22 @@ class DataInteraction(object):
         data = await self.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        update['rpg']['XP'] += exp
-        experience = update['rpg']['XP']
-        lvl_anterior = update['rpg']['Level']
-        lvl_now = int(experience ** 0.2)
-        if lvl_anterior < lvl_now:
-            update['rpg']['Level'] = lvl_now
-            update['rpg']['Status']['pdh'] += 1
+        if update['rpg']['Level'] < 50:
+            update['rpg']['XP'] += exp
+            experience = update['rpg']['XP']
+            lvl_anterior = update['rpg']['Level']
+            lvl_now = int(experience ** 0.2)
+            if lvl_anterior < lvl_now:
+                update['rpg']['Level'] = lvl_now
+                update['rpg']['Status']['pdh'] += 1
 
-            try:
-                update['inventory']['coins'] += 200
-            except KeyError:
-                update['inventory']['coins'] = 200
+                try:
+                    update['inventory']['coins'] += 200
+                except KeyError:
+                    update['inventory']['coins'] = 200
 
-            await ctx.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{},** ``ganhou`` **+200** '
-                           '``Fichas e +1 PDH (olhe o comando \"ash skill\")``'.format(ctx.author.mention, lvl_now))
+                await ctx.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{},** ``ganhou`` **+200** '
+                               '``Fichas e +1 PDH (olhe o comando \"ash skill\")``'.format(ctx.author.mention, lvl_now))
 
         await self.db.update_data(data, update, "users")
 
