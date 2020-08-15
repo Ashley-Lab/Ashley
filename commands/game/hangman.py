@@ -25,6 +25,16 @@ class ForceCass(commands.Cog):
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
+
+        try:
+            if data['inventory']['coins']:
+                pass
+        except KeyError:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
+            return await ctx.send(embed=embed)
+
         if data['inventory']['coins'] > 0 and not data['config']['playing']:
             update['config']['playing'] = True
             update['inventory']['coins'] -= 1

@@ -21,6 +21,11 @@ class RpgStart(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
+        if data['rpg']['status']:
+            embed = discord.Embed(color=self.bot.color, description=f'<:negate:721581573396496464>│``VOCE JA INICIOU O '
+                                                                    f'RPG``')
+            return await ctx.send(embed=embed)
+
         asks = {'lower_net': False, 'next_class': None}
 
         def check_battle(m):
@@ -70,7 +75,7 @@ class RpgStart(commands.Cog):
         rpg = {
             "vip": update['rpg']['vip'],
             "lower_net": asks['lower_net'],
-            "Class": 'Default',
+            "Class": 'default',
             "next_class": asks['next_class'],
             "Level": 1,
             "XP": 0,

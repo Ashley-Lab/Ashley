@@ -61,6 +61,12 @@ class SkillClass(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
+        if update['config']['battle']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``')
+            return await ctx.send(embed=embed)
+
         if update['rpg']['Status']['pdh'] > 0:
             if status.lower() == "con":
                 update['rpg']['Status']['con'] += 1
@@ -78,12 +84,12 @@ class SkillClass(commands.Cog):
                 update['rpg']['Status']['luk'] += 1
                 update['rpg']['Status']['pdh'] -= 1
             else:
-                return await ctx.send('<:negate:520418505993093130>│``Não existe esse atributo!``')
+                return await ctx.send('<:negate:721581573396496464>│``Não existe esse atributo!``')
             await self.bot.db.update_data(data, update, "users")
-            await ctx.send(f'<:confirmado:519896822072999937>│``Ponto de Habilidade adicionado com sucesso em:`` '
+            await ctx.send(f'<:confirmed:721581574461587496>│``Ponto de Habilidade adicionado com sucesso em:`` '
                            f'**{status.upper()}**')
         else:
-            await ctx.send('<:negate:520418505993093130>│``Você não tem pontos de habilidades disponiveis!``')
+            await ctx.send('<:negate:721581573396496464>│``Você não tem pontos de habilidades disponiveis!``')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -95,6 +101,12 @@ class SkillClass(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
+        if update['config']['battle']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``')
+            return await ctx.send(embed=embed)
+
         update['rpg']['Status']['con'] = 5
         update['rpg']['Status']['prec'] = 5
         update['rpg']['Status']['agi'] = 5
@@ -103,7 +115,7 @@ class SkillClass(commands.Cog):
         update['rpg']['Status']['pdh'] = update['rpg']['Level'] - 1
 
         await self.bot.db.update_data(data, update, "users")
-        await ctx.send('<:confirmado:519896822072999937>│``Status resetados com sucesso!``')
+        await ctx.send('<:confirmed:721581574461587496>│``Status resetados com sucesso!``')
 
 
 def setup(bot):

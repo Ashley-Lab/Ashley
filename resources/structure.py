@@ -42,7 +42,7 @@ user_data_structure = {
             "rpg": {
                 "vip": False,
                 "lower_net": False,
-                "Class": 'Default',
+                "Class": 'default',
                 "next_class": None,
                 "Level": 1,
                 "XP": 0,

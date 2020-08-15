@@ -401,9 +401,8 @@ class DataInteraction(object):
                     update['inventory']['coins'] = 1000
 
                     await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** '
-                                               '``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
-                                               'partir de agora e`` **+1000** ``Fichas para '
-                                               'jogar``'.format(message.author, "Silver"))
+                                               '``e ganhou a`` **chance** ``de garimpar mais ethernyas '
+                                               'e`` **+1000** ``Fichas``'.format(message.author, "Silver"))
 
         elif 20 < update['user']['level'] < 30 and update['user']['ranking'] is not None:
             if randint(1, 200) == 200 and update['user']['ranking'] == "Silver":
@@ -415,9 +414,8 @@ class DataInteraction(object):
                     update['inventory']['coins'] = 2000
 
                     await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou '
-                                               'a`` **chance** ``de garimpar mais eternyas do que o ranking passado a '
-                                               'partir de agora e`` **+2000** ``Fichas para '
-                                               'jogar``'.format(message.author, "Gold"))
+                                               'a`` **chance** ``de garimpar mais eternyas do que o ranking passado '
+                                               'e`` **+2000** ``Fichas``'.format(message.author, "Gold"))
 
         experience = update['user']['experience']
         lvl_anterior = update['user']['level']
@@ -431,7 +429,29 @@ class DataInteraction(object):
                 update['inventory']['coins'] = 200
 
             await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e ganhou`` **+200** '
-                                       '``Fichas para jogar``'.format(message.author, lvl_now))
+                                       '``Fichas``'.format(message.author, lvl_now))
+
+        await self.db.update_data(data, update, "users")
+
+    async def add_xp(self, ctx, exp):
+        data = await self.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        update['rpg']['XP'] += exp
+        experience = update['rpg']['XP']
+        lvl_anterior = update['rpg']['Level']
+        lvl_now = int(experience ** 0.2)
+        if lvl_anterior < lvl_now:
+            update['rpg']['Level'] = lvl_now
+            update['rpg']['Status']['pdh'] += 1
+
+            try:
+                update['inventory']['coins'] += 200
+            except KeyError:
+                update['inventory']['coins'] = 200
+
+            await ctx.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{},** ``ganhou`` **+200** '
+                           '``Fichas e +1 PDH (olhe o comando \"ash skill\")``'.format(ctx.author.mention, lvl_now))
 
         await self.db.update_data(data, update, "users")
 

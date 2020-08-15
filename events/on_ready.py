@@ -97,8 +97,9 @@ class OnReady(commands.Cog):
                             update['security']['strikes_to_ban'] = 1
 
                         channel_ = self.bot.get_channel(737467830571761786)
-                        await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA POSSIVELMENTE USANDO MACRO E FOI '
-                                            f'BLOQUEADO\nNa Data e Hora: {data_}```')
+                        user = self.bot.user(data["user_id"])
+                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO MACRO E'
+                                            f' FOI BLOQUEADO\nNa Data e Hora: {data_}```')
                         try:
                             if update['security']['last_channel'] is not None:
                                 channel_ = self.bot.get_channel(update['security']['last_channel'])
@@ -137,8 +138,9 @@ class OnReady(commands.Cog):
                         update['security']['strikes'] += 1
                         update['security']['commands'] = 0
                         channel_ = self.bot.get_channel(737467830571761786)
-                        await channel_.send(f'```O USUARIO {data["user_id"]} FOI DETECTADO POSSIVELMENTE USANDO MACRO\n'
-                                            f'Na Data e Hora: {data_}```')
+                        user = self.bot.user(data["user_id"])
+                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} FOI DETECTADO POSSIVELMENTE USANDO'
+                                            f' MACRO\nNa Data e Hora: {data_}```')
                         try:
                             if update['security']['strikes'] < 11:
                                 if update['security']['last_channel'] is not None:
@@ -158,8 +160,9 @@ class OnReady(commands.Cog):
                     if update['security']['strikes'] == 11:
                         update['security']['status'] = not update['security']['status']
                         channel_ = self.bot.get_channel(737467830571761786)
-                        await channel_.send(f'```O USUARIO {data["user_id"]} ESTAVA POSSIVELMENTE USANDO MACRO E FOI '
-                                            f'BLOQUEADO\nNa Data e Hora: {data_}```')
+                        user = self.bot.user(data["user_id"])
+                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO MACRO'
+                                            f' E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
 
                         try:
                             if update['security']['last_channel'] is not None:

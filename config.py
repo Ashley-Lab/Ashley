@@ -20,9 +20,6 @@ with open("data/battle.json", encoding="utf-8") as battle:
 with open("data/cards.json", encoding="utf-8") as cards:
     cards = json.load(cards)
 
-with open("data/classes.json", encoding="utf-8") as classes:
-    classes = json.load(classes)
-
 with open("data/config.json", encoding="utf-8") as config:
     config = json.load(config)
 
@@ -87,7 +84,6 @@ data = {
     "attribute": attribute,
     "battle": battle,
     "cards": cards,
-    "classes": classes,
     "config": config,
     "ctf": ctf,
     "emojis": emojis,
