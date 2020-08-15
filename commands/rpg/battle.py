@@ -65,6 +65,8 @@ class Battle(commands.Cog):
         max_ = data['rpg']['Level'] + 9
         db_monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['Level'] < max_])
         db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
+        if data['rpg']['vip']:
+            db_monster['XP'] += db_monster['XP'] // 2
         player = Entity(db_player, True)
         monster = Entity(db_monster, False)
 
@@ -149,7 +151,11 @@ class Battle(commands.Cog):
             await ctx.send(embed=embed)
             change = randint(1, 100)
             if change < 25:
-                response = await self.bot.db.add_reward(ctx, db_monster['reward'])
+                if data['rpg']['vip']:
+                    reward = list(db_monster['reward'])
+                else:
+                    reward = [choice(db_monster['reward']) for _ in range(3)]
+                response = await self.bot.db.add_reward(ctx, reward)
                 await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                '{}'.format(response))
 

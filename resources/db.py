@@ -451,8 +451,10 @@ class DataInteraction(object):
                 except KeyError:
                     update['inventory']['coins'] = 200
 
-                await ctx.send('🎊 **PARABENS** 🎉 {} ``você upou no RPG para o level`` **{},** ``ganhou`` **+200** '
-                               '``Fichas e +1 PDH (olhe o comando \"ash skill\")``'.format(ctx.author.mention, lvl_now))
+                msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
+                      f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``'
+                embed = discord.Embed(color=self.bot.color, description=f'<:confirmed:721581574461587496>│{msg}')
+                await ctx.send(embed=embed)
 
         await self.db.update_data(data, update, "users")
 
