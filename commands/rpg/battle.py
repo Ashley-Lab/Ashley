@@ -70,7 +70,7 @@ class Battle(commands.Cog):
 
         # durante a batalha
         while not self.bot.is_closed():
-            if player.status['hp'] <= 0:
+            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
                 break
 
             atk = await player.turn(monster.status['hp'], self.bot, ctx)
@@ -96,7 +96,7 @@ class Battle(commands.Cog):
                 embed.set_thumbnail(url=f"{db_monster['img']}")
                 await ctx.send(embed=embed)
 
-            if monster.status['hp'] <= 0:
+            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
                 break
 
             atk = await monster.turn(monster.status['hp'], self.bot, ctx)

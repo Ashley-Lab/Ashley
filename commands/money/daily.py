@@ -24,7 +24,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.group(name='daily', aliases=['diario', 'd'])
     async def daily(self, ctx):
         """Comando usado pra retornar uma lista de todos os subcomandos de daily
@@ -143,7 +143,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, cooldown=True, time=86400))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
     @daily.group(name='vip')
     async def _vip(self, ctx):
         """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
@@ -207,7 +207,6 @@ class DailyClass(commands.Cog):
                     return await ctx.send(f"<:alert:739251822920728708>│``Você já deu REC nesse membro hoje!``")
 
                 update['cooldown']['rec']['cont'] += 1
-                update['cooldown']['rec']['date'] = (datetime.utcnow() - epoch).total_seconds()
                 update['cooldown']['rec']['list'].append(member.id)
 
             else:
