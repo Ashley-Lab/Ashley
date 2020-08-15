@@ -48,7 +48,11 @@ class IdentifierClass(commands.Cog):
         Embed.set_footer(text="Ashley ® Todos os direitos reservados.")
         await ctx.send(embed=Embed)
 
-        if update['inventory']['?-Bollash'] < 1:
+        try:
+            if update['inventory']['?-Bollash'] < 1:
+                return await ctx.send("<:negate:721581573396496464>│``Voce nao tem o minimo de 1 ?-Bollash...``\n"
+                                      "**Obs:** ``VOCE CONSEGUE SUAS ?-BOLLASH USANDO O COMANDO`` **ASH BOLLASH**")
+        except KeyError:
             return await ctx.send("<:negate:721581573396496464>│``Voce nao tem o minimo de 1 ?-Bollash...``\n"
                                   "**Obs:** ``VOCE CONSEGUE SUAS ?-BOLLASH USANDO O COMANDO`` **ASH BOLLASH**")
 
@@ -62,8 +66,23 @@ class IdentifierClass(commands.Cog):
 
         if len(cost) > 0:
             msg = f"\n".join([f"{self.i[key][0]} **{key.upper()}**" for key in cost.keys()])
-            return await ctx.send(f"<:alert:739251822920728708>│``Lhe faltam esses itens para derreter um arfetafo:``"
+            return await ctx.send(f"<:alert:739251822920728708>│``Lhe faltam esses itens para identificar:``"
                                   f"\n{msg}\n``OLHE SEU INVENTARIO E VEJA A QUANTIDADE QUE ESTÁ FALTANDO.``")
+
+        def check_option(m):
+            return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
+
+        msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODOS OS ITEM NECESSARIOS, DESEJA IDENTIFICAR "
+                             f"SUA BOLLASH AGORA?``\n**1** para ``SIM`` ou **0** para ``NÃO``")
+        try:
+            answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
+        except TimeoutError:
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+        if answer.content == "0":
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+        await msg.delete()
 
         msg = await ctx.send("<a:loading:520418506567843860>│``Identificando sua ?-Bollash...``")
         await sleep(2)

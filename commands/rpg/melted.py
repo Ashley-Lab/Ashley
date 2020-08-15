@@ -81,7 +81,7 @@ class MeltedClass(commands.Cog):
             return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
         msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODOS OS ITEM NECESSARIOS, DESEJA DERRETER "
-                             f"SEUS ARTEFATOS AGORA?``")
+                             f"SEUS ARTEFATOS AGORA?``\n**1** para ``SIM`` ou **0** para ``NÃO``")
         try:
             answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
         except TimeoutError:
