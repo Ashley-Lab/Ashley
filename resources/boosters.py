@@ -181,9 +181,9 @@ class Booster(object):
         if data['user']['ranking'] == "Bronze":
             price -= 50
         if data['user']['ranking'] == "Silver":
-            price -= 100
+            price -= 75
         if data['user']['ranking'] == "Gold":
-            price -= 150
+            price -= 125
         if data['config']['vip']:
             price -= 50
 

@@ -167,6 +167,9 @@ class Ashley(commands.AutoShardedBot):
                 if str(ctx.command).lower() in ['box buy', 'box booster']:
                     update_user['config']['buying'] = False
 
+                if str(ctx.command).lower() in ['battle']:
+                    update['config']['battle'] = False
+
                 if update_user['security']['status']:
                     update_guild['data']['commands'] += 1
 

@@ -347,7 +347,7 @@ class Database(object):
                     if ctx.guild.id == 519894833783898112:
                         raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO "
                                                     "PODEM USAR ESSE COMANDO``\n **Para ganhar seu vip diário use "
-                                                    "ASH INVITE**")
+                                                    "ASH VIP**")
                     raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO PODEM "
                                                 "USAR ESSE COMANDO``\n **Para ganhar seu vip diário use ASH INVITE "
                                                 "entre no meu canal de suporte e use o comando ASH VIP**")
