@@ -451,7 +451,7 @@ class DataInteraction(object):
                 except KeyError:
                     update['inventory']['coins'] = 200
 
-                await ctx.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{},** ``ganhou`` **+200** '
+                await ctx.send('🎊 **PARABENS** 🎉 {} ``você upou no RPG para o level`` **{},** ``ganhou`` **+200** '
                                '``Fichas e +1 PDH (olhe o comando \"ash skill\")``'.format(ctx.author.mention, lvl_now))
 
         await self.db.update_data(data, update, "users")

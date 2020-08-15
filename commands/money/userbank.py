@@ -41,7 +41,7 @@ class UserBank(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='wallet', aliases=['carteira'])
     async def wallet(self, ctx):
         """Comando usado para verificar quanto dinheiro você tem
@@ -65,7 +65,7 @@ class UserBank(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='pay', aliases=['pagar'])
     async def pay(self, ctx, member: discord.Member = None, amount: int = None):
         if member is None:
@@ -108,7 +108,7 @@ class UserBank(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='give', aliases=['dar'])
     async def give(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
         if member is None:
@@ -161,7 +161,7 @@ class UserBank(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='ticket', aliases=['raspadinha', 'rifa'])
     async def ticket(self, ctx):
         """raspadinha da sorte da ashley"""
@@ -292,7 +292,7 @@ class UserBank(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='bollash', aliases=['pokebola', 'boll', 'bola'])
     async def bollash(self, ctx):
         """bola para capitura dos pets da ashley"""

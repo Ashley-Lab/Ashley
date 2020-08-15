@@ -219,8 +219,7 @@ class Helper(commands.Cog):
                                   f"{self.st[87]} `rifa    ` Tente conseguir um **ARTEFATO** para seu perfil.\n"
                                   f"{self.st[87]} `bollash ` Tente dropar uma **BOLLASH** no seu inventario.\n"
                                   f"{self.st[87]} `transfer` Transfere sua conta para outro servidor.\n"
-                                  f"{self.st[66]} `diario  ` Lista os comandos de recompensas diárias.\n"
-                                  f"`🔴` `loja    ` ...")  # em desenvolvimento
+                                  f"{self.st[66]} `diario  ` Lista os comandos de recompensas diárias.")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)

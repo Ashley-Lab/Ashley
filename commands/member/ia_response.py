@@ -11,7 +11,7 @@ class IaResponseClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='ia', aliases=['ai'])
     async def ia(self, ctx):
         """comando para habilitar/desabilitar a iteração com a IA da ashley

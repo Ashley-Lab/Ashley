@@ -17,7 +17,7 @@ class RecipeClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='craft', aliases=['construir'])
     async def craft(self, ctx, *, item=None):
         """Esse nem eu sei..."""
@@ -257,7 +257,7 @@ class RecipeClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='recipe', aliases=['receita'])
     async def recipe(self, ctx):
         """Esse nem eu sei..."""

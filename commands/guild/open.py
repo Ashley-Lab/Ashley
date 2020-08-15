@@ -16,7 +16,7 @@ class OpenClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='open', aliases=['abrir'])
     async def open(self, ctx):
         """Evento de Caixas..."""
@@ -46,7 +46,7 @@ class OpenClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='gift', aliases=['g'])
     async def gift(self, ctx, *, gift=None):
         """Evento de Caixas..."""

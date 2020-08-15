@@ -45,7 +45,7 @@ class GuildBank(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='treasure', aliases=['tesouro'])
     async def treasure(self, ctx):
         """Comando usado pra ver a quantia de dinheiro de um server

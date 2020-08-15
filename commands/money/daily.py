@@ -24,7 +24,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='daily', aliases=['diario', 'd'])
     async def daily(self, ctx):
         """Comando usado pra retornar uma lista de todos os subcomandos de daily
@@ -44,7 +44,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, cooldown=True, time=86400))
     @daily.group(name='coin', aliases=['ficha'])
     async def _coin(self, ctx):
         """Comando usado pra ganhar coins de jogo da Ashley
@@ -67,7 +67,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, cooldown=True, time=86400))
     @daily.group(name='energy', aliases=['energia'])
     async def _energy(self, ctx):
         """Comando usado pra ganhar coins de jogo da Ashley
@@ -93,7 +93,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, cooldown=True, time=86400))
     @daily.group(name='work', aliases=['trabalho', 'trabalhar'])
     async def _work(self, ctx):
         """Comando usado pra ganhar o dinheiro da Ashley diariamente
@@ -143,7 +143,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, cooldown=True, time=86400))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, cooldown=True, time=86400))
     @daily.group(name='vip')
     async def _vip(self, ctx):
         """Comando usado pra ganhar vip da Ashley diariamente(usavel somente no server da Ashley)
@@ -170,7 +170,7 @@ class DailyClass(commands.Cog):
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='rec', aliases=['recomendação', 'rep', 'reputação'])
     async def rec(self, ctx, member: discord.Member = None):
         """Comando usado pra dar um rec da Ashley pra algum usuario
