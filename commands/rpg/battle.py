@@ -125,6 +125,7 @@ class Battle(commands.Cog):
 
         # depois da batalha
         if monster.status['hp'] > 0:
+            await self.bot.data.add_xp(ctx, db_monster['XP'] // 4)
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} PERDEU!``",
                 color=0x000000

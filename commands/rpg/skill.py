@@ -46,6 +46,8 @@ class SkillClass(commands.Cog):
             if discord.File('skill_points.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
             await ctx.send(file=discord.File('skill_points.png'))
+            await ctx.send("> ``PARA ADICIONAR PONTOS DE HABILIDADE USE O COMANDO`` **ASH SKILL ADD**\n"
+                           "> ``PARA RESETAR OS PONTOS DE HABILIDADE USE O COMANDO`` **ASH SKILL RESET**")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -69,18 +71,43 @@ class SkillClass(commands.Cog):
 
         if update['rpg']['Status']['pdh'] > 0:
             if status.lower() == "con":
+                if update['rpg']['Status']['con'] == 40:
+                    embed = discord.Embed(
+                        color=self.bot.color,
+                        description='<:negate:721581573396496464>│``VOCE NAO PODE PASSAR DE 40 PONTOS NESSE ATRIBUTO``')
+                    return await ctx.send(embed=embed)
                 update['rpg']['Status']['con'] += 1
                 update['rpg']['Status']['pdh'] -= 1
             elif status.lower() == "dex":
+                if update['rpg']['Status']['prec'] == 20:
+                    embed = discord.Embed(
+                        color=self.bot.color,
+                        description='<:negate:721581573396496464>│``VOCE NAO PODE PASSAR DE 20 PONTOS NESSE ATRIBUTO``')
+                    return await ctx.send(embed=embed)
                 update['rpg']['Status']['prec'] += 1
                 update['rpg']['Status']['pdh'] -= 1
             elif status.lower() == "acc":
+                if update['rpg']['Status']['agi'] == 20:
+                    embed = discord.Embed(
+                        color=self.bot.color,
+                        description='<:negate:721581573396496464>│``VOCE NAO PODE PASSAR DE 20 PONTOS NESSE ATRIBUTO``')
+                    return await ctx.send(embed=embed)
                 update['rpg']['Status']['agi'] += 1
                 update['rpg']['Status']['pdh'] -= 1
             elif status.lower() == "atk":
+                if update['rpg']['Status']['atk'] == 40:
+                    embed = discord.Embed(
+                        color=self.bot.color,
+                        description='<:negate:721581573396496464>│``VOCE NAO PODE PASSAR DE 40 PONTOS NESSE ATRIBUTO``')
+                    return await ctx.send(embed=embed)
                 update['rpg']['Status']['atk'] += 1
                 update['rpg']['Status']['pdh'] -= 1
             elif status.lower() == "luk":
+                if update['rpg']['Status']['luk'] == 20:
+                    embed = discord.Embed(
+                        color=self.bot.color,
+                        description='<:negate:721581573396496464>│``VOCE NAO PODE PASSAR DE 20 PONTOS NESSE ATRIBUTO``')
+                    return await ctx.send(embed=embed)
                 update['rpg']['Status']['luk'] += 1
                 update['rpg']['Status']['pdh'] -= 1
             else:

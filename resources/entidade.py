@@ -27,7 +27,6 @@ class Entity(object):
         self.armor = 0
         self.img = self.db['img']
         self.ln = self.db['lower_net']
-        self.level_skill = self.db['Level'] // 10 + randint(1, 5)
 
         if self.is_player:
             self._ = self.db['Class']
@@ -42,11 +41,15 @@ class Entity(object):
                 for name in self.status.keys():
                     self.status[name] += itens[c[1]][c[0]]['modifier'][name]
 
+            self.ik = []
+
             for c in range(5):
-                if self.lvl > niveis[c]:
+                if self.lvl >= niveis[c]:
                     self.atacks[classes[self.db['next_class']][str(c)]['name']] = classes[self.db['next_class']][str(c)]
+                    self.ik.append(self.db['next_class'])
                 else:
                     self.atacks[classes[self.db['Class']][str(c)]['name']] = classes[self.db['Class']][str(c)]
+                    self.ik.append(self.db['Class'])
 
             for c in self.status.keys():
                 if c in ["pdh", "hp", "mp"]:
@@ -55,8 +58,10 @@ class Entity(object):
 
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
+            self.level_skill = self.db['Level'] // 10 + randint(1 + (self.status["luk"] // 4), 5)
         else:
             self.atacks = self.db['Atacks']
+            self.level_skill = self.db['Level'] // 10 + randint(1, 5)
             self.rate = [(10 + self.db['Level'] // 10), (10 + self.db['Level'] // 10)]
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
@@ -88,9 +93,9 @@ class Entity(object):
 
         if stun is False:
             if self.is_player:
-                emojis = [bot.config['skills'][self._]['0']['icon'], bot.config['skills'][self._]['1']['icon'],
-                          bot.config['skills'][self._]['2']['icon'], bot.config['skills'][self._]['3']['icon'],
-                          bot.config['skills'][self._]['4']['icon']]
+                emojis = [bot.config['skills'][self.ik[0]]['0']['icon'], bot.config['skills'][self.ik[1]]['1']['icon'],
+                          bot.config['skills'][self.ik[2]]['2']['icon'], bot.config['skills'][self.ik[3]]['3']['icon'],
+                          bot.config['skills'][self.ik[4]]['4']['icon']]
                 title = 'YOUR HP:  [{}/{}]  ||  YOUR MP:  [{}/{}]\nENEMY HP:  [{}]' \
                         ''.format(self.status['hp'] if self.status['hp'] > 0 else 0,
                                   (self.status['con'] * self.rate[0]),
@@ -228,24 +233,34 @@ class Entity(object):
                         if not self.is_player:
                             chance = randint(1, 100)
                             chance += self.status['luk']
-                            if chance >= 95:
+                            if chance >= 90:
                                 self.effects['turns'] += skill['effs'][self.level_skill - 1][c]['turns']
+                                self.chance = True
                             else:
                                 self.chance = False
                         else:
-                            self.effects['turns'] += skill['effs'][c]['turns']
-                            self.chance = True
+                            chance = randint(1, 100)
+                            if chance >= 50:
+                                self.effects['turns'] += skill['effs'][c]['turns']
+                                self.chance = True
+                            else:
+                                self.chance = False
                     except KeyError:
                         if not self.is_player:
                             chance = randint(1, 100)
                             chance += self.status['luk']
-                            if chance >= 95:
+                            if chance >= 90:
                                 self.effects[c] = skill['effs'][self.level_skill - 1][c]
+                                self.chance = True
                             else:
                                 self.chance = False
                         else:
-                            self.effects[c] = skill['effs'][c]
-                            self.chance = True
+                            chance = randint(1, 100)
+                            if chance >= 50:
+                                self.effects[c] = skill['effs'][c]
+                                self.chance = True
+                            else:
+                                self.chance = False
                     if self.chance:
                         description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
                         hp_max = self.status['con'] * self.rate[0]
