@@ -72,10 +72,16 @@ class Battle(commands.Cog):
 
         # durante a batalha
         while not self.bot.is_closed():
+
+            # -----------------------------------------------------------------------------
             if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
                 break
 
             atk = await player.turn(monster.status['hp'], self.bot, ctx)
+
+            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+                break
+            # -----------------------------------------------------------------------------
 
             if atk == "COMANDO-CANCELADO":
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -85,7 +91,10 @@ class Battle(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito`` '
                                       '**COMANDO CANCELADO**')
 
-            await sleep(1)
+            # --------======== TEMPO DE ESPERA ========--------
+            await sleep(0.5)
+            # --------======== ............... ========--------
+
             if randint(0, 20) + player.status['prec'] > randint(0, 16) + monster.status['agi']:
                 await monster.damage(atk, player.status['atk'], ctx, player.name)
             else:
@@ -98,10 +107,19 @@ class Battle(commands.Cog):
                 embed.set_thumbnail(url=f"{db_monster['img']}")
                 await ctx.send(embed=embed)
 
+            # --------======== TEMPO DE ESPERA ========--------
+            await sleep(0.5)
+            # --------======== ............... ========--------
+
+            # -----------------------------------------------------------------------------
             if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
                 break
 
             atk = await monster.turn(monster.status['hp'], self.bot, ctx)
+
+            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+                break
+            # -----------------------------------------------------------------------------
 
             if atk == "COMANDO-CANCELADO":
                 data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -111,7 +129,10 @@ class Battle(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito`` '
                                       '**COMANDO CANCELADO**')
 
-            await sleep(1)
+            # --------======== TEMPO DE ESPERA ========--------
+            await sleep(0.5)
+            # --------======== ............... ========--------
+
             if randint(0, 20) + monster.status['prec'] > randint(0, 16) + player.status['agi']:
                 await player.damage(atk, monster.status['atk'], ctx, monster.name)
             else:
@@ -123,7 +144,10 @@ class Battle(commands.Cog):
                     embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
                 embed.set_thumbnail(url=f"{db_player['img']}")
                 await ctx.send(embed=embed)
-            await sleep(2)
+
+            # --------======== TEMPO DE ESPERA ========--------
+            await sleep(0.5)
+            # --------======== ............... ========--------
 
         # depois da batalha
         if monster.status['hp'] > 0:

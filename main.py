@@ -117,29 +117,24 @@ class Ashley(commands.AutoShardedBot):
     async def on_command_completion(self, ctx):
         if ctx.guild is not None:
             _name = ctx.author.name.upper()
-
             data_guild = await self.db.get_data("guild_id", ctx.guild.id, "guilds")
             update_guild = data_guild
-
             data_user = await self.db.get_data("user_id", ctx.author.id, "users")
             update_user = data_user
-
             cmd = str(ctx.command).lower()
 
-            if isinstance(ctx.author, discord.Member) and update_user is not None:
+            if update_user is not None and update_guild is not None:
                 self.user_commands[ctx.author.id] += 1
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
 
                 if update_user['security']['status']:
                     update_user['user']['commands'] += 1
-
                 if (update_user['user']['commands'] % 10) == 0:
                     guild_ = self.get_guild(update_user['guild_id'])
                     if guild_ is None:
                         await ctx.send(f"<:negate:721581573396496464>│``{_name} SUA GUILDA DE CADASTRO FOI DELETADA, "
                                        f"TENTE USAR O COMANDO`` **ASH TRANS** ``PARA MUDAR SUA GUILDA DE ORIGEM``")
-
                 if (update_user['user']['commands'] % 2) == 0:
                     chance = randint(1, 100)
                     quant = randint(1, 3)
@@ -148,7 +143,6 @@ class Ashley(commands.AutoShardedBot):
                             update_user['inventory']['rank_point'] += quant
                             await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                            f"<:coin:519896843388452864> **{quant}** ``RANKPOINT A MAIS!``")
-
                 if (update_user['user']['commands'] % 10) == 0:
                     chance = randint(1, 100)
                     if chance <= 20:
@@ -156,7 +150,6 @@ class Ashley(commands.AutoShardedBot):
                             update_user['inventory']['medal'] += 1
                             await ctx.send(f"<:rank:519896825411665930>│🎊 **PARABENS** 🎉 ``{_name} GANHOU:`` "
                                            f"<:coin:519896843388452864> **1** ``MEDALHA A MAIS!``")
-
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
                         update_user['user']['titling'] = self.titling[key]
