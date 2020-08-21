@@ -3,7 +3,7 @@ import discord
 from resources.color import random_color
 from discord import Embed
 from discord.ext import commands
-from resources.webhook import WebHook
+from resources.webhook import Webhook
 from datetime import datetime
 from resources.check import check_it
 from resources.db import Database
@@ -37,13 +37,13 @@ class Pet(commands.Cog):
                 link_ = f'images/pet/{pet_n}/mask_{mask}.png'
 
             avatar = open(link_, 'rb')
-            web_hook_ = await ctx.channel.create_webhook(name=pet_n, avatar=avatar.read())
-            if 'a_' in web_hook_.avatar:
+            _webhook = await ctx.channel.create_webhook(name=pet_n, avatar=avatar.read())
+            if 'a_' in _webhook.avatar:
                 format_1 = '.gif'
             else:
                 format_1 = '.webp'
-            web_hook = WebHook(url=web_hook_.url)
-            web_hook.embed = Embed(
+            webhook = Webhook(url=_webhook.url)
+            webhook.embed = Embed(
                 colour=random_color(),
                 description=f"```{get_content(msg.lower())}```",
                 timestamp=datetime.utcnow()
@@ -51,10 +51,10 @@ class Pet(commands.Cog):
                 name=ctx.author.name,
                 icon_url=ctx.author.avatar_url
             ).set_thumbnail(
-                url=f'https://cdn.discordapp.com/avatars/{web_hook_.id}/{web_hook_.avatar}{format_1}?size=1024'
+                url=f'https://cdn.discordapp.com/avatars/{_webhook.id}/{_webhook.avatar}{format_1}?size=1024'
             ).to_dict()
-            web_hook.send_()
-            await web_hook_.delete()
+            await webhook.send()
+            await _webhook.delete()
         except discord.Forbidden:
             await ctx.send("<:alert:739251822920728708>│``Não tenho permissão de gerenciar WEBHOOKS nesse "
                            "servidor.``")

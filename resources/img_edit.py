@@ -1,10 +1,12 @@
 import re
 import json
 import textwrap
-import requests
 import unicodedata
 
 from io import BytesIO
+from config import data
+from aiohttp_requests import requests
+from resources.check import validate_url
 from random import choice
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
@@ -16,40 +18,13 @@ with open("data/pets.json", encoding="utf-8") as pets:
     pets = json.load(pets)
 
 
-def guess_lvl(lvl_g):
-    xp_ = 0
-    lvl_n = 1
-    while True:
-        next_lvl = int(xp_ ** 0.2)
-        if lvl_n < next_lvl:
-            lvl_n = next_lvl
-            if lvl_n == lvl_g:
-                break
-        xp_ += 1
-    return xp_
-
-
 def calc_xp(xp, lvl):
-    experience_now = xp
-    lvl_now = lvl
-    xp = 1 if xp == 0 else xp
-    experience = xp
-    lvl_guess = lvl_now + 1
-
-    while True:
-        lvl_next = int(experience ** 0.2)
-        if lvl_now < lvl_next:
-            lvl_now = lvl_next
-            if lvl_now == lvl_guess:
-                xp_ = experience
-                break
-        experience += 1
-    xp_b = guess_lvl(2 if lvl == 1 else lvl)
+    xp_now, xp_lvl_now, xp_lvl_back = xp, data['xp'][str(lvl)], data['xp'][str(lvl - 1 if lvl > 1 else 1)]
     try:
-        percent = int(int((experience_now - xp_b) * 100 / (xp_ - xp_b)) / 2)
+        percent = int(int((xp_now - xp_lvl_back) * 100 / (xp_lvl_now - xp_lvl_back)) / 2)
     except ZeroDivisionError:
         percent = 0
-    return percent, xp_, xp_b
+    return percent, xp_lvl_now, xp_lvl_back
 
 
 def remove_acentos_e_caracteres_especiais(word):
@@ -61,9 +36,13 @@ def remove_acentos_e_caracteres_especiais(word):
     return re.sub('[^a-zA-Z \\\]', '', palavra_sem_acento)
 
 
-def get_avatar(avatar_url, x, y):
-    url_avatar = requests.get(avatar_url)
-    avatar = Image.open(BytesIO(url_avatar.content)).convert('RGBA')
+async def get_avatar(avatar_url, x, y):
+    if validate_url(str(avatar_url)):
+        link = str(avatar_url)
+    else:
+        link = "https://festsonho.com.br/images/sem_foto.png"
+    url_avatar = await requests.get(link)
+    avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
     avatar = avatar.resize((x, y))
     big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
     mascara = Image.new('L', big_avatar, 0)
@@ -113,7 +92,7 @@ def gift(key, time):
     image.save('giftcard.png')
 
 
-def profile(data_):
+async def profile(data_):
     # load dashboard image
     global avatar_marry
     image = Image.open("images/dashboards/profile.png").convert('RGBA')
@@ -141,9 +120,9 @@ def profile(data_):
         link_ = None
 
     # take avatar member
-    avatar_user = get_avatar(data_['avatar_member'], 119, 119)
+    avatar_user = await get_avatar(data_['avatar_member'], 119, 119)
     if data_['avatar_married'] is not None:
-        avatar_marry = get_avatar(data_['avatar_married'], 122, 122)
+        avatar_marry = await get_avatar(data_['avatar_married'], 122, 122)
 
     # take artifacts img
     artifacts = {
@@ -282,15 +261,18 @@ def profile(data_):
                     image.paste(vip, (vip_xy[_][0][0], vip_xy[_][0][1]), vip)
                 _ += 1
             font_text_vip = ImageFont.truetype("fonts/bot.otf", 20)
-            x_, y_ = text_align(rectangles[k], data_[k][1], font_text_vip)
             if not data_[k][0][0]:
                 data_[k][1] = "VOCE NAO TEM VIP ATIVO"
+            x_, y_ = text_align(rectangles[k], data_[k][1], font_text_vip)
             show.text(xy=(x_ + 1, y_ + 1), text=data_[k][1].upper(), fill=(255, 255, 255), font=font_text_vip)
             show.text(xy=(x_, y_), text=data_[k][1].upper(), fill=(68, 29, 114), font=font_text_vip)
         else:
             font_s = font_number if k in font_ else font_text
             if k == "xp":
-                new_xp = f"{data_[k] - percent[2]} / {percent[1] - percent[2]}"
+                if data_[k] < 32:
+                    new_xp = f"{data_[k]} / {percent[2]}      {percent[0] * 2} / 100%"
+                else:
+                    new_xp = f"{data_[k] - percent[2]} / {percent[1] - percent[2]}      {percent[0] * 2} / 100%"
                 data_[k] = new_xp
             x_, y_ = text_align(rectangles[k], data_[k], font_s)
             if font_s == font_text:
@@ -310,7 +292,7 @@ def profile(data_):
     image.save('profile.png')
 
 
-def skill_points(database):
+async def skill_points(database):
     # load dashboard image
     image = Image.open("images/dashboards/skill_point.png").convert('RGBA')
     show = ImageDraw.Draw(image)
@@ -378,7 +360,7 @@ def skill_points(database):
     }
 
     # add img to main img
-    avatar_user = get_avatar(database['avatar_member'], 132, 132)
+    avatar_user = await get_avatar(database['avatar_member'], 132, 132)
     image.paste(avatar_user, (10, 13), avatar_user)
 
     # add img vip
@@ -406,10 +388,10 @@ def skill_points(database):
     for k in rectangles.keys():
         if k == "xp":
             font_number = ImageFont.truetype("fonts/times.ttf", 24)
-            if database[k] == 0:
-                new_xp = f"{database[k]} / {percent[2]}"
+            if database[k] < 32:
+                new_xp = f"{database[k]} / {percent[2]}      {percent[0] * 2} / 100%"
             else:
-                new_xp = f"{database[k] - percent[2]} / {percent[1] - percent[2]}"
+                new_xp = f"{database[k] - percent[2]} / {percent[1] - percent[2]}      {percent[0] * 2} / 100%"
             database[k] = new_xp
             x_, y_ = text_align(rectangles[k], database[k], font_number)
             show.text(xy=(x_ + 1, y_ - 2), text=database[k].upper(), fill=(0, 0, 0), font=font_number)
@@ -435,7 +417,10 @@ def skill_points(database):
             show.text(xy=(x_ + 1, y_ + 1), text=database[k].upper(), fill=(0, 0, 0), font=font_text)
             show.text(xy=(x_, y_), text=database[k].upper(), fill=(255, 255, 255), font=font_text)
         else:
-            font_text = ImageFont.truetype("fonts/bot.otf", 28)
+            if database[k] == "necromancer":
+                font_text = ImageFont.truetype("fonts/bot.otf", 23)
+            else:
+                font_text = ImageFont.truetype("fonts/bot.otf", 28)
             x_, y_ = text_align(rectangles[k], database[k], font_text)
             show.text(xy=(x_ + 1, y_ + 1), text=database[k].upper(), fill=(0, 0, 0), font=font_text)
             show.text(xy=(x_, y_), text=database[k].upper(), fill=(255, 255, 255), font=font_text)

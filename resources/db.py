@@ -453,7 +453,9 @@ class DataInteraction(object):
 
                 msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
                       f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``'
+                img = "https://i.pinimg.com/originals/7e/58/1c/7e581c87b8cf5cdae354258789b2fc32.gif"
                 embed = discord.Embed(color=self.bot.color, description=f'<:confirmed:721581574461587496>│{msg}')
+                embed.set_image(url=img)
                 await ctx.send(embed=embed)
 
         await self.db.update_data(data, update, "users")

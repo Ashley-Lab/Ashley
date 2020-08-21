@@ -10,4 +10,5 @@ requests
 pyfiglet
 websockets
 async_timeout
+aiohttp_requests
 discord.py

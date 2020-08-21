@@ -74,9 +74,20 @@ class OpenClass(commands.Cog):
         update['inventory']['coins'] += reward["coins"]
         await self.bot.db.update_data(data, update, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
-                       f'<:coin:519896843388452864> **{reward["coins"]}** ``fichas!``')
+                       f'<:coin:546019942936608778> **{reward["coins"]}** ``fichas!``')
 
-        response = await self.bot.db.add_reward(ctx, reward['items'])
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+        response = '``Caiu pra você:`` \n'
+        for item in reward['items']:
+            amount = randint(10, 25)
+            try:
+                update['inventory'][item] += amount
+            except KeyError:
+                update['inventory'][item] = amount
+            response += f"{self.bot.items[item][0]} ``{amount}`` ``{self.bot.items[item][1]}``\n"
+        response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
+        await self.bot.db.update_data(data, update, 'users')
         await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
         if reward['rare'] is not None:

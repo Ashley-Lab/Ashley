@@ -105,7 +105,7 @@ class ProfileSystem(commands.Cog):
             "artifacts": data['artifacts']
         }
 
-        profile(data_profile)
+        await profile(data_profile)
         await ctx.send("> ``CLIQUE NA IMAGEM PARA MAIORES DETALHES``")
 
         if discord.File('profile.png') is None:

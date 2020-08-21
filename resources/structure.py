@@ -46,7 +46,7 @@ user_data_structure = {
                 "next_class": None,
                 "Level": 1,
                 "XP": 0,
-                "Status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 0},
+                "Status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 1},
                 "artifacts": dict(),
                 "relics": dict(),
                 'items': list(),

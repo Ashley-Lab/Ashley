@@ -41,7 +41,7 @@ class SkillClass(commands.Cog):
                 "pdh": str(data['rpg']['Status']['pdh'])
             }
 
-            skill_points(db)
+            await skill_points(db)
             await ctx.send("> ``CLIQUE NA IMAGEM PARA MAIORES DETALHES``")
             if discord.File('skill_points.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
@@ -50,7 +50,7 @@ class SkillClass(commands.Cog):
                            "> ``PARA RESETAR OS PONTOS DE HABILIDADE USE O COMANDO`` **ASH SKILL RESET**")
 
     @check_it(no_pm=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 0.5, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @skill.command(name='add', aliases=['adicionar'])
     async def _add(self, ctx, status=None):
@@ -78,7 +78,7 @@ class SkillClass(commands.Cog):
                     return await ctx.send(embed=embed)
                 update['rpg']['Status']['con'] += 1
                 update['rpg']['Status']['pdh'] -= 1
-            elif status.lower() == "dex":
+            elif status.lower() == "acc":
                 if update['rpg']['Status']['prec'] == 20:
                     embed = discord.Embed(
                         color=self.bot.color,
@@ -86,7 +86,7 @@ class SkillClass(commands.Cog):
                     return await ctx.send(embed=embed)
                 update['rpg']['Status']['prec'] += 1
                 update['rpg']['Status']['pdh'] -= 1
-            elif status.lower() == "acc":
+            elif status.lower() == "dex":
                 if update['rpg']['Status']['agi'] == 20:
                     embed = discord.Embed(
                         color=self.bot.color,
@@ -139,7 +139,7 @@ class SkillClass(commands.Cog):
         update['rpg']['Status']['agi'] = 5
         update['rpg']['Status']['atk'] = 5
         update['rpg']['Status']['luk'] = 0
-        update['rpg']['Status']['pdh'] = update['rpg']['Level'] - 1
+        update['rpg']['Status']['pdh'] = update['rpg']['Level']
 
         await self.bot.db.update_data(data, update, "users")
         await ctx.send('<:confirmed:721581574461587496>│``Status resetados com sucesso!``')

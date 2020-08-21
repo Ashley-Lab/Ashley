@@ -49,11 +49,7 @@ class RegisterClass(commands.Cog):
                 return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
             def check_channel(m):
-                while not m.bot.is_closed():
-                    try:
-                        return m.author == ctx.author and m.channel_mentions[0].id
-                    except IndexError:
-                        pass
+                return m.author == ctx.author and m.channel_mentions[0].id
 
             register = await ctx.send('<:stream_status:519896814825242635>│``VOCÊ DESEJA CONFIGURAR O SERVIDOR '
                                       'AGORA?!`` **1** para ``SIM`` ou **0** para ``NÃO``')

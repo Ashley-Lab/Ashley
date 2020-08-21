@@ -16,7 +16,7 @@ class Booket(commands.Cog):
     @check_it(no_pm=True, is_nsfw=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='bok', aliases=['boquete', 'glupglup', 'blowjob'])
+    @commands.command(name='bok', aliases=['boquete', 'glubglub', 'blowjob'])
     async def bok(self, ctx, member: discord.Member = None):
         """eu não vou explicar oq isso faz
         Use ash bok <@pessoa que vc é casado/a>"""

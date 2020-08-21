@@ -77,6 +77,9 @@ with open("data/staff.json", encoding="utf-8") as staff:
 with open("data/thinker.json", encoding="utf-8") as thinker:
     thinker = json.load(thinker)
 
+with open("data/xp.json", encoding="utf-8") as xp:
+    xp = json.load(xp)
+
 data = {
     "achievements": achievements,
     "answers": answers,
@@ -102,5 +105,6 @@ data = {
     "set_equips": set_equips,
     "skills": skills,
     "staff": staff,
-    "thinker": thinker
+    "thinker": thinker,
+    "xp": xp
 }

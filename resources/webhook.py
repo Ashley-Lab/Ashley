@@ -1,17 +1,17 @@
 import json
-import requests
+import aiohttp
 
 from datetime import datetime
 
 
-class WebHook:
+class Webhook:
     def __init__(self, url: str, message: str = None, embed: dict = None):
         self.url = url
         self.message = message
         self.embed = embed
-        self.tempo = datetime.now().strftime("[%d/%m/%y - %H:%M]")
+        self.time = datetime.now().strftime("[%d/%m/%y - %H:%M]")
 
-    def converter_json(self):
+    def to_json(self):
         payload = {'embeds': []}
         if self.message:
             payload['content'] = self.message
@@ -19,9 +19,10 @@ class WebHook:
             payload['embeds'].append(self.embed)
         return json.dumps(payload)
 
-    def send_(self):
+    async def send(self):
         headers = {"Content-Type": "application/json"}
-        req = requests.post(self.url, headers=headers, data=self.converter_json())
-        if not req.ok:
-            print(f"\n\033[1;30m( ❌ ) | {self.tempo} \033[1;34mErro\033[1;30m ao enviar dados para o Webhook "
-                  f"\033[1;31m{self.url[:50]}...\33[m\n")
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.post(self.url, data=self.to_json()) as response:
+                if response.status >= 400:
+                    print(f"\n\033[1;30m( ❌ ) | {self.time} \033[1;34mErro\033[1;30m ao enviar dados para o Webhook "
+                          f"\033[1;31m{f'com o status: {response.status}'}...\33[m\n")

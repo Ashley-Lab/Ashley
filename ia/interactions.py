@@ -72,9 +72,9 @@ class IaInteractions(commands.Cog):
                     if message.author.id != self.bot.owner_id:
                         for c in range(0, len(config['questions']['denky_r'])):
                             if config['questions']['denky_r'][c] in message.content:
-                                return await message.channel.send('**Ei,** {}**! Eu to vendo você falar mal do meu'
-                                                                  ' pai!**\n```VOU CONTAR TUDO PRO '
-                                                                  'PAPAI```'.format(message.author.mention))
+                                msg = '**Ei,** {}**! Eu to vendo você falar mal do meu pai!**\n```VOU CONTAR TUDO ' \
+                                      'PRO PAPAI```'.format(message.author.mention)
+                                return await self.send_message(message, msg)
                 # --------------============================--------------
 
                 # filtro de quantidade de mensagens salvas por usuario

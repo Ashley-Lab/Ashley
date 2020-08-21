@@ -1,15 +1,16 @@
 import re
 import discord
-import requests
 import operator
 import unicodedata
 
+from aiohttp_requests import requests
 from io import BytesIO
 from discord.ext import commands
 from asyncio import TimeoutError
 from resources.db import Database
 from resources.check import check_it
 from PIL import Image, ImageDraw, ImageFont, ImageOps
+from resources.check import validate_url
 
 
 def remove_acentos_e_caracteres_especiais(word):
@@ -101,8 +102,12 @@ class RankingClass(commands.Cog):
         nome = remove_acentos_e_caracteres_especiais(str(user))
 
         # take avatar member
-        url_avatar = requests.get(user.avatar_url_as(format="png"))
-        avatar = Image.open(BytesIO(url_avatar.content)).convert('RGBA')
+        if validate_url(str(user.avatar_url_as(format="png"))):
+            link = str(user.avatar_url_as(format="png"))
+        else:
+            link = "https://festsonho.com.br/images/sem_foto.png"
+        url_avatar = await requests.get(link)
+        avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
         avatar = avatar.resize((250, 250))
         big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
         mascara = Image.new('L', big_avatar, 0)
@@ -159,8 +164,12 @@ class RankingClass(commands.Cog):
         # guild image
         guild_ = self.bot.get_guild(data['guild_id'])
         if guild_ is not None:
-            url_guild = requests.get(guild_.icon_url)
-            icon_guild = Image.open(BytesIO(url_guild.content)).convert("RGBA")
+            if validate_url(str(guild_.icon_url)):
+                link = str(guild_.icon_url)
+            else:
+                link = "https://festsonho.com.br/images/sem_foto.png"
+            url_guild = await requests.get(link)
+            icon_guild = Image.open(BytesIO(await url_guild.read())).convert("RGBA")
             icon_guild = icon_guild.resize((190, 190))
         else:
             icon_guild = Image.open('images/elements/no_found.png').convert("RGBA")

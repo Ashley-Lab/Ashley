@@ -6,6 +6,7 @@ from random import randint, choice
 from resources.entidade import Entity
 from resources.check import check_it
 from resources.db import Database
+from resources.img_edit import calc_xp
 
 
 class Battle(commands.Cog):
@@ -51,23 +52,19 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
             return await ctx.send(embed=embed)
 
+        # configuração do player
         db_player = dict(data['rpg'])
         db_player['Name'] = ctx.author.name
         db_player["img"] = ctx.author.avatar_url_as(format="png")
+        player = Entity(db_player, True)
 
-        if db_player['lower_net']:
-            embed = discord.Embed(
-                color=self.bot.color,
-                description='<:confirmed:721581574461587496>│``MODO SEM IMAGENS ATIVADO``')
-            await ctx.send(embed=embed)
-
-        min_ = data['rpg']['Level'] - 9 if data['rpg']['Level'] - 9 > 0 else 0
-        max_ = data['rpg']['Level'] + 9
+        # configuração do monstro
+        lvl = data['rpg']['Level']
+        dif = 1 if lvl == 1 else 3 if 1 < lvl < 5 else 5 if 5 < lvl < 40 else 10
+        min_, max_ = lvl - dif if lvl - dif > 0 else 0, lvl + dif
         db_monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['Level'] < max_])
         db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
-        if data['rpg']['vip']:
-            db_monster['XP'] += db_monster['XP'] // 2
-        player = Entity(db_player, True)
+        db_monster['enemy'] = data['rpg']['Level']
         monster = Entity(db_monster, False)
 
         # durante a batalha
@@ -77,7 +74,7 @@ class Battle(commands.Cog):
             if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
                 break
 
-            atk = await player.turn(monster.status['hp'], self.bot, ctx)
+            atk = await player.turn([monster.status, monster.rate, monster.name, monster.lvl], self.bot, ctx)
 
             if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
                 break
@@ -149,9 +146,34 @@ class Battle(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
+        # calculo de xp
+        xp, lp, lm = db_monster['XP'], db_player['Level'], db_monster['Level']
+        perc = xp if lp - lm <= 0 else xp + abs(0.25 * (db_player['Level'] - db_monster['Level']))
+        data_xp = calc_xp(db_player['XP'], db_player['Level'])
+
+        if db_player['XP'] < 32:
+            xpm = data_xp[2]
+            xpr = xpm
+        else:
+            if 1 < db_player['Level'] < 7:
+                percent = [randint(50, 75), randint(40, 60), randint(30, 55), randint(25, 45), randint(20, 40)]
+                xpm = data_xp[1] - data_xp[2]
+                xpr = int(xpm / 100 * percent[db_player['Level'] - 2])
+            else:
+                xpm = data_xp[1] - data_xp[2]
+                xpr = int(xpm / 100 * perc)
+        if xpr < xpm / 100 * 1:
+            xpr = int(xpm / 100 * 1)
+
+        xp_reward = [int(xpr + xpr * 0.5), int(xpr), int(xpr / 2)]
+        print(f"Player: {db_player['Name']} | Percent: {perc} | XPR/XPM: {xpr}/{xpm} | Reward: {xp_reward}")
+
         # depois da batalha
         if monster.status['hp'] > 0:
-            await self.bot.data.add_xp(ctx, db_monster['XP'] // 4)
+            if data['rpg']['vip']:
+                await self.bot.data.add_xp(ctx, xp_reward[1])
+            else:
+                await self.bot.data.add_xp(ctx, xp_reward[2])
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} PERDEU!``",
                 color=0x000000
@@ -163,7 +185,10 @@ class Battle(commands.Cog):
             await ctx.send(embed=embed)
         else:
             # premiação
-            await self.bot.data.add_xp(ctx, db_monster['XP'])
+            if data['rpg']['vip']:
+                await self.bot.data.add_xp(ctx, xp_reward[0])
+            else:
+                await self.bot.data.add_xp(ctx, xp_reward[1])
             answer_ = await self.bot.db.add_money(ctx, db_monster['ethernya'], True)
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} GANHOU!`` {answer_}",
@@ -176,9 +201,11 @@ class Battle(commands.Cog):
             change = randint(1, 100)
             if change < 25:
                 if data['rpg']['vip']:
-                    reward = list(db_monster['reward'])
+                    reward = [choice(db_monster['reward']) for _ in range(8)]
                 else:
-                    reward = [choice(db_monster['reward']) for _ in range(3)]
+                    reward = [choice(db_monster['reward']) for _ in range(4)]
+                if change == 1:
+                    reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
                 response = await self.bot.db.add_reward(ctx, reward)
                 await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                '{}'.format(response))

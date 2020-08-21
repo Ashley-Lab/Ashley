@@ -63,7 +63,7 @@ class DailyClass(commands.Cog):
             update_user['inventory']['coins'] = coin
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
-                       f'<:coin:519896843388452864> **{coin}** ``fichas!``')
+                       f'<:coin:546019942936608778> **{coin}** ``fichas!``')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -107,18 +107,20 @@ class DailyClass(commands.Cog):
                                           " DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**")
 
                 if data_user['user']['ranking'] == "Bronze":
-                    money = randint(100, 500) + self.bot.user_commands[ctx.author.id] * 2
+                    money = randint(100, 500)
                     m = 2
                 elif data_user['user']['ranking'] == "Silver":
-                    money = randint(200, 1000) + self.bot.user_commands[ctx.author.id] * 4
+                    money = randint(200, 1000)
                     m = 4
                 elif data_user['user']['ranking'] == "Gold":
-                    money = randint(300, 1500) + self.bot.user_commands[ctx.author.id] * 6
+                    money = randint(300, 1500)
                     m = 6
 
                 msg = await self.bot.db.add_money(ctx, money)
                 await ctx.send(f'<:confirmed:721581574461587496>│``Você trabalhou duro e acabou de ganhar:`` \n'
-                               f'{msg}\n``Obs:`` **{self.bot.user_commands[ctx.author.id] * m}** '
+                               f'{msg}')
+                msg = await self.bot.db.add_money(ctx, self.bot.user_commands[ctx.author.id] * m)
+                await ctx.send(f'<:confirmed:721581574461587496>│``Você tambem ganhou:``\n{msg}\n'
                                f'``de ETHERNYAS a mais por usar {self.bot.user_commands[ctx.author.id]} comandos.``')
             else:
                 try:
@@ -219,10 +221,15 @@ class DailyClass(commands.Cog):
         # o rec é dado aqui (acima é apenas testes, e abaixo as premiações.)
         update_user['user']['rec'] += 1
 
+        embed = discord.Embed(color=self.color)
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+        embed.set_image(url="https://i.pinimg.com/originals/1f/48/c4/1f48c47b7803eca495d237be1d0cfaba.gif")
+
         if (update_user['user']['rec'] % 2) == 0:
             if chance <= 25:
                 if update_user['user']['stars'] < 20:
                     update_user['user']['stars'] += 1
+                    await ctx.send(embed=embed)
                     await ctx.send(f'<:rank:519896825411665930>│{member.mention} ``GANHOU 1 ESTRELA!`` '
                                    f'🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM '
                                    f'O COMANDO:** ``ASH RANK``')
@@ -236,6 +243,7 @@ class DailyClass(commands.Cog):
                     if chance < 6:
                         if update['user']['stars'] < 21:
                             update['user']['stars'] += 1
+                            await ctx.send(embed=embed)
                             await ctx.send(f'<:rank:519896825411665930>│{ctx.author.mention} ``TAMBEM GANHOU 1 '
                                            f'ESTRELA!`` 🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA '
                                            f'ESTRELINHA NOVA COM O COMANDO:** ``ASH RANK``')
@@ -244,6 +252,7 @@ class DailyClass(commands.Cog):
                 else:
                     if update['user']['stars'] < 21:
                         update['user']['stars'] += 1
+                        await ctx.send(embed=embed)
                         await ctx.send(f'<:rank:519896825411665930>│{ctx.author.mention} ``GANHOU 1 ESTRELA, PORQUE`` '
                                        f'{member.mention} ``JA TEM TODAS AS 20 ESTRELAS DISPONIVEIS``'
                                        f'🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA '

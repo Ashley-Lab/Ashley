@@ -5,11 +5,9 @@ from resources.utility import embed_creator
 from random import randint, choice
 from config import data
 
-# DATABASE SKILL / EQUIP
 classes = data['skills']
-itens = data['equips']
-# NEW SKILLS
-niveis = [5, 10, 15, 20, 25]
+equipments = data['equips']
+levels = [5, 10, 15, 20, 25]
 
 
 class Entity(object):
@@ -29,44 +27,58 @@ class Entity(object):
         self.ln = self.db['lower_net']
 
         if self.is_player:
-            self._ = self.db['Class']
-            self.rate = [classes[self.db['Class']]['rate']['life'], classes[self.db['Class']]['rate']['mana']]
 
-            if self._ != "default":
-                for k in self.status.keys():
-                    self.status[k] += data['skills'][self._]['modifier'][k]
+            self.rate = [classes[self.db['Class']]['rate']['life'], classes[self.db['Class']]['rate']['mana']]
+            if self.db['Level'] > 25:
+                self.rate[0] += classes[self.db['next_class']]['rate']['life']
+                self.rate[1] += classes[self.db['next_class']]['rate']['mana']
+
+            for k in self.status.keys():
+                if k in ["pdh", "hp", "mp"]:
+                    continue
+                self.status[k] += classes[self.db['Class']]['modifier'][k]
+                if self.db['Level'] > 25:
+                    self.status[k] += classes[self.db['next_class']]['modifier'][k]
 
             for c in self.db['equipped_items']:
-                self.armor += itens[c[1]][c[0]]['armor']
+                self.armor += equipments[c[1]][c[0]]['armor']
                 for name in self.status.keys():
-                    self.status[name] += itens[c[1]][c[0]]['modifier'][name]
+                    self.status[name] += equipments[c[1]][c[0]]['modifier'][name]
 
             self.ik = []
-
             for c in range(5):
-                if self.lvl >= niveis[c]:
+                if self.lvl >= levels[c]:
                     self.atacks[classes[self.db['next_class']][str(c)]['name']] = classes[self.db['next_class']][str(c)]
                     self.ik.append(self.db['next_class'])
                 else:
                     self.atacks[classes[self.db['Class']][str(c)]['name']] = classes[self.db['Class']][str(c)]
                     self.ik.append(self.db['Class'])
 
-            for c in self.status.keys():
-                if c in ["pdh", "hp", "mp"]:
-                    continue
-                self.status[c] += classes[self.db['Class']]['modifier'][c]
-
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
-            self.level_skill = self.db['Level'] // 10 + randint(1 + (self.status["luk"] // 4), 5)
+            luk = (self.db['Level'] // 10 + 1) + (self.status["luk"] // 2)
+            self.level_skill = luk if luk < 9 else 9
+
         else:
+
+            for k in self.status.keys():
+                if k in ["pdh", "hp", "mp"]:
+                    continue
+                if self.db['enemy'] > 25:
+                    self.status[k] += randint(4, 8)
+
             self.atacks = self.db['Atacks']
             self.level_skill = self.db['Level'] // 10 + randint(1, 5)
-            self.rate = [(10 + self.db['Level'] // 10), (10 + self.db['Level'] // 10)]
+
+            if self.db['enemy'] > 25:
+                self.rate = [(10 + self.db['Level'] // 10), (10 + self.db['Level'] // 10)]
+            else:
+                self.rate = [(15 + self.db['Level'] // 10), (15 + self.db['Level'] // 10)]
+
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
 
-    async def turn(self, enemy_life, bot, ctx):
+    async def turn(self, enemy_info, bot, ctx):
         stun = False
         self.atack = None
         atacks = eval(str(self.atacks.keys()).replace('dict_keys(', '').replace(')', ''))
@@ -96,23 +108,28 @@ class Entity(object):
                 emojis = [bot.config['skills'][self.ik[0]]['0']['icon'], bot.config['skills'][self.ik[1]]['1']['icon'],
                           bot.config['skills'][self.ik[2]]['2']['icon'], bot.config['skills'][self.ik[3]]['3']['icon'],
                           bot.config['skills'][self.ik[4]]['4']['icon']]
-                title = 'YOUR HP:  [{}/{}]  ||  YOUR MP:  [{}/{}]\n----====>>> ENEMY HP:  [{}] <<<====----' \
-                        ''.format(self.status['hp'] if self.status['hp'] > 0 else 0,
-                                  (self.status['con'] * self.rate[0]),
-                                  self.status['mp'] if self.status['mp'] > 0 else 0,
-                                  (self.status['con'] * self.rate[1]),
-                                  enemy_life if enemy_life > 0 else 0)
+                title = 'YOUR HP:  [{}/{}]  |  YOUR MP:  [{}/{}]\n--==>> OPPONENT: {}<<==--\n' \
+                        '--==>> HP: [{}/{}] | LVL: {} <<==--'.format(self.status['hp'] if self.status['hp'] > 0 else 0,
+                                                                     (self.status['con'] * self.rate[0]),
+                                                                     self.status['mp'] if self.status['mp'] > 0 else 0,
+                                                                     (self.status['con'] * self.rate[1]),
+                                                                     enemy_info[2].upper(),
+                                                                     enemy_info[0]['hp'] if enemy_info[0][
+                                                                                                'hp'] > 0 else 0,
+                                                                     enemy_info[0]['con'] * enemy_info[1][0],
+                                                                     enemy_info[3])
                 description = ''
                 for c in range(0, len(atacks)):
                     c2 = atacks[c]
-                    description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{self.level_skill}**\n" \
+                    description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{self.level_skill + 1}**\n" \
                                    f"``Dano:`` **{self.atacks[c2]['damage'][self.level_skill]}**\n" \
-                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill]}%**\n" \
+                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill]}**\n" \
                                    f"``Efeito(s):`` " \
                                    f"**{str(self.atacks[c2]['effs'][self.level_skill].keys())}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
+                regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                 description += f'<:pass:692967573649752194> **{"Pass turn".upper()}**\n' \
-                               f'``Mana Recovery:`` **15% da Mana Total**'
+                               f'``Mana Recovery:`` **+{regen} de Mana**'
                 embed = discord.Embed(
                     title=title,
                     description=description,
@@ -120,25 +137,27 @@ class Entity(object):
                 )
                 embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
                 msg = await ctx.send(embed=embed)
+                await sleep(0.5)
                 for c in range(0, len(atacks)):
                     await msg.add_reaction(emojis[c])
                 await msg.add_reaction('<:pass:692967573649752194>')
                 while not bot.is_closed():
                     try:
-                        reaction = await bot.wait_for('reaction_add', timeout=30.0)
+                        reaction = await bot.wait_for('reaction_add', timeout=60.0)
                         while reaction[1].id != ctx.author.id:
-                            reaction = await bot.wait_for('reaction_add', timeout=30.0)
+                            reaction = await bot.wait_for('reaction_add', timeout=60.0)
                     except TimeoutError:
                         return "COMANDO-CANCELADO"
                     emo = "<:pass:692967573649752194>"
                     emoji_ = str(emo).replace('<:', '').replace(emo[emo.rfind(':'):], '')
                     try:
                         if reaction[0].emoji.name == emoji_:
-                            regen = int(((self.status['con'] * self.rate[1]) / 100) * 15)
+                            regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                             if (self.status['mp'] + regen) <= (self.status['con'] * self.rate[1]):
                                 self.status['mp'] += regen
                             else:
                                 self.status['mp'] = (self.status['con'] * self.rate[1])
+                            self.atack = None
                             break
                     except AttributeError:
                         pass
@@ -146,12 +165,13 @@ class Entity(object):
                         emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
                         try:
                             if reaction[0].emoji.name == emoji:
-                                self.atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
-                                self.atack = atacks[self.atack]
-                                percent = self.atacks[self.atack]['mana'][self.level_skill]
+                                test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
+                                _atack = atacks[test_atack]
+                                percent = self.atacks[_atack]['mana'][self.level_skill]
                                 remove = int(((self.status['con'] * self.rate[1]) / 100) * percent)
                                 if self.status['mp'] > remove:
                                     self.status['mp'] -= remove
+                                    self.atack = atacks[test_atack]
                                     break
                                 else:
                                     embed = discord.Embed(
@@ -162,7 +182,6 @@ class Entity(object):
                                     )
                                     embed.set_thumbnail(url=f"{ctx.author.avatar_url}")
                                     await ctx.send(embed=embed)
-                                    self.atack = None
                         except TypeError:
                             break
                         except AttributeError:
@@ -177,12 +196,14 @@ class Entity(object):
                 )
                 embed.set_thumbnail(url=f"{self.img}")
                 await ctx.send(embed=embed)
+
             try:
                 self.atack = self.atacks[self.atack]
             except KeyError:
                 pass
             except TypeError:
                 pass
+
         else:
             description = f'{self.name} esta stunado'
             hp_max = self.status['con'] * self.rate[0]
@@ -191,13 +212,46 @@ class Entity(object):
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)
 
-        await sleep(1)
+        try:
+            if self.atack['effs'] is not None:
+                if self.is_player:
+                    if self.atack['effs'][self.level_skill]['cura']['type'] == "cura":
+                        percent = self.atack['effs'][self.level_skill]['cura']['damage']
+                        regen = int(((self.status['con'] * self.rate[0]) / 100) * percent)
+                        if (self.status['hp'] + regen) <= (self.status['con'] * self.rate[0]):
+                            self.status['hp'] += regen
+                        else:
+                            self.status['hp'] = (self.status['con'] * self.rate[0])
+                        desc = f'**{self.name.upper()}** ``recuperou`` **{regen}%** ``de HP``'
+                        hp = self.status['con'] * self.rate[0]
+                        p = not self.is_player
+                        await ctx.send(embed=embed_creator(desc, self.atack['img'], p, hp,
+                                                           self.status['hp'], self.img, self.ln))
+                        self.atack = None
+                else:
+                    if self.atack['effs']['cura']['type'] == "cura":
+                        percent = self.atack['effs']['cura']['damage']
+                        regen = int(((self.status['con'] * self.rate[0]) / 100) * percent)
+                        if (self.status['hp'] + regen) <= (self.status['con'] * self.rate[0]):
+                            self.status['hp'] += regen
+                        else:
+                            self.status['hp'] = (self.status['con'] * self.rate[0])
+                        desc = f'**{self.name.upper()}** ``recuperou`` **{regen}%** ``de HP``'
+                        hp = self.status['con'] * self.rate[0]
+                        p = not self.is_player
+                        await ctx.send(embed=embed_creator(desc, self.atack['img'], p, hp,
+                                                           self.status['hp'], self.img, self.ln))
+                        self.atack = None
+        except KeyError:
+            pass
+        except TypeError:
+            pass
 
         if effects is not None:
             for c in effects:
                 try:
                     if 'damage' in self.effects[c]['type']:
-                        self.status['hp'] -= self.effects[c]['damage']
+                        self.status['hp'] -= (self.effects[c]['damage'] - self.armor // 2)
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
                         description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
@@ -205,11 +259,10 @@ class Entity(object):
                         hp_max = self.status['con'] * self.rate[0]
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/md78DFkpIIzzW/source.gif"
-                        embed_ = embed_creator(description, img_, monster, hp_max,
-                                               self.status['hp'], self.img, self.ln)
+                        embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
                     elif 'manadrain' in self.effects[c]['type']:
-                        self.status['mp'] -= self.effects[c]['damage']
+                        self.status['mp'] -= (self.effects[c]['damage'] - self.armor // 2)
                         if self.status['mp'] < 0:
                             self.status['mp'] = 0
                         description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
@@ -217,13 +270,13 @@ class Entity(object):
                         hp_max = self.status['con'] * self.rate[0]
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/pDLxcNa1r3QA0/source.gif"
-                        embed_ = embed_creator(description, img_, monster,
-                                               hp_max, self.status['hp'], self.img, self.ln)
+                        embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
                 except KeyError:
                     pass
                 if self.effects[c]['turns'] > 0:
                     self.effects[c]['turns'] -= 1
+
         return self.atack
 
     async def damage(self, skill, enemy_atack, ctx, name):
@@ -238,14 +291,14 @@ class Entity(object):
                         if not self.is_player:
                             chance = randint(1, 100)
                             chance += self.status['luk']
-                            if chance >= 90:
+                            if chance >= 95:
                                 self.effects['turns'] += skill['effs'][self.level_skill][c]['turns']
                                 self.chance = True
                             else:
                                 self.chance = False
                         else:
                             chance = randint(1, 100)
-                            if chance >= 50:
+                            if chance >= 95:
                                 self.effects['turns'] += skill['effs'][c]['turns']
                                 self.chance = True
                             else:
@@ -254,14 +307,14 @@ class Entity(object):
                         if not self.is_player:
                             chance = randint(1, 100)
                             chance += self.status['luk']
-                            if chance >= 90:
+                            if chance >= 95:
                                 self.effects[c] = skill['effs'][self.level_skill][c]
                                 self.chance = True
                             else:
                                 self.chance = False
                         else:
                             chance = randint(1, 100)
-                            if chance >= 50:
+                            if chance >= 95:
                                 self.effects[c] = skill['effs'][c]
                                 self.chance = True
                             else:
@@ -293,7 +346,7 @@ class Entity(object):
             for c in range(0, dice1):
                 damage += randint(1, dice2)
             damage += enemy_atack
-            self.status['hp'] -= damage
+            self.status['hp'] -= (damage - self.armor)
             if self.status['hp'] < 0:
                 self.status['hp'] = 0
             description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'

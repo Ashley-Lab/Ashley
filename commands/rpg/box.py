@@ -40,36 +40,38 @@ class BoxClass(commands.Cog):
                 Use ash box e siga as instruções"""
         if ctx.invoked_subcommand is None:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            if data is not None:
-                if data['box']['status']['active']:
-                    status = data['box']['status']['active']
-                    rarity = data['box']['status']['rarity']
+            if data['config']['buying']:
+                return await ctx.send('<:alert:739251822920728708>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
 
-                    s = data['box']['status']['secret']
-                    ur = data['box']['status']['ur']
-                    sr = data['box']['status']['sr']
-                    r = data['box']['status']['r']
-                    i = data['box']['status']['i']
-                    c = data['box']['status']['c']
+            if data['box']['status']['active']:
+                status = data['box']['status']['active']
+                rarity = data['box']['status']['rarity']
 
-                    size_full = legend[rarity][0]
-                    size_now = data['box']['status']['size']
+                s = data['box']['status']['secret']
+                ur = data['box']['status']['ur']
+                sr = data['box']['status']['sr']
+                r = data['box']['status']['r']
+                i = data['box']['status']['i']
+                c = data['box']['status']['c']
 
-                    l_s = int(size_full * legend[rarity][1][0])
-                    l_ur = int(size_full * legend[rarity][1][1])
-                    l_sr = int(size_full * legend[rarity][1][2])
-                    l_r = int(size_full * legend[rarity][1][3])
-                    l_i = int(size_full * legend[rarity][1][4])
-                    l_c = int(size_full * legend[rarity][1][5])
+                size_full = legend[rarity][0]
+                size_now = data['box']['status']['size']
 
-                    images = {'Secret': 'https://i.imgur.com/qjenk0j.png',
-                              'Ultra Raro': 'https://i.imgur.com/fdudP2k.png',
-                              'Super Raro': 'https://i.imgur.com/WYebgvF.png',
-                              'Raro': 'https://i.imgur.com/7LnlnDA.png',
-                              'Incomum': 'https://i.imgur.com/TnoC2j1.png',
-                              'Comum': 'https://i.imgur.com/ma5tHvK.png'}
+                l_s = int(size_full * legend[rarity][1][0])
+                l_ur = int(size_full * legend[rarity][1][1])
+                l_sr = int(size_full * legend[rarity][1][2])
+                l_r = int(size_full * legend[rarity][1][3])
+                l_i = int(size_full * legend[rarity][1][4])
+                l_c = int(size_full * legend[rarity][1][5])
 
-                    description = '''
+                images = {'Secret': 'https://i.imgur.com/qjenk0j.png',
+                          'Ultra Raro': 'https://i.imgur.com/fdudP2k.png',
+                          'Super Raro': 'https://i.imgur.com/WYebgvF.png',
+                          'Raro': 'https://i.imgur.com/7LnlnDA.png',
+                          'Incomum': 'https://i.imgur.com/TnoC2j1.png',
+                          'Comum': 'https://i.imgur.com/ma5tHvK.png'}
+
+                description = '''
 Raridade da Box:
 **{}**
 ```Markdown
@@ -84,20 +86,20 @@ ITEMS:
 <I: {}/{}>
 <C: {}/{}>
 <SIZE: {}/{}>```'''.format(rarity, status, s, l_s, ur, l_ur, sr, l_sr, r, l_r, i, l_i, c, l_c, size_now, size_full)
-                    box = discord.Embed(
-                        title="{}'s box:\n"
-                              "``PARA ABRIR SUA BOX USE O COMANDO``\n"
-                              "**ASH BOX BOOSTER**".format(ctx.author.name),
-                        color=self.color,
-                        description=description
-                    )
-                    box.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
-                    box.set_thumbnail(url="{}".format(images[rarity]))
-                    box.set_footer(text="Ashley ® Todos os direitos reservados.")
-                    await ctx.send(embed=box)
-                else:
-                    await ctx.send("<:alert:739251822920728708>│``Você não tem uma box ativa...``\n"
-                                   "``Para ativar sua box use o comando:`` **ash box buy**")
+                box = discord.Embed(
+                    title="{}'s box:\n"
+                          "``PARA ABRIR SUA BOX USE O COMANDO``\n"
+                          "**ASH BOX BOOSTER**".format(ctx.author.name),
+                    color=self.color,
+                    description=description
+                )
+                box.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
+                box.set_thumbnail(url="{}".format(images[rarity]))
+                box.set_footer(text="Ashley ® Todos os direitos reservados.")
+                await ctx.send(embed=box)
+            else:
+                await ctx.send("<:alert:739251822920728708>│``Você não tem uma box ativa...``\n"
+                               "``Para ativar sua box use o comando:`` **ash box buy**")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

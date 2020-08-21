@@ -1,20 +1,19 @@
 from resources.color import random_color
 from discord import Embed
 from discord.ext import commands
-from resources.webhook import WebHook
+from resources.webhook import Webhook
 from datetime import datetime
 
 
 class Shards(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.web_hook = WebHook(url="https://discordapp.com/api/webhooks/627584094959829002/FvTv2bT2k3pbSgO-7pp4-"
-                                    "nf6xPsE_oKp9BWbVhCpphzJJyWWVrjQjpXIveUWvIdNzOvL")
+        self.webhook = Webhook(url="https://discordapp.com/api/webhooks/627584094959829002/FvTv2bT2k3pbSgO-7pp4-"
+                                   "nf6xPsE_oKp9BWbVhCpphzJJyWWVrjQjpXIveUWvIdNzOvL")
 
     @commands.Cog.listener()
     async def on_shard_ready(self, shard_id):
-
-        self.web_hook.embed = Embed(
+        self.webhook.embed = Embed(
             colour=random_color(),
             description=f"**O shard `{shard_id}` se encontra pronto para uso**\nAproveite o dia ;)",
             timestamp=datetime.utcnow()
@@ -25,7 +24,7 @@ class Shards(commands.Cog):
             url=self.bot.user.avatar_url
         ).to_dict()
 
-        self.web_hook.send_()
+        await self.webhook.send()
 
 
 def setup(bot):
