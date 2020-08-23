@@ -27,7 +27,7 @@ class RpgStart(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if data['rpg']['status']:
+        if data['rpg']['active']:
             embed = discord.Embed(color=self.bot.color, description=f'<:alert:739251822920728708>│``VOCE JA INICIOU O '
                                                                     f'RPG, SE VOCE DESEJA ALTERAR ALGO COMO: MODO DE '
                                                                     f'IMAGEM OU CLASSE, VAI GASTAR AS PEDRAS ABAIXO:``')
@@ -110,35 +110,43 @@ class RpgStart(commands.Cog):
             await msg.delete()
             return await ctx.send("f'<:negate:721581573396496464>│``ESSA OPÇAO NAO ESTÁ DISPONIVEL, TENTE NOVAMENTE!``")
         await msg.delete()
-        if not data['rpg']['status']:
+        if not data['rpg']['active']:
             rpg = {
                 "vip": update['rpg']['vip'],
                 "lower_net": asks['lower_net'],
-                "Class": 'default',
+                "class": 'default',
                 "next_class": asks['next_class'],
-                "Level": 1,
-                "XP": 0,
-                "Status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 1},
+                "level": 1,
+                "xp": 0,
+                "status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 1},
                 "artifacts": dict(),
                 "relics": dict(),
-                'items': list(),
-                'equipped_items': list(),
-                "status": True
+                'items': dict(),
+                'equipped_items': {
+                    "breastplate": None,
+                    "leggings": None,
+                    "boots": None,
+                    "gloves": None,
+                    "shoulder": None,
+                    "sword": None,
+                    "shield": None
+                },
+                "active": True
             }
         else:
             rpg = {
                 "vip": update['rpg']['vip'],
                 "lower_net": asks['lower_net'],
-                "Class": 'default',
+                "class": 'default',
                 "next_class": asks['next_class'],
-                "Level": update['rpg']['Level'],
-                "XP": update['rpg']['XP'],
-                "Status": update['rpg']['Status'],
+                "level": update['rpg']['level'],
+                "xp": update['rpg']['xp'],
+                "status": update['rpg']['status'],
                 "artifacts": update['rpg']['artifacts'],
                 "relics": update['rpg']['relics'],
                 'items': update['rpg']['items'],
                 'equipped_items': update['rpg']['equipped_items'],
-                "status": True
+                "active": True
             }
 
         update['rpg'] = rpg

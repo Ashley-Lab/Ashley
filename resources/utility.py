@@ -118,12 +118,21 @@ async def paginator(bot, items, inventory, embed, ctx):
             dict_[_] = items[_][3]
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
         list_i = [sorted_x[x][0] for x in range(len(inventory.keys()))]
+
+    elif str(ctx.command) == "inventory equip":
+        dict_ = dict()
+        for _ in inventory.keys():
+            dict_[_] = items[_]['rarity']
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
+        list_i = [sorted_x[x][0] for x in range(len(inventory.keys()))]
+
     else:
         list_i = inventory.keys()
 
     for key in list_i:
         if cont == 0:
             description = embed[2]
+
         if str(ctx.command) == "inventory":
             try:
                 rarity = list(legend.keys())[list(legend.values()).index(items[key][3])]
@@ -131,6 +140,12 @@ async def paginator(bot, items, inventory, embed, ctx):
                          f'``{items[key][1]}{("-" * (30 - len(items[key][1])))}>`` **{rarity.lower()}**\n'
             except KeyError:
                 string = f"<:negate:721581573396496464> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
+
+        elif str(ctx.command) == "inventory equip":
+            rarity = items[key]['rarity']
+            string = f'{items[key]["icon"]} ``{inventory[key]}{("⠀" * (5 - len(str(inventory[key]))))}`` ' \
+                     f'``{items[key]["name"]}{("-" * (30 - len(items[key]["name"])))}>`` **{rarity.lower()}**\n'
+
         else:
             cost = "\n".join(f"{items[i[0]][0]} ``{i[1]}`` ``{items[i[0]][1]}``" for i in inventory[key]['cost'])
             reward = "\n".join(f"{items[i[0]][0]} ``{i[1]}`` ``{items[i[0]][1]}``" for i in inventory[key]['reward'])
@@ -138,6 +153,7 @@ async def paginator(bot, items, inventory, embed, ctx):
             string = f"{items[icon][0]} **{key.upper()}**\n" \
                      f"**Custo:**\n {cost} \n " \
                      f"**Recompensa:**\n {reward}\n\n"
+
         cont += len(string)
         if cont <= 1500 and cont_i < 20:
             description += string

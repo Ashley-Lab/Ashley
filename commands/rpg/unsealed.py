@@ -18,9 +18,19 @@ class MeltedClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.i = self.bot.items
+        self.se = self.bot.config['equips']
+
+        self.rarity = {
+            "uncommon": 100,
+            "rare": 50,
+            "super rare": 30,
+            "ultra rare": 19,
+            "secret": 1
+        }
 
         self.cost = {
             "melted_artifact": 1,
+            "unsealed_stone": 2,
             "Crystal_of_Energy": 25,
         }
 
@@ -28,13 +38,20 @@ class MeltedClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='unsealed', aliases=['liberar', 'libertar'])
-    async def unsealed(self, ctx):
+    async def unsealed(self, ctx, *, equip=None):
         """Esse nem eu sei..."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
+        if equip is None:
+            return await ctx.send("<:negate:721581573396496464>│``VOCE PRECISA DIZER UM NOME DE UM EQUIPAMENTO!``")
+
+        if equip.lower() not in [k.lower() for k in self.i.keys() if self.i[k][3] == 9]:
+            return await ctx.send("<:negate:721581573396496464>│``VOCE PRECISA DIZER UM EQUIPAMENTO VALIDO!``")
+
         msg = f"\n".join([f"{self.i[k][0]} ``{v}`` ``{self.i[k][1]}``" for k, v in self.cost.items()])
-        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISAR USAR O COMANDO`` **ASH BOX**"
+        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISAR USAR OS COMANDOS`` " \
+               "**ASH MELTED, ASH STONE**  ``E`` **ASH BOX**"
 
         Embed = discord.Embed(
             title="O CUSTO PARA VOCE TIRAR O SELO DE UM EQUIPAMENTO:",
@@ -45,15 +62,10 @@ class MeltedClass(commands.Cog):
         Embed.set_footer(text="Ashley ® Todos os direitos reservados.")
         await ctx.send(embed=Embed)
 
-        artifacts = []
-        for i_, amount in data['inventory'].items():
-            if i_ in self.art:
-                artifacts += [i_] * amount
-
-        if len(artifacts) < 3:
-            return await ctx.send("<:negate:721581573396496464>│``Voce nao tem o minimo de 3 arfetados...``\n"
-                                  "**Obs:** ``VOCE CONSEGUE ARTEFATOS USANDO O COMANDO`` **ASH RIFA** ``E PEGANDO"
-                                  " UM ARTEFATO REPETIDO.``")
+        if equip not in data['inventory'].keys():
+            return await ctx.send("<:negate:721581573396496464>│``Voce não tem esse equipamento no seu invetário...``\n"
+                                  "**Obs:** ``VOCE CONSEGUE OS EQUIPAMENTOS CRAFTANDO, USANDO O COMANDO`` **ASH CRAFT**"
+                                  " ``E O COMANDO`` **ASH RECIPE** ``PARA PEGAR AS RECEITAS DOS CRAFTS.``")
 
         cost = {}
         for i_, amount in self.cost.items():
@@ -71,8 +83,8 @@ class MeltedClass(commands.Cog):
         def check_option(m):
             return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 
-        msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODOS OS ITEM NECESSARIOS, DESEJA DERRETER "
-                             f"SEUS ARTEFATOS AGORA?``\n**1** para ``SIM`` ou **0** para ``NÃO``")
+        msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODOS OS ITEM NECESSARIOS, DESEJA TIRAR O SELO"
+                             f" DO SEU EQUIMENTO AGORA?``\n**1** para ``SIM`` ou **0** para ``NÃO``")
         try:
             answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
         except TimeoutError:
@@ -83,57 +95,61 @@ class MeltedClass(commands.Cog):
             return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
         await msg.delete()
 
-        msg = await ctx.send("<a:loading:520418506567843860>│``Escolhendo 3 artefatos para derreter...``")
+        msg = await ctx.send("<a:loading:520418506567843860>│``Selecionamento o equipamento para tirar o selo...``")
         await sleep(2)
-        art1 = choice(artifacts)
-        await msg.edit(content=f"<:confirmed:721581574461587496>│``O primeiro foi`` {self.i[art1][0]} **{art1}**")
-        await sleep(2)
-        artifacts.remove(art1)
-        art2 = choice(artifacts)
-        await msg.edit(content=f"<:confirmed:721581574461587496>│``O segundo foi`` {self.i[art2][0]} **{art2}**")
-        await sleep(2)
-        artifacts.remove(art2)
-        art3 = choice(artifacts)
-        await msg.edit(content=f"<:confirmed:721581574461587496>│``O terceiro foi`` {self.i[art3][0]} **{art3}**")
-        await sleep(2)
-        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo os itens de custo e os artefatos da sua "
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo os itens de custo e o equipamento da sua "
                                f"conta...``")
+
+        await sleep(2)
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo itens...``")
+
         for i_, amount in self.cost.items():
             update['inventory'][i_] -= amount
             if update['inventory'][i_] < 1:
                 del update['inventory'][i_]
 
         await sleep(2)
-        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo 1/3``")
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo equipamento...``")
 
-        update['inventory'][art1] -= 1
-        if update['inventory'][art1] < 1:
-            del update['inventory'][art1]
+        update['inventory'][equip] -= 1
+        if update['inventory'][equip] < 1:
+            del update['inventory'][equip]
 
-        await sleep(2)
-        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo 2/3``")
-
-        update['inventory'][art2] -= 1
-        if update['inventory'][art2] < 1:
-            del update['inventory'][art2]
-
-        await sleep(2)
-        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo 3/3``")
-
-        update['inventory'][art3] -= 1
-        if update['inventory'][art3] < 1:
-            del update['inventory'][art3]
         await msg.edit(content=f"<:confirmed:721581574461587496>│``itens retirados com sucesso...``")
         await sleep(2)
-        await msg.edit(content=f"<a:loading:520418506567843860>│``Adicionando o`` <:melted_artifact:739573767260471356>"
-                               f" **Melted Artifact** ``para sua conta...``")
+
+        # agora o item vai ser transformado em equipamento...
+
+        await msg.edit(content=f"<a:loading:520418506567843860>│``Tirando o selo da sua armadura...``")
+
+        list_rarity = []
+        for i_, amount in self.rarity.items():
+            list_rarity += [i_] * amount
+        rarity = choice(list_rarity)
+
+        reward_equip = None
+
+        if "leather" in equip:
+            for k, v in self.se[f'set dynasty leather {rarity}'].items():
+                if v['name'] == equip[:-7]:
+                    reward_equip = (k, v)
+        elif "platinum" in equip:
+            for k, v in self.se[f'set dynasty platinum {rarity}'].items():
+                if v['name'] == equip[:-7]:
+                    reward_equip = (k, v)
+        elif "cover" in equip:
+            for k, v in self.se[f'set dynasty cover {rarity}'].items():
+                if v['name'] == equip[:-7]:
+                    reward_equip = (k, v)
+
         try:
-            update['inventory']['melted_artifact'] += 2
+            update['rpg']['items'][reward_equip[0]] += 1
         except KeyError:
-            update['inventory']['melted_artifact'] = 2
+            update['rpg']['items'][reward_equip[0]] = 1
         await sleep(2)
-        await msg.edit(content=f"<:confirmed:721581574461587496>│<:melted_artifact:739573767260471356> ``2``"
-                               f"**Melted Artifact** ``adicionado ao seu inventario com sucesso...``")
+
+        await msg.edit(content=f"<:confirmed:721581574461587496>│{reward_equip[1]['icon']} ``1`` "
+                               f"**{reward_equip[1]['name']}** ``adicionado ao seu inventario com sucesso...``")
 
         img = choice(git)
         embed = discord.Embed(color=self.bot.color)
@@ -144,4 +160,4 @@ class MeltedClass(commands.Cog):
 
 def setup(bot):
     bot.add_cog(MeltedClass(bot))
-    print('\033[1;32m( 🔶 ) | O comando \033[1;34mMELTED\033[1;32m foi carregado com sucesso!\33[m')
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mUNSEALED\033[1;32m foi carregado com sucesso!\33[m')

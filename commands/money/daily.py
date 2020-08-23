@@ -107,14 +107,14 @@ class DailyClass(commands.Cog):
                                           " DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**")
 
                 if data_user['user']['ranking'] == "Bronze":
-                    money = randint(100, 500)
-                    m = 2
+                    money = 70 * 5
+                    m = 5
                 elif data_user['user']['ranking'] == "Silver":
-                    money = randint(200, 1000)
-                    m = 4
+                    money = 70 * 10
+                    m = 10
                 elif data_user['user']['ranking'] == "Gold":
-                    money = randint(300, 1500)
-                    m = 6
+                    money = 70 * 15
+                    m = 15
 
                 msg = await self.bot.db.add_money(ctx, money)
                 await ctx.send(f'<:confirmed:721581574461587496>│``Você trabalhou duro e acabou de ganhar:`` \n'

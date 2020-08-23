@@ -23,6 +23,10 @@ class UserBank(commands.Cog):
         self.silver = 0
         self.bronze = 0
 
+        self.items = {
+            "coins": 1000
+        }
+
     @staticmethod
     def format_num(num):
         a = '{:,.0f}'.format(float(num))
@@ -38,6 +42,49 @@ class UserBank(commands.Cog):
             return result
         else:
             return -1
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='shop', aliases=['buy', 'comprar', 'loja'])
+    async def shop(self, ctx, item=None, quant=None):
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        if item is None or quant is None:
+            msg = "```Markdown\n"
+            for k, v in self.items.items():
+                if k == "coins":
+                    k = "ficha"
+                msg += f"[>>]: {k.upper()}\n<1 UND = {v} ETHERNYAS>\n\n"
+            msg += "```"
+            return await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA:``\n{msg}\n"
+                                  f"**EXEMPLO:** ``USE`` **ASH SHOP FICHA 50** ``PARA COMPRAR FICHAS!``")
+
+        if item in ['ficha', 'fichas', 'coin', 'coins']:
+            item = "coins"
+
+        if item not in self.items.keys():
+            return await ctx.send("<:alert:739251822920728708>│``ESSE ITEM NAO EXISTE OU NAO ESTA DISPONIVEL!``")
+
+        if update['treasure']['money'] < self.items[item] * int(quant):
+            return await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM ETHERNYAS SUFICIENTES DISPONIVEIS!``")
+
+        update['treasure']['money'] -= self.items[item] * int(quant)
+
+        try:
+            update['inventory'][item] += int(quant)
+        except KeyError:
+            update['inventory'][item] = int(quant)
+
+        await self.bot.db.update_data(data, update, 'users')
+        a = '{:,.2f}'.format(float(self.items[item] * int(quant)))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+        await ctx.send(f"<:confirmed:721581574461587496>|``SUA COMPRA FOI FEITA COM SUCESSO`` **{quant}** "
+                       f"``{'FICHA' if item == 'coins' else item.upper()} ADICIONADO NO SEU INVENTARIO COM SUCESSO QUE"
+                       f" CUSTOU`` **R$ {d}** ``ETHERNYAS``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -172,7 +219,7 @@ class UserBank(commands.Cog):
             return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
                    m.author == ctx.author and m.content == '3'
 
-        n_cost = [500, 80, 20]
+        n_cost = [500, 75, 25]
         if data['config']['vip']:
             for i in range(len(n_cost)):
                 n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
@@ -303,7 +350,7 @@ class UserBank(commands.Cog):
             return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
                    m.author == ctx.author and m.content == '3'
 
-        n_cost = [750, 150, 50]
+        n_cost = [1000, 150, 50]
         if data['config']['vip']:
             for i in range(len(n_cost)):
                 n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
@@ -381,6 +428,104 @@ class UserBank(commands.Cog):
                 update['inventory']['?-Bollash'] += 1
             except KeyError:
                 update['inventory']['?-Bollash'] = 1
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
+
+        else:
+            msg = await self.bot.db.add_money(ctx, randint(10, 30), True)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=60.0)
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='stone', aliases=['pedra'])
+    async def stone(self, ctx):
+        """bola para capitura dos pets da ashley"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        global coin, cost, plus
+
+        def check(m):
+            return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
+                   m.author == ctx.author and m.content == '3'
+
+        n_cost = [2000, 300, 100]
+        if data['config']['vip']:
+            for i in range(len(n_cost)):
+                n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
+
+        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?``"
+                       f" ``Escolha uma dessas opções abaixo! Desconto no preço por ser`` **VIP: "
+                       f"{'-20%' if data['config']['vip'] else '-0%'}**\n"
+                       f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
+                       f"``Bonus de Chance:`` **+1%**\n"
+                       f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
+                       f"``Bonus de Chance:`` **+2%**\n"
+                       f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
+                       f"``Bonus de Chance:`` **+3%**")
+
+        try:
+            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+        except TimeoutError:
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
+                                  ' CANCELADO**')
+
+        if int(answer.content) == 1:
+            cost = n_cost[0]
+            coin = "bronze"
+            plus = 1
+        if int(answer.content) == 2:
+            cost = n_cost[1]
+            coin = "silver"
+            plus = 2
+        if int(answer.content) == 3:
+            cost = n_cost[2]
+            coin = "gold"
+            plus = 3
+
+        if data['treasure'][coin] < cost:
+            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '
+                                  '**COMANDO CANCELADO**')
+
+        # DATA DO MEMBRO
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+        update_user['treasure'][coin] -= cost
+        if update_user['treasure'][coin] < 0:
+            update_user['treasure'][coin] = 0
+        await self.bot.db.update_data(data_user, update_user, 'users')
+
+        # DATA NATIVA DO SERVIDOR
+        data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
+        update_guild_native = data_guild_native
+        update_guild_native['data'][f"total_{coin}"] -= cost
+        if update_guild_native['data'][f"total_{coin}"] < 0:
+            update_guild_native['data'][f"total_{coin}"] = 0
+        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+
+        msg = await ctx.send("<a:loading:520418506567843860>│``TENTANDO DROPAR UMA UNSEALED STONE...``")
+        await sleep(1)
+        await msg.delete()
+
+        percent = randint(1, 100)
+        chance = 100 * 0.05 + plus / 2 if randint(1, 10) > 5 else 100 * 0.01 + 100 * 0.05 / 2 + plus
+        if percent <= chance:
+
+            embed = discord.Embed(title='🎊 **PARABENS** 🎉 VOCÊ DROPOU', color=self.bot.color,
+                                  description=f"{self.bot.items['unsealed_stone'][0]} ``{1}`` "
+                                              f"``{self.bot.items['unsealed_stone'][1]}``")
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+            await ctx.send(embed=embed)
+
+            msg = await ctx.send("<a:loading:520418506567843860>│``SALVANDO SEU PREMIO...``")
+            await sleep(3)
+            await msg.delete()
+
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            try:
+                update['inventory']['unsealed_stone'] += 1
+            except KeyError:
+                update['inventory']['unsealed_stone'] = 1
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
 

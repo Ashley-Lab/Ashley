@@ -128,7 +128,8 @@ class MarriedSystem(commands.Cog):
         update_member['user']['married_at'] = None
         await self.bot.db.update_data(data_member, update_member, 'users')
 
-        await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.mention} **agora vocês estão SEPARADOS!**"
+        member = bot.get_user(data_user['user']['married_at'])
+        await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.name} **agora vocês estão SEPARADOS!**"
                        f" ``ESCOLHAM MELHOR DA PROXIMA VEZ!``")
 
 

@@ -42,16 +42,24 @@ user_data_structure = {
             "rpg": {
                 "vip": False,
                 "lower_net": False,
-                "Class": 'default',
+                "class": 'default',
                 "next_class": None,
-                "Level": 1,
-                "XP": 0,
-                "Status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 1},
+                "level": 1,
+                "xp": 0,
+                "status": {"con": 5, "prec": 5, "agi": 5, "atk": 5, "luk": 0, "pdh": 1},
                 "artifacts": dict(),
                 "relics": dict(),
-                'items': list(),
-                'equipped_items': list(),
-                "status": False
+                'items': dict(),
+                'equipped_items': {
+                    "breastplate": None,
+                    "leggings": None,
+                    "boots": None,
+                    "gloves": None,
+                    "shoulder": None,
+                    "sword": None,
+                    "shield": None
+                },
+                "active": False
             },
             "pet": {
                 "status": False,

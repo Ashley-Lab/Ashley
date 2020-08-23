@@ -31,7 +31,7 @@ class CharadeClass(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        if data['inventory']['coins'] > 0 and not data['config']['playing']:
+        if data['inventory']['coins'] > 10 and not data['config']['playing']:
             update['config']['playing'] = True
             await self.bot.db.update_data(data, update, 'users')
 
@@ -63,7 +63,7 @@ class CharadeClass(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
-            update['inventory']['coins'] -= 1
+            update['inventory']['coins'] -= 10
             if answer.content.lower() == self.charade[charade].lower().replace('resposta: ', ''):
                 await ctx.send(f'<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 ``A resposta era `` '
                                f'**{self.charade[charade].lower().replace("resposta: ", "")}** ``e vc respondeu`` '
@@ -98,7 +98,8 @@ class CharadeClass(commands.Cog):
             if data['config']['playing']:
                 await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE FICHAS PARA JOGAR``')
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 10 FICHAS PARA JOGAR``\n'
+                               '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
 
 
 def setup(bot):

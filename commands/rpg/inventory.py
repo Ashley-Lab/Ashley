@@ -19,16 +19,29 @@ class InventoryClass(commands.Cog):
         Use ash i ou ash inventory"""
         if ctx.invoked_subcommand is None:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            if ctx.author.id == data["user_id"]:
-                embed = ['Inventário:', self.color, 'Items: \n']
-                await paginator(self.bot, self.i, data['inventory'], embed, ctx)
+            embed = ['Inventário:', self.color, 'Items: \n']
+            await paginator(self.bot, self.i, data['inventory'], embed, ctx)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @inventory.command(name='quest', aliases=['missao', 'q'])
-    async def _quest(self, ctx):
-        return await ctx.send("<:negate:721581573396496464>│``O inventário de missões ainda não está disponível!``")
+    @inventory.command(name='equip', aliases=['equipamento', 'e'])
+    async def _equip(self, ctx):
+        """Comando usado pra ver seu inventario de equipamentos
+                Use ash i ou ash inventory"""
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+
+        if len(data['rpg']['items'].keys()) == 0:
+            return await ctx.send(f"<:negate:721581573396496464>|``SEU INVENTARIO DE EQUIPAMENTOS ESTÁ VAZIO!``")
+
+        embed = ['Inventário:', self.color, 'Equipamentos: \n']
+
+        eq = dict()
+        for ky in self.bot.config['equips'].keys():
+            for k, v in self.bot.config['equips'][ky].items():
+                eq[k] = v
+
+        await paginator(self.bot, eq, data['rpg']['items'], embed, ctx)
 
 
 def setup(bot):

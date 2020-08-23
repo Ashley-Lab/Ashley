@@ -437,23 +437,30 @@ class DataInteraction(object):
         data = await self.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if update['rpg']['Level'] < 50:
-            update['rpg']['XP'] += exp
-            experience = update['rpg']['XP']
-            lvl_anterior = update['rpg']['Level']
+        if update['rpg']['level'] < 50:
+            update['rpg']['xp'] += exp
+            experience = update['rpg']['xp']
+            lvl_anterior = update['rpg']['level']
             lvl_now = int(experience ** 0.2)
             if lvl_anterior < lvl_now:
-                update['rpg']['Level'] = lvl_now
-                update['rpg']['Status']['pdh'] += 1
+                update['rpg']['level'] = lvl_now
+                update['rpg']['status']['pdh'] += 1
 
                 try:
                     update['inventory']['coins'] += 200
                 except KeyError:
                     update['inventory']['coins'] = 200
 
-                msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
-                      f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``'
-                img = "https://i.pinimg.com/originals/7e/58/1c/7e581c87b8cf5cdae354258789b2fc32.gif"
+                if lvl_now != 26:
+                    msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
+                          f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``'
+                    img = "https://i.pinimg.com/originals/7e/58/1c/7e581c87b8cf5cdae354258789b2fc32.gif"
+                else:
+                    msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
+                          f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``\n' \
+                          f'```Markdown\n[>>]: AGORA VOCE TAMBEM GANHOU O BONUS DE STATUS DA SUA CLASSE```'
+                    img = "https://i.gifer.com/143t.gif"
+
                 embed = discord.Embed(color=self.bot.color, description=f'<:confirmed:721581574461587496>│{msg}')
                 embed.set_image(url=img)
                 await ctx.send(embed=embed)
