@@ -7,7 +7,13 @@ from config import data
 
 classes = data['skills']
 equipments = data['equips']
+set_equips = data['set_equips']
 levels = [5, 10, 15, 20, 25]
+
+eq = dict()
+for ky in equipments.keys():
+    for kk, vv in equipments[ky].items():
+        eq[kk] = vv
 
 
 class Entity(object):
@@ -23,6 +29,7 @@ class Entity(object):
         self.chance = False
         self.is_player = is_player
         self.armor = 0
+        self.set_e = list()
         self.img = self.db['img']
         self.ln = self.db['lower_net']
 
@@ -40,10 +47,26 @@ class Entity(object):
                 if self.db['level'] > 25:
                     self.status[k] += classes[self.db['next_class']]['modifier'][k]
 
-            for c in self.db['equipped_items']:
-                self.armor += equipments[c[1]][c[0]]['armor']
+            for c in self.db['equipped_items'].keys():
+                if self.db['equipped_items'][c] is None:
+                    continue
+
+                self.set_e.append(str(c))
+
+                self.armor += eq[c]['armor']
                 for name in self.status.keys():
-                    self.status[name] += equipments[c[1]][c[0]]['modifier'][name]
+                    try:
+                        self.status[name] += eq[c]['modifier'][name]
+                    except KeyError:
+                        pass
+
+            for kkk in set_equips.values():
+                if kkk['set'] == self.set_e:
+                    for name in self.status.keys():
+                        try:
+                            self.status[name] += kkk['modifier'][name]
+                        except KeyError:
+                            pass
 
             self.ik = []
             for c in range(5):

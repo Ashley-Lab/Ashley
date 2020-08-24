@@ -24,7 +24,10 @@ class UserBank(commands.Cog):
         self.bronze = 0
 
         self.items = {
-            "coins": 1000
+            "coins": 1000,
+            "crystal_fragment_light": 500,
+            "crystal_fragment_enery": 500,
+            "crystal_fragment_dark": 500
         }
 
     @staticmethod
@@ -59,7 +62,7 @@ class UserBank(commands.Cog):
                 msg += f"[>>]: {k.upper()}\n<1 UND = {v} ETHERNYAS>\n\n"
             msg += "```"
             return await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA:``\n{msg}\n"
-                                  f"**EXEMPLO:** ``USE`` **ASH SHOP FICHA 50** ``PARA COMPRAR FICHAS!``")
+                                  f"**EXEMPLO:** ``USE`` **ASH SHOP FICHA 50** ``PARA COMPRAR 50 FICHAS!``")
 
         if item in ['ficha', 'fichas', 'coin', 'coins']:
             item = "coins"

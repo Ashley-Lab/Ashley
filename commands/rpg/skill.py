@@ -52,7 +52,7 @@ class SkillClass(commands.Cog):
                            "[>>]: PARA RESETAR OS PONTOS DE HABILIDADE USE O COMANDO\n<ASH SKILL RESET>```")
             if discord.File('skill_points.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
-            await ctx.send(file=discord.File('skill_points.png'))
+            await ctx.send(file=discord.File('skill_points.png'), delete_after=60.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
