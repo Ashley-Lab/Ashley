@@ -8,11 +8,65 @@ from resources.check import check_it
 from resources.db import Database
 from resources.img_edit import calc_xp
 
+git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
+       "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
+       "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
+       "https://media1.tenor.com/images/17e1414f1dc91bc1f76159d7c3fa03ea/tenor.gif?itemid=15744166",
+       "https://media1.tenor.com/images/39c363015f2ae22f212f9cd8df2a1063/tenor.gif?itemid=15894886"]
+
 
 class Battle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.m = self.bot.config['battle']['monsters']
+
+        self.w_s = {
+            "assassin_1": 100,
+            "assassin_2": 80,
+            "assassin_3": 60,
+            "assassin_4": 40,
+            "assassin_5": 1,
+
+            "necromancer_1": 100,
+            "necromancer_2": 80,
+            "necromancer_3": 60,
+            "necromancer_4": 40,
+            "necromancer_5": 1,
+
+            "paladin_1": 100,
+            "paladin_2": 80,
+            "paladin_3": 60,
+            "paladin_4": 40,
+            "paladin_5": 1,
+
+            "priest_1": 100,
+            "priest_2": 80,
+            "priest_3": 60,
+            "priest_4": 40,
+            "priest_5": 1,
+
+            "warlock_1": 100,
+            "warlock_2": 80,
+            "warlock_3": 60,
+            "warlock_4": 40,
+            "warlock_5": 1,
+
+            "warrior_1": 100,
+            "warrior_2": 80,
+            "warrior_3": 60,
+            "warrior_4": 40,
+            "warrior_5": 1,
+
+            "wizard_1": 100,
+            "wizard_2": 80,
+            "wizard_3": 60,
+            "wizard_4": 40,
+            "wizard_5": 1,
+
+            "01": 10,
+            "02": 10,
+            "03": 10
+        }
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -212,6 +266,38 @@ class Battle(commands.Cog):
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
+
+        change = randint(1, 200)
+        if change < 2:
+
+            equips_list = list()
+            for ky in self.bot.config['equips'].keys():
+                for k, v in self.bot.config['equips'][ky].items():
+                    equips_list.append((k, v))
+
+            list_items = []
+            for i_, amount in self.w_s.items():
+                list_items += [i_] * amount
+            armor_or_shield = choice(list_items)
+
+            try:
+                update['rpg']['items'][armor_or_shield] += 1
+            except KeyError:
+                update['rpg']['items'][armor_or_shield] = 1
+
+            rew = None
+            for i in equips_list:
+                if i[0] == armor_or_shield:
+                    rew = i[1]
+
+            if rew is not None:
+                img = choice(git)
+                embed = discord.Embed(color=self.bot.color)
+                embed.set_image(url=img)
+                await ctx.send(embed=embed)
+                await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ESPADA/ESCUDO** ✨\n'
+                               f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
+
         update['config']['battle'] = False
         await self.bot.db.update_data(data, update, 'users')
 

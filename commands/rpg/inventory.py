@@ -99,14 +99,8 @@ class InventoryClass(commands.Cog):
             }
 
             equips(data_test)
-            await ctx.send("``--==ENTENDA O QUE OS ATRIBUTOS ALTERAM NO SEU PERSONAGEM==--``\n"
-                           ">>> >>> `ATK` - **O ATK é somado ao seu dano de Skill e a chance de critical.**\n"
-                           ">>> `DEX` - **O DEX aumenta sua chance de esquiva.**\n"
-                           ">>> `ACC` - **O ACC aumenta sua chance de acerto da Skill.**\n"
-                           ">>> `CON` - **O CON aumenta seu HP e sua MANA total.**\n"
-                           ">>> `LUK` - **LUK aumenta a chance de efeito da Skill e o level da skill.**\n"
-                           "```Markdown\n[>>]: PARA ADICIONAR PONTOS DE HABILIDADE USE O COMANDO\n<ASH SKILL ADD>\n"
-                           "[>>]: PARA RESETAR OS PONTOS DE HABILIDADE USE O COMANDO\n<ASH SKILL RESET>```")
+            await ctx.send("```Markdown\n[>>]: PARA EQUIPAR UM ITEM USE O COMANDO\n<ASH EQUIP ITEM NOME_DO_ITEM>\n"
+                           "[>>]: PARA RESETAR OS EQUIPAMENTOS USE O COMANDO\n<ASH EQUIP RESET>```")
             if discord.File('equips.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
             await ctx.send(file=discord.File('equips.png'), delete_after=60.0)
@@ -244,6 +238,7 @@ class InventoryClass(commands.Cog):
                     update['rpg']["equipped_items"][equip_in[1]["slot"]] = equip_in[0]
 
                 else:
+                    await msg.delete()
                     return await ctx.send("<:negate:721581573396496464>│``SUA CLASSE NAO PODE USAR ESSE ITEM...``")
 
         else:
