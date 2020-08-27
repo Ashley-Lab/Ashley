@@ -32,11 +32,21 @@ class InventoryClass(commands.Cog):
                 for k, v in self.bot.config['equips'][ky].items():
                     eq[k] = v
 
+            set_armor = list()
             sts = {"atk": 0, "agi": 0, "prec": 0, "con": 0}
             for key in data['rpg']["equipped_items"].keys():
                 if data['rpg']["equipped_items"][key] is not None:
+                    set_armor.append(data['rpg']["equipped_items"][key])
                     for k in sts.keys():
                         sts[k] += eq[data['rpg']["equipped_items"][key]]["modifier"][k]
+
+            for kkk in self.bot.config["set_equips"].values():
+                if kkk['set'] == set_armor:
+                    for name in sts.keys():
+                        try:
+                            sts[name] += kkk['modifier'][name]
+                        except KeyError:
+                            pass
 
             if data['rpg']['level'] > 25:
                 atk = self.bot.config['skills'][data['rpg']['next_class']]['modifier']['atk']
@@ -100,6 +110,58 @@ class InventoryClass(commands.Cog):
             if discord.File('equips.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
             await ctx.send(file=discord.File('equips.png'), delete_after=60.0)
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @equip.command(name='reset', aliases=['r'])
+    async def _reset(self, ctx):
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        if not update['rpg']['active']:
+            msg = "<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``"
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        if update['config']['battle']:
+            msg = '<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        equips_list = list()
+        for ky in self.bot.config['equips'].keys():
+            for k, v in self.bot.config['equips'][ky].items():
+                equips_list.append((k, v))
+
+        equipped_items = list()
+        for value in update['rpg']["equipped_items"].values():
+            for i in equips_list:
+                if i[0] == value:
+                    equipped_items.append(i[1]["name"])
+
+        equip_out = list()
+        for key in update['rpg']["equipped_items"].keys():
+            if update['rpg']["equipped_items"][key] is not None:
+                for name in equips_list:
+                    if name[0] == update['rpg']["equipped_items"][key]:
+                        equip_out.append(update['rpg']['equipped_items'][key])
+                        update['rpg']['equipped_items'][key] = None
+
+        if len(equip_out) > 0:
+            for item in equip_out:
+                try:
+                    update['rpg']['items'][item] += 1
+                except KeyError:
+                    update['rpg']['items'][item] = 1
+
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f"<:confirmed:721581574461587496>│``OS ITENS ESTAO NO SEU INVENTARIO DE EQUIPAMENTOS!``")
+
+        else:
+            msg = '<:negate:721581573396496464>│``VOCE NÃO TEM ITEM EQUIPADO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

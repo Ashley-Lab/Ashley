@@ -53,10 +53,10 @@ class Entity(object):
 
                 self.set_e.append(str(c))
 
-                self.armor += eq[c]['armor']
+                self.armor += eq[self.db['equipped_items'][c]]['armor']
                 for name in self.status.keys():
                     try:
-                        self.status[name] += eq[c]['modifier'][name]
+                        self.status[name] += eq[self.db['equipped_items'][c]]['modifier'][name]
                     except KeyError:
                         pass
 
