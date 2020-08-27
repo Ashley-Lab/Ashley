@@ -21,11 +21,6 @@ cor = {
     'pers': '\033[1;35;47m'
 }
 
-opt = {
-    'before_options': '-nostdin',
-    'options': '-vn -loglevel quiet'
-}
-
 
 class OnReady(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
@@ -68,16 +63,36 @@ class OnReady(commands.Cog):
                     if not update['security']['status']:
                         continue
 
-                    if update['security']['commands_today'] > (2500 / 100 * 85):
+                    if update['security']['commands_today'] > (2500 / 100 * 80):
                         if update['security']['commands_today'] < 2500:
                             try:
-                                if update['security']['last_channel'] is not None:
+
+                                warn = False
+                                if update['security']['commands_today'] > (2500 / 100 * 80):
+                                    percent = 80
+                                elif update['security']['commands_today'] > (2500 / 100 * 85):
+                                    percent = 85
+                                elif update['security']['commands_today'] > (2500 / 100 * 90):
+                                    percent = 90
+                                elif update['security']['commands_today'] > (2500 / 100 * 95):
+                                    percent = 95
+                                elif update['security']['commands_today'] >= (2500 / 100 * 100):
+                                    percent = 100
+                                else:
+                                    percent = 0
+                                if percent > 0:
+                                    if not update['security']['warn'][str(percent)]:
+                                        warn = True
+
+                                if update['security']['last_channel'] is not None and warn:
                                     channel_ = self.bot.get_channel(update['security']['last_channel'])
                                     if channel_ is not None:
                                         cmds = update['security']['commands_today']
-                                        await channel_.send(f'<a:red:525032764211200002>│``VOCE JA ATINGIU`` **85%**'
+                                        pe = update['security']['commands_today'] * 100 / 2500
+                                        await channel_.send(f'<a:red:525032764211200002>│``VOCE JA ATINGIU`` **{pe}%**'
                                                             f' ``DA SUA COTA DIARIA DE COMANDOS:`` **{cmds}/2500** '
                                                             f'``SE CONTINUAR ASSIM VAI SER BLOQUEADO POR 72 HORAS.``')
+                                        update['security']['warn'][str(percent)] = True
                             except KeyError:
                                 pass
 

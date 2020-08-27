@@ -53,11 +53,10 @@ class MarriedSystem(commands.Cog):
         if data_member['user']['marrieding'] is True:
             return await ctx.send(f'<:alert:739251822920728708>│{member.mention} ``JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
 
-        if data_user['user']['marrieding'] is False and data_member['user']['marrieding'] is False:
-            update_user['user']['marrieding'] = True
-            update_member['user']['marrieding'] = True
-            await self.bot.db.update_data(data_user, update_user, 'users')
-            await self.bot.db.update_data(data_member, update_member, 'users')
+        update_user['user']['marrieding'] = True
+        update_member['user']['marrieding'] = True
+        await self.bot.db.update_data(data_user, update_user, 'users')
+        await self.bot.db.update_data(data_member, update_member, 'users')
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
@@ -73,6 +72,7 @@ class MarriedSystem(commands.Cog):
 
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+
         except TimeoutError:
             update_user['user']['marrieding'] = False
             update_member['user']['marrieding'] = False
@@ -117,6 +117,8 @@ class MarriedSystem(commands.Cog):
         if not data_user['user']['married']:
             return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO CASADO(A)!``')
 
+        member = self.bot.get_user(data_user['user']['married_at'])
+
         data_member = await self.bot.db.get_data("user_id", data_user['user']['married_at'], "users")
         update_member = data_member
 
@@ -128,7 +130,6 @@ class MarriedSystem(commands.Cog):
         update_member['user']['married_at'] = None
         await self.bot.db.update_data(data_member, update_member, 'users')
 
-        member = bot.get_user(data_user['user']['married_at'])
         await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.name} **agora vocês estão SEPARADOS!**"
                        f" ``ESCOLHAM MELHOR DA PROXIMA VEZ!``")
 

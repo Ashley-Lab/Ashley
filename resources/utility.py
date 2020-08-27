@@ -144,7 +144,7 @@ async def paginator(bot, items, inventory, embed, ctx):
         elif str(ctx.command) == "inventory equip":
             rarity = items[key]['rarity']
             string = f'{items[key]["icon"]} ``{inventory[key]}{("⠀" * (5 - len(str(inventory[key]))))}`` ' \
-                     f'``{items[key]["name"]}{("-" * (30 - len(items[key]["name"])))}>`` **{rarity.lower()}**\n'
+                     f'``{items[key]["name"]}{("-" * (30 - len(items[key]["name"])))}`` **{rarity.lower()}**\n'
 
         else:
             cost = "\n".join(f"{items[i[0]][0]} ``{i[1]}`` ``{items[i[0]][1]}``" for i in inventory[key]['cost'])
@@ -290,6 +290,63 @@ def parse_duration(duration: int):
     return ', '.join(duration)
 
 
+async def guild_info(guild):
+
+    online = 0
+    idle = 0
+    dont_disturb = 0
+    offline = 0
+
+    for member in guild.members:
+        if str(member.status) == 'offline':
+            offline += 1
+            continue
+        elif str(member.status) == 'dnd':
+            dont_disturb += 1
+            continue
+        elif str(member.status) == 'idle':
+            idle += 1
+            continue
+        elif str(member.status) == 'online':
+            online += 1
+            continue
+
+    status_member = f'{online} membros online\n' \
+                    f'{idle} membros ausente(s)\n' \
+                    f'{dont_disturb} membros ocupados\n' \
+                    f'{offline} membros offline'
+
+    afk = guild.afk_channel.name if guild.afk_channel else "Sem canal de AFK"
+
+    verification_level = {
+        "none": "Nenhuma",
+        "low": "Baixo: Precisa ter um e-mail verificado na conta do Discord.",
+        "medium": "Médio: Precisa ter uma conta no Discord há mais de 5 minutos.",
+        "high": "Alta: Também precisa ser um membro deste servidor há mais de 10 minutos.",
+        "table_flip": "Alta: Precisa ser um membro deste servidor há mais de 10 minutos.",
+        "extreme": "Extrema: Precisa ter um telefone verificado na conta do Discord.",
+        "double_table_flip": "Extrema: Precisa ter um telefone verificado na conta do Discord."
+    }
+
+    verification = verification_level.get(str(guild.verification_level))
+    embed = discord.Embed(color=int("ff00c1", 16), description="Abaixo está as informaçoes principais do servidor!")
+    embed.set_thumbnail(url=guild.icon_url)
+    embed.add_field(name="Nome:", value=guild.name, inline=True)
+    embed.add_field(name="Dono:", value=guild.owner.mention)
+    embed.add_field(name="ID:", value=guild.id, inline=True)
+    embed.add_field(name="Cargos:", value=str(len(guild.roles)), inline=True)
+    embed.add_field(name="Membros:", value=str(len(guild.members)), inline=True)
+    embed.add_field(name="Canais de Texto", value=f'{len(guild.text_channels)}', inline=True)
+    embed.add_field(name="Canais de Voz", value=f"{len(guild.voice_channels)}", inline=True)
+    embed.add_field(name="Canal de AFK", value=str(afk), inline=True)
+    embed.add_field(name="Bots:", value=str(len([a for a in guild.members if a.bot])), inline=True)
+    embed.add_field(name="Nível de verificação", value=f"{verification}", inline=True)
+    embed.add_field(name="Criado em:", value=guild.created_at.strftime("%d %b %Y %H:%M"), inline=True)
+    embed.add_field(name="Região:", value=str(guild.region).title(), inline=True)
+    embed.add_field(name="Status dos Membros:", value=status_member, inline=True)
+    return embed
+
+
 def date_format(date):
     date_timezone = timezone("America/Recife")
     date_ = date.astimezone(date_timezone)
@@ -317,7 +374,8 @@ ERRORS = ['The check functions for command staff ban failed.',
           'The check functions for command config report failed.',
           'The check functions for command staff slowmode failed.',
           'The check functions for command staff delete failed.',
-          'The check functions for command logger failed.']
+          'The check functions for command logger failed.',
+          'The check functions for command guild convert failed.']
 
 enforcado = ['''
 ```

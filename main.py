@@ -15,7 +15,7 @@ from discord.ext import commands
 from resources.color import random_color
 from resources.webhook import Webhook
 from bson.json_util import dumps
-from resources.utility import date_format, patent_calculator
+from resources.utility import date_format, patent_calculator, guild_info
 from resources.db import Database, DataInteraction
 from resources.verify_cooldown import verify_cooldown
 from resources.boosters import Booster
@@ -258,7 +258,7 @@ class Ashley(commands.AutoShardedBot):
                     if perms.send_messages and perms.read_messages:
                         await ctx.send(file=file, embed=embed)
 
-                if update_user['config']['vip']:
+                if update_user['config']['vip'] and str(ctx.command).lower() != "daily vip":
                     try:
                         epoch = dt.utcfromtimestamp(0)
                         cooldown = update_user["cooldown"]["daily vip"]
@@ -330,8 +330,8 @@ class Ashley(commands.AutoShardedBot):
             await guild.leave()
         else:
             entrance = self.get_channel(619899848082063372)
-            msg = f"> **{guild.id}:** {guild.name} ``ME ADICINOU NO SERVIDOR!``"
-            await entrance.send(msg)
+            embed = await guild_info(guild)
+            await entrance.send(embed=embed)
 
     async def on_guild_remove(self, guild):
         if str(guild.id) not in self.blacklist:
@@ -340,12 +340,16 @@ class Ashley(commands.AutoShardedBot):
                 blacklist = self.get_channel(542134573010518017)
                 msg = f"> **{guild.id}:** {guild.name} ``ME RETIROU DO SERVIDOR LOGO ENTROU NA BLACKLIST``"
                 await blacklist.send(msg)
+                embed = await guild_info(guild)
+                await blacklist.send(embed=embed)
                 await self.ban_(guild.id, msg)
             else:
                 blacklist = self.get_channel(542134573010518017)
                 msg = f"> **{guild.id}:** {guild.name} ``ME RETIROU DO SERVIDOR MAS NÃO TINHA FEITO O RESGISTRO, " \
                       f"ENTÃO NÃO ENTROU NA MINHA BLACKLIST!``"
                 await blacklist.send(msg)
+                embed = await guild_info(guild)
+                await blacklist.send(embed=embed)
 
     async def on_message(self, message):
         if message.author.id == self.user.id:

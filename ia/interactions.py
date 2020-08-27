@@ -7,7 +7,7 @@ from resources.utility import get_response, include
 
 C_SIM, C_NAO = 98, 98
 chance, chance_not = 0, 0
-ASHLEY = [" ash", "ash ", " ash ", "ashley"]
+ASHLEY = ["ashley"]
 
 
 class IaInteractions(commands.Cog):

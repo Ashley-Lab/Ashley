@@ -83,6 +83,13 @@ user_data_structure = {
                 "last_channel": None,
                 "last_verify": None,
                 "last_blocked": None,
+                "warns": {
+                    "80": False,
+                    "85": False,
+                    "90": False,
+                    "95": False,
+                    "100": False
+                },
                 "strikes": 0,
                 "strikes_to_ban": 0,
                 "status": True,

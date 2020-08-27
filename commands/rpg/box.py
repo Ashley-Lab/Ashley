@@ -167,8 +167,13 @@ ITEMS:
         """Esse nem eu sei..."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
+
         if data['config']['buying']:
             return await ctx.send('<:alert:739251822920728708>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
+
+        if not data['box']['status']['active']:
+            return await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
+                                  "``Para ativar sua box use o comando:`` **ash box buy**")
 
         update['config']['buying'] = True
         await self.bot.db.update_data(data, update, 'users')
@@ -181,6 +186,7 @@ ITEMS:
 
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+
         except TimeoutError:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
@@ -192,6 +198,7 @@ ITEMS:
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         num = int(answer.content)
+
         if num > 10:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
@@ -200,7 +207,8 @@ ITEMS:
             await msg.delete()
             return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar mais que 10 boosters"
                                   " de uma vez...``")
-        elif num < 1:
+
+        if num < 1:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
             update['config']['buying'] = False
@@ -208,35 +216,31 @@ ITEMS:
             await msg.delete()
             return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar 0 ou menos boosters``")
 
-        if data['box']['status']['active']:
-            price = 500
-            if data['user']['ranking'] == "Bronze":
-                price -= 50
-            if data['user']['ranking'] == "Silver":
-                price -= 75
-            if data['user']['ranking'] == "Gold":
-                price -= 125
-            if data['config']['vip']:
-                price -= 50
-            num_ = self.verify_money(data['treasure']['money'], num, price)
-            if num_ < num:
-                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-                update = data
-                update['config']['buying'] = False
-                await self.bot.db.update_data(data, update, 'users')
-                await msg.delete()
-                return await ctx.send("<:negate:721581573396496464>│``Você não tem dinheiro o suficiente...``")
-            for _ in range(num):
-                if data['box']['status']['active']:
-                    await self.bot.booster.buy_booster(self.bot, ctx)
-                    await sleep(0.5)
+        price = 500
+        if data['user']['ranking'] == "Bronze":
+            price -= 50
+        if data['user']['ranking'] == "Silver":
+            price -= 75
+        if data['user']['ranking'] == "Gold":
+            price -= 125
+        if data['config']['vip']:
+            price -= 50
+        num_ = self.verify_money(data['treasure']['money'], num, price)
+        if num_ < num:
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['config']['buying'] = False
+            await self.bot.db.update_data(data, update, 'users')
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``Você não tem dinheiro o suficiente...``")
+        for _ in range(num):
+            if data['box']['status']['active']:
+                await self.bot.booster.buy_booster(self.bot, ctx)
+                await sleep(0.5)
 
-            await msg.delete()
-            await ctx.send("<:confirmed:721581574461587496>│``Obrigado pelas compras, volte sempre!``")
-        else:
-            await msg.delete()
-            await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
-                           "``Para ativar sua box use o comando:`` **ash box buy**")
+        await msg.delete()
+        await ctx.send("<:confirmed:721581574461587496>│``Obrigado pelas compras, volte sempre!``")
+
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         update['config']['buying'] = False

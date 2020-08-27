@@ -4,6 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from random import choice, randint
+from resources.utility import ERRORS
 
 
 class GuildBank(commands.Cog):
@@ -227,6 +228,12 @@ class GuildBank(commands.Cog):
         await ctx.send(f'<:confirmed:721581574461587496>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
                        f' aceito com sucesso, voce converteu todas as pedras do seu servidor em`` '
                        f'**RS{d}** ``ETHERNYAS``')
+
+    @_convert.error
+    async def _convert_error(self, ctx, error):
+        if error.__str__() in ERRORS[11]:
+            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
+                                  '**manage_guild / Gerenciar Servidor**')
 
 
 def setup(bot):

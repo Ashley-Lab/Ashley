@@ -4,18 +4,21 @@ import textwrap
 import unicodedata
 
 from io import BytesIO
-from config import data
+from config import data  # tirar para testes...
 from aiohttp_requests import requests
-from resources.check import validate_url
+from resources.check import validate_url  # tirar para testes...
 from random import choice
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+avatar_marry = None
 letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
            't', 'u', 'v', 'w', 'x', 'y', 'z')
-avatar_marry = None
 
 with open("data/pets.json", encoding="utf-8") as pets:
     pets = json.load(pets)
+
+with open("data/equips.json", encoding="utf-8") as _equips:
+    _equips = json.load(_equips)
 
 
 def calc_xp(xp, lvl):
@@ -426,3 +429,93 @@ async def skill_points(database):
             show.text(xy=(x_, y_), text=database[k].upper(), fill=(255, 255, 255), font=font_text)
 
     image.save("skill_points.png")
+
+
+def equips(data_s):
+    # load dashboard image
+    image = Image.open(f"images/dashboards/equip_{data_s['class']}.png").convert('RGBA')
+    show = ImageDraw.Draw(image)
+
+    # Text Align
+    def text_align(box, text, font_t):
+        nonlocal show
+        x1, y1, x2, y2 = box
+        w, h = show.textsize(text.upper(), font=font_t)
+        x = (x2 - x1 - w) // 2 + x1
+        y = (y2 - y1 - h) // 2 + y1
+        return x, y
+
+    mapped = {
+
+        "base": {
+            "atk": (420, 108, 484, 160),
+            "dex": (420, 207, 484, 260),
+            "acc": (420, 307, 486, 361),
+            "con": (420, 408, 486, 462),
+            "luk": (420, 509, 486, 562)
+        },
+
+        "class": {
+            "atk": (568, 109, 631, 160),
+            "dex": (568, 207, 632, 260),
+            "acc": (565, 307, 631, 361),
+            "con": (565, 408, 631, 462),
+            "luk": (565, 508, 631, 561)
+        },
+
+        "equip": {
+            "atk": (716, 108, 779, 160),
+            "dex": (716, 207, 780, 260),
+            "acc": (716, 307, 782, 361),
+            "con": (716, 408, 782, 461),
+            "luk": (716, 509, 782, 561)
+        },
+
+        "name": (24, 18, 373, 67),
+
+        "equipped": {
+            "breastplate": (36, 183, 93, 238),
+            "leggings": (36, 365, 93, 420),
+            "boots": (36, 456, 93, 511),
+            "gloves": (36, 274, 93, 329),
+            "shoulder": (36, 92, 93, 147),
+            "sword": (302, 137, 359, 192),
+            "shield": (302, 229, 359, 284)
+        }
+    }
+
+    for key in mapped.keys():
+        if key in ['base', 'class', 'equip']:
+            for k in mapped[key].keys():
+                if k in ['atk', 'dex', 'acc', 'con', 'luk']:
+                    font = ImageFont.truetype("fonts/times.ttf", 50)
+                    x_, y_ = text_align(mapped[key][k], data_s[f"status_{key}"][k], font)
+                    show.text(xy=(x_ + 1, y_ - 5), text=data_s[f"status_{key}"][k].upper(), fill=(0, 0, 0), font=font)
+                    show.text(xy=(x_, y_ - 6), text=data_s[f"status_{key}"][k].upper(), fill=(255, 255, 255), font=font)
+        if key == "name":
+            font_text = ImageFont.truetype("fonts/bot.otf", 34)
+            x_, y_ = text_align(mapped[key], data_s[key], font_text)
+            show.text(xy=(x_ + 1, y_ + 1), text=data_s[key].upper(), fill=(0, 0, 0), font=font_text)
+            show.text(xy=(x_, y_), text=data_s[key].upper(), fill=(255, 255, 255), font=font_text)
+
+    eq = dict()
+    for ky in _equips.keys():
+        for k, v in _equips[ky].items():
+            eq[k] = v
+
+    # add equips to img
+    for k in mapped["equipped"].keys():
+        if data_s['equipped'][k] is not None:
+            e_type = "armor" if k != "sword" else "weapon"
+            if k != "shield" and k != "sword":
+                f_t = f"{eq[data_s['equipped'][k]]['rarity']}/{data_s['equipped'][k]}"
+            elif k == "sword":
+                f_t = f"{data_s['equipped'][k]}"
+            else:
+                f_t = f"shield/{data_s['equipped'][k]}"
+
+            equipped = Image.open(f"images/equips/{e_type}/{f_t}.jpg").convert('RGBA')
+            equipped = equipped.resize((56, 56))
+            image.paste(equipped, (mapped["equipped"][k][0] + 1, mapped["equipped"][k][1]), equipped)
+
+    image.save("equips.png")
