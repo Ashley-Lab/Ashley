@@ -175,6 +175,12 @@ class InventoryClass(commands.Cog):
             embed = discord.Embed(color=self.bot.color, description=msg)
             return await ctx.send(embed=embed)
 
+        if update['rpg']['level'] < 26:
+            msg = '<:negate:721581573396496464>│``VOCE PRECISA ESTA NO NIVEL 26 OU MAIOR PARA USAR EQUIPAMENTOS!\n' \
+                  'OLHE O SEU NIVEL NO COMANDO:`` **ASH SKILL**'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
         if item is None:
             return await ctx.send("<:negate:721581573396496464>│``Você precisa colocar o nome de um item que deseja "
                                   "equipar em voce:`` **ash equip i <nome_do_item>** ``voce consegue ver os itens "

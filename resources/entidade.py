@@ -86,13 +86,21 @@ class Entity(object):
             for k in self.status.keys():
                 if k in ["pdh", "hp", "mp"]:
                     continue
-                if self.db['enemy'] > 25:
+
+                if self.db['enemy']['level'] > 25:
                     self.status[k] += randint(2, 4)
+
+                for sts in self.db['enemy']['equipped_items'].keys():
+                    if self.db['enemy']['equipped_items'][sts] is not None:
+                        if k in ["atk", "luk"]:
+                            self.status[k] += randint(1, 2)
+                        if k == "con":
+                            self.status[k] += randint(2, 4)
 
             self.atacks = self.db['atacks']
             self.level_skill = self.db['level'] // 10 + randint(1, 5)
 
-            if self.db['enemy'] > 25:
+            if self.db['enemy']['level'] > 25:
                 self.rate = [(12 + self.db['level'] // 10), (12 + self.db['level'] // 10)]
             else:
                 self.rate = [(6 + self.db['level'] // 10), (6 + self.db['level'] // 10)]
