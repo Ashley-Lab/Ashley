@@ -27,6 +27,9 @@ class RpgStart(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
+        data_guild_native = await self.bot.db.get_data("guild_id", update['guild_id'], "guilds")
+        update_guild_native = data_guild_native
+
         if data['rpg']['active']:
             embed = discord.Embed(color=self.bot.color, description=f'<:alert:739251822920728708>│``VOCE JA INICIOU O '
                                                                     f'RPG, SE VOCE DESEJA ALTERAR ALGO COMO: MODO DE '
@@ -42,14 +45,11 @@ class RpgStart(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '
                                       '**COMANDO CANCELADO**')
 
-            def check_option(m):
-                return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
-
             msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODAS AS PEDRAS NECESSARIOS, "
                                  f"DESEJA ALTERAR A CLASSE OU MODO DE IMAGEM AGORA?``"
                                  f"\n**1** para ``SIM`` ou **0** para ``NÃO``")
             try:
-                answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
+                answer = await self.bot.wait_for('message', check=check_battle, timeout=30.0)
             except TimeoutError:
                 await msg.delete()
                 return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
@@ -62,14 +62,10 @@ class RpgStart(commands.Cog):
             update['treasure']["bronze"] -= n_cost[0]
             update['treasure']["silver"] -= n_cost[1]
             update['treasure']["gold"] -= n_cost[2]
-
             # DATA NATIVA DO SERVIDOR
-            data_guild_native = await self.bot.db.get_data("guild_id", update['guild_id'], "guilds")
-            update_guild_native = data_guild_native
             update_guild_native['data'][f"total_bronze"] -= n_cost[0]
             update_guild_native['data'][f"total_silver"] -= n_cost[1]
             update_guild_native['data'][f"total_gold"] -= n_cost[2]
-            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         asks = {'lower_net': False, 'next_class': None}
 
@@ -151,6 +147,7 @@ class RpgStart(commands.Cog):
 
         update['rpg'] = rpg
         await self.bot.db.update_data(data, update, 'users')
+        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         embed = discord.Embed(color=self.bot.color,
                               description=f'<:confirmed:721581574461587496>│``CONFIGURAÇÃO DO RPG FEITA COM SUCESSO!``')
         await ctx.send(embed=embed)
