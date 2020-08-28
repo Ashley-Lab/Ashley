@@ -33,7 +33,7 @@ class RpgStart(commands.Cog):
         if data['rpg']['active']:
             embed = discord.Embed(color=self.bot.color, description=f'<:alert:739251822920728708>│``VOCE JA INICIOU O '
                                                                     f'RPG, SE VOCE DESEJA ALTERAR ALGO COMO: MODO DE '
-                                                                    f'IMAGEM OU CLASSE, VAI GASTAR AS PEDRAS ABAIXO:``')
+                                                                    f'IMAGEM E CLASSE, VAI GASTAR AS PEDRAS ABAIXO:``')
             await ctx.send(embed=embed)
             n_cost = [15000, 5000, 500]
             t = data['treasure']
@@ -44,6 +44,12 @@ class RpgStart(commands.Cog):
             if t["bronze"] < n_cost[0] or t["silver"] < n_cost[1] or t["gold"] < n_cost[2]:
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '
                                       '**COMANDO CANCELADO**')
+
+            for key in update['rpg']["equipped_items"].keys():
+                if update['rpg']["equipped_items"][key] is not None:
+                    return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não pode trocar de classe '
+                                          'com itens equipados, use o comando:`` **ASH EQUIP RESET** ``antes de mudar'
+                                          ' de classe.``')
 
             msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODAS AS PEDRAS NECESSARIOS, "
                                  f"DESEJA ALTERAR A CLASSE OU MODO DE IMAGEM AGORA?``"
