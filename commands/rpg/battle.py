@@ -267,8 +267,8 @@ class Battle(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        change = randint(1, 200)
-        if change < 2:
+        change = randint(1, 100)
+        if change < 5 and player.status['hp'] > 0:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():

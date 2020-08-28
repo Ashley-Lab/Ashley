@@ -127,19 +127,29 @@ class MeltedClass(commands.Cog):
             list_rarity += [i_] * amount
         rarity = choice(list_rarity)
 
+        legend = {
+            "uncommon": "silver",
+            "rare": "mystic",
+            "super rare": "inspiron",
+            "ultra rare": "violet",
+            "secret": "hero"
+        }
+
         reward_equip = None
+        item_reward = equip.lower()
+        item_reward = item_reward.replace("sealed", legend[rarity])
 
         if "leather" in equip:
             for k, v in self.se[f'set dynasty leather {rarity}'].items():
-                if v['name'] == equip[:-7]:
+                if v['name'] == item_reward:
                     reward_equip = (k, v)
         elif "platinum" in equip:
             for k, v in self.se[f'set dynasty platinum {rarity}'].items():
-                if v['name'] == equip[:-7]:
+                if v['name'] == item_reward:
                     reward_equip = (k, v)
         elif "cover" in equip:
             for k, v in self.se[f'set dynasty cover {rarity}'].items():
-                if v['name'] == equip[:-7]:
+                if v['name'] == item_reward:
                     reward_equip = (k, v)
 
         try:
