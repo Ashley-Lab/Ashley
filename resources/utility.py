@@ -110,7 +110,6 @@ async def paginator(bot, items, inventory, embed, ctx):
     cont = 0
     cont_i = 0
     description = ''
-    em = bot.config['emojis']
 
     if str(ctx.command) == "inventory":
         dict_ = dict()
@@ -158,22 +157,21 @@ async def paginator(bot, items, inventory, embed, ctx):
         if cont <= 1500 and cont_i < 20:
             description += string
             cont_i += 1
+
         else:
             descriptions.append(description)
             description = f'{embed[2]}{string}'
             cont = len(description)
             cont_i = 0
+
     descriptions.append(description)
     cont = 0
-
-    if str(ctx.command) == "inventory":
-        emojis = [em["1"][1], em["1"][0], em["1"][2]]
-    else:
-        emojis = [em["2"][1], em["2"][0], em["2"][2]]
+    emojis = bot.config['emojis']['arrow']
 
     msg = await ctx.send('<:alert:739251822920728708>│``Aguarde...``')
     for c in emojis:
         await msg.add_reaction(c)
+
     while not bot.is_closed():
         Embed = discord.Embed(
             title=embed[0],
@@ -184,24 +182,41 @@ async def paginator(bot, items, inventory, embed, ctx):
         Embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
         Embed.set_footer(text="Ashley ® Todos os direitos reservados.  [Pag {}/{}]".format(cont + 1, len(descriptions)))
         await msg.edit(embed=Embed, content='')
+
         try:
             reaction = await bot.wait_for('reaction_add', timeout=60.0)
         except TimeoutError:
             break
+
         while reaction[1].id != ctx.author.id:
             try:
                 reaction = await bot.wait_for('reaction_add', timeout=60.0)
             except TimeoutError:
                 break
+
         try:
             emoji = str(emojis[0]).replace('<:', '').replace(emojis[0][emojis[0].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and cont > 0:
-                cont -= 1
+            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+                cont = 0
+
             emoji = str(emojis[1]).replace('<:', '').replace(emojis[1][emojis[1].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and cont < len(descriptions) - 1:
-                cont += 1
+            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+                cont -= 1
+                if cont < 0:
+                    cont = 0
+
             emoji = str(emojis[2]).replace('<:', '').replace(emojis[2][emojis[2].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji:
+            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+                cont += 1
+                if cont > len(descriptions) - 1:
+                    cont = len(descriptions) - 1
+
+            emoji = str(emojis[3]).replace('<:', '').replace(emojis[3][emojis[3].rfind(':'):], '')
+            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+                cont = len(descriptions) - 1
+
+            emoji = str(emojis[4]).replace('<:', '').replace(emojis[4][emojis[4].rfind(':'):], '')
+            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
                 break
         except AttributeError:
             break

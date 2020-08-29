@@ -46,6 +46,7 @@ class MeltedClass(commands.Cog):
         if equip is None:
             return await ctx.send("<:negate:721581573396496464>│``VOCE PRECISA DIZER UM NOME DE UM EQUIPAMENTO!``")
 
+        equip = equip.replace("_", " ")
         if equip.lower() not in [k.lower() for k in self.i.keys() if self.i[k][3] == 9]:
             return await ctx.send("<:negate:721581573396496464>│``VOCE PRECISA DIZER UM EQUIPAMENTO VALIDO!``")
 

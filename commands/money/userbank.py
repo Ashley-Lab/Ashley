@@ -24,10 +24,11 @@ class UserBank(commands.Cog):
         self.bronze = 0
 
         self.items = {
-            "coins": 1000,
-            "crystal_fragment_light": 500,
-            "crystal_fragment_enery": 500,
-            "crystal_fragment_dark": 500
+            "Fichas": 1000,
+            "Crystal Fragment Light": 500,
+            "Crystal Fragment Energy": 500,
+            "Crystal Fragment Dark": 500,
+            "Energy": 500
         }
 
     @staticmethod
@@ -50,22 +51,21 @@ class UserBank(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='shop', aliases=['buy', 'comprar', 'loja'])
-    async def shop(self, ctx, item=None, quant=None):
+    async def shop(self, ctx, quant=None, *, item=None):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
         if item is None or quant is None:
             msg = "```Markdown\n"
             for k, v in self.items.items():
-                if k == "coins":
-                    k = "ficha"
-                msg += f"[>>]: {k.upper()}\n<1 UND = {v} ETHERNYAS>\n\n"
+                msg += f"[>>]: {k}\n<1 UND = {v} ETHERNYAS>\n\n"
             msg += "```"
             return await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA:``\n{msg}\n"
-                                  f"**EXEMPLO:** ``USE`` **ASH SHOP FICHA 50** ``PARA COMPRAR 50 FICHAS!``")
+                                  f"**EXEMPLO:** ``USE`` **ASH SHOP 50 Fichas** ``PARA COMPRAR 50 FICHAS!``")
 
-        if item in ['ficha', 'fichas', 'coin', 'coins']:
-            item = "coins"
+        for key in self.items.keys():
+            if key.lower() == item.lower():
+                item = key
 
         if item not in self.items.keys():
             return await ctx.send("<:alert:739251822920728708>│``ESSE ITEM NAO EXISTE OU NAO ESTA DISPONIVEL!``")
@@ -75,10 +75,15 @@ class UserBank(commands.Cog):
 
         update['treasure']['money'] -= self.items[item] * int(quant)
 
-        try:
-            update['inventory'][item] += int(quant)
-        except KeyError:
-            update['inventory'][item] = int(quant)
+        item_reward = None
+        for k, v in self.bot.items.items():
+            if v[1] == item:
+                item_reward = k
+        if item_reward is not None:
+            try:
+                update['inventory'][item_reward] += int(quant)
+            except KeyError:
+                update['inventory'][item_reward] = int(quant)
 
         await self.bot.db.update_data(data, update, 'users')
         a = '{:,.2f}'.format(float(self.items[item] * int(quant)))
@@ -86,8 +91,8 @@ class UserBank(commands.Cog):
         c = b.replace('.', ',')
         d = c.replace('v', '.')
         await ctx.send(f"<:confirmed:721581574461587496>|``SUA COMPRA FOI FEITA COM SUCESSO`` **{quant}** "
-                       f"``{'FICHA' if item == 'coins' else item.upper()} ADICIONADO NO SEU INVENTARIO COM SUCESSO QUE"
-                       f" CUSTOU`` **R$ {d}** ``ETHERNYAS``")
+                       f"``{item.upper()} ADICIONADO NO SEU INVENTARIO COM SUCESSO QUE CUSTOU`` "
+                       f"**R$ {d}** ``ETHERNYAS``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
