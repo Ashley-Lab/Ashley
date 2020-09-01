@@ -85,10 +85,10 @@ class Battle(commands.Cog):
             return await ctx.send(embed=embed)
 
         try:
-            if data['inventory']['coins'] < 50:
+            if data['inventory']['coins'] < 100:
                 embed = discord.Embed(
                     color=self.bot.color,
-                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 50 FICHAS PARA BATALHAR!``\n'
+                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 100 FICHAS PARA BATALHAR!``\n'
                                 '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
                 return await ctx.send(embed=embed)
         except KeyError:
@@ -260,8 +260,28 @@ class Battle(commands.Cog):
                     reward = [choice(db_monster['reward']) for _ in range(8)]
                 else:
                     reward = [choice(db_monster['reward']) for _ in range(4)]
-                if change == 1:
-                    reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
+
+                if db_player['level'] > 25:
+                    bonus = ['stone_crystal_white', 'stone_crystal_red', 'stone_crystal_green',
+                             'stone_crystal_blue', 'stone_crystal_yellow']
+
+                    if data['rpg']['vip']:
+                        reward[0] = choice(bonus)
+                        reward[1] = choice(bonus)
+                        reward[2] = choice(bonus)
+                        reward[3] = choice(bonus)
+
+                    else:
+                        reward[0] = choice(bonus)
+                        reward[1] = choice(bonus)
+
+                if change < 15:
+                    if data['rpg']['vip']:
+                        reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
+                        reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
+                    else:
+                        reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
+
                 response = await self.bot.db.add_reward(ctx, reward)
                 await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
                                '{}'.format(response))

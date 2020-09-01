@@ -136,10 +136,11 @@ class UtilityClass(commands.Cog):
         except KeyError:
             vip = True
 
+        date_now = dt.today()
+
         m_last_command = 0
         if data['security']['last_command'] is not None:
             last_command = data['security']['last_command']
-            date_now = dt.today()
             last_verify = date.mktime(date_now.timetuple())
             last_command = date.mktime(last_command.timetuple())
             m_last_command = int(int(last_verify - last_command) / 60)
@@ -147,16 +148,22 @@ class UtilityClass(commands.Cog):
         m_last_verify = 0
         if data['security']['last_verify'] is not None:
             last_command = data['security']['last_verify']
-            date_now = dt.today()
             last_verify = date.mktime(date_now.timetuple())
             last_command = date.mktime(last_command.timetuple())
             m_last_verify = int(int(last_verify - last_command) / 60)
+
+        m_last_blocked = 0
+        if data['security']['last_blocked'] is not None:
+            last_command = data['security']['last_blocked']
+            last_verify = date.mktime(date_now.timetuple())
+            last_command = date.mktime(last_command.timetuple())
+            m_last_blocked = int(int(last_verify - last_command) / 60)
 
         commands_today = data['security']['commands_today']
         last_command = f"Ha {m_last_command} minutos" if data['security']['last_command'] is not None else "Pendente..."
         last_channel = self.bot.get_channel(data['security']['last_channel'])
         last_verify = f"Ha {m_last_verify} minutos" if data['security']['last_verify'] is not None else "Pendente..."
-        last_blocked = "Ficha Limpa" if data['security']['last_blocked'] is None else data['security']['last_blocked']
+        last_blocked = "Ficha Limpa" if data['security']['last_blocked'] is None else f"Ha {m_last_blocked} minutos"
         wa = data['security']['warns']
         strikes = data['security']['strikes']
         strikes_to_ban = data['security']['strikes_to_ban']

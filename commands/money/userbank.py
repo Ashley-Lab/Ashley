@@ -24,11 +24,16 @@ class UserBank(commands.Cog):
         self.bronze = 0
 
         self.items = {
-            "Fichas": 1000,
-            "Crystal Fragment Light": 500,
-            "Crystal Fragment Energy": 500,
-            "Crystal Fragment Dark": 500,
-            "Energy": 500
+            "Fichas": 175,
+            "Crystal Fragment Light": 435,
+            "Crystal Fragment Energy": 453,
+            "Crystal Fragment Dark": 445,
+            "Energy": 370,
+            "Melted Bone": 190,
+            "Life Crystal": 210,
+            "Death Blow": 250,
+            "Stone of Soul": 230,
+            "Vital Force": 275,
         }
 
     @staticmethod
@@ -58,10 +63,10 @@ class UserBank(commands.Cog):
         if item is None or quant is None:
             msg = "```Markdown\n"
             for k, v in self.items.items():
-                msg += f"[>>]: {k}\n<1 UND = {v} ETHERNYAS>\n\n"
+                msg += f"[>>]: {k.upper()}\n<1 UND = {v} ETHERNYAS>\n\n"
             msg += "```"
             return await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA:``\n{msg}\n"
-                                  f"**EXEMPLO:** ``USE`` **ASH SHOP 50 Fichas** ``PARA COMPRAR 50 FICHAS!``")
+                                  f"**EXEMPLO:** ``USE`` **ASH SHOP 50 FICHAS** ``PARA COMPRAR 50 FICHAS!``")
 
         for key in self.items.keys():
             if key.lower() == item.lower():
@@ -340,9 +345,7 @@ class UserBank(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
 
         else:
-            money = randint(10, 30)
-            msg = await self.bot.db.add_money(ctx, money, True)
-            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=30.0)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE", delete_after=30.0)
         await a.delete()
 
     @check_it(no_pm=True)
@@ -440,8 +443,7 @@ class UserBank(commands.Cog):
             await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
 
         else:
-            msg = await self.bot.db.add_money(ctx, randint(10, 30), True)
-            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=60.0)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE", delete_after=30.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -538,8 +540,7 @@ class UserBank(commands.Cog):
             await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
 
         else:
-            msg = await self.bot.db.add_money(ctx, randint(10, 30), True)
-            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE, PELO MENOS VOCE GANHOU`` {msg}", delete_after=60.0)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE", delete_after=30.0)
 
 
 def setup(bot):

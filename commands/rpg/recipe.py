@@ -64,9 +64,13 @@ class RecipeClass(commands.Cog):
                 for c in recipe['cost']:
                     try:
                         tempmax = update['inventory'][c[0]] // c[1]
+                        if tempmax == 0:
+                            await ctx.send(f'<:alert:739251822920728708>|``Você não tem o item`` **{c[0]}** '
+                                           f'``suficiente no seu inventario.``')
                     except KeyError:
                         tempmax = 0
-                        await ctx.send(f'<:alert:739251822920728708>|``Você não tem o item`` **{c[0]}**')
+                        await ctx.send(f'<:alert:739251822920728708>|``Você não tem o item`` **{c[0]}** '
+                                       f'``no seu inventario.``')
                     if maximo is None or maximo > tempmax:
                         maximo = tempmax
 

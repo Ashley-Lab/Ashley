@@ -31,7 +31,7 @@ class JoKenPo(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        if data['inventory']['coins'] > 10 and not data['config']['playing']:
+        if data['inventory']['coins'] > 50 and not data['config']['playing']:
             update['config']['playing'] = True
             await self.bot.db.update_data(data, update, 'users')
 
@@ -57,7 +57,7 @@ class JoKenPo(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito, eu tinha '
                                       'escolhido:`` **{}**.'.format(jkp))
 
-            update['inventory']['coins'] -= 10
+            update['inventory']['coins'] -= 50
             await self.bot.db.update_data(data, update, 'users')
             reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark', 'Energy']
             change = randint(10, 100)
@@ -142,7 +142,7 @@ class JoKenPo(commands.Cog):
             if data['config']['playing']:
                 await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 10 FICHAS PARA JOGAR``\n'
+                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 50 FICHAS PARA JOGAR``\n'
                                '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
 
 

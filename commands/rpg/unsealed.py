@@ -31,7 +31,7 @@ class MeltedClass(commands.Cog):
         self.cost = {
             "melted_artifact": 1,
             "unsealed_stone": 2,
-            "Crystal_of_Energy": 25,
+            "Crystal_of_Energy": 20,
         }
 
     @check_it(no_pm=True)

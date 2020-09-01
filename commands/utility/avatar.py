@@ -19,20 +19,15 @@ class Avatar(commands.Cog):
         Use ash avatar <usuario em questão>"""
         try:
             user = ctx.message.mentions[0]
-            embed = discord.Embed(
-                title="Avatar de: {}".format(user.name),
-                color=self.color)
-            embed.set_image(url=user.avatar_url)
-            embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
-            await ctx.send(embed=embed)
         except IndexError:
-            user2 = ctx.author
-            embed2 = discord.Embed(
-                title="Avatar de: {}".format(user2.name),
-                color=self.color)
-            embed2.set_image(url=user2.avatar_url)
-            embed2.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
-            await ctx.send(embed=embed2)
+            user = ctx.author
+
+        embed = discord.Embed(
+            title="Avatar de: {}".format(user.name),
+            color=self.color)
+        embed.set_image(url=user.avatar_url)
+        embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

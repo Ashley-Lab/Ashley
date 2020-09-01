@@ -8,6 +8,7 @@ import copy
 import sys
 import traceback
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
+import time as date
 from random import choice, randint
 from datetime import datetime as dt
 from collections import Counter
@@ -47,6 +48,7 @@ class Ashley(commands.AutoShardedBot):
         self.items = config['items']
         self.icons = config['icons']
         self.pets = config['pets']
+        self.no_panning = config['attribute']['no_panning']
 
         self.server_ = "HEROKU"
         self.progress = "V.7 -> 067.5%"
@@ -70,14 +72,14 @@ class Ashley(commands.AutoShardedBot):
         print('\033[1;32m( 🔶 ) | Inicialização do atributo \033[1;34mSHUTDOWN\033[1;32m foi feita sucesso!\33[m')
 
     async def shutdown(self, reason):
-        date = dt(*dt.utcnow().timetuple()[:6])
-        data = {"_id": date, "reason": reason}
+        date_ = dt(*dt.utcnow().timetuple()[:6])
+        data = {"_id": date_, "reason": reason}
         await self.db.push_data(data, "shutdown")
         self.shutdowns = dumps(await self.db.get_all_data("shutdown"))
 
     async def ban_(self, id_, reason: str):
-        date = dt(*dt.utcnow().timetuple()[:6])
-        data = {"_id": id_, str(date): reason}
+        date_ = dt(*dt.utcnow().timetuple()[:6])
+        data = {"_id": id_, str(date_): reason}
         if str(id_) not in self.blacklist:
             await self.db.push_data(data, "blacklist")
             self.blacklist = dumps(await self.db.get_all_data("blacklist"))
@@ -307,14 +309,166 @@ class Ashley(commands.AutoShardedBot):
                                                    "VIP DIARIO ENTRANDO NO MEU SERVIDOR!``\n **Saiba mais usando ASH "
                                                    "INVITE**")
 
+                # -----------------------------------------------------------------------------------------
+                #                                  INICIO DO MACRO SYSTEM
+                # -----------------------------------------------------------------------------------------
+                m_last_verify = 0
+                last_command, last_verify, last_command, date_now = None, None, None, dt.today()
+                if update_user['security']['last_verify'] is not None:
+                    last_command = update_user['security']['last_verify']
+                    last_verify = date.mktime(date_now.timetuple())
+                    last_command = date.mktime(last_command.timetuple())
+                    m_last_verify = int(int(last_verify - last_command) / 60)
+
+                last_command = None
+                if m_last_verify > 5:
+                    update_user['security']['last_verify'] = dt.today()
+                    update_user['security']['blocked'] = False
+                    last_verify = update_user['security']['last_verify']
+                    last_command = update_user['security']['last_command']
+
+                if last_command is not None and update_user['security']['status'] and m_last_verify > 5:
+                    if update_user['security']['commands_today'] > (2500 / 100 * 80):
+                        if update_user['security']['commands_today'] < 2500:
+                            try:
+                                warn = False
+                                percent = update_user['security']['commands_today'] * 100 / 2500
+                                if update_user['security']['commands_today'] >= (2500 / 100 * 80):
+                                    percent = 80
+                                if update_user['security']['commands_today'] >= (2500 / 100 * 85):
+                                    percent = 85
+                                if update_user['security']['commands_today'] >= (2500 / 100 * 90):
+                                    percent = 90
+                                if update_user['security']['commands_today'] >= (2500 / 100 * 95):
+                                    percent = 95
+                                if update_user['security']['commands_today'] >= (2500 / 100 * 100):
+                                    percent = 100
+                                if percent >= 80:
+                                    if not update_user['security']['warn'][str(percent)]:
+                                        warn = True
+                                if update_user['security']['last_channel'] is not None and warn:
+                                    channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                    if channel_ is not None:
+                                        cmds = update_user['security']['commands_today']
+                                        pe = update_user['security']['commands_today'] * 100 / 2500
+                                        await channel_.send(f'<a:red:525032764211200002>│``VOCE JA ATINGIU`` **{pe}%**'
+                                                            f' ``DA SUA COTA DIARIA DE COMANDOS:`` **{cmds}/2500** '
+                                                            f'``SE CONTINUAR ASSIM VAI SER BLOQUEADO POR 72 HORAS.``')
+                                        update_user['security']['warn'][str(percent)] = True
+                            except KeyError:
+                                pass
+
+                    if update_user['security']['commands_today'] > 2500:
+                        try:
+                            update_user['security']['status'] = not update_user['security']['status']
+                            update_user['security']['blocked'] = not update_user['security']['blocked']
+                        except KeyError:
+                            update_user['security']['status'] = False
+                            update_user['security']['blocked'] = True
+
+                        update_user['security']['last_blocked'] = dt.today()
+
+                        try:
+                            update_user['security']['strikes_to_ban'] += 1
+                        except KeyError:
+                            update_user['security']['strikes_to_ban'] = 1
+
+                        channel_ = self.bot.get_channel(737467830571761786)
+                        user = self.bot.get_user(data["user_id"])
+                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO MACRO E'
+                                            f' FOI BLOQUEADO\nNa Data e Hora: {data_}```')
+                        try:
+                            if update_user['security']['last_channel'] is not None:
+                                channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                if channel_ is not None:
+                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
+                                                        f'POIS EXTRAPOLOU OS LIMITES HOJE``\n<a:red:525032764211200002>'
+                                                        f' **OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
+                                                        f'PRIVILEGIOS DE GANHAR OS ITENS** ``ESSE BLOQUEIO FOI MAIS '
+                                                        f'RIGIDO,`` **SE VOCE CONTINUAR LEVANDO ESSE BLOQUEIO IRÁ SER'
+                                                        f' BANIDO DE USAR MEUS SERVIÇOS** ``AVISO PARA BANIMENTO:`` '
+                                                        f'**{update_user["security"]["strikes_to_ban"]}**/10')
+                        except KeyError:
+                            pass
+
+                    if update_user['security']['strikes_to_ban'] > 10:
+                        answer = await self.bot.ban_(update_user['user_id'], "BANIDO POR USAR MACRO!")
+                        if answer:
+                            embed = discord.Embed(
+                                color=discord.Color.red(),
+                                description=f'<:cry:530735037243719687>│``VOCE FOI BANIDO POR USAR MACRO!``'
+                                            f' **SE QUISER CONTESTAR ENTRE NO MEU SERVIDOR DE SUPORTE!**')
+                            try:
+                                if update_user['security']['last_channel'] is not None:
+                                    channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                    if channel_ is not None:
+                                        await channel_.send(embed=embed)
+                            except KeyError:
+                                pass
+
+                    last_verify = date.mktime(last_verify.timetuple())
+                    last_command = date.mktime(last_command.timetuple())
+                    minutes = int(int(last_verify - last_command) / 60)
+
+                    if minutes < 5 and update_user['security']['commands'] > 40:
+
+                        update_user['security']['strikes'] += 1
+                        update_user['security']['commands'] = 0
+                        channel_ = self.bot.get_channel(737467830571761786)
+                        user = self.bot.get_user(data["user_id"])
+                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} FOI DETECTADO POSSIVELMENTE USANDO'
+                                            f' MACRO\nNa Data e Hora: {data_}```')
+                        try:
+                            if update_user['security']['strikes'] < 11:
+                                if update_user['security']['last_channel'] is not None:
+                                    channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                    if channel_ is not None:
+                                        await channel_.send(f'<a:red:525032764211200002>│``EI TENHA CALMA VOCE TA '
+                                                            f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER'
+                                                            f' BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
+                                                            f'<a:red:525032764211200002>'
+                                                            f'**AVISO {update_user["security"]["strikes"]}/10**')
+                        except KeyError:
+                            pass
+
+                    if update_user['security']['commands'] > 0:
+                        update_user['security']['commands'] = 0
+
+                    else:
+                        update_user['security']['commands'] = 0
+                        update_user['security']['strikes'] = 0
+
+                    if update_user['security']['strikes'] == 11:
+                        update_user['security']['status'] = not update_user['security']['status']
+                        channel_ = self.bot.get_channel(737467830571761786)
+                        user = self.bot.get_user(data["user_id"])
+                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO MACRO'
+                                            f' E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
+
+                        try:
+                            if update_user['security']['last_channel'] is not None:
+                                channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                if channel_ is not None:
+                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO ATE AS 0 '
+                                                        f'HORAS DO DIA DE HOJE..`` <a:red:525032764211200002>'
+                                                        f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
+                                                        f'PRIVILEGIOS DE GANHAR OS ITENS**')
+                        except KeyError:
+                            pass
+
+                # -----------------------------------------------------------------------------------------
+                #                                    FIM DO MACRO SYSTEM
+                # -----------------------------------------------------------------------------------------
+
                 await self.db.update_data(data_user, update_user, 'users')
                 await self.db.update_data(data_guild, update_guild, 'guilds')
 
                 if isinstance(ctx.author, discord.Member) and data_user is not None:
-                    msg = await self.db.add_money(ctx, 6, True)
-                    perms = ctx.channel.permissions_for(ctx.me)
-                    if perms.send_messages and perms.read_messages:
-                        await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
+                    if str(ctx.command) not in self.no_panning:
+                        msg = await self.db.add_money(ctx, 6, True)
+                        perms = ctx.channel.permissions_for(ctx.me)
+                        if perms.send_messages and perms.read_messages:
+                            await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
