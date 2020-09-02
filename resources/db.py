@@ -720,3 +720,28 @@ class DataInteraction(object):
             else:
                 update['vip'] = False
             await self.db.update_data(data, update, "guilds")
+
+    async def get_rank_rpg(self, limit):
+        global cont
+        data = await self.db.get_all_data("users")
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['rpg'].get('level')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            cont['list'] += 1
+            return cont['list']
+
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        return rank

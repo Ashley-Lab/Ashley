@@ -110,7 +110,7 @@ class RpgStart(commands.Cog):
             asks['next_class'] = self.cl[int(answer.content) - 1]
         else:
             await msg.delete()
-            return await ctx.send("f'<:negate:721581573396496464>│``ESSA OPÇAO NAO ESTÁ DISPONIVEL, TENTE NOVAMENTE!``")
+            return await ctx.send("<:negate:721581573396496464>│``ESSA OPÇAO NAO ESTÁ DISPONIVEL, TENTE NOVAMENTE!``")
         await msg.delete()
         if not data['rpg']['active']:
             rpg = {
@@ -154,8 +154,8 @@ class RpgStart(commands.Cog):
         update['rpg'] = rpg
         await self.bot.db.update_data(data, update, 'users')
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-        embed = discord.Embed(color=self.bot.color,
-                              description=f'<:confirmed:721581574461587496>│``CONFIGURAÇÃO DO RPG FEITA COM SUCESSO!``')
+        msg = f'<:confirmed:721581574461587496>│``CONFIGURAÇÃO DO RPG FEITA COM SUCESSO!``'
+        embed = discord.Embed(color=self.bot.color, description=msg)
         await ctx.send(embed=embed)
 
 

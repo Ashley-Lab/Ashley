@@ -345,7 +345,7 @@ class UserBank(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
 
         else:
-            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE", delete_after=30.0)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE``", delete_after=30.0)
         await a.delete()
 
     @check_it(no_pm=True)
@@ -443,7 +443,7 @@ class UserBank(commands.Cog):
             await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
 
         else:
-            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE", delete_after=30.0)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE``", delete_after=30.0)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -540,7 +540,7 @@ class UserBank(commands.Cog):
             await ctx.send(f"<:confirmed:721581574461587496>│``PREMIO SALVO COM SUCESSO!``", delete_after=5.0)
 
         else:
-            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE", delete_after=30.0)
+            await ctx.send(f"> ``A SORTE NAO ESTAVA COM VOCE``", delete_after=30.0)
 
 
 def setup(bot):

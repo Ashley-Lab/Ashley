@@ -100,10 +100,52 @@ class InventoryClass(commands.Cog):
 
             equips(data_test)
             await ctx.send("```Markdown\n[>>]: PARA EQUIPAR UM ITEM USE O COMANDO\n<ASH EQUIP ITEM NOME_DO_ITEM>\n"
-                           "[>>]: PARA RESETAR OS EQUIPAMENTOS USE O COMANDO\n<ASH EQUIP RESET>```")
+                           "[>>]: PARA RESETAR OS EQUIPAMENTOS USE O COMANDO\n<ASH EQUIP RESET>\n\n"
+                           "[>>]: PARA MAIS INFORMAÇÕES USE O COMANDO\n<ASH EQUIP INFO>```")
             if discord.File('equips.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
             await ctx.send(file=discord.File('equips.png'), delete_after=60.0)
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @equip.command(name='info')
+    async def _info(self, ctx):
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        if not update['rpg']['active']:
+            msg = "<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``"
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        if update['config']['battle']:
+            msg = '<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        equips_list = list()
+        for ky in self.bot.config['equips'].keys():
+            for k, v in self.bot.config['equips'][ky].items():
+                equips_list.append((k, v))
+
+        equipped_items = list()
+        for value in update['rpg']["equipped_items"].values():
+            for i in equips_list:
+                if i[0] == value:
+                    equipped_items.append(i[1])
+
+        if len(equipped_items) == 0:
+            msg = "VOCE NAO TEM ITENS EQUIPADOS NO MOMENTO, USE O COMANDO \"ASH I E\" PARA VER OS ITEMS PARA EQUIPAR," \
+                  " LOGO APOS USE O COMANDO \"ASH E I <NOME_DO_ITEM>\" PARA EQUIPAR O SEU ITEM."
+            return await ctx.send(f"<:confirmed:721581574461587496>│``ITENS EQUIPADOS EM VOCE:``\n```{msg}```")
+
+        msg = '```Markdown\n'
+        for item in equipped_items:
+            text = "DAMAGE_ABSORPTION"
+            msg += f"[>>]: {item['name'].upper()}\n<{text} = {item['armor']} RARITY = \"{item['rarity']}\">\n\n"
+        msg += "```"
+        await ctx.send(f"<:confirmed:721581574461587496>│``ITENS EQUIPADOS EM VOCE:``\n{msg}")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

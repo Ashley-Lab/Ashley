@@ -46,7 +46,7 @@ class OnReady(commands.Cog):
             date_ = date.localtime()
 
             # existe uma diferença de hora de +3 para o servidor da ashley
-            if date_[3] == 3 and date_[4] <= 10:
+            if date_[3] == 3 and date_[4] <= 15:
                 all_data = await self.bot.db.get_all_data("users")
                 for data in all_data:
                     update = data
@@ -57,7 +57,9 @@ class OnReady(commands.Cog):
                         minutes = int(int(last_verify - last_blocked) / 60)
                         if minutes > 4320:
                             update['security']['blocked'] = False
-                    except KeyError or AttributeError:
+                    except KeyError:
+                        pass
+                    except AttributeError:
                         pass
 
                     if not update['security']['blocked']:
