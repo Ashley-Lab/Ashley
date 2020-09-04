@@ -53,7 +53,7 @@ class HeadsOrTails(commands.Cog):
 
             update['inventory']['coins'] -= 50
             await self.bot.db.update_data(data, update, 'users')
-            reward = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark', 'Energy']
+            reward = ['crystal_fragment_light', 'crystal_fragment_energy', 'crystal_fragment_dark', 'Energy']
             change = randint(5, 100)
             if change == 50:
                 reward.append(choice(self.extra))

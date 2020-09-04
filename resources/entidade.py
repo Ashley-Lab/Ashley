@@ -5,15 +5,8 @@ from resources.utility import embed_creator
 from random import randint, choice
 from config import data
 
-classes = data['skills']
-equipments = data['equips']
-set_equips = data['set_equips']
+_class = data['skills']
 levels = [5, 10, 15, 20, 25]
-
-eq = dict()
-for ky in equipments.keys():
-    for kk, vv in equipments[ky].items():
-        eq[kk] = vv
 
 
 class Entity(object):
@@ -28,54 +21,25 @@ class Entity(object):
         self.atack = None
         self.chance = False
         self.is_player = is_player
-        self.armor = 0
-        self.set_e = list()
+        self.armor = self.db['armor']
         self.img = self.db['img']
         self.ln = self.db['lower_net']
 
         if self.is_player:
 
-            self.rate = [classes[self.db['class']]['rate']['life'], classes[self.db['class']]['rate']['mana']]
-            if self.db['level'] > 25:
-                self.rate[0] += classes[self.db['next_class']]['rate']['life']
-                self.rate[1] += classes[self.db['next_class']]['rate']['mana']
-
-            for k in self.status.keys():
-                if k in ["pdh", "hp", "mp"]:
-                    continue
-                self.status[k] += classes[self.db['class']]['modifier'][k]
-                if self.db['level'] > 25:
-                    self.status[k] += classes[self.db['next_class']]['modifier'][k]
-
-            for c in self.db['equipped_items'].keys():
-                if self.db['equipped_items'][c] is None:
-                    continue
-
-                self.set_e.append(str(c))
-
-                self.armor += eq[self.db['equipped_items'][c]]['armor']
-                for name in self.status.keys():
-                    try:
-                        self.status[name] += eq[self.db['equipped_items'][c]]['modifier'][name]
-                    except KeyError:
-                        pass
-
-            for kkk in set_equips.values():
-                if kkk['set'] == self.set_e:
-                    for name in self.status.keys():
-                        try:
-                            self.status[name] += kkk['modifier'][name]
-                        except KeyError:
-                            pass
-
             self.ik = []
             for c in range(5):
                 if self.lvl >= levels[c]:
-                    self.atacks[classes[self.db['next_class']][str(c)]['name']] = classes[self.db['next_class']][str(c)]
+                    self.atacks[_class[self.db['next_class']][str(c)]['name']] = _class[self.db['next_class']][str(c)]
                     self.ik.append(self.db['next_class'])
                 else:
-                    self.atacks[classes[self.db['class']][str(c)]['name']] = classes[self.db['class']][str(c)]
+                    self.atacks[_class[self.db['class']][str(c)]['name']] = _class[self.db['class']][str(c)]
                     self.ik.append(self.db['class'])
+
+            self.rate = [_class[self.db['class']]['rate']['life'], _class[self.db['class']]['rate']['mana']]
+            if self.db['level'] > 25:
+                self.rate[0] += _class[self.db['next_class']]['rate']['life']
+                self.rate[1] += _class[self.db['next_class']]['rate']['mana']
 
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
@@ -83,22 +47,7 @@ class Entity(object):
 
         else:
 
-            for k in self.status.keys():
-                if k in ["pdh", "hp", "mp"]:
-                    continue
-
-                if self.db['enemy']['level'] > 25:
-                    self.status[k] += randint(2, 4)
-
-                for sts in self.db['enemy']['equipped_items'].keys():
-                    if self.db['enemy']['equipped_items'][sts] is not None:
-                        if k in ["atk", "luk"]:
-                            self.status[k] += randint(1, 2)
-                        if k == "con":
-                            self.status[k] += randint(2, 4)
-
             self.atacks = self.db['atacks']
-            self.level_skill = self.db['level'] // 10 + randint(1, 5)
 
             if self.db['enemy']['level'] > 25:
                 self.rate = [(12 + self.db['level'] // 10), (12 + self.db['level'] // 10)]
@@ -107,6 +56,7 @@ class Entity(object):
 
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
+            self.level_skill = self.db['level'] // 10 + randint(1, 5)
 
     async def turn(self, enemy_info, bot, ctx):
         stun = False

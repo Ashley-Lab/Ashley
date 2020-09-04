@@ -233,13 +233,9 @@ class UserBank(commands.Cog):
                    m.author == ctx.author and m.content == '3'
 
         n_cost = [500, 75, 25]
-        if data['config']['vip']:
-            for i in range(len(n_cost)):
-                n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
 
-        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?``"
-                       f" ``Escolha uma dessas opções abaixo! Desconto no preço por ser`` **VIP: "
-                       f"{'-20%' if data['config']['vip'] else '-0%'}**\n"
+        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                       f" Escolha uma dessas opções abaixo!``\n"
                        f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
                        f"``Bonus de Chance:`` **+1%**\n"
                        f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
@@ -362,13 +358,9 @@ class UserBank(commands.Cog):
                    m.author == ctx.author and m.content == '3'
 
         n_cost = [1000, 150, 50]
-        if data['config']['vip']:
-            for i in range(len(n_cost)):
-                n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
 
-        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?``"
-                       f" ``Escolha uma dessas opções abaixo! Desconto no preço por ser`` **VIP: "
-                       f"{'-20%' if data['config']['vip'] else '-0%'}**\n"
+        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                       f" Escolha uma dessas opções abaixo!``\n"
                        f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
                        f"``Bonus de Chance:`` **+1%**\n"
                        f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
@@ -459,13 +451,9 @@ class UserBank(commands.Cog):
                    m.author == ctx.author and m.content == '3'
 
         n_cost = [2000, 300, 100]
-        if data['config']['vip']:
-            for i in range(len(n_cost)):
-                n_cost[i] = int(n_cost[i] - n_cost[i] * 0.2)
 
-        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?``"
-                       f" ``Escolha uma dessas opções abaixo! Desconto no preço por ser`` **VIP: "
-                       f"{'-20%' if data['config']['vip'] else '-0%'}**\n"
+        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                       f" Escolha uma dessas opções abaixo!``\n"
                        f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
                        f"``Bonus de Chance:`` **+1%**\n"
                        f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "

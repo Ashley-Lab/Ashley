@@ -16,11 +16,11 @@ class Booster(object):
                    "Secret": "secret"}
         self.rarity = {
             "Comum": [600, [0.01, 0.02, 0.07, 0.10, 0.20, 0.60]],
-            "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.30, 0.30]],
-            "Raro": [400, [0.03, 0.07, 0.15, 0.20, 0.25, 0.30]],
-            "Super Raro": [300, [0.04, 0.8, 0.20, 0.28, 0.20, 0.20]],
-            "Ultra Raro": [200, [0.05, 0.10, 0.25, 0.30, 0.15, 0.15]],
-            "Secret": [100, [0.10, 0.20, 0.30, 0.25, 0.10, 0.05]]
+            "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.50, 0.10]],
+            "Raro": [400, [0.03, 0.07, 0.10, 0.50, 0.20, 0.10]],
+            "Super Raro": [300, [0.04, 0.6, 0.30, 0.20, 0.20, 0.20]],
+            "Ultra Raro": [200, [0.05, 0.35, 0.15, 0.15, 0.15, 0.15]],
+            "Secret": [100, [0.25, 0.20, 0.25, 0.15, 0.10, 0.05]]
         }
 
         # booster configs
@@ -214,7 +214,7 @@ class Booster(object):
             update['box']['status']['active'] = False
             Empty = True
 
-        bonus_ = choice(['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark'])
+        bonus_ = choice(['crystal_fragment_light', 'crystal_fragment_energy', 'crystal_fragment_dark'])
         try:
             update['inventory'][bonus_] += 1
         except KeyError:

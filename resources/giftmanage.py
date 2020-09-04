@@ -58,7 +58,7 @@ async def open_gift(bot, gift):
 
         ethernyas = randint(250, 300)
         coins = randint(50, 100)
-        items = ['crystal_fragment_light', 'crystal_fragment_enery', 'crystal_fragment_dark', 'Energy']
+        items = ['crystal_fragment_light', 'crystal_fragment_energy', 'crystal_fragment_dark', 'Energy']
 
         rare = None
         chance = randint(1, 100)

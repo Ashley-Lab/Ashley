@@ -85,8 +85,8 @@ class Helper(commands.Cog):
             embed.add_field(name="**Estado dos comandos**",
                             value=">>> Todos os comandos possuem um estado para que seja fácil entender se estão "
                                   "disponíveis ou não para uso.\nAbaixo está uma lista com referências aos diversos "
-                                  "estados, que aparecerão antes do nome dos comandos.\n\n`🟢  Disponível           "
-                                  "   `\n`🟡  Com possíveis problemas `\n`🔴  Desativado              `\n`🟣  VIP  "
+                                  "estados, que aparecerão antes do nome dos comandos.\n\n🟢  `Disponível           "
+                                  "   `\n🟡  `Com possíveis problemas `\n🔴  `Desativado              `\n🟣  `VIP  "
                                   "                   `", inline=False)
 
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -168,8 +168,8 @@ class Helper(commands.Cog):
             embed.add_field(name="**Estado dos comandos**",
                             value=">>> Todos os comandos possuem um estado para que seja fácil entender se estão "
                                   "disponíveis ou não para uso.\nAbaixo está uma lista com referências aos diversos "
-                                  "estados, que aparecerão antes do nome dos comandos.\n\n`🟢  Disponível           "
-                                  "   `\n`🟡  Com possíveis problemas `\n`🔴  Desativado              `\n`🟣  VIP  "
+                                  "estados, que aparecerão antes do nome dos comandos.\n\n🟢  `Disponível           "
+                                  "   `\n🟡  `Com possíveis problemas `\n🔴  `Desativado              `\n🟣  `VIP  "
                                   "                   `", inline=False)
 
             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -276,7 +276,7 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos de PET", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url=link)
             embed.add_field(name="🐻",
-                            value=f"`🔴` `pet     ` ...\n")  # {self.st[76]}
+                            value=f"🔴 `pet     ` ...\n")  # {self.st[76]}
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
             await botmsg[user.id].edit(embed=embed)
             await self.add_reactions(user)
@@ -347,8 +347,8 @@ class Helper(commands.Cog):
             embed.set_author(name="Ashley — Comandos de Staff", icon_url=self.bot.user.avatar_url)
             embed.set_thumbnail(url="http://mieinfo.com/wp-content/uploads/2013/08/policia-mie.png")
             embed.add_field(name="👮🏽‍♂️",
-                            value=f"`🔴` `reception      ` ...\n"  # {self.st[94]}
-                                  f"`🔴` `door           ` ...\n"  # {self.st[48]}
+                            value=f"🔴 `reception      ` ...\n"  # {self.st[94]}
+                                  f"🔴 `door           ` ...\n"  # {self.st[48]}
                                   f"{self.st[39]} `source         ` Olhe meu codigo fonte.\n"
                                   f"{self.st[32]} `announce       ` Mande um anuncio para eu divulgar.\n"
                                   f"{self.st[1]} `staff delete   ` Exclua ate as ultimas 100 mensagens.\n"

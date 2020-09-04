@@ -19,54 +19,7 @@ class Battle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.m = self.bot.config['battle']['monsters']
-
-        self.w_s = {
-            "assassin_1": 50,
-            "assassin_2": 25,
-            "assassin_3": 20,
-            "assassin_4": 5,
-            "assassin_5": 1,
-
-            "necromancer_1": 50,
-            "necromancer_2": 25,
-            "necromancer_3": 20,
-            "necromancer_4": 5,
-            "necromancer_5": 1,
-
-            "paladin_1": 50,
-            "paladin_2": 25,
-            "paladin_3": 20,
-            "paladin_4": 5,
-            "paladin_5": 1,
-
-            "priest_1": 50,
-            "priest_2": 25,
-            "priest_3": 20,
-            "priest_4": 5,
-            "priest_5": 1,
-
-            "warlock_1": 50,
-            "warlock_2": 25,
-            "warlock_3": 20,
-            "warlock_4": 5,
-            "warlock_5": 1,
-
-            "warrior_1": 50,
-            "warrior_2": 25,
-            "warrior_3": 20,
-            "warrior_4": 5,
-            "warrior_5": 1,
-
-            "wizard_1": 50,
-            "wizard_2": 25,
-            "wizard_3": 20,
-            "wizard_4": 5,
-            "wizard_5": 1,
-
-            "01": 35,
-            "02": 35,
-            "03": 35
-        }
+        self.w_s = self.bot.config['attribute']['chance_weapon']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -97,7 +50,7 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        update['inventory']['coins'] -= 50
+        update['inventory']['coins'] -= 100
         update['config']['battle'] = True
         await self.bot.db.update_data(data, update, 'users')
 
@@ -108,10 +61,46 @@ class Battle(commands.Cog):
             return await ctx.send(embed=embed)
 
         # configuração do player
-        db_player = dict(data['rpg'])
-        db_player['name'] = ctx.author.name
+        db_player = data['rpg']
         db_player["img"] = ctx.author.avatar_url_as(format="png")
-        player = Entity(db_player, True)
+        db_player['name'] = ctx.author.name
+        db_player["armor"] = 0
+        set_e = list()
+
+        # bonus status player
+        eq = dict()
+        for ky in self.bot.config["equips"].keys():
+            for kk, vv in self.bot.config["equips"][ky].items():
+                eq[kk] = vv
+
+        for k in db_player["status"].keys():
+            try:
+                db_player["status"][k] += self.bot.config["skills"][db_player['class']]['modifier'][k]
+                if db_player['level'] > 25:
+                    db_player["status"][k] += self.bot.config["skills"][db_player['next_class']]['modifier'][k]
+            except KeyError:
+                pass
+
+        for c in db_player['equipped_items'].keys():
+            if db_player['equipped_items'][c] is None:
+                continue
+
+            set_e.append(str(c))
+
+            db_player["armor"] += eq[db_player['equipped_items'][c]]['armor']
+            for name in db_player["status"].keys():
+                try:
+                    db_player["status"][name] += eq[db_player['equipped_items'][c]]['modifier'][name]
+                except KeyError:
+                    pass
+
+        for kkk in self.bot.config["set_equips"].values():
+            if kkk['set'] == set_e:
+                for name in db_player["status"].keys():
+                    try:
+                        db_player["status"][name] += kkk['modifier'][name]
+                    except KeyError:
+                        pass
 
         # configuração do monstro
         lvl = data['rpg']['level']
@@ -119,7 +108,22 @@ class Battle(commands.Cog):
         min_, max_ = lvl - dif if lvl - dif > 0 else 0, lvl + dif
         db_monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
         db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
-        db_monster['enemy'] = data['rpg']
+        db_monster['enemy'] = db_player
+        db_monster["armor"] = 0
+
+        # bonus status monster
+        for k in db_monster["status"].keys():
+            if db_player['level'] > 25:
+                db_monster["status"][k] += randint(2, 4)
+            for sts in db_player['equipped_items'].keys():
+                if db_player['equipped_items'][sts] is not None:
+                    if k in ["atk", "luk"]:
+                        db_monster["status"][k] += randint(1, 2)
+                    if k == "con":
+                        db_monster["status"][k] += randint(2, 4)
+
+        # criando as entidades...
+        player = Entity(db_player, True)
         monster = Entity(db_monster, False)
 
         # durante a batalha
@@ -255,7 +259,7 @@ class Battle(commands.Cog):
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
 
-            if change < 25:
+            if change < 50:
                 if data['rpg']['vip']:
                     reward = [choice(db_monster['reward']) for _ in range(8)]
                 else:
@@ -275,7 +279,7 @@ class Battle(commands.Cog):
                         reward[0] = choice(bonus)
                         reward[1] = choice(bonus)
 
-                if change < 15:
+                if change < 25:
                     if data['rpg']['vip']:
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
@@ -289,7 +293,7 @@ class Battle(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if change < 10 and player.status['hp'] > 0 and db_player['level'] > 25:
+        if change < 15 and player.status['hp'] > 0 and db_player['level'] > 25:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():

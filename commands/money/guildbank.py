@@ -137,7 +137,7 @@ class GuildBank(commands.Cog):
 
         items = {
             'crystal_fragment_light': randint(10, 25),
-            'crystal_fragment_enery': randint(10, 25),
+            'crystal_fragment_energy': randint(10, 25),
             'crystal_fragment_dark': randint(10, 25)
         }
 

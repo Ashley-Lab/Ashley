@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from config import data as config
 from asyncio import sleep
-from resources.utility import include, get_content
+from resources.utility import include
 
 
 class SystemMessage(commands.Cog):
@@ -33,8 +33,8 @@ class SystemMessage(commands.Cog):
                                         perms = ctx.channel.permissions_for(ctx.me)
                                         if not perms.send_messages or not perms.read_messages:
                                             return
-
-                                        await channel_.send(get_content(message.content))
+                                        msg = message.content.replace("here", "[censored]")
+                                        await channel_.send(msg.replace("everyone", "[censored]"))
                             except discord.Forbidden:
                                 pass
                             await sleep(0.5)

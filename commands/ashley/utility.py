@@ -188,19 +188,19 @@ class UtilityClass(commands.Cog):
         embed = discord.Embed(color=self.bot.color)
 
         embed.add_field(name="-== STATUS DO USUARIO ==-", inline=False,
-                        value=f"`{'🟢' if a1 else '🔴'}` `Casando` Se for verde esta ativado.\n"
-                              f"`{'🟢' if a2 else '🔴'}` `Jogando` Se for verde esta ativado.\n"
-                              f"`{'🟢' if a3 else '🔴'}` `Batalhando` Se for verde esta ativado.\n"
-                              f"`{'🟢' if a4 else '🔴'}` `Comprando` Se for verde esta ativado.\n"
-                              f"`{'🟢' if a5 is not None else '🔴'}` `Provincia` Se for verde esta ativado.")
+                        value=f"{'🟢' if a1 else '🔴'} `Casando` Se for verde esta ativado.\n"
+                              f"{'🟢' if a2 else '🔴'} `Jogando` Se for verde esta ativado.\n"
+                              f"{'🟢' if a3 else '🔴'} `Batalhando` Se for verde esta ativado.\n"
+                              f"{'🟢' if a4 else '🔴'} `Comprando` Se for verde esta ativado.\n"
+                              f"{'🟢' if a5 is not None else '🔴'} `Provincia` Se for verde esta ativado.")
 
         embed.add_field(name="-== COMANDOS DIARIOS ==-", inline=False,
-                        value=f"`{'🟢' if coin else '🔴'}` `Coin` Se tiver verde está disponivel pra usar.\n"
-                              f"`{'🟢' if work else '🔴'}` `Work` Se tiver verde está disponivel pra usar.\n"
-                              f"`{'🟢' if rec else '🔴'}` `Rec` Se tiver verde está disponivel pra usar.\n"
-                              f"`{'🟢' if energy else '🔴'}` `Energy` Se tiver verde está disponivel pra usar.\n"
-                              f"`{'🟢' if reward else '🔴'}` `Reward` Se tiver verde está disponivel pra usar.\n"
-                              f"`{'🟢' if vip else '🔴'}` `Vip` Se tiver verde está disponivel pra usar.")
+                        value=f"{'🟢' if coin else '🔴'} `Coin` Se tiver verde está disponivel pra usar.\n"
+                              f"{'🟢' if work else '🔴'} `Work` Se tiver verde está disponivel pra usar.\n"
+                              f"{'🟢' if rec else '🔴'} `Rec` Se tiver verde está disponivel pra usar.\n"
+                              f"{'🟢' if energy else '🔴'} `Energy` Se tiver verde está disponivel pra usar.\n"
+                              f"{'🟢' if reward else '🔴'} `Reward` Se tiver verde está disponivel pra usar.\n"
+                              f"{'🟢' if vip else '🔴'} `Vip` Se tiver verde está disponivel pra usar.")
 
         embed.add_field(name="--== COMANDOS USADOS ==--", inline=False,
                         value=f"``{user}{(' ' * (5 - len(str(user))))}`` {s1}\n"

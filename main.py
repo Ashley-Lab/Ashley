@@ -312,6 +312,7 @@ class Ashley(commands.AutoShardedBot):
                 # -----------------------------------------------------------------------------------------
                 #                                  INICIO DO MACRO SYSTEM
                 # -----------------------------------------------------------------------------------------
+                data_ = date_format(dt.now())
                 m_last_verify = 0
                 last_command, last_verify, last_command, date_now = None, None, None, dt.today()
                 if update_user['security']['last_verify'] is not None:
@@ -347,7 +348,7 @@ class Ashley(commands.AutoShardedBot):
                                     if not update_user['security']['warn'][str(percent)]:
                                         warn = True
                                 if update_user['security']['last_channel'] is not None and warn:
-                                    channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                    channel_ = self.get_channel(update_user['security']['last_channel'])
                                     if channel_ is not None:
                                         cmds = update_user['security']['commands_today']
                                         pe = update_user['security']['commands_today'] * 100 / 2500
@@ -373,13 +374,13 @@ class Ashley(commands.AutoShardedBot):
                         except KeyError:
                             update_user['security']['strikes_to_ban'] = 1
 
-                        channel_ = self.bot.get_channel(737467830571761786)
-                        user = self.bot.get_user(data["user_id"])
-                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO MACRO E'
-                                            f' FOI BLOQUEADO\nNa Data e Hora: {data_}```')
+                        channel_ = self.get_channel(737467830571761786)
+                        user = self.get_user(update_user["user_id"])
+                        await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO'
+                                            f' MACRO E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
                         try:
                             if update_user['security']['last_channel'] is not None:
-                                channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                channel_ = self.get_channel(update_user['security']['last_channel'])
                                 if channel_ is not None:
                                     await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
                                                         f'POIS EXTRAPOLOU OS LIMITES HOJE``\n<a:red:525032764211200002>'
@@ -392,7 +393,7 @@ class Ashley(commands.AutoShardedBot):
                             pass
 
                     if update_user['security']['strikes_to_ban'] > 10:
-                        answer = await self.bot.ban_(update_user['user_id'], "BANIDO POR USAR MACRO!")
+                        answer = await self.ban_(update_user['user_id'], "BANIDO POR USAR MACRO!")
                         if answer:
                             embed = discord.Embed(
                                 color=discord.Color.red(),
@@ -400,7 +401,7 @@ class Ashley(commands.AutoShardedBot):
                                             f' **SE QUISER CONTESTAR ENTRE NO MEU SERVIDOR DE SUPORTE!**')
                             try:
                                 if update_user['security']['last_channel'] is not None:
-                                    channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                    channel_ = self.get_channel(update_user['security']['last_channel'])
                                     if channel_ is not None:
                                         await channel_.send(embed=embed)
                             except KeyError:
@@ -414,14 +415,14 @@ class Ashley(commands.AutoShardedBot):
 
                         update_user['security']['strikes'] += 1
                         update_user['security']['commands'] = 0
-                        channel_ = self.bot.get_channel(737467830571761786)
-                        user = self.bot.get_user(data["user_id"])
-                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} FOI DETECTADO POSSIVELMENTE USANDO'
-                                            f' MACRO\nNa Data e Hora: {data_}```')
+                        channel_ = self.get_channel(737467830571761786)
+                        user = self.get_user(update_user["user_id"])
+                        await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} FOI DETECTADO POSSIVELMENTE'
+                                            f' USANDO MACRO\nNa Data e Hora: {data_}```')
                         try:
                             if update_user['security']['strikes'] < 11:
                                 if update_user['security']['last_channel'] is not None:
-                                    channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                    channel_ = self.get_channel(update_user['security']['last_channel'])
                                     if channel_ is not None:
                                         await channel_.send(f'<a:red:525032764211200002>│``EI TENHA CALMA VOCE TA '
                                                             f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER'
@@ -440,14 +441,14 @@ class Ashley(commands.AutoShardedBot):
 
                     if update_user['security']['strikes'] == 11:
                         update_user['security']['status'] = not update_user['security']['status']
-                        channel_ = self.bot.get_channel(737467830571761786)
-                        user = self.bot.get_user(data["user_id"])
-                        await channel_.send(f'```O USUARIO {data["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO MACRO'
-                                            f' E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
+                        channel_ = self.get_channel(737467830571761786)
+                        user = self.get_user(update_user["user_id"])
+                        await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO '
+                                            f'MACRO E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
 
                         try:
                             if update_user['security']['last_channel'] is not None:
-                                channel_ = self.bot.get_channel(update_user['security']['last_channel'])
+                                channel_ = self.get_channel(update_user['security']['last_channel'])
                                 if channel_ is not None:
                                     await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO ATE AS 0 '
                                                         f'HORAS DO DIA DE HOJE..`` <a:red:525032764211200002>'
@@ -612,7 +613,7 @@ if __name__ == "__main__":
     bot = Ashley(command_prefix=['ash.', 'ash '], description=description_ashley, pm_help=True)
     bot.remove_command('help')
     cont = 0
-    emojis = {"ON": "``🟢``", "IDLE": "``🟡``", "OFF": "``🔴``", "VIP": "``🟣``"}
+    emojis = {"ON": "🟢", "IDLE": "🟡", "OFF": "🔴", "VIP": "🟣"}
 
     print("\033[1;35m( >> ) | Iniciando...\033[m\n")
     print("\033[1;35m( >> ) | Iniciando carregamento de extensões...\033[m")

@@ -56,6 +56,7 @@ class OnMemberJoin(commands.Cog):
                     role = discord.utils.find(lambda r: r.name == "</Members>", member.guild.roles)
                     await member.add_roles(role)
                     data = await self.bot.db.get_data("user_id", member.id, "users")
+                    update = data
                     if data is not None:
                         if len(data['config']['roles']) != 0:
                             cargos = member.roles
@@ -69,6 +70,11 @@ class OnMemberJoin(commands.Cog):
                                 return
                             return await channel_.send(f"<a:blue:525032762256785409>│{member.mention} ``SAIR SEM DAR "
                                                        f"RESPAWN NAO É A MANEIRA CORRETA DE SAIR DO SERVIDOR``")
+
+                        if data['config']['provinces'] is not None:
+                            update['config']['provinces'] = None
+                            await self.bot.db.update_data(data, update, "users")
+
                         data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
                         channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
                         if channel_ is None:
