@@ -31,7 +31,9 @@ class MeltedClass(commands.Cog):
         self.cost = {
             "melted_artifact": 1,
             "unsealed_stone": 2,
-            "Crystal_of_Energy": 20,
+            "Discharge_Crystal": 10,
+            "Acquittal_Crystal": 10,
+            "Crystal_of_Energy": 10
         }
 
     @check_it(no_pm=True)
@@ -78,7 +80,7 @@ class MeltedClass(commands.Cog):
 
         if len(cost) > 0:
             msg = f"\n".join([f"{self.i[key][0]} **{key.upper()}**" for key in cost.keys()])
-            return await ctx.send(f"<:alert:739251822920728708>│``Lhe faltam esses itens para derreter um arfetafo:``"
+            return await ctx.send(f"<:alert:739251822920728708>│``Lhe faltam esses itens para tirar o selo do item:``"
                                   f"\n{msg}\n``OLHE SEU INVENTARIO E VEJA A QUANTIDADE QUE ESTÁ FALTANDO.``")
 
         def check_option(m):

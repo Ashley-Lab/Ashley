@@ -24,16 +24,39 @@ class UserBank(commands.Cog):
         self.bronze = 0
 
         self.items = {
-            "Fichas": 175,
-            "Crystal Fragment Light": 435,
-            "Crystal Fragment Energy": 453,
-            "Crystal Fragment Dark": 445,
-            "Energy": 370,
-            "Melted Bone": 190,
-            "Life Crystal": 210,
-            "Death Blow": 250,
-            "Stone of Soul": 230,
-            "Vital Force": 275,
+            "Fichas": 65,
+
+            "Crystal Fragment Light": 154,
+            "Crystal Fragment Energy": 167,
+            "Crystal Fragment Dark": 178,
+
+            "Energy": 200,
+            "Melted Bone": 212,
+            "Life Crystal": 211,
+            "Death Blow": 221,
+            "Stone of Soul": 222,
+            "Vital Force": 213,
+
+            "stone_crystal_white": 312,
+            "stone_crystal_red": 345,
+            "stone_crystal_green": 354,
+            "stone_crystal_blue": 364,
+            "stone_crystal_yellow": 365,
+
+            "dust_wind": 432,
+            "dust_water": 412,
+            "dust_light": 468,
+            "dust_fire": 454,
+            "dust_earth": 444,
+            "dust_dark": 468,
+
+            "stone_wind": 563,
+            "stone_water": 543,
+            "stone_light": 525,
+            "stone_fire": 512,
+            "stone_earth": 532,
+            "stone_dark": 587,
+
         }
 
     @staticmethod

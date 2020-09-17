@@ -22,12 +22,14 @@ class IdentifierClass(commands.Cog):
 
         self.cost = {
             "?-Bollash": 1,
+            "Discharge_Crystal": 1,
+            "Acquittal_Crystal": 1,
             "Crystal_of_Energy": 1,
-            "Melted_Bone": 2,
-            "Life_Crystal": 3,
-            "Death_Blow": 2,
-            "Stone_of_Soul": 3,
-            "Vital_Force": 2,
+            "Melted_Bone": 30,
+            "Life_Crystal": 30,
+            "Death_Blow": 30,
+            "Stone_of_Soul": 30,
+            "Vital_Force": 30,
         }
 
     @check_it(no_pm=True)

@@ -466,7 +466,7 @@ class Ashley(commands.AutoShardedBot):
 
                 if isinstance(ctx.author, discord.Member) and data_user is not None:
                     if str(ctx.command) not in self.no_panning:
-                        msg = await self.db.add_money(ctx, 6, True)
+                        msg = await self.db.add_money(ctx, randint(6, 12), True)
                         perms = ctx.channel.permissions_for(ctx.me)
                         if perms.send_messages and perms.read_messages:
                             await ctx.send(f"``Por usar um comando, {_name} tambem ganhou`` {msg}", delete_after=5.0)

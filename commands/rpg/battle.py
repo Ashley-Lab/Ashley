@@ -38,10 +38,10 @@ class Battle(commands.Cog):
             return await ctx.send(embed=embed)
 
         try:
-            if data['inventory']['coins'] < 100:
+            if data['inventory']['coins'] < 50:
                 embed = discord.Embed(
                     color=self.bot.color,
-                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 100 FICHAS PARA BATALHAR!``\n'
+                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 50 FICHAS PARA BATALHAR!``\n'
                                 '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
                 return await ctx.send(embed=embed)
         except KeyError:
@@ -50,7 +50,7 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        update['inventory']['coins'] -= 100
+        update['inventory']['coins'] -= 50
         update['config']['battle'] = True
         await self.bot.db.update_data(data, update, 'users')
 
