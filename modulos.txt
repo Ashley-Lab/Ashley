@@ -102,4 +102,5 @@ commands.rpg.rpg_start
 commands.rpg.identifier
 commands.rpg.unsealed
 commands.rpg.merge
+commands.rpg.mine
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

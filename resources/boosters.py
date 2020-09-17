@@ -25,6 +25,8 @@ class Booster(object):
 
         # booster configs
         self.booster_choice = {"Comum": 0, "Incomum": 0, "Raro": 0, "Super Raro": 0, "Ultra Raro": 0, "Secret": 0}
+        # rarity configs
+        self.rarity_choice = {"Comum": 25, "Incomum": 25, "Raro": 20, "Super Raro": 15, "Ultra Raro": 10, "Secret": 5}
 
         # contadores de itens
         self.secret = 0
@@ -66,7 +68,10 @@ class Booster(object):
 
     @property
     def create_box(self):
-        rarity = choice(list(self.rarity.keys()))
+        rarity_choice = []
+        for i_, amount in self.rarity_choice.items():
+            rarity_choice += [i_] * amount
+        rarity = choice(rarity_choice)
         size = self.rarity[rarity][0]
         self.reset_counts()
         self.define_limit(self.rarity[rarity])
@@ -214,31 +219,45 @@ class Booster(object):
             update['box']['status']['active'] = False
             Empty = True
 
-        bonus_ = choice(['crystal_fragment_light', 'crystal_fragment_energy', 'crystal_fragment_dark'])
-        try:
-            update['inventory'][bonus_] += 1
-        except KeyError:
-            update['inventory'][bonus_] = 1
+        bonus_1 = choice(['crystal_fragment_light', 'crystal_fragment_energy', 'crystal_fragment_dark'])
+        bonus_2 = choice(["Melted_Bone", "Life_Crystal", "Death_Blow", "Stone_of_Soul", "Vital_Force", "Energy"])
+        quant_1 = randint(1, 3)
+        quant_2 = randint(1, 3)
+        quant_3 = randint(1, 3)
 
         try:
-            update['inventory'][self.key_item] += 1
+            update['inventory'][self.key_item] += quant_1
         except KeyError:
-            update['inventory'][self.key_item] = 1
+            update['inventory'][self.key_item] = quant_1
+
+        try:
+            update['inventory'][bonus_1] += quant_2
+        except KeyError:
+            update['inventory'][bonus_1] = quant_2
+
+        try:
+            update['inventory'][bonus_2] += quant_3
+        except KeyError:
+            update['inventory'][bonus_2] = quant_3
 
         await bot.db.update_data(data, update, 'users')
 
         if Empty:
-            reward = list()
             op = ['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur']
-            reward.append(choice(op))
+            reward = [choice(op), choice(op), choice(op)]
             response = await bot.db.add_reward(ctx, reward)
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
                            f"``COMO PREMIO VOCE ACABA DE GANHAR UM ITEM:`` ✨ **HEROIC** ✨\n{response.upper()}")
 
         if rarity.lower() in ["ultra raro", "secret"]:
-            return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``O ITEM "
-                                  f"``{item['data'][0]} **{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n"
-                                  f"``ELE TEM O TIER`` ✨ **{rarity.upper()}** ✨ "
-                                  f"``+1`` {self.items[bonus_][0]} **{self.items[bonus_][1]}**")
-        await ctx.send(f"``O ITEM ``{item['data'][0]} **{item['data'][1]}** ``ENCONTRA-SE NO SEU INVENTÁRIO!``\n``ELE "
-                       f"TEM O TIER`` **{rarity.upper()}** ``+1`` {self.items[bonus_][0]} **{self.items[bonus_][1]}**")
+            return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE TIROU:``\n"
+                                  f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
+                                  f"``ELE TEM O TIER`` ✨ **{rarity.upper()}** ✨\n"
+                                  f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
+                                  f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**")
+
+        await ctx.send(f"<:mito:745375589145247804>│``VOCE TIROU:``\n"
+                       f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
+                       f"``ELE TEM O TIER`` **{rarity.upper()}**\n"
+                       f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
+                       f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**")
