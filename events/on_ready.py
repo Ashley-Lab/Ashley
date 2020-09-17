@@ -243,6 +243,7 @@ class OnReady(commands.Cog):
             update['config']['playing'] = False
             update['config']['battle'] = False
             update['config']['buying'] = False
+            update['config']['mine'] = False
             update['user']['marrieding'] = False
             await self.bot.db.update_data(data, update, "users")
         print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita com sucesso!\33[m')

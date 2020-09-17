@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-from random import randint
+from random import randint, choice
 from asyncio import sleep
 
 
@@ -11,6 +11,10 @@ class MineClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.items = self.bot.items
+        self.reward = ['sapphire', 'sapphire', 'sapphire', 'sapphire', 'sapphire', 'sapphire',
+                       'sapphire', 'sapphire', 'sapphire', 'sapphire', 'sapphire', 'sapphire',
+                       'ruby', 'ruby', 'ruby', 'ruby', 'ruby', 'ruby', 'ruby', 'ruby',
+                       'emerald', 'emerald', 'emerald', 'emerald', 'diamond', 'diamond']
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -22,13 +26,16 @@ class MineClass(commands.Cog):
         update = data
 
         try:
-            if data['inventory']['Energy']:
+            if update['inventory']['Energy']:
                 pass
         except KeyError:
             embed = discord.Embed(
                 color=self.bot.color,
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM ENERGIA!``')
             return await ctx.send(embed=embed)
+
+        if update['config']['mine']:
+            return await ctx.send('<:alert:739251822920728708>│``VOCÊ JA ESTÁ MINERANDO...``')
 
         if update['inventory']['Energy'] < 25:
             return await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 25 ENERGIAS PARA MINERAR``')
@@ -37,169 +44,16 @@ class MineClass(commands.Cog):
         if update['inventory']['Energy'] < 1:
             del update['inventory']['Energy']
 
+        update['config']['mine'] = True
+        await self.bot.db.update_data(data, update, 'users')
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
         quant = 0
 
-        text = "Minerando...\n----------.----------.----------.----------.----------"
+        text = "Minerando 0%...\n``--------------------------------------------------``"
         embed = discord.Embed(color=self.bot.color, description=text)
         msg = await ctx.send(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==--------.----------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n====------.----------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n======----.----------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n========--.----------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.----------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        # ========================================================================================
-        chance = randint(1, 100)
-        if chance < 20:
-            if chance == 1:
-                quant += 2
-                item = 2
-            else:
-                quant += 1
-                item = 1
-
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE MINEROU:``\n"
-                           f"``+{item}`` {self.items['sapphire'][0]} **{self.items['sapphire'][1]}**")
-
-            try:
-                update['inventory']['sapphire'] += item
-            except KeyError:
-                update['inventory']['sapphire'] = item
-        # ========================================================================================
-
-        text = "Minerando...\n==========.==--------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.====------.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.======----.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.========--.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.----------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        # ========================================================================================
-        chance = randint(1, 100)
-        if chance < 15:
-            if chance == 1:
-                quant += 2
-                item = 2
-            else:
-                quant += 1
-                item = 1
-
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE MINEROU:``\n"
-                           f"``+{item}`` {self.items['ruby'][0]} **{self.items['ruby'][1]}**")
-
-            try:
-                update['inventory']['ruby'] += item
-            except KeyError:
-                update['inventory']['ruby'] = item
-        # ========================================================================================
-
-        text = "Minerando...\n==========.==========.==--------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.====------.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.======----.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.========--.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.----------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        # ========================================================================================
-        chance = randint(1, 100)
-        if chance < 10:
-            if chance == 1:
-                quant += 2
-                item = 2
-            else:
-                quant += 1
-                item = 1
-
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE MINEROU:``\n"
-                           f"``+{item}`` {self.items['emerald'][0]} **{self.items['emerald'][1]}**")
-
-            try:
-                update['inventory']['emerald'] += item
-            except KeyError:
-                update['inventory']['emerald'] = item
-        # ========================================================================================
-
-        text = "Minerando...\n==========.==========.==========.==--------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.====------.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.======----.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.========--.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.==========.----------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
+        await sleep(3)
 
         # ========================================================================================
         chance = randint(1, 100)
@@ -211,48 +65,261 @@ class MineClass(commands.Cog):
                 quant += 1
                 item = 1
 
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE MINEROU:``\n"
-                           f"``+{item}`` {self.items['diamond'][0]} **{self.items['diamond'][1]}**")
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
             try:
-                update['inventory']['diamond'] += item
+                update['inventory'][reward] += item
             except KeyError:
-                update['inventory']['diamond'] = item
+                update['inventory'][reward] = item
         # ========================================================================================
 
-        text = "Minerando...\n==========.==========.==========.==========.==--------"
+        text = "Minerando 10%...\n``█████---------------------------------------------``"
         embed = discord.Embed(color=self.bot.color, description=text)
         await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.==========.====------"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.==========.======----"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "Minerando...\n==========.==========.==========.==========.========--"
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
-
-        text = "MINERADO!\n==========.==========.==========.==========.=========="
-        embed = discord.Embed(color=self.bot.color, description=text)
-        await msg.edit(embed=embed)
-        await sleep(0.2)
+        await sleep(3)
 
         # ========================================================================================
-        if quant > 0:
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE MINEROU:``\n"
-                           f"``{quant}`` **ITENS NO TOTAL.**")
-        else:
-            await ctx.send(f"<:confirmed:721581574461587496>│``VOCE MINEROU:``\n"
-                           f"``{quant}`` **ITENS NO TOTAL.** ``TENTE NOVAMENTE...``")
+        chance = randint(1, 100)
+        if chance < 10:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
         # ========================================================================================
+
+        text = "Minerando 20%...\n``██████████----------------------------------------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 15:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 30%...\n``███████████████-----------------------------------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 20:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 40%...\n``████████████████████------------------------------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 25:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 50%...\n``█████████████████████████-------------------------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 30:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 60%...\n``██████████████████████████████--------------------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 35:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 70%...\n``███████████████████████████████████---------------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 40:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 80%...\n``████████████████████████████████████████----------``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 45:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "Minerando 90%...\n``█████████████████████████████████████████████-----``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        chance = randint(1, 100)
+        if chance < 50:
+            if chance == 1:
+                quant += 2
+                item = 2
+            else:
+                quant += 1
+                item = 1
+
+            reward = choice(self.reward)
+
+            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
+                           f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
+
+            try:
+                update['inventory'][reward] += item
+            except KeyError:
+                update['inventory'][reward] = item
+        # ========================================================================================
+
+        text = "**MINERADO 100%!**\n``██████████████████████████████████████████████████``"
+        embed = discord.Embed(color=self.bot.color, description=text)
+        await msg.edit(embed=embed)
+        await sleep(3)
+
+        # ========================================================================================
+        await ctx.send(f"<:confirmed:721581574461587496>│{ctx.author.name} ``VOCE MINEROU:``\n"
+                       f"``{quant}`` **ITENS NO TOTAL.**")
+        # ========================================================================================
+        update['config']['mine'] = False
         await self.bot.db.update_data(data, update, 'users')
 
 
