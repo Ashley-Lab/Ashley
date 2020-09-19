@@ -104,4 +104,5 @@ commands.rpg.unsealed
 commands.rpg.merge
 commands.rpg.mine
 commands.rpg.jewel
+commands.rpg.trade
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

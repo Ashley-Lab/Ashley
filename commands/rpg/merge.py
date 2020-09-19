@@ -129,6 +129,7 @@ MAX_LEVEL = ['assassin_5', 'necromancer_5', 'paladin_5', 'priest_5', 'warlock_5'
 class MergeClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.i = self.bot.items
 
         self.cost = {
             "solution_agent_green": 3,
@@ -236,7 +237,6 @@ class MergeClass(commands.Cog):
         if answer.content == "0":
             await msg.delete()
             return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
-        await msg.delete()
 
         await sleep(2)
         await msg.edit(content=f"<a:loading:520418506567843860>│``removendo os itens de custo e os equipamentos da sua"
@@ -260,6 +260,7 @@ class MergeClass(commands.Cog):
 
         await msg.edit(content=f"<:confirmed:721581574461587496>│``itens retirados com sucesso...``")
         await sleep(2)
+        await msg.delete()
 
         await self.bot.db.update_data(data, update, 'users')
         await ctx.send(f"<:confirmed:721581574461587496>│``O ITEM {item.upper()} FOI FUNDIDO COM SUCESSO, "
