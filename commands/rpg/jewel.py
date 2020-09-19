@@ -143,7 +143,7 @@ class JewelClass(commands.Cog):
             list_items += [i_] * amount
         armor_or_shield = choice(list_items)
 
-        await msg.edit(content=f"<:confirmed:721581574461587496>│``jois sorteada com sucesso...``")
+        await msg.edit(content=f"<:confirmed:721581574461587496>│``joia sorteada com sucesso...``")
         await sleep(2)
 
         rew = None

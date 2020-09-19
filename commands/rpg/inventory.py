@@ -108,7 +108,7 @@ class InventoryClass(commands.Cog):
                            "[>>]: PARA MAIS INFORMAÇÕES USE O COMANDO\n<ASH EQUIP INFO>```")
             if discord.File('equips.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
-            await ctx.send(file=discord.File('equips.png'), delete_after=60.0)
+            await ctx.send(file=discord.File('equips.png'))
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

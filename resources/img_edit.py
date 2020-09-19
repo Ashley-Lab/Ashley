@@ -510,11 +510,16 @@ def equips(data_s):
     # add equips to img
     for k in mapped["equipped"].keys():
         if data_s['equipped'][k] is not None:
-            e_type = "armor" if k != "sword" else "weapon"
-            if k != "shield" and k != "sword":
+            armor = ['shoulder', 'breastplate', 'gloves', 'leggings', 'boots', 'shield']
+            jewel = ['necklace', 'earring', 'ring']
+            e_type = "armor" if k in armor else "jewel" if k in jewel else "weapon" if k == "sword" else "consumable"
+
+            if k in armor:
                 f_t = f"{eq[data_s['equipped'][k]]['rarity']}/{data_s['equipped'][k]}"
-            elif k == "sword":
+
+            elif k == "sword" or k in jewel:
                 f_t = f"{data_s['equipped'][k]}"
+
             else:
                 f_t = f"shield/{data_s['equipped'][k]}"
 
