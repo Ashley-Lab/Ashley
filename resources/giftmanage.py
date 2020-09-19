@@ -63,8 +63,11 @@ async def open_gift(bot, gift):
         rare = None
         chance = randint(1, 100)
         if chance <= 50:
-            item = choice(['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur'])
-            rare = [item, 'Crystal_of_Energy']
+            item_1 = choice(['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur'])
+            item_2 = choice(['Crystal_of_Energy', 'Discharge_Crystal', 'Acquittal_Crystal'])
+            item_3 = choice(['SoulStoneYellow', 'SoulStoneRed', 'SoulStonePurple', 'SoulStoneGreen',
+                             'SoulStoneDarkGreen', 'SoulStoneBlue'])
+            rare = [item_1, item_2, item_3]
 
         return {"money": ethernyas, "coins": coins, "items": items, "rare": rare, "validity": validity}
 

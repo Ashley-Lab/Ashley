@@ -510,19 +510,22 @@ def equips(data_s):
     # add equips to img
     for k in mapped["equipped"].keys():
         if data_s['equipped'][k] is not None:
-            armor = ['shoulder', 'breastplate', 'gloves', 'leggings', 'boots', 'shield']
+            armor = ['shoulder', 'breastplate', 'gloves', 'leggings', 'boots']
             jewel = ['necklace', 'earring', 'ring']
-            e_type = "armor" if k in armor else "jewel" if k in jewel else "weapon" if k == "sword" else "consumable"
-
+            if k in armor or k == "shield":
+                e_type = "armor"
+            elif k in jewel:
+                e_type = "jewel"
+            elif k == "sword":
+                e_type = "weapon"
+            else:
+                e_type = "consumable"
             if k in armor:
                 f_t = f"{eq[data_s['equipped'][k]]['rarity']}/{data_s['equipped'][k]}"
-
-            elif k == "sword" or k in jewel:
+            elif k == "sword" or k in jewel or k == "consumable":
                 f_t = f"{data_s['equipped'][k]}"
-
             else:
                 f_t = f"shield/{data_s['equipped'][k]}"
-
             equipped = Image.open(f"images/equips/{e_type}/{f_t}.jpg").convert('RGBA')
             equipped = equipped.resize((56, 56))
             image.paste(equipped, (mapped["equipped"][k][0] + 1, mapped["equipped"][k][1]), equipped)

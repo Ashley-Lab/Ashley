@@ -9,16 +9,18 @@ legend = {
     "Comum": [600, [0.01, 0.02, 0.07, 0.10, 0.20, 0.60]],
     "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.50, 0.10]],
     "Raro": [400, [0.03, 0.07, 0.10, 0.50, 0.20, 0.10]],
-    "Super Raro": [300, [0.04, 0.6, 0.30, 0.20, 0.20, 0.20]],
-    "Ultra Raro": [200, [0.05, 0.35, 0.15, 0.15, 0.15, 0.15]],
-    "Secret": [100, [0.25, 0.20, 0.25, 0.15, 0.10, 0.05]]
+    "Super Raro": [300, [0.04, 0.06, 0.40, 0.10, 0.20, 0.20]],
+    "Ultra Raro": [200, [0.20, 0.40, 0.10, 0.10, 0.10, 0.10]],
+    "Secret": [100, [0.40, 0.20, 0.15, 0.10, 0.10, 0.05]]
 }
+summon = None
 
 
 class BoxClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.color = self.bot.color
+        self.consumable = ["summon_box_sr", "summon_box_ur", "summon_box_secret"]
 
     @staticmethod
     def verify_money(money, num, price):
@@ -107,6 +109,7 @@ ITEMS:
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
         """Esse nem eu sei..."""
+        global summon
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:
@@ -129,7 +132,40 @@ ITEMS:
                 answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
                 answer = bool(int(answer.content))
                 if answer:
-                    await self.bot.booster.buy_box(self.bot, ctx)
+                    if data['rpg']["equipped_items"]['consumable'] is not None:
+                        if data['rpg']["equipped_items"]['consumable'] in self.consumable:
+                            await ctx.send("<:alert:739251822920728708>│``ATENÇÃO: VOCE ESTA EQUIPADO COM UM "
+                                           "CONSUMIVEL!\n DESEJA USAR-LO AGORA?``\n**1** para ``SIM`` ou "
+                                           "**0** para ``NÃO``")
+                            try:
+                                answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
+                                answer = bool(int(answer.content))
+                                if answer:
+                                    if data['rpg']["equipped_items"]['consumable'] == self.consumable[0]:
+                                        summon = "Super Raro"
+
+                                    if data['rpg']["equipped_items"]['consumable'] == self.consumable[1]:
+                                        summon = "Ultra Raro"
+
+                                    if data['rpg']["equipped_items"]['consumable'] == self.consumable[2]:
+                                        summon = "Secret"
+
+                                    data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                                    update = data
+                                    update['rpg']["equipped_items"]['consumable'] = None
+                                    await self.bot.db.update_data(data, update, 'users')
+                                    await ctx.send(f"<:confirmed:721581574461587496>│``VOCE ACABOU DE USAR O SEU ITEM "
+                                                   f"CONSUMIVEL!``")
+                            except TimeoutError:
+                                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                                update = data
+                                update['config']['buying'] = False
+                                await self.bot.db.update_data(data, update, 'users')
+                                await msg.delete()
+                                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
+                                                      '**COMANDO CANCELADO**')
+
+                    await self.bot.booster.buy_box(self.bot, ctx, summon)
                 else:
                     data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                     update = data
@@ -146,7 +182,39 @@ ITEMS:
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
         else:
-            await self.bot.booster.buy_box(self.bot, ctx)
+            if data['rpg']["equipped_items"]['consumable'] is not None:
+                if data['rpg']["equipped_items"]['consumable'] in self.consumable:
+                    await ctx.send("<:alert:739251822920728708>│``ATENÇÃO: VOCE ESTA EQUIPADO COM UM CONSUMIVEL!\n"
+                                   " DESEJA USAR-LO AGORA?``\n**1** para ``SIM`` ou **0** para ``NÃO``")
+                    try:
+                        answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
+                        answer = bool(int(answer.content))
+                        if answer:
+                            if data['rpg']["equipped_items"]['consumable'] == self.consumable[0]:
+                                summon = "Super Raro"
+
+                            if data['rpg']["equipped_items"]['consumable'] == self.consumable[1]:
+                                summon = "Ultra Raro"
+
+                            if data['rpg']["equipped_items"]['consumable'] == self.consumable[2]:
+                                summon = "Secret"
+
+                            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                            update = data
+                            update['rpg']["equipped_items"]['consumable'] = None
+                            await self.bot.db.update_data(data, update, 'users')
+                            await ctx.send(f"<:confirmed:721581574461587496>│``VOCE ACABOU DE USAR O SEU ITEM "
+                                           f"CONSUMIVEL!``")
+                    except TimeoutError:
+                        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                        update = data
+                        update['config']['buying'] = False
+                        await self.bot.db.update_data(data, update, 'users')
+                        await msg.delete()
+                        return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
+                                              ' CANCELADO**')
+
+            await self.bot.booster.buy_box(self.bot, ctx, summon)
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if data['box']['status']['active']:

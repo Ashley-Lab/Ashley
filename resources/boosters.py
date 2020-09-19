@@ -18,9 +18,9 @@ class Booster(object):
             "Comum": [600, [0.01, 0.02, 0.07, 0.10, 0.20, 0.60]],
             "Incomum": [500, [0.02, 0.04, 0.10, 0.24, 0.50, 0.10]],
             "Raro": [400, [0.03, 0.07, 0.10, 0.50, 0.20, 0.10]],
-            "Super Raro": [300, [0.04, 0.6, 0.30, 0.20, 0.20, 0.20]],
-            "Ultra Raro": [200, [0.05, 0.35, 0.15, 0.15, 0.15, 0.15]],
-            "Secret": [100, [0.25, 0.20, 0.25, 0.15, 0.10, 0.05]]
+            "Super Raro": [300, [0.04, 0.06, 0.40, 0.10, 0.20, 0.20]],
+            "Ultra Raro": [200, [0.20, 0.40, 0.10, 0.10, 0.10, 0.10]],
+            "Secret": [100, [0.40, 0.20, 0.15, 0.10, 0.10, 0.05]]
         }
 
         # booster configs
@@ -66,12 +66,15 @@ class Booster(object):
         self.l_i = int(rarity[0] * rarity[1][4])
         self.l_c = int(rarity[0] * rarity[1][5])
 
-    @property
-    def create_box(self):
+    def create_box(self, summon):
         rarity_choice = []
         for i_, amount in self.rarity_choice.items():
             rarity_choice += [i_] * amount
         rarity = choice(rarity_choice)
+
+        if summon is not None:
+            rarity = summon
+
         size = self.rarity[rarity][0]
         self.reset_counts()
         self.define_limit(self.rarity[rarity])
@@ -142,7 +145,7 @@ class Booster(object):
                     self.box_count += 1
         return self.box
 
-    async def buy_box(self, bot, ctx):
+    async def buy_box(self, bot, ctx, summon):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         if data['treasure']['money'] > 2000:
             answer = await bot.db.take_money(ctx, 2000)
@@ -151,7 +154,7 @@ class Booster(object):
                                   "A BOX!\nVOCÊ PRECISA DE 2.000 ETHERNYAS PARA COMPRAR UMA BOX.``")
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
-        box = self.create_box
+        box = self.create_box(summon)
         update['box'] = box
         await bot.db.update_data(data, update, 'users')
         await ctx.send(answer)
@@ -243,8 +246,11 @@ class Booster(object):
         await bot.db.update_data(data, update, 'users')
 
         if Empty:
-            op = ['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur']
-            reward = [choice(op), choice(op), choice(op)]
+            item_1 = choice(['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur'])
+            item_2 = choice(['Crystal_of_Energy', 'Discharge_Crystal', 'Acquittal_Crystal'])
+            item_3 = choice(['SoulStoneYellow', 'SoulStoneRed', 'SoulStonePurple', 'SoulStoneGreen',
+                             'SoulStoneDarkGreen', 'SoulStoneBlue'])
+            reward = [item_1, item_2, item_3]
             response = await bot.db.add_reward(ctx, reward)
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
                            f"``COMO PREMIO VOCE ACABA DE GANHAR UM ITEM:`` ✨ **HEROIC** ✨\n{response.upper()}")

@@ -323,6 +323,30 @@ class Battle(commands.Cog):
                 await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ESPADA/ESCUDO** ✨\n'
                                f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
 
+        elif change < 35 and player.status['hp'] > 0:
+
+            equips_list = list()
+            for ky in self.bot.config['equips'].keys():
+                for k, v in self.bot.config['equips'][ky].items():
+                    equips_list.append((k, v))
+
+            sb = choice(['summon_box_sr', 'summon_box_sr', 'summon_box_sr', 'summon_box_sr', 'summon_box_sr',
+                         'summon_box_ur', 'summon_box_ur', 'summon_box_ur', 'summon_box_secret'])
+
+            try:
+                update['rpg']['items'][sb] += 1
+            except KeyError:
+                update['rpg']['items'][sb] = 1
+
+            rew = None
+            for i in equips_list:
+                if i[0] == sb:
+                    rew = i[1]
+
+            if rew is not None:
+                await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU UM`` ✨ **CONSUMABLE** ✨\n'
+                               f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
+
         update['config']['battle'] = False
         await self.bot.db.update_data(data, update, 'users')
 

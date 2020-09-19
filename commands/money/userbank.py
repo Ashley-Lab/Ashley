@@ -37,25 +37,25 @@ class UserBank(commands.Cog):
             "Stone of Soul": 222,
             "Vital Force": 213,
 
-            "stone_crystal_white": 312,
-            "stone_crystal_red": 345,
-            "stone_crystal_green": 354,
-            "stone_crystal_blue": 364,
-            "stone_crystal_yellow": 365,
+            "Stone Crystal White": 312,
+            "Stone Crystal Red": 345,
+            "Stone Crystal Green": 354,
+            "Stone Crystal Blue": 364,
+            "Stone Crystal Yellow": 365,
 
-            "dust_wind": 432,
-            "dust_water": 412,
-            "dust_light": 468,
-            "dust_fire": 454,
-            "dust_earth": 444,
-            "dust_dark": 468,
+            "Dust Wind": 432,
+            "Dust Water": 412,
+            "Dust Light": 468,
+            "Dust Fire": 454,
+            "Dust Earth": 444,
+            "Dust Dark": 468,
 
-            "stone_wind": 563,
-            "stone_water": 543,
-            "stone_light": 525,
-            "stone_fire": 512,
-            "stone_earth": 532,
-            "stone_dark": 587,
+            "Stone Wind": 563,
+            "Stone Water": 543,
+            "Stone Light": 525,
+            "Stone Fire": 512,
+            "Stone Earth": 532,
+            "Stone Dark": 587,
 
         }
 
@@ -91,36 +91,37 @@ class UserBank(commands.Cog):
             return await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA:``\n{msg}\n"
                                   f"**EXEMPLO:** ``USE`` **ASH SHOP 50 FICHAS** ``PARA COMPRAR 50 FICHAS!``")
 
+        name = None
         for key in self.items.keys():
             if key.lower() == item.lower():
-                item = key
+                name = key
 
-        if item not in self.items.keys():
+        if name is None:
             return await ctx.send("<:alert:739251822920728708>│``ESSE ITEM NAO EXISTE OU NAO ESTA DISPONIVEL!``")
 
-        if update['treasure']['money'] < self.items[item] * int(quant):
+        if update['treasure']['money'] < self.items[name] * int(quant):
             return await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM ETHERNYAS SUFICIENTES DISPONIVEIS!``")
 
         item_reward = None
         for k, v in self.bot.items.items():
-            if v[1] == item:
+            if v[1] == name:
                 item_reward = k
-        if item_reward is not None:
-            try:
-                update['inventory'][item_reward] += int(quant)
-            except KeyError:
-                update['inventory'][item_reward] = int(quant)
-        else:
-            return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM NAO EXISTE OU NAO ESTA DISPONIVEL!``")
+        if item_reward is None:
+            return await ctx.send("<:negate:721581573396496464>│``ITEM NAO ENCONTRADO!``")
 
-        update['treasure']['money'] -= self.items[item] * int(quant)
+        try:
+            update['inventory'][item_reward] += int(quant)
+        except KeyError:
+            update['inventory'][item_reward] = int(quant)
+
+        update['treasure']['money'] -= self.items[name] * int(quant)
         await self.bot.db.update_data(data, update, 'users')
-        a = '{:,.2f}'.format(float(self.items[item] * int(quant)))
+        a = '{:,.2f}'.format(float(self.items[name] * int(quant)))
         b = a.replace(',', 'v')
         c = b.replace('.', ',')
         d = c.replace('v', '.')
         await ctx.send(f"<:confirmed:721581574461587496>|``SUA COMPRA FOI FEITA COM SUCESSO`` **{quant}** "
-                       f"``{item.upper()} ADICIONADO NO SEU INVENTARIO COM SUCESSO QUE CUSTOU`` "
+                       f"``{name.upper()} ADICIONADO NO SEU INVENTARIO COM SUCESSO QUE CUSTOU`` "
                        f"**R$ {d}** ``ETHERNYAS``")
 
     @check_it(no_pm=True)
