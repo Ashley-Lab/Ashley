@@ -121,9 +121,31 @@ async def paginator(bot, items, inventory, embed, ctx):
     elif str(ctx.command) == "inventory equip":
         dict_ = dict()
         for _ in inventory.keys():
-            dict_[_] = items[_]['rarity']
+            if _ in ["01", "02", "03"]:
+                dict_[_] = items[_]['rarity']
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
-        list_i = [sorted_x[x][0] for x in range(len(inventory.keys()))]
+        list_a = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+        dict_ = dict()
+        for _ in inventory.keys():
+            try:
+                test = int(_)
+            except ValueError:
+                test = 0
+            if _ not in ["01", "02", "03"] and test == 0:
+                dict_[_] = items[_]['rarity']
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
+        list_b = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+        dict_ = dict()
+        for _ in inventory.keys():
+            try:
+                test = int(_)
+            except ValueError:
+                test = 0
+            if _ not in ["01", "02", "03"] and test != 0:
+                dict_[_] = items[_]['rarity']
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
+        list_c = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+        list_i = list_a + list_b + list_c
 
     else:
         list_i = inventory.keys()

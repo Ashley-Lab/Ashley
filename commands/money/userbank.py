@@ -101,8 +101,6 @@ class UserBank(commands.Cog):
         if update['treasure']['money'] < self.items[item] * int(quant):
             return await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM ETHERNYAS SUFICIENTES DISPONIVEIS!``")
 
-        update['treasure']['money'] -= self.items[item] * int(quant)
-
         item_reward = None
         for k, v in self.bot.items.items():
             if v[1] == item:
@@ -112,7 +110,10 @@ class UserBank(commands.Cog):
                 update['inventory'][item_reward] += int(quant)
             except KeyError:
                 update['inventory'][item_reward] = int(quant)
+        else:
+            return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM NAO EXISTE OU NAO ESTA DISPONIVEL!``")
 
+        update['treasure']['money'] -= self.items[item] * int(quant)
         await self.bot.db.update_data(data, update, 'users')
         a = '{:,.2f}'.format(float(self.items[item] * int(quant)))
         b = a.replace(',', 'v')
@@ -183,8 +184,8 @@ class UserBank(commands.Cog):
             await self.bot.db.update_data(data_member, update_member, 'users')
             await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             await self.bot.db.update_data(data_guild_native_member, update_guild_native_member, 'guilds')
-            return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU {self.format_num(amount)} DE '
-                                  f'ETHERNYAS PARA {member.name} COM SUCESSO!``')
+            return await ctx.send(f'<:coins:519896825365528596>│``PARABENS, VC PAGOU R$ {self.format_num(amount)},00 '
+                                  f'DE ETHERNYAS PARA {member.name} COM SUCESSO!``')
         else:
             return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM ESSE VALOR DISPONIVEL DE "
                                   f"ETHERNYAS!``")

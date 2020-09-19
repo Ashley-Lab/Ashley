@@ -199,7 +199,7 @@ class MergeClass(commands.Cog):
         # =========================================================================================
 
         msg = f"\n".join([f"{self.i[k][0]} ``{v}`` ``{self.i[k][1]}``" for k, v in self.cost.items()])
-        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISAR USAR O COMANDO`` **ASH BOX**"
+        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISA USAR O COMANDO`` **ASH BOX**"
 
         Embed = discord.Embed(
             title="O CUSTO PARA VOCE FUNDIR UM EQUIPAMENTO:",

@@ -94,7 +94,11 @@ class InventoryClass(commands.Cog):
                     "gloves": data['rpg']["equipped_items"]['gloves'],
                     "shoulder": data['rpg']["equipped_items"]['shoulder'],
                     "sword": data['rpg']["equipped_items"]['sword'],
-                    "shield": data['rpg']["equipped_items"]['shield']
+                    "shield": data['rpg']["equipped_items"]['shield'],
+                    "consumable": data['rpg']["equipped_items"]['consumable'],
+                    "necklace": data['rpg']["equipped_items"]['necklace'],
+                    "earring": data['rpg']["equipped_items"]['earring'],
+                    "ring": data['rpg']["equipped_items"]['ring']
                 }
             }
 

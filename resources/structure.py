@@ -51,13 +51,17 @@ user_data_structure = {
                 "relics": dict(),
                 'items': dict(),
                 'equipped_items': {
+                    "shoulder": None,
                     "breastplate": None,
+                    "gloves": None,
                     "leggings": None,
                     "boots": None,
-                    "gloves": None,
-                    "shoulder": None,
+                    "consumable": None,
                     "sword": None,
-                    "shield": None
+                    "shield": None,
+                    "necklace": None,
+                    "earring": None,
+                    "ring": None
                 },
                 "active": False
             },

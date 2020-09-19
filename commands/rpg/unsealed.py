@@ -53,7 +53,7 @@ class MeltedClass(commands.Cog):
             return await ctx.send("<:negate:721581573396496464>│``VOCE PRECISA DIZER UM EQUIPAMENTO VALIDO!``")
 
         msg = f"\n".join([f"{self.i[k][0]} ``{v}`` ``{self.i[k][1]}``" for k, v in self.cost.items()])
-        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISAR USAR OS COMANDOS`` " \
+        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISA USAR OS COMANDOS`` " \
                "**ASH MELTED, ASH STONE**  ``E`` **ASH BOX**"
 
         Embed = discord.Embed(

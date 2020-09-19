@@ -284,6 +284,7 @@ class Entity(object):
                                 self.chance = False
                         else:
                             chance = randint(1, 100)
+                            chance += self.status['luk']
                             if chance >= 95:
                                 self.effects['turns'] += skill['effs'][c]['turns']
                                 self.chance = True
@@ -300,6 +301,7 @@ class Entity(object):
                                 self.chance = False
                         else:
                             chance = randint(1, 100)
+                            chance += self.status['luk']
                             if chance >= 95:
                                 self.effects[c] = skill['effs'][c]
                                 self.chance = True
