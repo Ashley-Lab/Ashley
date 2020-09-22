@@ -236,7 +236,7 @@ class OnReady(commands.Cog):
         print(f'\033[1;32m( 🔶 ) | Exclusão de \033[1;34m{cont} Gifts\033[1;32m foi feita com sucesso!\33[m')
         print("\033[1;35m( ✔ ) | Exclusão dos gifts sem validade finalizados!\033[m\n")
 
-        print("\n\033[1;35m( >> ) | Iniciando reestruturação de variaveis internas...\033[m")
+        print("\n\033[1;35m( >> ) | Redefinindo status de variaveis internas...\033[m")
         all_data = await self.bot.db.get_all_data("users")
         for data in all_data:
             update = data
@@ -246,13 +246,12 @@ class OnReady(commands.Cog):
             update['config']['mine'] = False
             update['user']['marrieding'] = False
             await self.bot.db.update_data(data, update, "users")
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mPLAYING\033[1;32m foi feita com sucesso!\33[m')
-        print('\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mBATTLE\033[1;32m foi feita com sucesso!\33[m')
-        print(
-            '\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mTOURNAMENT\033[1;32m foi feita com sucesso!\33[m')
-        print(
-            '\033[1;32m( 🔶 ) | Reestruturação da variavel \033[1;34mMARRIEDING\033[1;32m foi feita com sucesso!\33[m')
-        print("\033[1;35m( ✔ ) | Reestruturação de variaveis internas Finalizadas!\033[m\n")
+        print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mPLAYING\033[1;32m redefinida com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mBATTLE\033[1;32m foi redefinida com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mBUYING\033[1;32m foi redefinida com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mMINE\033[1;32m foi redefinida com sucesso!\33[m')
+        print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mMARRIEDING\033[1;32m foi redefinida com sucesso!\33[m')
+        print("\033[1;35m( ✔ ) |Redefinição das variaveis internas finalizadas!\033[m\n")
 
         print("\n\033[1;35m( >> ) | Iniciando reestruturação do banco de dados...\033[m")
         all_data = await self.bot.db.get_all_data("users")

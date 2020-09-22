@@ -64,6 +64,11 @@ class ChannelClass(commands.Cog):
         else:
             return await ctx.send("<:negate:721581573396496464>│``OPÇÃO INVALIDA!``")
 
+    @channel.error
+    async def _check_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
+
 
 def setup(bot):
     bot.add_cog(ChannelClass(bot))

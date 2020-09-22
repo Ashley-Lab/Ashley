@@ -26,11 +26,11 @@ class MeltedClass(commands.Cog):
             "solution_agent_green": 3,
             "solution_agent_blue": 3,
             "nucleo_xyz": 2,
-            "enchanted_stone": 2,
+            "enchanted_stone": 1,
             "Discharge_Crystal": 5,
             "Acquittal_Crystal": 5,
             "Crystal_of_Energy": 5,
-            "crystal_of_death": 2
+            "crystal_of_death": 1
         }
 
     @check_it(no_pm=True)

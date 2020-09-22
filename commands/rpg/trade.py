@@ -12,6 +12,67 @@ class TradeClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='sell', aliases=['vender'])
+    async def sell(self, ctx, amount: int = None, *, item=None):
+        if amount is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantia!``")
+        if item is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você esqueceu de falar o nome do item para vender!``")
+
+        equips_list = list()
+        for ky in self.bot.config['equips'].keys():
+            for k, v in self.bot.config['equips'][ky].items():
+                equips_list.append((k, v))
+
+        if item not in [i[1]["name"] for i in equips_list]:
+            if "sealed" in item.lower():
+                return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM ESTÁ SELADO, ANTES DISSO TIRE O SELO "
+                                      "USANDO O COMANDO:`` **ASH LIBERAR**")
+            return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM NAO EXISTE...``")
+
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+
+        if data_user['config']['playing']:
+            return await ctx.send("<:alert:739251822920728708>│``VocÊ está jogando, aguarde para quando"
+                                  " vocÊ estiver livre!``")
+
+        if not data_user['rpg']['active']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
+            return await ctx.send(embed=embed)
+
+        if data_user['config']['battle']:
+            msg = '<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        item_key = None
+        for key in data_user['rpg']['items'].keys():
+            for name in equips_list:
+                if name[0] == key and name[1]["name"] == item:
+                    item_key = name
+        if item_key is None:
+            return await ctx.send("<:negate:721581573396496464>│``VOCE NAO TEM ESSE ITEM...``")
+
+        if data_user['rpg']['items'][item_key[0]] >= amount:
+            update_user['rpg']['items'][item_key[0]] -= amount
+            if update_user['rpg']['items'][item_key[0]] < 1:
+                del update_user['rpg']['items'][item_key[0]]
+            await self.bot.db.update_data(data_user, update_user, 'users')
+
+            msg = await self.bot.db.add_money(ctx, item_key[1]['sell'], True)
+            return await ctx.send(f'<:confirmed:721581574461587496>│``PARABENS, VC VENDEU {amount} DE '
+                                  f'{item_key[1]["name"].upper()} COM SUCESSO!``\n'
+                                  f'``E POR VENDER UM ITEM, {ctx.author.name} GANHOU`` {msg}')
+        else:
+            return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM ESSA QUANTIDADE DISPONIVEL DE "
+                                  f"{item_key[1]['name'].upper()}!``")
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='trade', aliases=['trocar'])
     async def trade(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
         if member is None:
@@ -31,8 +92,7 @@ class TradeClass(commands.Cog):
         if item not in [i[1]["name"] for i in equips_list]:
             if "sealed" in item.lower():
                 return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM ESTÁ SELADO, ANTES DISSO TIRE O SELO "
-                                      "USANDO O COMANDO:`` **ASH LIBERAR** ``E USE O NOME DO COMANDO:`` "
-                                      "**ASH INVENTORY EQUIP** ``OU`` **ASH I E**")
+                                      "USANDO O COMANDO:`` **ASH LIBERAR**")
             return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM NAO EXISTE...``")
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")

@@ -552,8 +552,7 @@ class Ashley(commands.AutoShardedBot):
                                 await message.guild.owner.send(embed=embed)
                             except discord.Forbidden:
                                 pass
-
-            if str(ctx.command) in ['channel']:
+            if str(ctx.command) in ['channel', 'daily']:
                 run_command = True
 
             if run_command:
@@ -563,7 +562,8 @@ class Ashley(commands.AutoShardedBot):
             else:
                 if ctx.command is not None:
                     await message.channel.send("<:alert:739251822920728708>|``NAO POSSO EXECUTAR COMANDOS NESSE"
-                                               " CANAL!``")
+                                               " CANAL!``\n**CASO QUERIA ALTERAR ESSA CONFIGURAÇÃO, USE O COMANDO "
+                                               "ASH CHANNEL**")
 
     @staticmethod
     def get_ram():

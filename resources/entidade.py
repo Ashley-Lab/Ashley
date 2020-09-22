@@ -208,7 +208,7 @@ class Entity(object):
                             self.status['hp'] += regen
                         else:
                             self.status['hp'] = (self.status['con'] * self.rate[0])
-                        desc = f'**{self.name.upper()}** ``recuperou`` **{regen}%** ``de HP``'
+                        desc = f'**{self.name.upper()}** ``recuperou`` **{regen}** ``de HP``'
                         hp = self.status['con'] * self.rate[0]
                         p = not self.is_player
                         await ctx.send(embed=embed_creator(desc, self.atack['img'], p, hp,
@@ -222,7 +222,7 @@ class Entity(object):
                             self.status['hp'] += regen
                         else:
                             self.status['hp'] = (self.status['con'] * self.rate[0])
-                        desc = f'**{self.name.upper()}** ``recuperou`` **{regen}%** ``de HP``'
+                        desc = f'**{self.name.upper()}** ``recuperou`` **{regen}** ``de HP``'
                         hp = self.status['con'] * self.rate[0]
                         p = not self.is_player
                         await ctx.send(embed=embed_creator(desc, self.atack['img'], p, hp,

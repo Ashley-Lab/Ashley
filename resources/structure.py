@@ -29,6 +29,7 @@ user_data_structure = {
                 "battle": False,
                 "buying": False,
                 "provinces": None,
+                "mine": False,
                 "vip": False,
                 "roles": [],
                 "points": 0

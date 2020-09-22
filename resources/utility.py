@@ -110,6 +110,9 @@ async def paginator(bot, items, inventory, embed, ctx):
     cont = 0
     cont_i = 0
     description = ''
+    jewel = ['101', '102', '103', '104', '105', '106', '107', '108', '109', '110', '111', '112']
+    cons = ['summon_box_sr', 'summon_box_ur', 'summon_box_secret']
+    shield = ["01", "02", "03"]
 
     if str(ctx.command) == "inventory":
         dict_ = dict()
@@ -121,31 +124,48 @@ async def paginator(bot, items, inventory, embed, ctx):
     elif str(ctx.command) == "inventory equip":
         dict_ = dict()
         for _ in inventory.keys():
-            if _ in ["01", "02", "03"]:
+            if _ in cons:
                 dict_[_] = items[_]['rarity']
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
-        list_a = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+        consumable = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+
+        dict_ = dict()
+        for _ in inventory.keys():
+            if _ in shield:
+                dict_[_] = items[_]['rarity']
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
+        shield = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+
+        dict_ = dict()
+        for _ in inventory.keys():
+            if _ in jewel:
+                dict_[_] = items[_]['rarity']
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
+        jewel = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+
         dict_ = dict()
         for _ in inventory.keys():
             try:
                 test = int(_)
             except ValueError:
                 test = 0
-            if _ not in ["01", "02", "03"] and test == 0:
+            if _ not in shield and _ not in jewel and test == 0 and _ not in cons:
                 dict_[_] = items[_]['rarity']
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
-        list_b = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+        weapon = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+
         dict_ = dict()
         for _ in inventory.keys():
             try:
                 test = int(_)
             except ValueError:
                 test = 0
-            if _ not in ["01", "02", "03"] and test != 0:
+            if _ not in shield and _ not in jewel and test != 0 and _ not in cons:
                 dict_[_] = items[_]['rarity']
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
-        list_c = [sorted_x[x][0] for x in range(len(dict_.keys()))]
-        list_i = list_a + list_b + list_c
+        armor = [sorted_x[x][0] for x in range(len(dict_.keys()))]
+
+        list_i = consumable + shield + jewel + weapon + armor
 
     else:
         list_i = inventory.keys()
