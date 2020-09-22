@@ -62,10 +62,14 @@ class TradeClass(commands.Cog):
                 del update_user['rpg']['items'][item_key[0]]
             await self.bot.db.update_data(data_user, update_user, 'users')
 
-            msg = await self.bot.db.add_money(ctx, item_key[1]['sell'], True)
+            money = 0
+            for _ in range(amount):
+                money += item_key[1]['sell']
+
+            msg = await self.bot.db.add_money(ctx, money, True)
             return await ctx.send(f'<:confirmed:721581574461587496>│``PARABENS, VC VENDEU {amount} DE '
                                   f'{item_key[1]["name"].upper()} COM SUCESSO!``\n'
-                                  f'``E POR VENDER UM ITEM, {ctx.author.name} GANHOU`` {msg}')
+                                  f'``E POR VENDER UM ITEM, VOCE GANHOU`` {msg}')
         else:
             return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM ESSA QUANTIDADE DISPONIVEL DE "
                                   f"{item_key[1]['name'].upper()}!``")
