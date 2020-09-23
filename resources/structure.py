@@ -15,7 +15,7 @@ user_data_structure = {
                 "stars": 0,
                 "rec": 0,
                 "commands": 0,
-                "ia_response": True,
+                "ia_response": False,
                 "achievements": list()
             },
             "treasure": {

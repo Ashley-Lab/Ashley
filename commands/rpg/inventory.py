@@ -34,9 +34,11 @@ class InventoryClass(commands.Cog):
 
             set_armor = list()
             sts = {"atk": 0, "agi": 0, "prec": 0, "con": 0}
+            set_value = ["shoulder", "breastplate", "gloves", "leggings", "boots"]
             for key in data['rpg']["equipped_items"].keys():
                 if data['rpg']["equipped_items"][key] is not None:
-                    set_armor.append(data['rpg']["equipped_items"][key])
+                    if key in set_value:
+                        set_armor.append(data['rpg']["equipped_items"][key])
                     for k in sts.keys():
                         sts[k] += eq[data['rpg']["equipped_items"][key]]["modifier"][k]
 

@@ -79,7 +79,8 @@ class OnMemberJoin(commands.Cog):
                         channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
                         if channel_ is None:
                             return
-                        t = "<a:blue:525032762256785409>│**OBS:** ``PARA PEGAR SEU VIP USE O COMANDO`` **ASH VIP**"
+                        t = f"<a:blue:525032762256785409>│**OBS:** {member.mention} ``PARA PEGAR SEU VIP USE O " \
+                            f"COMANDO`` **ASH VIP**"
                         embed = discord.Embed(color=self.color, description=t)
                         await channel_.send(embed=embed)
             except discord.Forbidden:

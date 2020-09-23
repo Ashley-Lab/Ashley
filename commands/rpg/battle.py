@@ -61,6 +61,7 @@ class Battle(commands.Cog):
             return await ctx.send(embed=embed)
 
         # configuração do player
+        set_value = ["shoulder", "breastplate", "gloves", "leggings", "boots"]
         db_player = data['rpg']
         db_player["img"] = ctx.author.avatar_url_as(format="png")
         db_player['name'] = ctx.author.name
@@ -85,7 +86,8 @@ class Battle(commands.Cog):
             if db_player['equipped_items'][c] is None:
                 continue
 
-            set_e.append(str(c))
+            if key in set_value:
+                set_e.append(str(c))
 
             db_player["armor"] += eq[db_player['equipped_items'][c]]['armor']
             for name in db_player["status"].keys():
