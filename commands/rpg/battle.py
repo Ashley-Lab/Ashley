@@ -86,7 +86,7 @@ class Battle(commands.Cog):
             if db_player['equipped_items'][c] is None:
                 continue
 
-            if key in set_value:
+            if c in set_value:
                 set_e.append(str(c))
 
             db_player["armor"] += eq[db_player['equipped_items'][c]]['armor']
