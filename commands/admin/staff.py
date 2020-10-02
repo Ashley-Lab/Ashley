@@ -151,7 +151,7 @@ class StaffAdmin(commands.Cog):
                 await ctx.send('<:send:519896817320591385>│``ESTAREI ENVIANDO PARA SEU PRIVADO O FORMULARIO!``',
                                delete_after=5.0)
 
-                msg_1 = await ctx.author.send('<:stream_status:519896814825242635>│``Qual úsuario você deseja '
+                msg_1 = await ctx.author.send('<a:blue:525032762256785409>│``Qual úsuario você deseja '
                                               'denunciar?`` {}'.format(ctx.author.mention))
 
                 def check(m):
@@ -162,21 +162,21 @@ class StaffAdmin(commands.Cog):
                 except TimeoutError:
                     return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_1.delete()
-                msg_2 = await ctx.author.send('<:stream_status:519896814825242635>│``Qual o motivo da denuncia?`` '
+                msg_2 = await ctx.author.send('<a:blue:525032762256785409>│``Qual o motivo da denuncia?`` '
                                               '{}'.format(ctx.author.mention))
                 try:
                     report = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_2.delete()
-                msg_3 = await ctx.author.send('<:stream_status:519896814825242635>│``Que dia aconteceu isso?`` '
+                msg_3 = await ctx.author.send('<a:blue:525032762256785409>│``Que dia aconteceu isso?`` '
                                               '{}'.format(ctx.author.mention))
                 try:
                     day = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except TimeoutError:
                     return await ctx.author.send('<:negate:721581573396496464>│``Desculpe, você demorou muito!``')
                 await msg_3.delete()
-                msg_4 = await ctx.author.send('<:stream_status:519896814825242635>│``Link da prova já hospedada '
+                msg_4 = await ctx.author.send('<a:blue:525032762256785409>│``Link da prova já hospedada '
                                               'senhor`` {}:'.format(ctx.author.mention))
                 try:
                     file = await self.bot.wait_for('message', check=check, timeout=30.0)

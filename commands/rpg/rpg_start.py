@@ -76,7 +76,7 @@ class RpgStart(commands.Cog):
         asks = {'lower_net': False, 'next_class': None}
 
         embed = discord.Embed(color=self.bot.color,
-                              description=f'<:stream_status:519896814825242635>│``DESEJA ATIVAR O MODO DE BATALHA SEM '
+                              description=f'<a:blue:525032762256785409>│``DESEJA ATIVAR O MODO DE BATALHA SEM '
                                           f'IMAGEM?``\n```O modo de batalha sem imagem faz com que seja carregado '
                                           f'mais rapido as mensagens```\n**1** para ``SIM`` ou **0** para ``NÃO``')
         msg = await ctx.send(embed=embed)
@@ -91,7 +91,7 @@ class RpgStart(commands.Cog):
         await msg.delete()
 
         embed = discord.Embed(color=self.bot.color,
-                              description=f'<:stream_status:519896814825242635>│``QUAL CLASSE VOCE DESEJA APRENDER?``\n'
+                              description=f'<a:blue:525032762256785409>│``QUAL CLASSE VOCE DESEJA APRENDER?``\n'
                                           f'```As classes fazem voce aprender habilidades unicas de cada uma```\n'
                                           f'``USE OS NUMEROS PARA DIZER QUAL CLASSE VOCE DESEJA:``\n'
                                           f'**1** para ``{self.cl[0].upper()}``\n**2** para ``{self.cl[1].upper()}``\n'

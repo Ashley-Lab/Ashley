@@ -55,7 +55,7 @@ class ConfigClass(commands.Cog):
             def check_channel(m):
                 return m.author == ctx.author and m.channel_mentions[0].id
 
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o ActionLog?`` \n'
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o ActionLog?`` \n'
                                  '```O ActionLog serve para você verificar tudo o que ocorre no seu servidor atravez de'
                                  ' um canal de registro de ações.```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
@@ -64,7 +64,7 @@ class ConfigClass(commands.Cog):
             values.append(resp_1.content)
             if resp_1.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do ActionLog!``')
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do ActionLog!``')
 
                 resp_2 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_2.channel_mentions[0].id)
@@ -75,7 +75,7 @@ class ConfigClass(commands.Cog):
             else:
                 values.append(-1)
             await msg.delete()
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o BotNews?`` \n'
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o BotNews?`` \n'
                                  '```O BotNews é um canal onde vc vai receber em primeira mao todas as novidades da '
                                  'ashley```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
@@ -84,7 +84,7 @@ class ConfigClass(commands.Cog):
             values.append(resp_3.content)
             if resp_3.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do BotNews!``')
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do BotNews!``')
 
                 resp_4 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_4.channel_mentions[0].id)
@@ -95,7 +95,7 @@ class ConfigClass(commands.Cog):
             else:
                 values.append(-1)
             await msg.delete()
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o Contador de membros?`` \n'
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o Contador de membros?`` \n'
                                  '```O Contador de membros é um recurso onde a ashley edita um canal para mostrar '
                                  'quantos membros existem em seu servidor, em tempo real.```\n'
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
@@ -104,7 +104,7 @@ class ConfigClass(commands.Cog):
             values.append(resp_5.content)
             if resp_5.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Contador de membros!``')
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do Contador de membros!``')
 
                 resp_6 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_6.channel_mentions[0].id)
@@ -131,7 +131,7 @@ class ConfigClass(commands.Cog):
             else:
                 values.append(-1)
             await msg.delete()
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o Registro de entrada de '
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o Registro de entrada de '
                                  'membros?`` \n'
                                  '```Esse recurso registra em um canal a entrada de novos membros, quando ele entrou, '
                                  'etc```\n'
@@ -141,7 +141,7 @@ class ConfigClass(commands.Cog):
             values.append(resp_7.content)
             if resp_7.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Registro de Entrada '
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do Registro de Entrada '
                                      'de Membros!``')
 
                 resp_8 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
@@ -153,7 +153,7 @@ class ConfigClass(commands.Cog):
             else:
                 values.append(-1)
             await msg.delete()
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o '
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o '
                                  'Registro de Saida de membros?``\n'
                                  '```Esse recurso registra em um canal a sainda de membros, quando ele saiu, '
                                  'etc```\n'
@@ -163,7 +163,7 @@ class ConfigClass(commands.Cog):
             values.append(resp_9.content)
             if resp_9.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do '
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do '
                                      'Registro de Sainda de Membros!``')
 
                 resp_10 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
@@ -175,7 +175,7 @@ class ConfigClass(commands.Cog):
             else:
                 values.append(-1)
             await msg.delete()
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o Sorteio de Membros?`` \n'
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o Sorteio de Membros?`` \n'
                                  '```O Sorteio de Membros serve para escolher um dos seus membros para receber premios '
                                  'da ashley, todo aqueles registrados em nossos sistemas vao ter muitas regalias.\n'
                                  'OBS: essa função apenas entrará em vigor em servidores com 50 ou mais membros e 10 '
@@ -186,7 +186,7 @@ class ConfigClass(commands.Cog):
             values.append(resp_11.content)
             if resp_11.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Sorteio de Membros!``')
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do Sorteio de Membros!``')
 
                 resp_12 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_12.channel_mentions[0].id)
@@ -198,7 +198,7 @@ class ConfigClass(commands.Cog):
                 values.append(-1)
             await msg.delete()
             msg = await ctx.send(
-                '<:stream_status:519896814825242635>│``Você deseja ativar o Log de Programação de Ashley?`` \n'
+                '<a:blue:525032762256785409>│``Você deseja ativar o Log de Programação de Ashley?`` \n'
                 '```O Log de Programação de Ashley serve para que voce veja como ela foi programada, o codigo'
                 ' de Ashley é aberto e todos podem ter a certeza de que nosso bot não tem nenhum codigo malicioso'
                 ' presamos muito pela nossa imagem, alem de sempre queremos contribuir de alguma forma para a '
@@ -210,7 +210,7 @@ class ConfigClass(commands.Cog):
             if resp_13.content == '1':
                 await msg.delete()
                 msg = await ctx.send(
-                    '<:stream_status:519896814825242635>│``Marque o canal do Log de Programação de Ashley!``')
+                    '<a:blue:525032762256785409>│``Marque o canal do Log de Programação de Ashley!``')
 
                 resp_14 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_14.channel_mentions[0].id)
@@ -222,7 +222,7 @@ class ConfigClass(commands.Cog):
                 values.append(-1)
             await msg.delete()
 
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o meu '
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o meu '
                                  'Serviço de Interação com Membros (SIM)?``\n'
                                  '```Esse serviço ativa as minhas interações com Inteligencia Artifical,'
                                  'meu sistema de perguntas e respostas alem de varias outras coisas legais e '
@@ -302,14 +302,14 @@ class ConfigClass(commands.Cog):
             def check_channel(m):
                 return m.author == ctx.author and m.channel_mentions[0].id
 
-            msg = await ctx.send('<:stream_status:519896814825242635>│``Você deseja ativar o Report?`` '
+            msg = await ctx.send('<a:blue:525032762256785409>│``Você deseja ativar o Report?`` '
                                  '**1** para ``SIM`` ou **0** para ``NÃO``')
 
             resp_1 = await self.bot.wait_for('message', check=check_option, timeout=30.0)
             values.append(resp_1.content)
             if resp_1.content == '1':
                 await msg.delete()
-                msg = await ctx.send('<:stream_status:519896814825242635>│``Marque o canal do Report!``')
+                msg = await ctx.send('<a:blue:525032762256785409>│``Marque o canal do Report!``')
 
                 resp_2 = await self.bot.wait_for('message', check=check_channel, timeout=30.0)
                 values.append(resp_2.channel_mentions[0].id)

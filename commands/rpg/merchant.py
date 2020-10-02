@@ -31,6 +31,12 @@ class MerchantClass(commands.Cog):
             for ky in self.bot.config['equips'].keys():
                 for k, v in self.bot.config['equips'][ky].items():
                     equips_list.append((k, v))
+            await ctx.send('```Para criar uma loja use o comando:\n'
+                           'ash merchant add <preço_da_unidade> <quantidade> <nome_do_item>\n\n'
+                           'Para comprar um item use o comando:\n'
+                           'ash merchant buy <codigo_da_loja> <quantidade>\n\n'
+                           'Para remover uma loja use o comando:\n'
+                           'ash merchant remove <codigo_da_loja>```')
             await paginator(self.bot, equips_list, data, embed, ctx)
 
     @check_it(no_pm=True)
@@ -41,9 +47,9 @@ class MerchantClass(commands.Cog):
         """Esse nem eu sei..."""
         global item_key_equip, item_key_craft, _type
         if value is None:
-            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o valor da unidade!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o preço da unidade!``")
         if amount is None:
-            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantia!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantidade de itens!``")
         if item is None:
             return await ctx.send("<:alert:739251822920728708>│``Você esqueceu de falar o nome do item para colocar "
                                   "na loja!``")
@@ -147,18 +153,55 @@ class MerchantClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @merchant.command(name='edit', aliases=['editar', 'e'])
-    async def _edit(self, ctx):
-        """Esse nem eu sei..."""
-        return await ctx.send("<:alert:739251822920728708>│``Comando em manutenção...``")
-
-    @check_it(no_pm=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @merchant.command(name='remove', aliases=['remover', 'r'])
-    async def _remove(self, ctx):
+    async def _remove(self, ctx, id_shop: str = None):
         """Esse nem eu sei..."""
-        return await ctx.send("<:alert:739251822920728708>│``Comando em manutenção...``")
+        if id_shop is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o codigo da loja!``")
+
+        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update_user = data_user
+
+        if data_user['config']['playing']:
+            return await ctx.send("<:alert:739251822920728708>│``Você está jogando, aguarde para quando"
+                                  " você estiver livre!``")
+
+        if not data_user['rpg']['active']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
+            return await ctx.send(embed=embed)
+
+        if data_user['config']['battle']:
+            msg = '<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        data_shop = await self.bot.db.get_data("_id", id_shop.upper(), "merchant")
+
+        if data_shop is None:
+            return await ctx.send("<:alert:739251822920728708>│``Essa loja não existe, verifique o codigo da loja e"
+                                  " tente novamente!``")
+
+        if data_shop['owner'] != ctx.author.id:
+            return await ctx.send("<:alert:739251822920728708>│``Essa loja não é sua, apenas o dono da loja pode"
+                                  " remove-la do mercado!``")
+
+        if data_shop['type'] == "craft":
+            try:
+                update_user['inventory'][data_shop['item']] += data_shop['amount']
+            except KeyError:
+                update_user['inventory'][data_shop['item']] = data_shop['amount']
+        else:
+            try:
+                update_user['rpg']['items'][data_shop['item']] += data_shop['amount']
+            except KeyError:
+                update_user['rpg']['items'][data_shop['item']] = data_shop['amount']
+
+        await self.bot.db.delete_data({"_id": data_shop['_id']}, "merchant")
+        await self.bot.db.update_data(data_user, update_user, 'users')
+        await ctx.send(f"<:confirmed:721581574461587496>│``PARABENS, VOCE ACABOU DE REMOVER SUA LOJA DO MERCADO COM"
+                       f" SUCESSO, OS ITENS DA LOJA VOLTARAM PARA SEU INVENTARIO.``")
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -169,7 +212,7 @@ class MerchantClass(commands.Cog):
         if id_shop is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o codigo da loja!``")
         if amount is None:
-            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantia de itens!``")
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantidade de itens!``")
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         if data_user['config']['playing']:
