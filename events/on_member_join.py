@@ -32,6 +32,8 @@ class OnMemberJoin(commands.Cog):
                     pass
                 except AttributeError:
                     pass
+                except discord.errors.NotFound:
+                    pass
 
             if data['func_config']['cont_users']:
                 try:
@@ -49,6 +51,8 @@ class OnMemberJoin(commands.Cog):
                     list_ = str(list_).replace('[', '').replace(']', '').replace(',', '.')
                     await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:**  " + list_)
                 except discord.errors.Forbidden:
+                    pass
+                except discord.errors.NotFound:
                     pass
 
             try:
@@ -84,6 +88,8 @@ class OnMemberJoin(commands.Cog):
                         embed = discord.Embed(color=self.color, description=t)
                         await channel_.send(embed=embed)
             except discord.Forbidden:
+                pass
+            except discord.errors.NotFound:
                 pass
 
 

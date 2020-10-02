@@ -32,6 +32,8 @@ class ChannelPinUpdate(commands.Cog):
                         await canal.send(embed=to_send)
                 except AttributeError:
                     pass
+                except discord.errors.NotFound:
+                    pass
                 except discord.errors.HTTPException:
                     pass
                 except TypeError:

@@ -248,7 +248,7 @@ class UserBank(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='ticket', aliases=['raspadinha', 'rifa'])
-    async def ticket(self, ctx):
+    async def ticket(self, ctx, stone: int = None):
         """raspadinha da sorte da ashley"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
@@ -259,33 +259,47 @@ class UserBank(commands.Cog):
 
         n_cost = [500, 75, 25]
 
-        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
-                       f" Escolha uma dessas opções abaixo!``\n"
-                       f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                       f"``Bonus de Chance:`` **+1%**\n"
-                       f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                       f"``Bonus de Chance:`` **+2%**\n"
-                       f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                       f"``Bonus de Chance:`` **+3%**")
+        if stone not in [1, 2, 3]:
+            await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                           f" Escolha uma dessas opções abaixo!``\n"
+                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
+                           f"``Bonus de Chance:`` **+1%**\n"
+                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
+                           f"``Bonus de Chance:`` **+2%**\n"
+                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
+                           f"``Bonus de Chance:`` **+3%**")
 
-        try:
-            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-        except TimeoutError:
-            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                  ' CANCELADO**')
+            try:
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+            except TimeoutError:
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
+                                      ' CANCELADO**')
 
-        if int(answer.content) == 1:
-            cost = n_cost[0]
-            coin = "bronze"
-            plus = 1
-        if int(answer.content) == 2:
-            cost = n_cost[1]
-            coin = "silver"
-            plus = 2
-        if int(answer.content) == 3:
-            cost = n_cost[2]
-            coin = "gold"
-            plus = 3
+            if int(answer.content) == 1:
+                cost = n_cost[0]
+                coin = "bronze"
+                plus = 1
+            if int(answer.content) == 2:
+                cost = n_cost[1]
+                coin = "silver"
+                plus = 2
+            if int(answer.content) == 3:
+                cost = n_cost[2]
+                coin = "gold"
+                plus = 3
+        else:
+            if stone == 1:
+                cost = n_cost[0]
+                coin = "bronze"
+                plus = 1
+            if stone == 2:
+                cost = n_cost[1]
+                coin = "silver"
+                plus = 2
+            if stone == 3:
+                cost = n_cost[2]
+                coin = "gold"
+                plus = 3
 
         if data['treasure'][coin] < cost:
             return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '
@@ -373,7 +387,7 @@ class UserBank(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='bollash', aliases=['pokebola', 'boll', 'bola'])
-    async def bollash(self, ctx):
+    async def bollash(self, ctx, stone: int = None):
         """bola para capitura dos pets da ashley"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
@@ -384,33 +398,47 @@ class UserBank(commands.Cog):
 
         n_cost = [1000, 150, 50]
 
-        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
-                       f" Escolha uma dessas opções abaixo!``\n"
-                       f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                       f"``Bonus de Chance:`` **+1%**\n"
-                       f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                       f"``Bonus de Chance:`` **+2%**\n"
-                       f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                       f"``Bonus de Chance:`` **+3%**")
+        if stone not in [1, 2, 3]:
+            await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                           f" Escolha uma dessas opções abaixo!``\n"
+                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
+                           f"``Bonus de Chance:`` **+1%**\n"
+                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
+                           f"``Bonus de Chance:`` **+2%**\n"
+                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
+                           f"``Bonus de Chance:`` **+3%**")
 
-        try:
-            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-        except TimeoutError:
-            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                  ' CANCELADO**')
+            try:
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+            except TimeoutError:
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
+                                      ' CANCELADO**')
 
-        if int(answer.content) == 1:
-            cost = n_cost[0]
-            coin = "bronze"
-            plus = 1
-        if int(answer.content) == 2:
-            cost = n_cost[1]
-            coin = "silver"
-            plus = 2
-        if int(answer.content) == 3:
-            cost = n_cost[2]
-            coin = "gold"
-            plus = 3
+            if int(answer.content) == 1:
+                cost = n_cost[0]
+                coin = "bronze"
+                plus = 1
+            if int(answer.content) == 2:
+                cost = n_cost[1]
+                coin = "silver"
+                plus = 2
+            if int(answer.content) == 3:
+                cost = n_cost[2]
+                coin = "gold"
+                plus = 3
+        else:
+            if stone == 1:
+                cost = n_cost[0]
+                coin = "bronze"
+                plus = 1
+            if stone == 2:
+                cost = n_cost[1]
+                coin = "silver"
+                plus = 2
+            if stone == 3:
+                cost = n_cost[2]
+                coin = "gold"
+                plus = 3
 
         if data['treasure'][coin] < cost:
             return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '
@@ -466,7 +494,7 @@ class UserBank(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='stone', aliases=['pedra'])
-    async def stone(self, ctx):
+    async def stone(self, ctx, stone: int = None):
         """bola para capitura dos pets da ashley"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
@@ -477,33 +505,47 @@ class UserBank(commands.Cog):
 
         n_cost = [2000, 300, 100]
 
-        await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
-                       f" Escolha uma dessas opções abaixo!``\n"
-                       f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                       f"``Bonus de Chance:`` **+1%**\n"
-                       f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                       f"``Bonus de Chance:`` **+2%**\n"
-                       f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                       f"``Bonus de Chance:`` **+3%**")
+        if stone not in [1, 2, 3]:
+            await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                           f" Escolha uma dessas opções abaixo!``\n"
+                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
+                           f"``Bonus de Chance:`` **+1%**\n"
+                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
+                           f"``Bonus de Chance:`` **+2%**\n"
+                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
+                           f"``Bonus de Chance:`` **+3%**")
 
-        try:
-            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-        except TimeoutError:
-            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                  ' CANCELADO**')
+            try:
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+            except TimeoutError:
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
+                                      ' CANCELADO**')
 
-        if int(answer.content) == 1:
-            cost = n_cost[0]
-            coin = "bronze"
-            plus = 1
-        if int(answer.content) == 2:
-            cost = n_cost[1]
-            coin = "silver"
-            plus = 2
-        if int(answer.content) == 3:
-            cost = n_cost[2]
-            coin = "gold"
-            plus = 3
+            if int(answer.content) == 1:
+                cost = n_cost[0]
+                coin = "bronze"
+                plus = 1
+            if int(answer.content) == 2:
+                cost = n_cost[1]
+                coin = "silver"
+                plus = 2
+            if int(answer.content) == 3:
+                cost = n_cost[2]
+                coin = "gold"
+                plus = 3
+        else:
+            if stone == 1:
+                cost = n_cost[0]
+                coin = "bronze"
+                plus = 1
+            if stone == 2:
+                cost = n_cost[1]
+                coin = "silver"
+                plus = 2
+            if stone == 3:
+                cost = n_cost[2]
+                coin = "gold"
+                plus = 3
 
         if data['treasure'][coin] < cost:
             return await ctx.send('<:negate:721581573396496464>│``Desculpe, você não tem pedras suficientes.`` '

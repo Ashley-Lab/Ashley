@@ -44,13 +44,11 @@ class OnReady(commands.Cog):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
             date_ = date.localtime()
-
             # existe uma diferença de hora de +3 para o servidor da ashley
             if date_[3] == 3 and date_[4] <= 15:
                 all_data = await self.bot.db.get_all_data("users")
                 for data in all_data:
                     update = data
-
                     try:
                         last_verify = date.mktime(update['security']['last_verify'].timetuple())
                         last_blocked = date.mktime(update['security']['last_blocked'].timetuple())
@@ -61,22 +59,18 @@ class OnReady(commands.Cog):
                         pass
                     except AttributeError:
                         pass
-
                     if not update['security']['blocked']:
                         update['security']['commands'] = 0
                         update['security']['commands_today'] = 0
                         update['security']['strikes'] = 0
                         update['security']['last_verify'] = dt.today()
                         update['security']['status'] = True
-
                     else:
                         update['security']['commands'] = 0
                         update['security']['commands_today'] = 0
                         update['security']['strikes'] = 0
                         update['security']['last_verify'] = dt.today()
-
                     await self.bot.db.update_data(data, update, "users")
-
             await asyncio.sleep(300)
 
     async def draw_member(self):

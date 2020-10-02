@@ -121,10 +121,13 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [instagram](#instagram)
 - [InventoryClass](#inventoryclass-commands)
   - [inventory](#inventory)
+  - [inventory equip](#inventory-equip)
 - [Inverse](#inverse-commands)
   - [palin](#palin)
 - [InviteClass](#inviteclass-commands)
   - [invite](#invite)
+- [JewelClass](#jewelclass-commands)
+  - [jewel](#jewel)
 - [JoKenPo](#jokenpo-commands)
   - [jkp](#jkp)
 - [KickClass](#kickclass-commands)
@@ -140,11 +143,20 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [logger edit](#logger-edit)
 - [LogoutCog](#logoutcog-commands)
   - [logout](#logout)
+- [LoverClass](#loverclass-commands)
+  - [lover](#lover)
+  - [status](#status)
+  - [unlover](#unlover)
 - [MarriedSystem](#marriedsystem-commands)
   - [divorce](#divorce)
   - [marry](#marry)
 - [MeltedClass](#meltedclass-commands)
   - [melted](#melted)
+  - [unsealed](#unsealed)
+- [MergeClass](#mergeclass-commands)
+  - [merge](#merge)
+- [MineClass](#mineclass-commands)
+  - [mine](#mine)
 - [OpenClass](#openclass-commands)
   - [gift](#gift)
   - [open](#open)
@@ -213,10 +225,12 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [top money](#top-money)
   - [top point](#top-point)
   - [top purple](#top-purple)
+  - [top rpg](#top-rpg)
   - [top xp](#top-xp)
   - [top yellow](#top-yellow)
 - [TotComandos](#totcomandos-commands)
   - [total_de_comandos](#total_de_comandos)
+- [TradeClass](#tradeclass-commands)
 - [TransferClass](#transferclass-commands)
   - [transfer](#transfer)
 - [TwitterClass](#twitterclass-commands)
@@ -225,15 +239,15 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [unload](#unload)
 - [UserBank](#userbank-commands)
   - [bollash](#bollash)
+  - [stone](#stone)
   - [ticket](#ticket)
   - [wallet](#wallet)
 - [UserInfo](#userinfo-commands)
   - [userinfo](#userinfo)
 - [UtilityClass](#utilityclass-commands)
   - [create_gift](#create_gift)
-  - [lover](#lover)
-  - [status](#status)
-  - [unlover](#unlover)
+  - [create_vip](#create_vip)
+  - [reset_user](#reset_user)
 - [WhatsappClass](#whatsappclass-commands)
   - [whatsapp](#whatsapp)
 
@@ -465,7 +479,7 @@ Use ash economy
 ## EvalSintax
 
 #### eval
->**Descrição:** apenas desenvolvedores
+>**Descrição:** Evaluates a code
 
 >**Modo de Uso:** `ash eval <body>`
 
@@ -595,6 +609,12 @@ Use ash i ou ash inventory
 
 >**Modo de Uso:** `ash inventory `
 
+#### inventory equip
+>**Descrição:** Comando usado pra ver seu inventario de equipamentos
+Use ash i ou ash inventory
+
+>**Modo de Uso:** `ash inventory equip `
+
 ## Inverse
 
 #### palin
@@ -610,6 +630,13 @@ Use ash palin
 Use ash invite
 
 >**Modo de Uso:** `ash invite `
+
+## JewelClass
+
+#### jewel
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash jewel `
 
 ## JoKenPo
 
@@ -671,13 +698,30 @@ Use ash logger edit <log desejado> e siga as instruções do comando
 
 >**Modo de Uso:** `ash logout [reason]`
 
+## LoverClass
+
+#### lover
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash lover `
+
+#### status
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash status `
+
+#### unlover
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash unlover `
+
 ## MarriedSystem
 
 #### divorce
 >**Descrição:** Comando usado pra se divorciar
 Use ash divorce <@prostiranha em questão>
 
->**Modo de Uso:** `ash divorce [member]`
+>**Modo de Uso:** `ash divorce `
 
 #### marry
 >**Descrição:** Comando usado pra pedir alguem em casamento
@@ -691,6 +735,25 @@ Use ash marry <@pessoa desejada>
 >**Descrição:** Esse nem eu sei...
 
 >**Modo de Uso:** `ash melted `
+
+#### unsealed
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash unsealed [equip]`
+
+## MergeClass
+
+#### merge
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash merge [item]`
+
+## MineClass
+
+#### mine
+>**Descrição:** Esse nem eu sei...
+
+>**Modo de Uso:** `ash mine `
 
 ## OpenClass
 
@@ -877,7 +940,7 @@ Use ash skill
 >**Descrição:** Comando usado pra distribuir seus status no rpg da Ashley
 Use ash skill add e siga as instruções do comando
 
->**Modo de Uso:** `ash skill add [status]`
+>**Modo de Uso:** `ash skill add [status] [n=1]`
 
 #### skill reset
 >**Descrição:** Comando usado pra resetar seus status
@@ -991,6 +1054,12 @@ Use ash top roxo
 
 >**Modo de Uso:** `ash top purple `
 
+#### top rpg
+>**Descrição:** Comando usado pra retornar o top 20 em questão de comandos usados
+Use ash top command
+
+>**Modo de Uso:** `ash top rpg `
+
 #### top xp
 >**Descrição:** Comando usado pra retornar o top 20 em questão de xp da Ashley
 Use ash top xp
@@ -1009,6 +1078,8 @@ Use ash top amarelo
 >**Descrição:** apenas desenvolvedores
 
 >**Modo de Uso:** `ash total_de_comandos `
+
+## TradeClass
 
 ## TransferClass
 
@@ -1038,12 +1109,17 @@ Use ash twitter <mensagem desejada>
 #### bollash
 >**Descrição:** bola para capitura dos pets da ashley
 
->**Modo de Uso:** `ash bollash `
+>**Modo de Uso:** `ash bollash [stone]`
+
+#### stone
+>**Descrição:** bola para capitura dos pets da ashley
+
+>**Modo de Uso:** `ash stone [stone]`
 
 #### ticket
 >**Descrição:** raspadinha da sorte da ashley
 
->**Modo de Uso:** `ash ticket `
+>**Modo de Uso:** `ash ticket [stone]`
 
 #### wallet
 >**Descrição:** Comando usado para verificar quanto dinheiro você tem
@@ -1066,20 +1142,15 @@ Use ash userinfo <@usuario em questão>
 
 >**Modo de Uso:** `ash create_gift [time]`
 
-#### lover
+#### create_vip
+>**Descrição:** raspadinha da sorte da ashley
+
+>**Modo de Uso:** `ash create_vip [member]`
+
+#### reset_user
 >**Descrição:** Esse nem eu sei...
 
->**Modo de Uso:** `ash lover `
-
-#### status
->**Descrição:** Esse nem eu sei...
-
->**Modo de Uso:** `ash status `
-
-#### unlover
->**Descrição:** Esse nem eu sei...
-
->**Modo de Uso:** `ash unlover `
+>**Modo de Uso:** `ash reset_user [member]`
 
 ## WhatsappClass
 

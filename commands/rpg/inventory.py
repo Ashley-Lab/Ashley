@@ -315,7 +315,7 @@ class InventoryClass(commands.Cog):
         Use ash i ou ash inventory"""
         if ctx.invoked_subcommand is None:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            embed = ['Inventário:', self.color, 'Items: \n']
+            embed = ['Inventário de itens:', self.color, 'Items: \n']
             await paginator(self.bot, self.i, data['inventory'], embed, ctx)
 
     @check_it(no_pm=True)
@@ -330,7 +330,7 @@ class InventoryClass(commands.Cog):
         if len(data['rpg']['items'].keys()) == 0:
             return await ctx.send(f"<:negate:721581573396496464>|``SEU INVENTARIO DE EQUIPAMENTOS ESTÁ VAZIO!``")
 
-        embed = ['Inventário:', self.color, 'Equipamentos: \n']
+        embed = ['Inventário de equipamentos:', self.color, 'Equipamentos: \n']
 
         eq = dict()
         for ky in self.bot.config['equips'].keys():

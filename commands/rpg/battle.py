@@ -28,6 +28,7 @@ class Battle(commands.Cog):
     async def battle(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
+
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
@@ -117,12 +118,12 @@ class Battle(commands.Cog):
         for k in db_monster["status"].keys():
             if db_player['level'] > 25:
                 db_monster["status"][k] += randint(2, 4)
+
+        for k in db_monster["status"].keys():
             for sts in db_player['equipped_items'].keys():
                 if db_player['equipped_items'][sts] is not None:
-                    if k in ["atk", "luk"]:
+                    if k in ["atk", "luk", "con"]:
                         db_monster["status"][k] += randint(1, 2)
-                    if k == "con":
-                        db_monster["status"][k] += randint(2, 4)
 
         # criando as entidades...
         player = Entity(db_player, True)
@@ -152,6 +153,7 @@ class Battle(commands.Cog):
             # --------======== TEMPO DE ESPERA ========--------
             await sleep(0.5)
             # --------======== ............... ========--------
+
             lvlp, lvlm, atk = player.lvl, monster.lvl, int(player.status['atk'] * 2)
             if randint(1, 20 + lvlp) + player.status['prec'] > randint(1, 16 + lvlm) + monster.status['agi']:
                 await monster.damage(skill, player.level_skill, atk, ctx, player.name)

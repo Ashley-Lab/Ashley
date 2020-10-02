@@ -49,6 +49,8 @@ class Ashley(commands.AutoShardedBot):
         self.icons = config['icons']
         self.pets = config['pets']
         self.no_panning = config['attribute']['no_panning']
+        self.testers = [385975713167179779, 396101152359579648, 300592580381376513, 547082621293690900]
+        self.maintenance = False
 
         self.server_ = "HEROKU"
         self.progress = "V.7 -> 067.5%"
@@ -174,6 +176,9 @@ class Ashley(commands.AutoShardedBot):
 
                 if str(ctx.command).lower() in ['box buy', 'box booster', 'craft', 'box']:
                     update_user['config']['buying'] = False
+
+                if str(ctx.command).lower() in ['mine']:
+                    update_user['config']['mine'] = False
 
                 if str(ctx.command).lower() in ['battle']:
                     update_user['config']['battle'] = False
@@ -518,6 +523,15 @@ class Ashley(commands.AutoShardedBot):
         if not perms.send_messages or not perms.read_messages:
             return
 
+        if ctx.command is not None:
+            if message.author.id not in self.testers and self.maintenance:
+                msg = "<a:xablau:525105065460105226>│``DESCULPE ESTOU EM MANUTENÇÃO. MAS DENTRO DE 6H TUDO ESTARÁ " \
+                      "NORMALIZADO. (MANUTENÇÃO INICOU AS 18:00) PREVISAO DE TERMINO (00:00)``\n" \
+                      "**OBS:** ``ATUALMENTE APENAS PESSOAS AUTORIZADAS PODEM USAR OS RECURSOS DA ASHLEY, MAS" \
+                      " LOGO TUDO ESTARÁ NORMALIZADO. A EQUIPE DA`` **ASHLEY** ``SENTE MUITO POR ESSE TRANSTORNO!``"
+                embed = discord.Embed(color=self.color, description=msg)
+                return await message.channel.send(embed=embed)
+
         self.msg_cont += 1
 
         if message.webhook_id is not None:
@@ -617,7 +631,12 @@ if __name__ == "__main__":
 
     print("\033[1;35m( >> ) | Iniciando...\033[m\n")
     print("\033[1;35m( >> ) | Iniciando carregamento de extensões...\033[m")
-    f = open("modulos.txt", "r")
+
+    if bot.maintenance:
+        f = open("maintenance.txt", "r")
+    else:
+        f = open("modulos.txt", "r")
+
     for name in f.readlines():
         if len(name.strip()) > 0:
             try:

@@ -1,7 +1,8 @@
 import discord
 import operator
-from pytz import timezone
+import datetime
 
+from pytz import timezone
 from config import data as config
 from random import choice
 from asyncio import TimeoutError
@@ -18,6 +19,25 @@ def include(string_, list_):
         if i.lower() in string_.lower():
             return True
     return False
+
+
+def base36encode(number):
+    base36, sign, alphabet = str(), str(), '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    if number < 0:
+        sign = '-'
+        number = -number
+    if 0 <= number < len(alphabet):
+        return sign + alphabet[number]
+    while number != 0:
+        number, i = divmod(number, len(alphabet))
+        base36 = alphabet[i] + base36
+    return sign + base36
+
+
+def create_id():
+    actual_datetime = datetime.datetime.now()
+    actual_datetime = actual_datetime.strftime("1%d%m%y%H%M%S")
+    return base36encode(int(actual_datetime))
 
 
 def get_content(content):
@@ -121,6 +141,9 @@ async def paginator(bot, items, inventory, embed, ctx):
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=False)
         list_i = [sorted_x[x][0] for x in range(len(inventory.keys()))]
 
+    elif str(ctx.command) == "merchant":
+        list_i = inventory
+
     elif str(ctx.command) == "inventory equip":
         dict_ = dict()
         for _ in inventory.keys():
@@ -181,6 +204,23 @@ async def paginator(bot, items, inventory, embed, ctx):
                          f'``{items[key][1]}{("-" * (30 - len(items[key][1])))}>`` **{rarity.lower()}**\n'
             except KeyError:
                 string = f"<:negate:721581573396496464> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
+
+        elif str(ctx.command) == "merchant":
+            a = '{:,.2f}'.format(float(key['value']))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+
+            if key['type'] == "craft":
+                item_now = bot.items[key["item"]]
+                icon, name = item_now[0], item_now[1]
+
+            else:
+                item_now = [i[1] for i in items if i[0] == key["item"]]
+                icon, name = item_now[0]["icon"], item_now[0]["name"]
+
+            string = f'``{key["_id"]}`` **-** {icon} **{key["amount"]}** ``{name.upper()}\n' \
+                     f'PREÇO DA UND:`` **R$ {d}**\n\n'
 
         elif str(ctx.command) == "inventory equip":
             rarity = items[key]['rarity']
@@ -389,7 +429,7 @@ async def guild_info(guild):
     embed = discord.Embed(color=int("ff00c1", 16), description="Abaixo está as informaçoes principais do servidor!")
     embed.set_thumbnail(url=guild.icon_url)
     embed.add_field(name="Nome:", value=guild.name, inline=True)
-    embed.add_field(name="Dono:", value=guild.owner.mention)
+    embed.add_field(name="Dono:", value=f"{str(guild.owner)} = {guild.owner.mention}")
     embed.add_field(name="ID:", value=guild.id, inline=True)
     embed.add_field(name="Cargos:", value=str(len(guild.roles)), inline=True)
     embed.add_field(name="Membros:", value=str(len(guild.members)), inline=True)

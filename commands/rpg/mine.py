@@ -46,8 +46,6 @@ class MineClass(commands.Cog):
 
         update['config']['mine'] = True
         await self.bot.db.update_data(data, update, 'users')
-        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        update = data
         quant = 0
 
         text = "Minerando 0%...\n``--------------------------------------------------``"
@@ -70,10 +68,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 10%...\n``█████---------------------------------------------``"
@@ -96,10 +97,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 20%...\n``██████████----------------------------------------``"
@@ -122,10 +126,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 30%...\n``███████████████-----------------------------------``"
@@ -148,10 +155,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 40%...\n``████████████████████------------------------------``"
@@ -174,10 +184,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 50%...\n``█████████████████████████-------------------------``"
@@ -200,10 +213,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 60%...\n``██████████████████████████████--------------------``"
@@ -226,10 +242,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 70%...\n``███████████████████████████████████---------------``"
@@ -252,10 +271,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 80%...\n``████████████████████████████████████████----------``"
@@ -278,10 +300,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "Minerando 90%...\n``█████████████████████████████████████████████-----``"
@@ -304,10 +329,13 @@ class MineClass(commands.Cog):
             await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 {ctx.author.name} ``VOCE MINEROU:``\n"
                            f"``+{item}`` {self.items[reward][0]} **{self.items[reward][1]}**")
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             try:
                 update['inventory'][reward] += item
             except KeyError:
                 update['inventory'][reward] = item
+            await self.bot.db.update_data(data, update, 'users')
         # ========================================================================================
 
         text = "**MINERADO 100%!**\n``██████████████████████████████████████████████████``"
@@ -319,6 +347,9 @@ class MineClass(commands.Cog):
         await ctx.send(f"<:confirmed:721581574461587496>│{ctx.author.name} ``VOCE MINEROU:``\n"
                        f"``{quant}`` **ITENS NO TOTAL.**")
         # ========================================================================================
+
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
         update['config']['mine'] = False
         await self.bot.db.update_data(data, update, 'users')
 

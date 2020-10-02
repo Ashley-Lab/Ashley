@@ -137,8 +137,9 @@ class Database(object):
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         return f"<:confirmed:721581574461587496>│**{amount}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
 
-    async def give_money(self, ctx, amount: int = 0):
-        data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+    async def give_money(self, ctx, amount: int = 0, id_give=None):
+        _id = id_give if id_give is not None else ctx.author.id
+        data_user = await self.bot.db.get_data("user_id", _id, "users")
         update_user = data_user
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
@@ -146,6 +147,19 @@ class Database(object):
         update_guild_native['data']['total_money'] += amount
         await self.bot.db.update_data(data_user, update_user, 'users')
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+
+        if id_give is not None:
+            _user = self.bot.get_user(id_give)
+            try:
+                a = '{:,.2f}'.format(float(amount))
+                b = a.replace(',', 'v')
+                c = b.replace('.', ',')
+                d = c.replace('v', '.')
+                await _user.send(f"<:confirmed:721581574461587496>│``Voce acabou de vender um item no mercado, "
+                                 f"e recebeu o valor de`` **R$ {d}** ``Ethernyas. Aproveite e olhe sua lojinha.``")
+            except discord.errors.Forbidden:
+                pass
+
         return f"<:confirmed:721581574461587496>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
 
     async def add_money(self, ctx, amount, ext=False):
@@ -365,19 +379,18 @@ class DataInteraction(object):
         self.bot = bot
         self.db = self.bot.db
 
-    async def get_language(self, guild: str):
-        data = await self.db.get_data("guild_id", guild, "guilds")
-        lang = data["data"].get("lang", "pt")
-        return lang
-
-    async def set_language(self, guild: str, language):
-        data = await self.db.get_data("guild_id", guild, "guilds")
-        update = data
-        update['data'].__delitem__("lang")
-        update["data"].__setitem__("lang", language)
-        await self.db.update_data(data, update, "guilds")
-
     async def add_experience(self, message, exp):
+
+        run_command = False
+        data_guild = await self.db.get_data("guild_id", message.guild.id, "guilds")
+        if data_guild is not None:
+            if data_guild['command_locked']['status']:
+                if message.channel.id in data_guild['command_locked']['while_list']:
+                    run_command = True
+            else:
+                if message.channel.id not in data_guild['command_locked']['black_list']:
+                    run_command = True
+
         data = await self.db.get_data("user_id", message.author.id, "users")
         update = data
 
@@ -400,6 +413,7 @@ class DataInteraction(object):
                 except KeyError:
                     update['inventory']['coins'] = 1000
 
+                if run_command:
                     await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** '
                                                '``e ganhou a`` **chance** ``de garimpar mais ethernyas '
                                                'e`` **+1000** ``Fichas``'.format(message.author, "Silver"))
@@ -413,6 +427,7 @@ class DataInteraction(object):
                 except KeyError:
                     update['inventory']['coins'] = 2000
 
+                if run_command:
                     await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o ranking`` **{}** ``e ganhou '
                                                'a`` **chance** ``de garimpar mais eternyas do que o ranking passado '
                                                'e`` **+2000** ``Fichas``'.format(message.author, "Gold"))
@@ -428,8 +443,9 @@ class DataInteraction(object):
             except KeyError:
                 update['inventory']['coins'] = 200
 
-            await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e ganhou`` **+200** '
-                                       '``Fichas``'.format(message.author, lvl_now))
+            if run_command:
+                await message.channel.send('🎊 **PARABENS** 🎉 {} ``você upou para o level`` **{}** ``e ganhou`` '
+                                           '**+200** ``Fichas``'.format(message.author, lvl_now))
 
         await self.db.update_data(data, update, "users")
 
@@ -500,6 +516,24 @@ class DataInteraction(object):
         pending = self.bot.get_channel(619969149791240211)
         msg = f"{ctx.author.id}: **{ctx.author.name}** ``ADICIONOU UM NOVO ANUNCIO PARA APROVAÇÃO!``"
         await pending.send(msg)
+
+    async def add_vip(self, **kwargs):
+        if kwargs.get("target") == "users":
+            data = await self.db.get_data("user_id", kwargs.get("user_id"), "users")
+            update = data
+            if kwargs.get("state"):
+                update['config']['vip'] = True
+            else:
+                update['config']['vip'] = False
+            await self.db.update_data(data, update, "users")
+        elif kwargs.get("target") == "guilds":
+            data = await self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
+            update = data
+            if kwargs.get("state"):
+                update['vip'] = True
+            else:
+                update['vip'] = False
+            await self.db.update_data(data, update, "guilds")
 
     async def get_rank_xp(self, limit):
         global cont
@@ -702,24 +736,6 @@ class DataInteraction(object):
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         return rank
-
-    async def add_vip(self, **kwargs):
-        if kwargs.get("target") == "users":
-            data = await self.db.get_data("user_id", kwargs.get("user_id"), "users")
-            update = data
-            if kwargs.get("state"):
-                update['config']['vip'] = True
-            else:
-                update['config']['vip'] = False
-            await self.db.update_data(data, update, "users")
-        elif kwargs.get("target") == "guilds":
-            data = await self.db.get_data("guild_id", kwargs.get("guild_id"), "guilds")
-            update = data
-            if kwargs.get("state"):
-                update['vip'] = True
-            else:
-                update['vip'] = False
-            await self.db.update_data(data, update, "guilds")
 
     async def get_rank_rpg(self, limit):
         global cont

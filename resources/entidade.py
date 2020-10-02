@@ -26,15 +26,11 @@ class Entity(object):
         self.ln = self.db['lower_net']
 
         if self.is_player:
-
-            self.ik = []
             for c in range(5):
                 if self.lvl >= levels[c]:
                     self.atacks[_class[self.db['next_class']][str(c)]['name']] = _class[self.db['next_class']][str(c)]
-                    self.ik.append(self.db['next_class'])
                 else:
                     self.atacks[_class[self.db['class']][str(c)]['name']] = _class[self.db['class']][str(c)]
-                    self.ik.append(self.db['class'])
 
             self.rate = [_class[self.db['class']]['rate']['life'], _class[self.db['class']]['rate']['mana']]
             if self.db['level'] > 25:
@@ -60,6 +56,7 @@ class Entity(object):
 
     async def turn(self, enemy_info, bot, ctx):
         stun = False
+        ice = False
         self.atack = None
         atacks = eval(str(self.atacks.keys()).replace('dict_keys(', '').replace(')', ''))
         try:
@@ -70,7 +67,11 @@ class Entity(object):
         for c in ['stun', 'gelo']:
             try:
                 if c in effects and self.effects[c]['turns'] > 0:
-                    stun = True
+                    if c == "stun":
+                        stun = True
+                    if c == "gelo":
+                        ice = True
+
             except KeyError:
                 pass
 
@@ -83,11 +84,9 @@ class Entity(object):
             except KeyError:
                 pass
 
-        if stun is False:
+        if stun is False and ice is False:
             if self.is_player:
-                emojis = [bot.config['skills'][self.ik[0]]['0']['icon'], bot.config['skills'][self.ik[1]]['1']['icon'],
-                          bot.config['skills'][self.ik[2]]['2']['icon'], bot.config['skills'][self.ik[3]]['3']['icon'],
-                          bot.config['skills'][self.ik[4]]['4']['icon']]
+                emojis = list()
                 title = 'YOUR HP:  [{}/{}]  |  YOUR MP:  [{}/{}]\n--==>> OPPONENT: {}<<==--\n' \
                         '--==>> HP: [{}/{}] | LVL: {} <<==--'.format(self.status['hp'] if self.status['hp'] > 0 else 0,
                                                                      (self.status['con'] * self.rate[0]),
@@ -101,14 +100,25 @@ class Entity(object):
                 description = ''
                 for c in range(0, len(atacks)):
                     c2, ls = atacks[c], self.level_skill
-                    damage = int(self.status['atk'] + self.status['atk'] * 0.50)
+                    damage = int(self.status['atk'] * 2)
                     dado = self.atacks[c2]['damage'][self.level_skill]
-                    description += f"{emojis[c]} **{c2.upper()}** ``Lv:`` **{ls + 1 if ls + 1 < 11 else 10}**\n" \
-                                   f"``Dano:`` **{dado} + {damage} de ATK**\n" \
+                    icon = self.atacks[c2]['icon']
+                    skill_type = self.atacks[c2]['type']
+                    emojis.append(self.atacks[c2]['icon'])
+
+                    try:
+                        effect_skill = str(self.atacks[c2]['effs'][self.level_skill].keys())
+                    except KeyError:
+                        effect_skill = "sem efeito"
+                    except TypeError:
+                        effect_skill = "sem efeito"
+
+                    description += f"{icon} **{c2.upper()}** ``Lv:`` **{ls + 1 if ls + 1 < 11 else 10}**\n" \
+                                   f"``Dano:`` **{dado} + {damage} de ATK -** ``{skill_type.upper()}``\n" \
                                    f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill]}**\n" \
-                                   f"``Efeito(s):`` " \
-                                   f"**{str(self.atacks[c2]['effs'][self.level_skill].keys())}**" \
+                                   f"``Efeito(s):`` **{effect_skill}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
+
                 regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                 description += f'<:pass:692967573649752194> **{"Pass turn".upper()}**\n' \
                                f'``Mana Recovery:`` **+{regen} de Mana** + **HP Regen**'
@@ -191,7 +201,7 @@ class Entity(object):
                 pass
 
         else:
-            description = f'{self.name} esta stunado'
+            description = f'{self.name} esta {"stunado" if stun else "congelado"}'
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
@@ -260,92 +270,93 @@ class Entity(object):
                         await ctx.send(embed=embed_)
                 except KeyError:
                     pass
+
                 if self.effects[c]['turns'] > 0:
                     self.effects[c]['turns'] -= 1
+
+                if self.effects[c]['turns'] == 0:
+                    del self.effects[c]
 
         return self.atack
 
     async def damage(self, skill, lvlskill, enemy_atack, ctx, name):
-        if skill is not None:
-            if skill['effs'] is not None:
-                if not self.is_player:
-                    key = [k for k, v in skill['effs'][lvlskill].items()]
-                else:
-                    key = [k for k, v in skill['effs'].items()]
-                for c in key:
-                    try:
-                        if not self.is_player:
-                            chance = randint(1, 100)
-                            chance += self.status['luk']
-                            if chance >= 95:
-                                self.effects['turns'] += skill['effs'][lvlskill][c]['turns']
-                                self.chance = True
-                            else:
-                                self.chance = False
-                        else:
-                            chance = randint(1, 100)
-                            chance += self.status['luk']
-                            if chance >= 95:
-                                self.effects['turns'] += skill['effs'][c]['turns']
-                                self.chance = True
-                            else:
-                                self.chance = False
-                    except KeyError:
-                        if not self.is_player:
-                            chance = randint(1, 100)
-                            chance += self.status['luk']
-                            if chance >= 95:
-                                self.effects[c] = skill['effs'][lvlskill][c]
-                                self.chance = True
-                            else:
-                                self.chance = False
-                        else:
-                            chance = randint(1, 100)
-                            chance += self.status['luk']
-                            if chance >= 95:
-                                self.effects[c] = skill['effs'][c]
-                                self.chance = True
-                            else:
-                                self.chance = False
-                    if self.chance:
-                        if c.upper() != "SEM EFEITO":
-                            description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
-                            hp_max = self.status['con'] * self.rate[0]
-                            monster = not self.is_player
-                            embed_ = embed_creator(description, skill['img'], monster, hp_max,
-                                                   self.status['hp'], self.img, self.ln)
-                            await ctx.send(embed=embed_)
-                    else:
-                        if c.upper() != "SEM EFEITO":
-                            description = f'**{self.name.upper()}** ``não recebeu o efeito de`` **{c.upper()}**'
-                            hp_max = self.status['con'] * self.rate[0]
-                            monster = not self.is_player
-                            img_ = "https://uploads1.yugioh.com/card_images/2383/detail/110.jpg?1385098437"
-                            embed_ = embed_creator(description, img_, monster, hp_max,
-                                                   self.status['hp'], self.img, self.ln)
-                            await ctx.send(embed=embed_)
-            if not self.is_player:
-                damage = skill['damage'][lvlskill]
-            else:
-                damage = skill['damage']
-            dice1 = int(damage[:damage.find('d')])
-            dice2 = int(damage[damage.find('d') + 1:])
-            bk = 0
-            for c in range(0, dice1):
-                bk += randint(1, dice2)
-            damage = enemy_atack + bk
-            self.status['hp'] -= (damage - self.armor)
-            if self.status['hp'] < 0:
-                self.status['hp'] = 0
-            description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
-            hp_max = self.status['con'] * self.rate[0]
-            monster = not self.is_player
-            embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
-            await ctx.send(embed=embed_)
-        else:
+        if skill is None:
             description = f'**{name.upper()}** ``não pode atacar!``'
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
+            return await ctx.send(embed=embed_)
+
+        if skill['effs'] is not None:
+            if not self.is_player:
+                key = [k for k, v in skill['effs'][lvlskill].items()]
+            else:
+                key = [k for k, v in skill['effs'].items()]
+            for c in key:
+
+                chance = randint(1, 100)
+                chance += self.status['luk']
+
+                if chance >= 95:
+                    self.chance = True
+                else:
+                    self.chance = False
+
+                if self.chance:
+
+                    if not self.is_player:
+                        self.effects[c] = skill['effs'][lvlskill][c]
+                    else:
+                        self.effects[c] = skill['effs'][c]
+
+                    if self.effects[c]['turns'] == 0:
+                        self.effects[c]['turns'] = randint(1, 2)
+
+                    description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
+                    hp_max = self.status['con'] * self.rate[0]
+                    monster = not self.is_player
+                    embed_ = embed_creator(description, skill['img'], monster, hp_max,
+                                           self.status['hp'], self.img, self.ln)
+                    await ctx.send(embed=embed_)
+                else:
+                    description = f'**{self.name.upper()}** ``não recebeu o efeito de`` **{c.upper()}**'
+                    hp_max = self.status['con'] * self.rate[0]
+                    monster = not self.is_player
+                    img_ = "https://uploads1.yugioh.com/card_images/2383/detail/110.jpg?1385098437"
+                    embed_ = embed_creator(description, img_, monster, hp_max,
+                                           self.status['hp'], self.img, self.ln)
+                    await ctx.send(embed=embed_)
+
+        if not self.is_player:
+            damage = skill['damage'][lvlskill]
+        else:
+            damage = skill['damage']
+        dice1 = int(damage[:damage.find('d')])
+        dice2 = int(damage[damage.find('d') + 1:])
+        bk = 0
+        for c in range(0, dice1):
+            bk += randint(1, dice2)
+        damage = enemy_atack + bk
+        dn = (damage - self.armor)
+        if dn < 0:
+            description = f'**{self.name.upper()}** ``obsorveu todo o dano e recebeu`` **0** ``de dano``'
+            hp_max = self.status['con'] * self.rate[0]
+            monster = not self.is_player
+            embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
+            await ctx.send(embed=embed_)
+        else:
+            self.status['hp'] -= dn
+            if self.status['hp'] < 0:
+                self.status['hp'] = 0
+
+            if self.armor > 0:
+                description = f'**{self.name.upper()}** ``receberia`` **{damage}** ``de dano, mas absorveu`` ' \
+                              f'**{self.armor}** ``logo recebeu`` **{dn}**'
+            else:
+                description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
+
+            hp_max = self.status['con'] * self.rate[0]
+            monster = not self.is_player
+            embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)

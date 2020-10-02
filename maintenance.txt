@@ -1,0 +1,11 @@
+commands.owner.eval
+commands.owner.load
+commands.owner.unload
+commands.owner.logout
+commands.admin.source
+events.on_shard_ready
+handler.on_command_error
+commands.data.register
+commands.bot.ping
+commands.rpg.battle
+# O NUMERO DO INDICE É O NUMERO DA LINHA -1

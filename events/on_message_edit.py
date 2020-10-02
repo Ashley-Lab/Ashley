@@ -40,6 +40,8 @@ class OnMessageEdit(commands.Cog):
                     pass
                 except TypeError:
                     pass
+                except discord.errors.NotFound:
+                    pass
                 except discord.errors.HTTPException:
                     pass
 

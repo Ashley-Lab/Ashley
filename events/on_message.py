@@ -14,10 +14,12 @@ class SystemMessage(commands.Cog):
     async def on_message(self, message):
         if message.guild is not None and str(message.author.id) not in self.bot.blacklist:
 
-            # filtro de comandos ( para nao haver iteração em cima de comandos
+            # filtro de comandos ( para nao haver iteração em cima de comandos )
+            # -----------======================-----------
             ctx = await self.bot.get_context(message)
             if ctx.command is not None:
                 return
+            # -----------======================-----------
 
             data_guild = await self.bot.db.get_data("guild_id", message.guild.id, "guilds")
             if data_guild is not None:
