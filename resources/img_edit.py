@@ -1,18 +1,31 @@
 import re
 import json
+# import asyncio  // colocar para testes
 import textwrap
 import unicodedata
 
 from io import BytesIO
 from config import data  # tirar para testes...
 from aiohttp_requests import requests
-from resources.check import validate_url  # tirar para testes...
 from random import choice
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 avatar_marry = None
 letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
            't', 'u', 'v', 'w', 'x', 'y', 'z')
+
+
+regex = re.compile(
+    r'^(?:http|ftp)s?://'  # http:// or https://
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+    r'(?::\d+)?'  # optional port
+    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+
+def validate_url(url):
+    return bool(regex.fullmatch(url))
+
 
 with open("data/pets.json", encoding="utf-8") as pets:
     pets = json.load(pets)
@@ -531,3 +544,45 @@ def equips(data_s):
             image.paste(equipped, (mapped["equipped"][k][0] + 1, mapped["equipped"][k][1]), equipped)
 
     image.save("equips.png")
+
+
+async def welcome(data_welcome):
+    # load dashboard image
+    image = Image.open(f"images/dashboards/{data_welcome['type']}.png").convert('RGBA')
+    show = ImageDraw.Draw(image)
+
+    # add img to main img
+    avatar_user = await get_avatar(data_welcome['avatar'], 258, 258)
+    image.paste(avatar_user, (383, 46), avatar_user)
+
+    # Text Align
+    def text_align(box, text, font_t):
+        nonlocal show
+        x1, y1, x2, y2 = box
+        w, h = show.textsize(text.upper(), font=font_t)
+        x = (x2 - x1 - w) // 2 + x1
+        y = (y2 - y1 - h) // 2 + y1
+        return x, y
+
+    # rectangles' texts
+    rectangles = {
+        "name": [0, 367, 1023, 442],
+        "text": [0, 443, 1023, 499],
+    }
+
+    # add text to img
+    for k in rectangles.keys():
+        if k == "name":
+            color = (211, 36, 7) if data_welcome['type'] == "welcome" else (79, 0, 38)
+            back_color = (255, 255, 255) if data_welcome['type'] == "welcome" else (255, 255, 255)
+            font = ImageFont.truetype("fonts/bot.otf", 50)
+            x_, y_ = text_align(rectangles[k], data_welcome[k], font)
+            show.text(xy=(x_ + 1, y_ + 13), text=data_welcome[k].upper(), fill=back_color, font=font)
+            show.text(xy=(x_, y_ + 12), text=data_welcome[k].upper(), fill=color, font=font)
+
+        if k == "text" and data_welcome['type'] == "welcome":
+            font = ImageFont.truetype("fonts/times.ttf", 24)
+            x_, y_ = text_align(rectangles[k], data_welcome[k], font)
+            show.text(xy=(x_, y_), text=data_welcome[k].upper(), fill=(255, 255, 255), font=font)
+
+    image.save(f"{data_welcome['type']}.png")

@@ -1,5 +1,6 @@
 import discord
 
+from resources.img_edit import welcome
 from discord.ext import commands
 
 
@@ -16,13 +17,22 @@ class OnMemberRemove(commands.Cog):
             try:
                 if data['func_config']['member_remove']:
                     canal = self.bot.get_channel(data['func_config']['member_remove_id'])
-                    msg = discord.Embed(title='O membro {} Saiu do servidor {}!'.format(member, member.guild),
-                                        color=self.color, description="Adeus {}, qualquer coisa é a mesma coisa e "
-                                                                      "tudo é nenhuma!".format(member.name))
-                    msg.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                    msg.set_thumbnail(url="{}".format(member.avatar_url))
-                    msg.set_footer(text="Ashley ® Todos os direitos reservados.")
-                    await canal.send(embed=msg)
+
+                    if canal is None:
+                        return
+
+                    data_goodbye = {
+                        "type": "goodbye",
+                        "name": str(member.name),
+                        "avatar": member.avatar_url_as(format="png"),
+                        "text": None
+                    }
+
+                    await welcome(data_goodbye)
+                    if discord.File('goodbye.png') is None:
+                        return
+                    await canal.send(file=discord.File('goodbye.png'))
+
             except AttributeError:
                 pass
             except discord.errors.Forbidden:

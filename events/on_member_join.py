@@ -1,5 +1,6 @@
 import discord
 
+from resources.img_edit import welcome
 from discord.ext import commands
 
 
@@ -15,19 +16,23 @@ class OnMemberJoin(commands.Cog):
         if data is not None:
             if data['func_config']['member_join']:
                 try:
-                    to_send = discord.Embed(
-                        title="SEJA MUITO BEM VINDO AO SERVIDOR {}:".format(member.guild),
-                        color=self.color,
-                        description="{}, Eu sou o BOT oficial do(a) {}, qualquer coisa "
-                                    "digite ``ash.ajuda`` que eu irei ajudar você com "
-                                    "muito prazer!".format(member.name, member.guild))
-                    to_send.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-                    to_send.set_thumbnail(url="{}".format(member.avatar_url))
-                    to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
+
                     channel_ = self.bot.get_channel(data['func_config']['member_join_id'])
                     if channel_ is None:
                         return
-                    await channel_.send(embed=to_send)
+
+                    data_welcome = {
+                        "type": "welcome",
+                        "name": str(member.name),
+                        "avatar": member.avatar_url_as(format="png"),
+                        "text": f"Seja bem vindo ao servidor {member.guild.name.upper()}, divirta-se!"
+                    }
+
+                    await welcome(data_welcome)
+                    if discord.File('welcome.png') is None:
+                        return
+                    await channel_.send(file=discord.File('welcome.png'))
+
                 except discord.errors.Forbidden:
                     pass
                 except AttributeError:

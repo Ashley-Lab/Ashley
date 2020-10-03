@@ -92,7 +92,7 @@ commands.img_edit.instagram
 commands.img_edit.twitter
 commands.img_edit.whatsapp
 ia.interactions
-commands.guild.receptions
+commands.rpg.merchant
 commands.member.ia_response
 commands.guild.open
 commands.rpg.recipe
@@ -106,5 +106,4 @@ commands.rpg.mine
 commands.rpg.jewel
 commands.rpg.trade
 commands.bot.lover
-commands.rpg.merchant
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1
