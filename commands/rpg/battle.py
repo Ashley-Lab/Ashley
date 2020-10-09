@@ -1,5 +1,8 @@
 import discord
 
+# preparativo para o evento do dia 10
+import time as date
+
 from asyncio import sleep
 from discord.ext import commands
 from random import randint, choice
@@ -289,6 +292,22 @@ class Battle(commands.Cog):
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
                     else:
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
+
+                # preparativo para o evento do dia 10
+                if change < 15:
+                    # PEGANDO DATA ATUAL
+                    date_ = date.localtime()
+                    # ANO / MES / DIA
+                    if date_[0] == 2020 and date_[1] == 10 and date_[2] == 10:
+                        # existe uma diferença de hora de +3 para o servidor da ashley
+                        if 11 < date_[3] < 20:
+                            item_event = choice(["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
+                                                 "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
+                                                 "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
+                                                 "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                                                 "unsealed_stone", "melted_artifact"])
+                            reward.append(item_event)
+                            await ctx.send('<a:xablau:525105065460105226>│``VOCÊ GANHOU`` ✨ **ITENS DO EVENTO** ✨')
 
                 response = await self.bot.db.add_reward(ctx, reward)
                 await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
