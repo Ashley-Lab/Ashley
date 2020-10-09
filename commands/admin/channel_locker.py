@@ -4,12 +4,12 @@ from resources.db import Database
 
 ON = ['locked', 'block', 'on']
 OFF = ['unlocked', 'unblock', 'off']
-EM = ['<:confirmed:721581574461587496>', '<:negate:721581573396496464>']
 
 
 class ChannelClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.em = self.bot.em
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -23,9 +23,9 @@ class ChannelClass(commands.Cog):
             update_guild['command_locked']['status'] = not data_guild['command_locked']['status']
             await self.bot.db.update_data(data_guild, update_guild, 'guilds')
             if data_guild['command_locked']['status']:
-                await ctx.send(f"{EM[0]}│``BLOQUEADOR DE COMANDOS EM CANAIS ATIVADO COM SUCESSO!``")
+                await ctx.send(f"{self.em['confirm']}│``BLOQUEADOR DE COMANDOS EM CANAIS ATIVADO COM SUCESSO!``")
             else:
-                await ctx.send(f"{EM[1]}│``BLOQUEADOR DE COMANDOS EM CANAIS DESATIVADO COM SUCESSO!``")
+                await ctx.send(f"{self.em['negate']}│``BLOQUEADOR DE COMANDOS EM CANAIS DESATIVADO COM SUCESSO!``")
 
         elif locker in ON:
             data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
@@ -33,15 +33,17 @@ class ChannelClass(commands.Cog):
             if data_guild['command_locked']['status']:
                 if ctx.channel.id not in data_guild['command_locked']['while_list']:
                     update_guild['command_locked']['while_list'].append(ctx.channel.id)
-                    await ctx.send(f"{EM[0]}│``O CANAL`` **{ctx.channel.name}** ``FOI DESBLOQUEADO COM SUCESSO!``")
+                    await ctx.send(f"{self.em['confim']}│``O CANAL`` **{ctx.channel.name}** ``FOI DESBLOQUEADO COM "
+                                   f"SUCESSO!``")
                 else:
-                    return await ctx.send(f"{EM[0]}│``ESSE CANAL JA ESTA DESBLOQUEADO!``")
+                    return await ctx.send(f"{self.em['confim']}│``ESSE CANAL JA ESTA DESBLOQUEADO!``")
             else:
                 if ctx.channel.id not in data_guild['command_locked']['black_list']:
                     update_guild['command_locked']['black_list'].append(ctx.channel.id)
-                    await ctx.send(f"{EM[1]}│``O CANAL`` **{ctx.channel.name}**``FOI BLOQUEADO COM SUCESSO!``")
+                    await ctx.send(f"{self.em['negate']}│``O CANAL`` **{ctx.channel.name}**``FOI BLOQUEADO COM "
+                                   f"SUCESSO!``")
                 else:
-                    return await ctx.send(f"{EM[1]}│``ESSE CANAL JA ESTA BLOQUEADO!``")
+                    return await ctx.send(f"{self.em['negate']}│``ESSE CANAL JA ESTA BLOQUEADO!``")
             await self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
         elif locker in OFF:
@@ -50,24 +52,26 @@ class ChannelClass(commands.Cog):
             if data_guild['command_locked']['status']:
                 if ctx.channel.id in data_guild['command_locked']['while_list']:
                     update_guild['command_locked']['while_list'].remove(ctx.channel.id)
-                    await ctx.send(f"{EM[1]}│``O CANAL`` **{ctx.channel.name}**``FOI BLOQUEADO COM SUCESSO!``")
+                    await ctx.send(f"{self.em['negate']}│``O CANAL`` **{ctx.channel.name}**``FOI BLOQUEADO COM "
+                                   f"SUCESSO!``")
                 else:
-                    return await ctx.send(f"{EM[1]}│``ESSE CANAL JA ESTA BLOQUEADO!``")
+                    return await ctx.send(f"{self.em['negate']}│``ESSE CANAL JA ESTA BLOQUEADO!``")
             else:
                 if ctx.channel.id in data_guild['command_locked']['black_list']:
                     update_guild['command_locked']['black_list'].remove(ctx.channel.id)
-                    await ctx.send(f"{EM[0]}│``O CANAL`` **{ctx.channel.name}** ``FOI DESBLOQUEADO COM SUCESSO!``")
+                    await ctx.send(f"{self.em['confirm']}│``O CANAL`` **{ctx.channel.name}** ``FOI DESBLOQUEADO COM "
+                                   f"SUCESSO!``")
                 else:
-                    return await ctx.send(f"{EM[0]}│``ESSE CANAL JA ESTA DESBLOQUEADO!``")
+                    return await ctx.send(f"{self.em['confim']}│``ESSE CANAL JA ESTA DESBLOQUEADO!``")
             await self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
         else:
-            return await ctx.send("<:negate:721581573396496464>│``OPÇÃO INVALIDA!``")
+            return await ctx.send(f"{self.em['negate']}│``OPÇÃO INVALIDA!``")
 
     @channel.error
     async def _check_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
+            await ctx.send(f'{self.em["negate"]}│``Você não tem permissão para usar esse comando!``')
 
 
 def setup(bot):

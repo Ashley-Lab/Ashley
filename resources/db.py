@@ -40,9 +40,7 @@ class Database(object):
 
     async def update_data(self, data, update, db_name):
         db = self._database[db_name]
-        await db.update_one({'_id': data['_id']}, {
-            '$set': update,
-        }, upsert=False)
+        await db.update_one({'_id': data['_id']}, {'$set': update}, upsert=False)
 
     async def update_all_data(self, search, update, db_name):
         db = self._database[db_name]
@@ -51,35 +49,12 @@ class Database(object):
     async def get_data(self, key, value, db_name):
         db = self._database[db_name]
         data = await db.find_one({key: value})
-        if data is None:
-            return None
-        else:
-            return data
+        return data
 
     async def get_all_data(self, db_name):
         db = self._database[db_name]
         all_data = [data async for data in db.find()]
         return all_data
-
-    async def update_all_db(self, db_users, db_guilds):
-        all_users = await self.get_all_data("users")
-        for data in all_users:
-            update = data
-            try:
-                for k, v in db_users.items():
-                    update[k] = v
-                await self.update_data(data, update, "users")
-            except KeyError:
-                pass
-        all_guilds = await self.get_all_data("guilds")
-        for data in all_guilds:
-            update = data
-            try:
-                for k, v in db_guilds.items():
-                    update[k] = v
-                await self.update_data(data, update, "guilds")
-            except KeyError:
-                pass
 
     async def get_announcements(self):
         db = self._database["announcements"]
@@ -135,7 +110,13 @@ class Database(object):
         update_guild_native['data']['total_money'] -= amount
         await self.bot.db.update_data(data_user, update_user, 'users')
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-        return f"<:confirmed:721581574461587496>│**{amount}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
+
+        a = '{:,.2f}'.format(float(amount))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+
+        return f"<:confirmed:721581574461587496>│**R$ {d}** ``DE`` **Ethernyas** ``RETIRADOS COM SUCESSO!``"
 
     async def give_money(self, ctx, amount: int = 0, id_give=None):
         _id = id_give if id_give is not None else ctx.author.id
@@ -148,19 +129,20 @@ class Database(object):
         await self.bot.db.update_data(data_user, update_user, 'users')
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
+        a = '{:,.2f}'.format(float(amount))
+        b = a.replace(',', 'v')
+        c = b.replace('.', ',')
+        d = c.replace('v', '.')
+
         if id_give is not None:
             _user = self.bot.get_user(id_give)
             try:
-                a = '{:,.2f}'.format(float(amount))
-                b = a.replace(',', 'v')
-                c = b.replace('.', ',')
-                d = c.replace('v', '.')
                 await _user.send(f"<:confirmed:721581574461587496>│``Voce acabou de vender um item no mercado, "
                                  f"e recebeu o valor de`` **R$ {d}** ``Ethernyas. Aproveite e olhe sua lojinha.``")
             except discord.errors.Forbidden:
                 pass
 
-        return f"<:confirmed:721581574461587496>│**{amount}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
+        return f"<:confirmed:721581574461587496>│**R$ {d}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"
 
     async def add_money(self, ctx, amount, ext=False):
 
@@ -277,12 +259,16 @@ class Database(object):
 
         # DATA NATIVA DO SERVIDOR
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
-        update_guild_native = data_guild_native
-        update_guild_native['data']['total_bronze'] += ethernya[0] * 2
-        update_guild_native['data']['total_silver'] += ethernya[1] * 2
-        update_guild_native['data']['total_gold'] += ethernya[2] * 2
-        update_guild_native['data']['total_money'] += amount * 2
-        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        if data_guild_native is not None:
+            update_guild_native = data_guild_native
+            update_guild_native['data']['total_bronze'] += ethernya[0] * 2
+            update_guild_native['data']['total_silver'] += ethernya[1] * 2
+            update_guild_native['data']['total_gold'] += ethernya[2] * 2
+            update_guild_native['data']['total_money'] += amount * 2
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        else:
+            await ctx.send("<:alert:739251822920728708>│``SUA GUILDA DE REGISTRO FOI DELETADA, USE O COMANDO:`` "
+                           "**ASH TRANSFER** ``PARA SE TRANSFERIR PARA OUTRAS GUILDA!``")
 
         # DATA DO SERVIDOR ATUAL
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
@@ -482,24 +468,6 @@ class DataInteraction(object):
                 await ctx.send(embed=embed)
 
         await self.db.update_data(data, update, "users")
-
-    async def add_battle(self, ctx):
-        data = await self.db.get_data("user_id", ctx.author.id, "users")
-        update = data
-        if data is not None:
-            if ctx.author.id == data["user_id"]:
-                update['config']['battle'] = True
-                update['config']['provinces'] = str(ctx.channel)
-                await self.db.update_data(data, update, "users")
-
-    async def remove_battle(self, ctx):
-        data = await self.db.get_data("user_id", ctx.author.id, "users")
-        update = data
-        if data is not None:
-            if ctx.author.id == data["user_id"]:
-                update['config']['battle'] = False
-                update['config']['provinces'] = None
-                await self.db.update_data(data, update, "users")
 
     async def add_announcement(self, ctx, announce):
         date = datetime.datetime(*datetime.datetime.utcnow().timetuple()[:6])

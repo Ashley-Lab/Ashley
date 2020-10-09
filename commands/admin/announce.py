@@ -10,6 +10,7 @@ from asyncio import TimeoutError
 class RegisterAnnounce(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.em = self.bot.em
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -24,8 +25,8 @@ class RegisterAnnounce(commands.Cog):
             update_ = data_
             del update_['cooldown'][str(ctx.command)]
             await self.bot.db.update_data(data_, update_, 'users')
-            return await ctx.send("<:negate:721581573396496464>│``Apenas donos de Guilda vip podem usar esse "
-                                  "comando!``")
+            return await ctx.send(f"{self.em['negate']}│``Apenas donos de Guilda vip podem usar esse "
+                                  f"comando!``")
 
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
         if data_guild['vip'] is False:
@@ -33,8 +34,8 @@ class RegisterAnnounce(commands.Cog):
             update_ = data_
             del update_['cooldown'][str(ctx.command)]
             await self.bot.db.update_data(data_, update_, 'users')
-            return await ctx.send("<:negate:721581573396496464>│``Você é o líder da guilda, mas sua Guilda ainda "
-                                  "nao é VIP, você precisa conquistar 10 estrelas para tornar sua guilda VIP!``")
+            return await ctx.send(f"{self.em['negate']}│``Você é o líder da guilda, mas sua Guilda ainda "
+                                  f"nao é VIP, você precisa conquistar 10 estrelas para tornar sua guilda VIP!``")
 
         if announce is None:
             try:
@@ -44,14 +45,14 @@ class RegisterAnnounce(commands.Cog):
                 await self.bot.db.update_data(data_, update_, 'users')
             except KeyError:
                 pass
-            return await ctx.send('<:negate:721581573396496464>│``Você precisa colocar um anuncio, para que eu'
-                                  ' adicione no banco de dados!``')
+            return await ctx.send(f"{self.em['negate']}│``Você precisa colocar um anuncio, para que eu"
+                                  f" adicione no banco de dados!``")
 
         for data in await self.bot.db.get_announcements():
             if data['_id'] == ctx.author.id:
-                await ctx.send("<:alert:739251822920728708>│``Você já tem um anuncio em vigor, se colocar"
-                               " outro anuncio vai sobrepor seu anuncio antigo. Deseja mesmo assim proseguir?`` "
-                               "**Responda com: S ou N**")
+                await ctx.send(f"{self.em['alert']}│``Você já tem um anuncio em vigor, se colocar"
+                               f" outro anuncio vai sobrepor seu anuncio antigo. Deseja mesmo assim proseguir?`` "
+                               f"**Responda com: S ou N**")
 
                 def check(m):
                     return m.author.id == ctx.author.id and m.content.upper() == 'S' or m.author.id == ctx.author.id \
@@ -64,10 +65,10 @@ class RegisterAnnounce(commands.Cog):
                     update_ = data_
                     del update_['cooldown'][str(ctx.command)]
                     await self.bot.db.update_data(data_, update_, 'users')
-                    return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
-                                          '**COMANDO CANCELADO**')
+                    return await ctx.send(f'{self.em["negate"]}│``Desculpe, você demorou muito:`` '
+                                          f'**COMANDO CANCELADO**')
                 if answer.content.upper() == "N":
-                    return await ctx.send('<:negate:520418505993093130>│ **COMANDO CANCELADO**')
+                    return await ctx.send(f'{self.em["negate"]}│ **COMANDO CANCELADO**')
                 else:
                     update = data
                     update['data']['status'] = False
@@ -75,8 +76,8 @@ class RegisterAnnounce(commands.Cog):
                     update['data']['date'] = date
                     update['data']['announce'] = announce
                     await self.bot.db.update_data(data, update, "announcements")
-                    await ctx.send('<:confirmed:721581574461587496>│``Anuncio cadastrado com sucesso!``\n'
-                                   '```AGUARDE APROVAÇÃO```')
+                    await ctx.send(f'{self.em["confirm"]}│``Anuncio cadastrado com sucesso!``\n'
+                                   f'```AGUARDE APROVAÇÃO```')
                     pending = self.bot.get_channel(619969149791240211)
                     msg = f"{ctx.author.id}: **{ctx.author.name}** ``ADICIONOU UM NOVO ANUNCIO PARA APROVAÇÃO!``"
                     return await pending.send(msg)
@@ -96,10 +97,10 @@ class RegisterAnnounce(commands.Cog):
         for announce in range(len(announces)):
             await ctx.send(f"{announce + 1}º Anuncio:\n{announces[announce]}")
         if len(announces) > 0:
-            await ctx.send("<:alert:739251822920728708>│``Qual anuncio você deseja verificar? Obs: Digite o "
-                           "numero do anuncio``")
+            await ctx.send(f"{self.em['alert']}│``Qual anuncio você deseja verificar? Obs: Digite o "
+                           f"numero do anuncio``")
         else:
-            return await ctx.send("<:alert:739251822920728708>│``VOCE NAO TEM ANUNCIOS DISPONIVEIS!``")
+            return await ctx.send(f"{self.em['alert']}│``VOCE NAO TEM ANUNCIOS DISPONIVEIS!``")
 
         def check(m):
             return m.author.id == ctx.author.id and m.content.isdigit()
@@ -111,16 +112,16 @@ class RegisterAnnounce(commands.Cog):
             if answer < 0:
                 answer = 0
         except TimeoutError:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
-                                  '**COMANDO CANCELADO**')
+            return await ctx.send(f'{self.em["negate"]}│``Desculpe, você demorou muito:`` '
+                                  f'**COMANDO CANCELADO**')
         if len(announces) >= answer > 0:
             pass
         else:
-            return await ctx.send('<:negate:520418505993093130>│ **DESCULPE VOCÊ DIGITOU UM NUMERO INEXISTENTE!**')
+            return await ctx.send(f'{self.em["negate"]}│ **DESCULPE VOCÊ DIGITOU UM NUMERO INEXISTENTE!**')
 
         await ctx.send(announces[num - 1])
-        await ctx.send("<:alert:739251822920728708>│``Esse anuncio é valido?  Obs: Digite"
-                       " S ou N``")
+        await ctx.send(f"{self.em['alert']}│``Esse anuncio é valido?  Obs: Digite"
+                       f" S ou N``")
 
         def check(m):
             return m.author.id == ctx.author.id and m.content.upper() == 'S' or m.author.id == ctx.author.id \
@@ -129,30 +130,30 @@ class RegisterAnnounce(commands.Cog):
         try:
             answer = await self.bot.wait_for('message', check=check, timeout=30.0)
         except TimeoutError:
-            return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
-                                  '**COMANDO CANCELADO**')
+            return await ctx.send(f'{self.em["negate"]}│``Desculpe, você demorou muito:`` '
+                                  f'**COMANDO CANCELADO**')
         if answer.content.upper() == "S":
             pass
         else:
             data = announces[num - 1]
             await self.bot.db.delete_data(data, 'announcements')
-            await ctx.send("<:confirmed:721581574461587496>│``Anuncio verificado com sucesso!``")
+            await ctx.send(f"{self.em['confirm']}│``Anuncio verificado com sucesso!``")
             try:
                 member = self.bot.get_user(data['_id'])
-                await member.send("<:negate:520418505993093130>│``Seu anuncio foi verificado, mas não foi aprovado!``")
+                await member.send(f"{self.em['negate']}│``Seu anuncio foi verificado, mas não foi aprovado!``")
             except discord.errors.Forbidden:
                 pass
-            return await ctx.send('<:negate:520418505993093130>│ **ANUNCIO DELETADO**')
+            return await ctx.send(f'{self.em["alert"]}│ **ANUNCIO DELETADO**')
 
         data = announces[num - 1]
         update = data
         update['data']['status'] = True
         await self.bot.db.update_data(data, update, "announcements")
-        await ctx.send("<:confirmed:721581574461587496>│``Anuncio verificado com sucesso!``")
+        await ctx.send(f"{self.em['confirm']}│``Anuncio verificado com sucesso!``")
         try:
             member = self.bot.get_user(data['_id'])
-            await member.send("<:confirmed:721581574461587496>│``Seu anuncio foi verificado e foi aprovado"
-                              " parabens!``")
+            await member.send(f"{self.em['confirm']}│``Seu anuncio foi verificado e foi aprovado"
+                              f" parabens!``")
         except discord.errors.Forbidden:
             pass
 

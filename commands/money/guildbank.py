@@ -232,8 +232,7 @@ class GuildBank(commands.Cog):
     @_convert.error
     async def _convert_error(self, ctx, error):
         if error.__str__() in ERRORS[11]:
-            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
-                                  '**manage_guild / Gerenciar Servidor**')
+            await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
 
 
 def setup(bot):

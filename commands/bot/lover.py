@@ -16,6 +16,34 @@ class LoverClass(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='lower_net', aliases=['ln'])
+    async def lower_net(self, ctx):
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        if data['config']['playing']:
+            return await ctx.send("<:alert:739251822920728708>│``Você está jogando, aguarde para quando"
+                                  " vocÊ estiver livre!``")
+
+        if not data['rpg']['active']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
+            return await ctx.send(embed=embed)
+
+        if data['config']['battle']:
+            msg = '<:negate:721581573396496464>│``VOCE ESTÁ BATALHANDO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        update['rpg']['lower_net'] = not update['rpg']['lower_net']
+        await self.bot.db.update_data(data, update, "users")
+        msg = "ATIVADO" if update['rpg']['lower_net'] else "DESATIVADO"
+        await ctx.send(f"<:confirmed:721581574461587496>│``O MODO DE IMAGEM FOI {msg}!``")
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='lover', aliases=['al'])
     async def lover(self, ctx):
         """Esse nem eu sei..."""

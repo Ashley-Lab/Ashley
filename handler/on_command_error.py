@@ -79,6 +79,10 @@ class CommandErrorHandler(commands.Cog):
         channel = self.bot.get_channel(530419409311760394)
         perms = ctx.channel.permissions_for(ctx.me)
         if perms.send_messages and perms.read_messages:
+
+            if isinstance(error, discord.errors.HTTPException):
+                return await channel.send(f"Erro HTTP:\n```py\n{error}\n```")
+
             await channel.send(f"<:negate:721581573396496464>│``Ocorreu um erro no comando:`` "
                                f"**{ctx.command}**, ``no servidor:`` **{ctx.guild}**, ``no canal:`` "
                                f"**{ctx.channel}** ``com o membro:`` **{ctx.author}**  "

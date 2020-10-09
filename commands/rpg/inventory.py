@@ -5,6 +5,7 @@ from resources.check import check_it
 from resources.db import Database
 from resources.utility import paginator
 from resources.img_edit import equips
+from asyncio import sleep
 
 
 class InventoryClass(commands.Cog):
@@ -287,21 +288,49 @@ class InventoryClass(commands.Cog):
                         equip_in = name
 
             if equip_in is not None:
-
-                update['rpg']['items'][equip_in[0]] -= 1
-                if update['rpg']['items'][equip_in[0]] < 1:
-                    del update['rpg']['items'][equip_in[0]]
-
                 if data['rpg']['next_class'] in equip_in[1]["class"]:
-                    update['rpg']["equipped_items"][equip_in[1]["slot"]] = equip_in[0]
+
+                    update['rpg']['items'][equip_in[0]] -= 1
+                    if update['rpg']['items'][equip_in[0]] < 1:
+                        del update['rpg']['items'][equip_in[0]]
+
+                    if update['rpg']["equipped_items"][equip_in[1]["slot"]] is None:
+                        update['rpg']["equipped_items"][equip_in[1]["slot"]] = equip_in[0]
+
+                    else:
+                        await sleep(1)
+                        await msg.delete()
+                        msg = await ctx.send("<a:loading:520418506567843860>│``DESEQUIPANDO O ITEM EXISTENTE...``")
+                        equip_out = None
+                        for key in update['rpg']["equipped_items"].keys():
+                            if update['rpg']["equipped_items"][key] is not None:
+                                for name in equips_list:
+                                    if name[0] == update['rpg']["equipped_items"][key]:
+                                        equip_out = update['rpg']['equipped_items'][key]
+                                        update['rpg']['equipped_items'][key] = None
+
+                        if equip_out is not None:
+                            try:
+                                update['rpg']['items'][equip_out] += 1
+                            except KeyError:
+                                update['rpg']['items'][equip_out] = 1
+
+                            update['rpg']["equipped_items"][equip_in[1]["slot"]] = equip_in[0]
+
+                        else:
+                            await sleep(1)
+                            await msg.delete()
+                            return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
 
                 else:
+                    await sleep(1)
                     await msg.delete()
                     return await ctx.send("<:negate:721581573396496464>│``SUA CLASSE NAO PODE USAR ESSE ITEM...``")
 
         else:
             return await ctx.send("<:negate:721581573396496464>│``VOCE NAO TEM ESSE ITEM...``")
 
+        await sleep(1)
         await msg.delete()
         await ctx.send(f"<:confirmed:721581574461587496>│``O ITEM {item.upper()} FOI {plus} COM SUCESSO!``")
         await self.bot.db.update_data(data, update, 'users')

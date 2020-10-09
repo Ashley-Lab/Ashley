@@ -37,6 +37,7 @@ class Ashley(commands.AutoShardedBot):
         self.shutdowns = list()
 
         self.config = config
+        self.em = self.config["emojis"]["msg"]
         self.color = int(config['config']['default_embed'], 16)
         self.announcements = config['attribute']['announcements']
         self.all_prefix = config['attribute']['all_prefix']
@@ -53,10 +54,10 @@ class Ashley(commands.AutoShardedBot):
         self.maintenance = False
 
         self.server_ = "HEROKU"
-        self.progress = "V.7 -> 067.5%"
+        self.progress = "V.8 -> 50.0%"
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.staff = [235937029106434048, 300592580381376513]
-        self.version = "API: " + str(discord.__version__) + " | BOT: 7.6.75 | PROGRESS: " + str(self.progress)
+        self.version = "API: " + str(discord.__version__) + " | BOT: 8.5.00 | PROGRESS: " + str(self.progress)
         self.shortcut = config['attribute']['shortcut']
         self.block = ['open', 'box', 'box buy', 'box booster', 'gift']
         self.data_cog = {}

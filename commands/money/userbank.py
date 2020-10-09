@@ -79,7 +79,7 @@ class UserBank(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='shop', aliases=['buy', 'comprar', 'loja'])
-    async def shop(self, ctx, quant=None, *, item=None):
+    async def shop(self, ctx, quant: int = None, *, item=None):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
