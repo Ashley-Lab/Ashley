@@ -266,7 +266,7 @@ class Battle(commands.Cog):
             embed.set_thumbnail(url=f"{db_player['img']}")
             await ctx.send(embed=embed)
 
-            if change < 50:
+            if change < 60:
                 if data['rpg']['vip']:
                     reward = [choice(db_monster['reward']) for _ in range(8)]
                 else:
@@ -286,7 +286,7 @@ class Battle(commands.Cog):
                         reward[0] = choice(bonus)
                         reward[1] = choice(bonus)
 
-                if change < 25:
+                if change < 40:
                     if data['rpg']['vip']:
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
@@ -294,13 +294,13 @@ class Battle(commands.Cog):
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
 
                 # preparativo para o evento do dia 10
-                if change < 15:
+                if change < 20 and db_player['level'] > 25:
                     # PEGANDO DATA ATUAL
                     date_ = date.localtime()
                     # ANO / MES / DIA
                     if date_[0] == 2020 and date_[1] == 10 and date_[2] == 10:
                         # existe uma diferença de hora de +3 para o servidor da ashley
-                        if 11 < date_[3] < 20:
+                        if 11 <= date_[3] <= 20:
                             item_event = choice(["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
                                                  "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
                                                  "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
@@ -316,7 +316,7 @@ class Battle(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if change < 15 and player.status['hp'] > 0 and db_player['level'] > 25:
+        if change < 10 and player.status['hp'] > 0 and db_player['level'] > 25:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():
@@ -346,7 +346,7 @@ class Battle(commands.Cog):
                 await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ESPADA/ESCUDO** ✨\n'
                                f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
 
-        elif change < 35 and player.status['hp'] > 0:
+        elif change < 25 and player.status['hp'] > 0:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():
