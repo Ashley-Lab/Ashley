@@ -266,9 +266,6 @@ class Database(object):
             update_guild_native['data']['total_gold'] += ethernya[2] * 2
             update_guild_native['data']['total_money'] += amount * 2
             await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
-        else:
-            await ctx.send("<:alert:739251822920728708>│``SUA GUILDA DE REGISTRO FOI DELETADA, USE O COMANDO:`` "
-                           "**ASH TRANSFER** ``PARA SE TRANSFERIR PARA OUTRAS GUILDA!``")
 
         # DATA DO SERVIDOR ATUAL
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
@@ -711,6 +708,31 @@ class DataInteraction(object):
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['rpg'].get('level')
+        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        cont['list'] = 0
+
+        def money_(money):
+            a = '{:,.0f}'.format(float(money))
+            b = a.replace(',', 'v')
+            c = b.replace('.', ',')
+            d = c.replace('v', '.')
+            return d
+
+        def counter():
+            cont['list'] += 1
+            return cont['list']
+
+        rank = "\n".join([str(counter()) + "º: " +
+                          str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
+                          " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        return rank
+
+    async def get_rank_raid(self, limit):
+        global cont
+        data = await self.db.get_all_data("users")
+        dict_ = dict()
+        for _ in data:
+            dict_[str(_.get('user_id'))] = _['user'].get('raid')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
         cont['list'] = 0
 

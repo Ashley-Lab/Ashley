@@ -106,4 +106,5 @@ commands.rpg.mine
 commands.rpg.jewel
 commands.rpg.trade
 commands.bot.lover
+commands.rpg.raid
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

@@ -17,7 +17,7 @@ class BotInfo(commands.Cog):
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='botinfo', aliases=['infobot', 'info'])
+    @commands.command(name='botinfo', aliases=['infobot', 'info', 'bi', 'ib'])
     async def botinfo(self, ctx):
         """Comando para ter informações sobre a Ashley
         Use ash botinfo"""
@@ -47,7 +47,7 @@ class BotInfo(commands.Cog):
         embed_bot.add_field(name='‍💻 | Servidores', value=str(len(self.bot.guilds)))
         embed_bot.add_field(name='👥 | Usuarios', value='{} ({} online)'.format(total_members, total_online))
         embed_bot.add_field(name='‍⚙ | Programador', value=str(owner))
-        embed_bot.add_field(name='🐍 Python  | Version', value="`3.8.3`")
+        embed_bot.add_field(name='🐍 Python  | Version', value=f"`{self.bot.python_version}`")
         embed_bot.add_field(name='<:ashley:525348179734953995> Bot  | Version', value=str(ver_))
         embed_bot.add_field(name="<a:loading:520418506567843860> | Tempo Online",
                             value=f"{dt.utcnow() - self.bot.start_time}")

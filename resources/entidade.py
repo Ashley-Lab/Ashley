@@ -121,7 +121,8 @@ class Entity(object):
 
                 regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                 description += f'<:pass:692967573649752194> **{"Pass turn".upper()}**\n' \
-                               f'``Mana Recovery:`` **+{regen} de Mana** + **HP Regen**'
+                               f'``Mana Recovery:`` **+{regen} de Mana** + **HP Regen**\n\n' \
+                               f'<:fechar:749090949413732352> **Finalizar batalha**'
                 embed = discord.Embed(
                     title=title,
                     description=description,
@@ -133,31 +134,43 @@ class Entity(object):
                 for c in range(0, len(atacks)):
                     await msg.add_reaction(emojis[c])
                 await msg.add_reaction('<:pass:692967573649752194>')
+                await msg.add_reaction('<:fechar:749090949413732352>')
                 while not bot.is_closed():
                     try:
-                        reaction = await bot.wait_for('reaction_add', timeout=60.0)
+                        reaction = await bot.wait_for('reaction_add', timeout=30.0)
                         while reaction[1].id != ctx.author.id:
-                            reaction = await bot.wait_for('reaction_add', timeout=60.0)
+                            reaction = await bot.wait_for('reaction_add', timeout=30.0)
                     except TimeoutError:
                         return "COMANDO-CANCELADO"
-                    emo = "<:pass:692967573649752194>"
-                    emoji_ = str(emo).replace('<:', '').replace(emo[emo.rfind(':'):], '')
+                    pass_turn = "<:pass:692967573649752194>"
+                    f_battle = "<:fechar:749090949413732352>"
+                    emoji_pass_turn = str(pass_turn).replace('<:', '').replace(pass_turn[pass_turn.rfind(':'):], '')
+                    emoji_fb = str(f_battle).replace('<:', '').replace(f_battle[f_battle.rfind(':'):], '')
                     try:
-                        if reaction[0].emoji.name == emoji_:
+                        if reaction[0].emoji.name == emoji_pass_turn:
+                            # regeneração de MP
                             regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                             if (self.status['mp'] + regen) <= (self.status['con'] * self.rate[1]):
                                 self.status['mp'] += regen
-                                hp = int(((self.status['con'] * self.rate[1]) / 100) * 10)
-                                if (self.status['hp'] + hp) <= (self.status['con'] * self.rate[0]):
-                                    self.status['hp'] += hp
-                                else:
-                                    self.status['hp'] = (self.status['con'] * self.rate[0])
                             else:
                                 self.status['mp'] = (self.status['con'] * self.rate[1])
-                            self.atack = None
+
+                            # regeneração de HP
+                            hp = int(((self.status['con'] * self.rate[1]) / 100) * 10)
+                            if (self.status['hp'] + hp) <= (self.status['con'] * self.rate[0]):
+                                self.status['hp'] += hp
+                            else:
+                                self.status['hp'] = (self.status['con'] * self.rate[0])
+
+                            self.atack = "PASS-TURN"
                             break
+
+                        if reaction[0].emoji.name == emoji_fb:
+                            return "BATALHA-CANCELADA"
+
                     except AttributeError:
                         pass
+
                     for c in emojis:
                         emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
                         try:
@@ -201,7 +214,7 @@ class Entity(object):
                 pass
 
         else:
-            description = f'{self.name} esta {"stunado" if stun else "congelado"}'
+            description = f'**{self.name.upper()}** ``esta`` **{"STUNADO" if stun else "CONGELADO"}**'
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
@@ -277,7 +290,7 @@ class Entity(object):
                 if self.effects[c]['turns'] == 0:
                     del self.effects[c]
 
-        return self.atack
+        return self.atack if self.atack != "PASS-TURN" else "PASS-TURN"
 
     async def damage(self, skill, lvlskill, enemy_atack, ctx, name):
         if skill is None:
@@ -285,6 +298,14 @@ class Entity(object):
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
+            return await ctx.send(embed=embed_)
+
+        if skill == "PASS-TURN":
+            description = f'**{name.upper()}** ``passou o turno!``'
+            hp_max = self.status['con'] * self.rate[0]
+            monster = not self.is_player
+            img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
             return await ctx.send(embed=embed_)
 
@@ -338,7 +359,15 @@ class Entity(object):
         for c in range(0, dice1):
             bk += randint(1, dice2)
         damage = enemy_atack + bk
-        dn = (damage - self.armor)
+
+        armor_now = self.armor if self.armor > 0 else 1
+        percent = int(armor_now / (damage / 100))
+        if percent < 45:
+            dn = int(damage - self.armor)
+        else:
+            dn_chance = randint(1, 100)
+            dn = int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65))
+
         if dn < 0:
             description = f'**{self.name.upper()}** ``obsorveu todo o dano e recebeu`` **0** ``de dano``'
             hp_max = self.status['con'] * self.rate[0]
@@ -351,8 +380,8 @@ class Entity(object):
                 self.status['hp'] = 0
 
             if self.armor > 0:
-                description = f'**{self.name.upper()}** ``receberia`` **{damage}** ``de dano, mas absorveu`` ' \
-                              f'**{self.armor}** ``logo recebeu`` **{dn}**'
+                description = f'**{self.name.upper()}** ``receberia`` **{damage}** ``de dano, mas absorveu parte ' \
+                              f'dele, logo recebeu`` **{dn}**'
             else:
                 description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
 

@@ -39,27 +39,28 @@ class Ashley(commands.AutoShardedBot):
         self.config = config
         self.em = self.config["emojis"]["msg"]
         self.color = int(config['config']['default_embed'], 16)
-        self.announcements = config['attribute']['announcements']
-        self.all_prefix = config['attribute']['all_prefix']
-        self.vip_cog = config['attribute']['vip_cog']
-        self.titling = config['attribute']['titling']
-        self.boxes_l = config['attribute']['boxes_l']
-        self.boxes = config['attribute']['boxes']
-        self.money = config['attribute']['money']
-        self.items = config['items']
-        self.icons = config['icons']
-        self.pets = config['pets']
-        self.no_panning = config['attribute']['no_panning']
-        self.testers = [385975713167179779, 396101152359579648, 300592580381376513, 547082621293690900]
+        self.announcements = self.config['attribute']['announcements']
+        self.all_prefix = self.config['attribute']['all_prefix']
+        self.vip_cog = self.config['attribute']['vip_cog']
+        self.titling = self.config['attribute']['titling']
+        self.boxes_l = self.config['attribute']['boxes_l']
+        self.boxes = self.config['attribute']['boxes']
+        self.money = self.config['attribute']['money']
+        self.items = self.config['items']
+        self.icons = self.config['icons']
+        self.pets = self.config['pets']
+        self.no_panning = self.config['attribute']['no_panning']
+        self.testers = self.config['attribute']['testers']
         self.maintenance = False
 
         self.server_ = "HEROKU"
-        self.progress = "V.8 -> 50.0%"
+        self.progress = "V.8 -> 73.4%"
+        self.python_version = "3.9.0"
         self.github = "https://github.com/Ashley-Lab/Ashley"
-        self.staff = [235937029106434048, 300592580381376513]
-        self.version = "API: " + str(discord.__version__) + " | BOT: 8.5.00 | PROGRESS: " + str(self.progress)
-        self.shortcut = config['attribute']['shortcut']
-        self.block = ['open', 'box', 'box buy', 'box booster', 'gift']
+        self.staff = self.config['attribute']['staff']
+        self.version = "API: " + str(discord.__version__) + " | BOT: 8.7.34 | PROGRESS: " + str(self.progress)
+        self.shortcut = self.config['attribute']['shortcut']
+        self.block = self.config['attribute']['block']
         self.data_cog = {}
         self.box = {}
         self.msg_cont = 0
@@ -181,7 +182,7 @@ class Ashley(commands.AutoShardedBot):
                 if str(ctx.command).lower() in ['mine']:
                     update_user['config']['mine'] = False
 
-                if str(ctx.command).lower() in ['battle']:
+                if str(ctx.command).lower() in ['battle', 'raid']:
                     update_user['config']['battle'] = False
 
                 if update_user['security']['status']:
@@ -526,10 +527,7 @@ class Ashley(commands.AutoShardedBot):
 
         if ctx.command is not None:
             if message.author.id not in self.testers and self.maintenance:
-                msg = "<a:xablau:525105065460105226>│``DESCULPE ESTOU EM MANUTENÇÃO. MAS DENTRO DE 6H TUDO ESTARÁ " \
-                      "NORMALIZADO. (MANUTENÇÃO INICOU AS 18:00) PREVISAO DE TERMINO (00:00)``\n" \
-                      "**OBS:** ``ATUALMENTE APENAS PESSOAS AUTORIZADAS PODEM USAR OS RECURSOS DA ASHLEY, MAS" \
-                      " LOGO TUDO ESTARÁ NORMALIZADO. A EQUIPE DA`` **ASHLEY** ``SENTE MUITO POR ESSE TRANSTORNO!``"
+                msg = self.config['attribute']['maintenance']
                 embed = discord.Embed(color=self.color, description=msg)
                 return await message.channel.send(embed=embed)
 

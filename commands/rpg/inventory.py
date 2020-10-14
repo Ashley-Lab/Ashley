@@ -279,9 +279,11 @@ class InventoryClass(commands.Cog):
 
         elif item in items_inventory:
             msg = await ctx.send("<a:loading:520418506567843860>│``O ITEM ESTA NO SEU INVENTARIO, EQUIPANDO...``")
+            await sleep(1)
             plus = "EQUIPADO"
             equip_in = None
 
+            # aqui esta verificando qual o ID do item
             for key in update['rpg']['items'].keys():
                 for name in equips_list:
                     if name[0] == key and name[1]["name"] == item:
@@ -290,37 +292,24 @@ class InventoryClass(commands.Cog):
             if equip_in is not None:
                 if data['rpg']['next_class'] in equip_in[1]["class"]:
 
+                    # aqui esta tirando o item do inventario
                     update['rpg']['items'][equip_in[0]] -= 1
                     if update['rpg']['items'][equip_in[0]] < 1:
                         del update['rpg']['items'][equip_in[0]]
 
+                    # se o slot do item esta vazio, apenas equipa o item!
                     if update['rpg']["equipped_items"][equip_in[1]["slot"]] is None:
                         update['rpg']["equipped_items"][equip_in[1]["slot"]] = equip_in[0]
 
+                    # caso contrario, inicia os testes...
                     else:
                         await sleep(1)
                         await msg.delete()
-                        msg = await ctx.send("<a:loading:520418506567843860>│``DESEQUIPANDO O ITEM EXISTENTE...``")
-                        equip_out = None
-                        for key in update['rpg']["equipped_items"].keys():
-                            if update['rpg']["equipped_items"][key] is not None:
-                                for name in equips_list:
-                                    if name[0] == update['rpg']["equipped_items"][key]:
-                                        equip_out = update['rpg']['equipped_items'][key]
-                                        update['rpg']['equipped_items'][key] = None
-
-                        if equip_out is not None:
-                            try:
-                                update['rpg']['items'][equip_out] += 1
-                            except KeyError:
-                                update['rpg']['items'][equip_out] = 1
-
-                            update['rpg']["equipped_items"][equip_in[1]["slot"]] = equip_in[0]
-
-                        else:
-                            await sleep(1)
-                            await msg.delete()
-                            return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
+                        return await ctx.send("<:negate:721581573396496464>│``VOCE PRECISA DESEQUIPAR O ITEM "
+                                              "EXISTENTE...``\n**Use o comando: \"ash e info\" verifique o nome do "
+                                              "item existente, entao use o comando \"ash e i <nome_do_item>\" "
+                                              "para desequipar o item atual, entao voce usa o comando novamente "
+                                              "com o nome do item que voce quer equipar.**")
 
                 else:
                     await sleep(1)

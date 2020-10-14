@@ -69,13 +69,12 @@ class RankingClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='rank', aliases=['r'])
-    async def rank(self, ctx):
+    async def rank(self, ctx, user: discord.Member = None):
         """Mostra seu rank da Ashley
         Use ash rank"""
-        try:
-            user = ctx.message.mentions[0]
-        except IndexError:
+        if user is None:
             user = ctx.author
+
         data = await self.bot.db.get_data("user_id", user.id, "users")
 
         if data is None:
@@ -141,7 +140,7 @@ class RankingClass(commands.Cog):
                     if data['user']['ranking'] == "Gold":
                         star_ = 'star_gold'
 
-                    if user.id == ctx.guild.owner.id:
+                    if user == ctx.guild.owner:
                         star_ = "star_pink"
 
                     if position < 11:

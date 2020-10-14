@@ -39,10 +39,7 @@ class CommandErrorHandler(commands.Cog):
         # Todos os eventos de erros ignorados, qualquer coisa ignorada retornará e impedirá que algo aconteça.
         if isinstance(error, commands.CommandNotFound) or isinstance(error, commands.UserInputError):
             if ctx.author.id not in self.bot.testers and self.bot.maintenance:
-                msg = "<a:xablau:525105065460105226>│``DESCULPE ESTOU EM MANUTENÇÃO. MAS DENTRO DE 6H TUDO ESTARÁ " \
-                      "NORMALIZADO. (MANUTENÇÃO INICOU AS 18:00) PREVISAO DE TERMINO (00:00)``\n" \
-                      "**OBS:** ``ATUALMENTE APENAS PESSOAS AUTORIZADAS PODEM USAR OS RECURSOS DA ASHLEY, MAS" \
-                      " LOGO TUDO ESTARÁ NORMALIZADO. A EQUIPE DA`` **ASHLEY** ``SENTE MUITO POR ESSE TRANSTORNO!``"
+                msg = self.bot.config['attribute']['maintenance']
                 embed = discord.Embed(color=self.bot.color, description=msg)
                 return await ctx.send(embed=embed)
             return

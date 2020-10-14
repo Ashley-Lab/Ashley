@@ -8,7 +8,7 @@ from io import BytesIO
 from config import data  # tirar para testes...
 from aiohttp_requests import requests
 from random import choice
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont, ImageOps, UnidentifiedImageError
 
 avatar_marry = None
 letters = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -58,7 +58,14 @@ async def get_avatar(avatar_url, x, y):
     else:
         link = "https://festsonho.com.br/images/sem_foto.png"
     url_avatar = await requests.get(link)
-    avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
+
+    try:
+        avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
+    except UnidentifiedImageError:
+        link = "https://festsonho.com.br/images/sem_foto.png"
+        url_avatar = await requests.get(link)
+        avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
+
     avatar = avatar.resize((x, y))
     big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
     mascara = Image.new('L', big_avatar, 0)

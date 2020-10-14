@@ -9,6 +9,9 @@ from resources.check import check_it
 from resources.db import Database
 from resources.img_edit import calc_xp
 
+raid_rank = {}
+player = {}
+monster = {}
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -16,20 +19,43 @@ git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.g
        "https://media1.tenor.com/images/39c363015f2ae22f212f9cd8df2a1063/tenor.gif?itemid=15894886"]
 
 
-class Battle(commands.Cog):
+class Raid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.m = self.bot.config['battle']['monsters']
         self.w_s = self.bot.config['attribute']['chance_weapon']
 
+    def choice_monster(self, data, db_player):
+        # configuração do monstro
+        lvl = data['rpg']['level']
+        dif = 10 if 26 <= lvl <= 30 else 15 if 31 <= lvl <= 40 else 20
+        min_, max_ = lvl - dif if lvl - dif > 0 else 0, lvl + dif
+        db_monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
+        db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
+        db_monster['enemy'] = db_player
+        db_monster["armor"] = 0
+
+        # bonus status monster
+        for k in db_monster["status"].keys():
+            if db_player['level'] > 25:
+                db_monster["status"][k] += randint(2, 4)
+
+        for k in db_monster["status"].keys():
+            for sts in db_player['equipped_items'].keys():
+                if db_player['equipped_items'][sts] is not None:
+                    if k in ["atk", "luk", "con"]:
+                        db_monster["status"][k] += randint(1, 2)
+        return db_monster
+
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
-    @commands.command(name='battle', aliases=['batalha', 'batalhar'])
-    async def battle(self, ctx):
+    @commands.command(name='raid', aliases=['onda', 'orda'])
+    async def raid(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
-        Use ash battle"""
-
+        Use ash raid"""
+        global raid_rank, monster, player
+        raid_rank[ctx.author.id] = 0
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
@@ -45,11 +71,17 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
             return await ctx.send(embed=embed)
 
+        if data['rpg']['level'] < 26:
+            msg = '<:negate:721581573396496464>│``VOCE PRECISA ESTA NO NIVEL 26 OU MAIOR PARA IR UMA RAID!\n' \
+                  'OLHE O SEU NIVEL NO COMANDO:`` **ASH SKILL**'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
         try:
-            if data['inventory']['coins'] < 50:
+            if data['inventory']['coins'] < 1:
                 embed = discord.Embed(
                     color=self.bot.color,
-                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 50 FICHAS PARA BATALHAR!``\n'
+                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 1 FICHAS PARA BATALHAR!``\n'
                                 '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
                 return await ctx.send(embed=embed)
         except KeyError:
@@ -58,7 +90,7 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        update['inventory']['coins'] -= 50
+        update['inventory']['coins'] -= 1
         update['config']['battle'] = True
         await self.bot.db.update_data(data, update, 'users')
 
@@ -106,44 +138,51 @@ class Battle(commands.Cog):
                     except KeyError:
                         pass
 
-        # configuração do monstro
-        lvl = data['rpg']['level']
-        dif = 1 if lvl == 1 else 5 if 2 <= lvl <= 9 else 10 if 10 <= lvl <= 30 else 20
-        min_, max_ = lvl - dif if lvl - dif > 0 else 0, lvl + dif
-        db_monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
-        db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
-        db_monster['enemy'] = db_player
-        db_monster["armor"] = 0
+        # criando as entidade do jogador...
+        player[ctx.author.id] = Entity(db_player, True)
 
-        # bonus status monster
-        for k in db_monster["status"].keys():
-            if db_player['level'] > 25:
-                db_monster["status"][k] += randint(2, 4)
+        # ======================================================================================================
+        # ----------------------------------- SYSTEM RAID MONSTERS / BOSS --------------------------------------
+        # ======================================================================================================
 
-        for k in db_monster["status"].keys():
-            for sts in db_player['equipped_items'].keys():
-                if db_player['equipped_items'][sts] is not None:
-                    if k in ["atk", "luk", "con"]:
-                        db_monster["status"][k] += randint(1, 2)
-
-        # criando as entidades...
-        player = Entity(db_player, True)
-        monster = Entity(db_monster, False)
+        db_monster = self.choice_monster(data, db_player)
+        # criando as entidade do monstro...
+        monster[ctx.author.id] = Entity(db_monster, False)
 
         # durante a batalha
         while not self.bot.is_closed():
 
             # -----------------------------------------------------------------------------
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0:
                 break
+            if monster[ctx.author.id].status['hp'] <= 0:
+                raid_rank[ctx.author.id] += 1
+                db_monster = self.choice_monster(data, db_player)
+                msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
+                embed = discord.Embed(color=self.bot.color, title=msg)
+                embed.set_image(url=db_monster['img'])
+                await ctx.send(embed=embed)
+                # criando as entidade do monstro...
+                monster[ctx.author.id] = Entity(db_monster, False)
 
-            skill = await player.turn([monster.status, monster.rate, monster.name, monster.lvl], self.bot, ctx)
+            skill = await player[ctx.author.id].turn([monster[ctx.author.id].status, monster[ctx.author.id].rate,
+                                                      monster[ctx.author.id].name, monster[ctx.author.id].lvl],
+                                                     self.bot, ctx)
 
             if skill == "BATALHA-CANCELADA":
-                player.status['hp'] = 0
+                player[ctx.author.id].status['hp'] = 0
 
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0:
                 break
+            if monster[ctx.author.id].status['hp'] <= 0:
+                raid_rank[ctx.author.id] += 1
+                db_monster = self.choice_monster(data, db_player)
+                msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
+                embed = discord.Embed(color=self.bot.color, title=msg)
+                embed.set_image(url=db_monster['img'])
+                await ctx.send(embed=embed)
+                # criando as entidade do monstro...
+                monster[ctx.author.id] = Entity(db_monster, False)
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -158,12 +197,15 @@ class Battle(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
-            lvlp, lvlm, atk = player.lvl, monster.lvl, int(player.status['atk'] * 2)
-            if randint(1, 20 + lvlp) + player.status['prec'] > randint(1, 16 + lvlm) + monster.status['agi']:
-                await monster.damage(skill, player.level_skill, atk, ctx, player.name)
+            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
+            atk = int(player[ctx.author.id].status['atk'] * 2)
+            if randint(1, 20 + lvlp) + player[ctx.author.id].status['prec'] > randint(1, 16 + lvlm) + \
+                    monster[ctx.author.id].status['agi']:
+                await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
+                                                    player[ctx.author.id].name)
             else:
                 embed = discord.Embed(
-                    description=f"``{monster.name.upper()} EVADIU``",
+                    description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
                     color=0x000000
                 )
                 if not data['rpg']['lower_net']:
@@ -176,16 +218,34 @@ class Battle(commands.Cog):
             # --------======== ............... ========--------
 
             # -----------------------------------------------------------------------------
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0:
                 break
+            if monster[ctx.author.id].status['hp'] <= 0:
+                raid_rank[ctx.author.id] += 1
+                db_monster = self.choice_monster(data, db_player)
+                msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
+                embed = discord.Embed(color=self.bot.color, title=msg)
+                embed.set_image(url=db_monster['img'])
+                await ctx.send(embed=embed)
+                # criando as entidade do monstro...
+                monster[ctx.author.id] = Entity(db_monster, False)
 
-            skill = await monster.turn(monster.status['hp'], self.bot, ctx)
+            skill = await monster[ctx.author.id].turn(monster[ctx.author.id].status['hp'], self.bot, ctx)
 
             if skill == "BATALHA-CANCELADA":
-                player.status['hp'] = 0
+                player[ctx.author.id].status['hp'] = 0
 
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0:
                 break
+            if monster[ctx.author.id].status['hp'] <= 0:
+                raid_rank[ctx.author.id] += 1
+                db_monster = self.choice_monster(data, db_player)
+                msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
+                embed = discord.Embed(color=self.bot.color, title=msg)
+                embed.set_image(url=db_monster['img'])
+                await ctx.send(embed=embed)
+                # criando as entidade do monstro...
+                monster[ctx.author.id] = Entity(db_monster, False)
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -200,10 +260,14 @@ class Battle(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
-            atk_bonus = monster.status['atk'] * 1 if player.lvl > 25 else monster.status['atk'] * 0.25
-            lvlp, lvlm, atk = player.lvl, monster.lvl, int(monster.status['atk'] + atk_bonus)
-            if randint(1, 20 + lvlm) + monster.status['prec'] > randint(1, 16 + lvlp) + player.status['agi']:
-                await player.damage(skill, monster.level_skill, atk, ctx, monster.name)
+            atk_bonus = monster[ctx.author.id].status['atk'] * 1 if player[ctx.author.id].lvl > 25 else \
+                monster[ctx.author.id].status['atk'] * 0.25
+            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
+            atk = int(monster[ctx.author.id].status['atk'] + atk_bonus)
+            if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
+                    player[ctx.author.id].status['agi']:
+                await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
+                                                   monster[ctx.author.id].name)
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",
@@ -243,24 +307,26 @@ class Battle(commands.Cog):
         change = randint(1, 100)
 
         # depois da batalha
-        if monster.status['hp'] > 0:
-            await self.bot.data.add_xp(ctx, xp_reward[2])
-            embed = discord.Embed(
-                description=f"``{ctx.author.name.upper()} PERDEU!``",
-                color=0x000000
-            )
-            img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
-            if not data['rpg']['lower_net']:
-                embed.set_image(url=img)
-            embed.set_thumbnail(url=f"{db_player['img']}")
-            await ctx.send(embed=embed)
-        else:
+        if monster[ctx.author.id].status['hp'] > 0:
+            if raid_rank[ctx.author.id] == 0:
+                await self.bot.data.add_xp(ctx, xp_reward[2])
+                embed = discord.Embed(
+                    description=f"``{ctx.author.name.upper()} PERDEU!``",
+                    color=0x000000
+                )
+                img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
+                if not data['rpg']['lower_net']:
+                    embed.set_image(url=img)
+                embed.set_thumbnail(url=f"{db_player['img']}")
+                await ctx.send(embed=embed)
+
+        if raid_rank[ctx.author.id] > 0:
             # premiação
             if data['rpg']['vip']:
-                await self.bot.data.add_xp(ctx, xp_reward[0])
+                await self.bot.data.add_xp(ctx, xp_reward[0] * raid_rank[ctx.author.id])
             else:
-                await self.bot.data.add_xp(ctx, xp_reward[1])
-            answer_ = await self.bot.db.add_money(ctx, db_monster['ethernya'], True)
+                await self.bot.data.add_xp(ctx, xp_reward[1] * raid_rank[ctx.author.id])
+            answer_ = await self.bot.db.add_money(ctx, db_monster['ethernya'] * raid_rank[ctx.author.id], True)
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} GANHOU!`` {answer_}",
                 color=0x000000)
@@ -297,26 +363,23 @@ class Battle(commands.Cog):
                     else:
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
 
-                if change < 20 and db_player['level'] > 25:
-                    date_ = date.localtime()
-                    item_event = choice(["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
-                                         "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
-                                         "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
-                                         "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
-                                         "unsealed_stone", "melted_artifact"])
+                    raid_reward = ["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
+                                   "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
+                                   "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
+                                   "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                                   "unsealed_stone", "melted_artifact"]
 
-                    icon, name = self.bot.items[item_event][0], self.bot.items[item_event][1]
-                    awards = choice(['images/elements/medallion.gif', 'images/elements/trophy.gif'])
-                    msg = f"``VOCÊ GANHOU`` {icon} ``{name.upper()}`` ✨ **DO EVENTO** ✨"
-                    file = discord.File(awards, filename="reward.gif")
-                    embed = discord.Embed(title=msg, color=self.bot.color)
-                    embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-                    embed.set_image(url="attachment://reward.gif")
+                    if raid_rank[ctx.author.id] > 10:
+                        reward.append(choice(raid_reward))
 
-                    # config do evento atual.
-                    if date_[0] == 2020 and date_[1] == 10 and date_[2] <= 15:
-                        reward.append(item_event)
-                        await ctx.send(file=file, embed=embed)
+                    if raid_rank[ctx.author.id] > 15:
+                        reward.append(choice(raid_reward))
+
+                    if raid_rank[ctx.author.id] > 20:
+                        reward.append(choice(raid_reward))
+
+                    if raid_rank[ctx.author.id] > 25:
+                        reward.append(choice(raid_reward))
 
                 response = await self.bot.db.add_reward(ctx, reward)
                 await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
@@ -325,7 +388,7 @@ class Battle(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if change < 10 and player.status['hp'] > 0 and db_player['level'] > 25:
+        if change < 10 and raid_rank[ctx.author.id] > 0 and db_player['level'] > 25:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():
@@ -355,34 +418,20 @@ class Battle(commands.Cog):
                 await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ESPADA/ESCUDO** ✨\n'
                                f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
 
-        elif change < 25 and player.status['hp'] > 0:
-
-            equips_list = list()
-            for ky in self.bot.config['equips'].keys():
-                for k, v in self.bot.config['equips'][ky].items():
-                    equips_list.append((k, v))
-
-            sb = choice(['summon_box_sr', 'summon_box_sr', 'summon_box_sr', 'summon_box_sr', 'summon_box_sr',
-                         'summon_box_ur', 'summon_box_ur', 'summon_box_ur', 'summon_box_secret'])
-
-            try:
-                update['rpg']['items'][sb] += 1
-            except KeyError:
-                update['rpg']['items'][sb] = 1
-
-            rew = None
-            for i in equips_list:
-                if i[0] == sb:
-                    rew = i[1]
-
-            if rew is not None:
-                await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU UM`` ✨ **CONSUMABLE** ✨\n'
-                               f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
+        if raid_rank[ctx.author.id] > 0:
+            if raid_rank[ctx.author.id] > update['user']['raid']:
+                await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCÊ CONSEGUIU MATAR:`` "
+                               f"**{raid_rank[ctx.author.id]}** ``MONSTROS!``\n **ESSE É SEU NOVO RECORD!** "
+                               f"``APROVEITE E OLHE O COMANDO:`` **ASH TOP RAID**")
+            else:
+                await ctx.send(f"<:confirmed:721581574461587496>│``VOCÊ CONSEGUIU MATAR:`` "
+                               f"**{raid_rank[ctx.author.id]}** ``MONSTROS!``")
+            update['user']['raid'] = raid_rank[ctx.author.id]
 
         update['config']['battle'] = False
         await self.bot.db.update_data(data, update, 'users')
 
 
 def setup(bot):
-    bot.add_cog(Battle(bot))
-    print('\033[1;32m( 🔶 ) | O comando \033[1;34mBATTLE\033[1;32m foi carregado com sucesso!\33[m')
+    bot.add_cog(Raid(bot))
+    print('\033[1;32m( 🔶 ) | O comando \033[1;34mRAID\033[1;32m foi carregado com sucesso!\33[m')

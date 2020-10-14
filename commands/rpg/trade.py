@@ -94,10 +94,10 @@ class TradeClass(commands.Cog):
                 equips_list.append((k, v))
 
         if item not in [i[1]["name"] for i in equips_list]:
-            if "sealed" in item.lower():
+            if "sealed" in item.lower() and item.lower() != "unsealed stone":
                 return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM ESTÁ SELADO, ANTES DISSO TIRE O SELO "
                                       "USANDO O COMANDO:`` **ASH LIBERAR**")
-            return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM NAO EXISTE...``")
+            return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM NAO EXISTE, OU NAO É UM EQUIPAMENTO...``")
 
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         data_member = await self.bot.db.get_data("user_id", member.id, "users")
@@ -105,7 +105,7 @@ class TradeClass(commands.Cog):
         update_member = data_member
 
         if data_user['config']['playing']:
-            return await ctx.send("<:alert:739251822920728708>│``VocÊ está jogando, aguarde para quando"
+            return await ctx.send("<:alert:739251822920728708>│``Você está jogando, aguarde para quando"
                                   " vocÊ estiver livre!``")
 
         if not data_user['rpg']['active']:

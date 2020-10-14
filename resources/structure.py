@@ -8,6 +8,7 @@ user_data_structure = {
                 "ranking": "Bronze",
                 "titling": "Vagabond",
                 "patent": 0,
+                "raid": 0,
                 "married": False,
                 "married_at": None,
                 "marrieding": False,

@@ -429,7 +429,7 @@ async def guild_info(guild):
     embed = discord.Embed(color=int("ff00c1", 16), description="Abaixo está as informaçoes principais do servidor!")
     embed.set_thumbnail(url=guild.icon_url)
     embed.add_field(name="Nome:", value=guild.name, inline=True)
-    embed.add_field(name="Dono:", value=f"{str(guild.owner)} = {guild.owner.mention}")
+    embed.add_field(name="Dono:", value=f"{str(guild.owner)}")
     embed.add_field(name="ID:", value=guild.id, inline=True)
     embed.add_field(name="Cargos:", value=str(len(guild.roles)), inline=True)
     embed.add_field(name="Membros:", value=str(len(guild.members)), inline=True)
