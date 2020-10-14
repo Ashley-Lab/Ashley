@@ -297,7 +297,7 @@ class Battle(commands.Cog):
                     else:
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
 
-                if change < 20 and db_player['level'] > 25:
+                if change < 15 and db_player['level'] > 25:
                     date_ = date.localtime()
                     item_event = choice(["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
                                          "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
@@ -307,14 +307,14 @@ class Battle(commands.Cog):
 
                     icon, name = self.bot.items[item_event][0], self.bot.items[item_event][1]
                     awards = choice(['images/elements/medallion.gif', 'images/elements/trophy.gif'])
-                    msg = f"``VOCÊ GANHOU`` {icon} ``{name.upper()}`` ✨ **DO EVENTO** ✨"
+                    msg = f"``VOCÊ GANHOU`` {icon} ``{name.upper()}`` ✨ **DO EVENTO DE HALLOWEEN** ✨"
                     file = discord.File(awards, filename="reward.gif")
                     embed = discord.Embed(title=msg, color=self.bot.color)
                     embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
                     embed.set_image(url="attachment://reward.gif")
 
                     # config do evento atual.
-                    if date_[0] == 2020 and date_[1] == 10 and date_[2] <= 15:
+                    if date_[0] == 2020 and date_[1] == 10:
                         reward.append(item_event)
                         await ctx.send(file=file, embed=embed)
 

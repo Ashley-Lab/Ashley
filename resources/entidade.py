@@ -156,9 +156,9 @@ class Entity(object):
                                 self.status['mp'] = (self.status['con'] * self.rate[1])
 
                             # regeneração de HP
-                            hp = int(((self.status['con'] * self.rate[1]) / 100) * 10)
-                            if (self.status['hp'] + hp) <= (self.status['con'] * self.rate[0]):
-                                self.status['hp'] += hp
+                            hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 10)
+                            if (self.status['hp'] + hp_regen) <= (self.status['con'] * self.rate[0]):
+                                self.status['hp'] += hp_regen
                             else:
                                 self.status['hp'] = (self.status['con'] * self.rate[0])
 
@@ -259,8 +259,16 @@ class Entity(object):
         if effects is not None:
             for c in effects:
                 try:
+                    armor_now = self.armor if self.armor > 0 else 1
                     if 'damage' in self.effects[c]['type']:
-                        self.status['hp'] -= (self.effects[c]['damage'] - self.armor // 2)
+                        damage = self.effects[c]['damage']
+                        percent = int(armor_now / (damage / 100))
+                        if percent < 45:
+                            dn = int(damage - self.armor)
+                        else:
+                            dn_chance = randint(1, 100)
+                            dn = int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65))
+                        self.status['hp'] -= dn
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
                         description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
@@ -271,7 +279,14 @@ class Entity(object):
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
                     elif 'manadrain' in self.effects[c]['type']:
-                        self.status['mp'] -= (self.effects[c]['damage'] - self.armor // 2)
+                        damage = self.effects[c]['damage']
+                        percent = int(armor_now / (damage / 100))
+                        if percent < 45:
+                            dn = int(damage - self.armor)
+                        else:
+                            dn_chance = randint(1, 100)
+                            dn = int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65))
+                        self.status['mp'] -= dn
                         if self.status['mp'] < 0:
                             self.status['mp'] = 0
                         description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
