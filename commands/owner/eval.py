@@ -34,8 +34,8 @@ class EvalSintax(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='eval')
-    async def _eval(self, ctx, *, body: str):
-        """Evaluates a code"""
+    async def eval(self, ctx, *, body: str):
+        """Apenas desenvolvedores."""
 
         env = {
             'bot': self.bot,

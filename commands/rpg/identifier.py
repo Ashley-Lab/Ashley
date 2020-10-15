@@ -37,7 +37,7 @@ class IdentifierClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='identifier', aliases=['identificar', 'identifique'])
     async def identifier(self, ctx):
-        """Esse nem eu sei..."""
+        """Comando usado para identificar as ?-bollash, assim liberando uma bola para captura de pets."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 

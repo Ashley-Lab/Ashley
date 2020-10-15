@@ -31,6 +31,7 @@ class RankingClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='stars', aliases=['estrelas'])
     async def stars(self, ctx):
+        """Comando para DEVs, adicionar ou retirar estrelas de um usuario"""
         try:
             user = ctx.message.mentions[0]
         except IndexError:

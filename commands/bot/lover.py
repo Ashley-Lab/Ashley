@@ -18,6 +18,7 @@ class LoverClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='lower_net', aliases=['ln'])
     async def lower_net(self, ctx):
+        """Comando para ativar/desativar imagens e gifs do battle."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
@@ -46,7 +47,7 @@ class LoverClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='lover', aliases=['al'])
     async def lover(self, ctx):
-        """Esse nem eu sei..."""
+        """Esse comando te transforma em um lover da ahsley, sendo pingado para novidades."""
         if ctx.guild.id == 519894833783898112:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             if data['config']['provinces'] is not None or ctx.channel.id == 576795574783705104:
@@ -73,7 +74,7 @@ class LoverClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='unlover', aliases=['ual'])
     async def unlover(self, ctx):
-        """Esse nem eu sei..."""
+        """Esse comando retira seu lover, assim voce nao é mais notificado"""
         if ctx.guild.id == 519894833783898112:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             if data['config']['provinces'] is not None or ctx.channel.id == 576795574783705104:
@@ -101,7 +102,7 @@ class LoverClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='status', aliases=['estado'])
     async def status(self, ctx):
-        """Esse nem eu sei..."""
+        """Esse comando mostra seus status atuais, numa visao geral do bot."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         user = self.bot.user_commands[ctx.author.id]
         guild = self.bot.guilds_commands[ctx.guild.id]

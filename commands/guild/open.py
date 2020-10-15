@@ -19,7 +19,7 @@ class OpenClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='open', aliases=['abrir'])
     async def open(self, ctx):
-        """Evento de Caixas..."""
+        """Abra um presente para liberar seu giftcard."""
         if ctx.guild.id in self.bot.box:
             try:
                 BOX = choice(self.bot.box[ctx.guild.id]['boxes'])
@@ -49,7 +49,7 @@ class OpenClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='gift', aliases=['g'])
     async def gift(self, ctx, *, gift=None):
-        """Evento de Caixas..."""
+        """Esse comando libera premios do giftcard que voce abriu no comando 'ash open'"""
         if gift is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa digitar um numero de GIFT!``")
 

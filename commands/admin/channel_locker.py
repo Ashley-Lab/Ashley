@@ -16,7 +16,10 @@ class ChannelClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='channel', aliases=['locker', 'ch', 'lk'])
     async def channel(self, ctx, locker=None):
-        """Esse nem eu sei..."""
+        """Esse comando bloqueia a ashley de usar comandos em determinados canais, usando o sistema de
+        lista branca e lista negra.
+        ash channel (troca de listra negra e branca)
+        ash channel on/off (libera/bloqueia variando do tipo de lista)"""
         if locker is None:
             data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             update_guild = data_guild

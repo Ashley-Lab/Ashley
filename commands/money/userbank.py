@@ -80,6 +80,7 @@ class UserBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='shop', aliases=['buy', 'comprar', 'loja'])
     async def shop(self, ctx, quant: int = None, *, item=None):
+        """A lojinha da ashley, compre itens e crafts que voce ainda nao conseguiu pegar em outros comandos."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
@@ -153,6 +154,7 @@ class UserBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='pay', aliases=['pagar'])
     async def pay(self, ctx, member: discord.Member = None, amount: int = None):
+        """Pague aquele dinheiro que voce ficou devendo"""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem.``")
         if amount is None:
@@ -196,6 +198,7 @@ class UserBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='give', aliases=['dar'])
     async def give(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
+        """De aquele item de craft como presente para um amigo seu ou troque com alguem."""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if amount is None:
@@ -495,7 +498,7 @@ class UserBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='stone', aliases=['pedra'])
     async def stone(self, ctx, stone: int = None):
-        """bola para capitura dos pets da ashley"""
+        """pedra da liberação usada para tirar o selo das armaduras seladas."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
 

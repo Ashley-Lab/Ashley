@@ -14,6 +14,7 @@ class TradeClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='sell', aliases=['vender'])
     async def sell(self, ctx, amount: int = None, *, item=None):
+        """Comando usado para vender equipamentos, para o proprio bot"""
         if amount is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantia!``")
         if item is None:
@@ -79,6 +80,7 @@ class TradeClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='trade', aliases=['trocar'])
     async def trade(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
+        """Comando usado para trocar equipamentos com os jogadores"""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if amount is None:

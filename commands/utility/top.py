@@ -150,8 +150,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='rpg')
     async def _rpg(self, ctx):
-        """Comando usado pra retornar o top 20 em questão de comandos usados
-        Use ash top command"""
+        """Comando usado pra retornar o top 20 em questão do RPG
+        Use ash top rpg"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_rpg(20)
@@ -163,8 +163,8 @@ class TopClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @top.group(name='raid')
     async def _raid(self, ctx):
-        """Comando usado pra retornar o top 20 em questão de comandos usados
-        Use ash top command"""
+        """Comando usado pra retornar o top 20 em questão das RAIDS
+        Use ash top raid"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
         top = await self.bot.data.get_rank_raid(20)

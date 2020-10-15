@@ -35,7 +35,7 @@ class UtilityClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='reset_user', aliases=['ru'])
     async def reset_user(self, ctx, member: discord.Member = None):
-        """Esse nem eu sei..."""
+        """Comando usado apelas por DEVS para resetar status bugados..."""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem.``")
 
@@ -65,7 +65,7 @@ class UtilityClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='create_vip', aliases=['cv'])
     async def create_vip(self, ctx, member: discord.Member = None):
-        """raspadinha da sorte da ashley"""
+        """Comando usado apelas por DEVS para dar vip para doadores."""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem.``")
 
@@ -112,6 +112,9 @@ class UtilityClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='create_money', aliases=['cm'])
     async def create_money(self, ctx, member: discord.Member = None, amount: int = None):
+        """
+        Comando usado apelas por DEVS para criar money para usuarios doadores
+        """
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem.``")
         if amount is None:
@@ -140,6 +143,7 @@ class UtilityClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='create_item', aliases=['ci'])
     async def create_item(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
+        """Comando usado apelas por DEVS para criar itens de crafts para doadores"""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if amount is None:
@@ -175,6 +179,7 @@ class UtilityClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='create_equip', aliases=['ce'])
     async def create_equip(self, ctx, member: discord.Member = None, amount: int = None, *, item=None):
+        """Comando usado apelas por DEVS para criar equipamentos para doadores"""
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if amount is None:
@@ -233,7 +238,7 @@ class UtilityClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='create_gift', aliases=['cg'])
     async def create_gift(self, ctx, time=None):
-        """Esse nem eu sei..."""
+        """Comando usado apelas por DEVS para presentar eventos e doadores"""
         if time is None:
             return await ctx.send("<:alert:739251822920728708>│``Digite o tempo de cooldown do gift.``")
         try:

@@ -21,7 +21,7 @@ class MineClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='mine', aliases=['minerar'])
     async def mine(self, ctx):
-        """Esse nem eu sei..."""
+        """Comando para minerar pedras preciosas."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 

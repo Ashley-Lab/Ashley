@@ -105,6 +105,7 @@ class GuildBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, g_vip=True, cooldown=True, time=3600))
     @guild.group(name='reward', aliases=['recompensa'])
     async def _reward(self, ctx):
+        """Comando que entrega sua recompença do servidor de cadastro."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if ctx.guild.id != data['guild_id']:
@@ -199,6 +200,7 @@ class GuildBank(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True, g_vip=True, cooldown=True, time=86400))
     @guild.group(name='convert', aliases=["converter"])
     async def _convert(self, ctx):
+        """Comando que converte o money disponivel para recompensar os membros do servidor."""
 
         # DATA DO SERVIDOR ATUAL
         data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")

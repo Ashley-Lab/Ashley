@@ -17,7 +17,7 @@ class RpgStart(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='rpg', aliases=['start'])
     async def rpg(self, ctx):
-        """Esse nem eu sei..."""
+        """Comando necessario para iniciar sua jornada no rpg da ashley"""
         def check_battle(m):
             return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
 

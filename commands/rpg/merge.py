@@ -156,7 +156,7 @@ class MergeClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='merge', aliases=['fundir'])
     async def merge(self, ctx, *, item=None):
-        """Esse nem eu sei..."""
+        """Comando especial para fundir itens de uma mesma raridade para uma maior"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 

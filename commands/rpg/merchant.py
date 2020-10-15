@@ -17,7 +17,7 @@ class MerchantClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='merchant', aliases=['mercado'])
     async def merchant(self, ctx):
-        """Esse nem eu sei..."""
+        """Mercado da ashley, onde todas as lojas sao dos proprios jogadores"""
         if ctx.invoked_subcommand is None:
             data = await self.bot.db.get_all_data("merchant")
 
@@ -44,7 +44,7 @@ class MerchantClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @merchant.command(name='add', aliases=['adicionar', 'a'])
     async def _add(self, ctx, value: int = None, amount: int = None, *, item=None):
-        """Esse nem eu sei..."""
+        """Comando para adicionar loja no mercado"""
         global item_key_equip, item_key_craft, _type
         if value is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o preço da unidade!``")
@@ -155,7 +155,7 @@ class MerchantClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @merchant.command(name='remove', aliases=['remover', 'r'])
     async def _remove(self, ctx, id_shop: str = None):
-        """Esse nem eu sei..."""
+        """Comando para remover uma loja do mercado"""
         if id_shop is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o codigo da loja!``")
 
@@ -208,7 +208,7 @@ class MerchantClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @merchant.command(name='buy', aliases=['comprar', 'c'])
     async def _buy(self, ctx, id_shop: str = None, amount: int = None):
-        """Esse nem eu sei..."""
+        """Comando para comprar itens das lojas do mercado."""
         if id_shop is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer o codigo da loja!``")
         if amount is None:

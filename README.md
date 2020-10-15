@@ -106,6 +106,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [gif](#gif)
 - [GuildBank](#guildbank-commands)
   - [guild](#guild)
+  - [guild convert](#guild-convert)
+  - [guild reward](#guild-reward)
   - [treasure](#treasure)
 - [HeadsOrTails](#headsortails-commands)
   - [hot](#hot)
@@ -120,6 +122,10 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [InstagramClass](#instagramclass-commands)
   - [instagram](#instagram)
 - [InventoryClass](#inventoryclass-commands)
+  - [equip](#equip)
+  - [equip info](#equip-info)
+  - [equip item](#equip-item)
+  - [equip reset](#equip-reset)
   - [inventory](#inventory)
   - [inventory equip](#inventory-equip)
 - [Inverse](#inverse-commands)
@@ -145,6 +151,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [logout](#logout)
 - [LoverClass](#loverclass-commands)
   - [lover](#lover)
+  - [lower_net](#lower_net)
   - [status](#status)
   - [unlover](#unlover)
 - [MarriedSystem](#marriedsystem-commands)
@@ -153,6 +160,11 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [MeltedClass](#meltedclass-commands)
   - [melted](#melted)
   - [unsealed](#unsealed)
+- [MerchantClass](#merchantclass-commands)
+  - [merchant](#merchant)
+  - [merchant add](#merchant-add)
+  - [merchant buy](#merchant-buy)
+  - [merchant remove](#merchant-remove)
 - [MergeClass](#mergeclass-commands)
   - [merge](#merge)
 - [MineClass](#mineclass-commands)
@@ -167,15 +179,17 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [PokemonClass](#pokemonclass-commands)
   - [pokemon](#pokemon)
 - [ProfileSystem](#profilesystem-commands)
+  - [about](#about)
   - [profile](#profile)
 - [PunchClass](#punchclass-commands)
   - [punch](#punch)
 - [PushClass](#pushclass-commands)
   - [push](#push)
+- [Raid](#raid-commands)
+  - [raid](#raid)
 - [RankingClass](#rankingclass-commands)
   - [rank](#rank)
-- [ReceptionClass](#receptionclass-commands)
-  - [reception](#reception)
+  - [stars](#stars)
 - [RecipeClass](#recipeclass-commands)
   - [craft](#craft)
   - [recipe](#recipe)
@@ -225,12 +239,15 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [top money](#top-money)
   - [top point](#top-point)
   - [top purple](#top-purple)
+  - [top raid](#top-raid)
   - [top rpg](#top-rpg)
   - [top xp](#top-xp)
   - [top yellow](#top-yellow)
 - [TotComandos](#totcomandos-commands)
   - [total_de_comandos](#total_de_comandos)
 - [TradeClass](#tradeclass-commands)
+  - [sell](#sell)
+  - [trade](#trade)
 - [TransferClass](#transferclass-commands)
   - [transfer](#transfer)
 - [TwitterClass](#twitterclass-commands)
@@ -239,13 +256,19 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [unload](#unload)
 - [UserBank](#userbank-commands)
   - [bollash](#bollash)
+  - [give](#give)
+  - [pay](#pay)
+  - [shop](#shop)
   - [stone](#stone)
   - [ticket](#ticket)
   - [wallet](#wallet)
 - [UserInfo](#userinfo-commands)
   - [userinfo](#userinfo)
 - [UtilityClass](#utilityclass-commands)
+  - [create_equip](#create_equip)
   - [create_gift](#create_gift)
+  - [create_item](#create_item)
+  - [create_money](#create_money)
   - [create_vip](#create_vip)
   - [reset_user](#reset_user)
 - [WhatsappClass](#whatsappclass-commands)
@@ -342,12 +365,13 @@ Use ash box e siga as instruções
 >**Modo de Uso:** `ash box `
 
 #### box booster
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Esse comando esvazia a box, assim que voce zerar uma box ganha um item extra
 
 >**Modo de Uso:** `ash box booster `
 
 #### box buy
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Subcomando de box, para comprar uma box ativa.
+recomenda-se sempre pegar box de raridades mamiores.
 
 >**Modo de Uso:** `ash box buy `
 
@@ -361,7 +385,10 @@ Use ash box e siga as instruções
 ## ChannelClass
 
 #### channel
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Esse comando bloqueia a ashley de usar comandos em determinados canais, usando o sistema de
+lista branca e lista negra.
+ash channel (troca de listra negra e branca)
+ash channel on/off (libera/bloqueia variando do tipo de lista)
 
 >**Modo de Uso:** `ash channel [locker]`
 
@@ -456,7 +483,7 @@ Use ash dance <@usuario a sua escolha>
 ## DoorClass
 
 #### door
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Sistema de segurança, controle de entra e sainda de membros (em desenvolvimento)
 
 >**Modo de Uso:** `ash door `
 
@@ -479,7 +506,7 @@ Use ash economy
 ## EvalSintax
 
 #### eval
->**Descrição:** Evaluates a code
+>**Descrição:** Apenas desenvolvedores.
 
 >**Modo de Uso:** `ash eval <body>`
 
@@ -550,6 +577,16 @@ Use ash guild
 
 >**Modo de Uso:** `ash guild `
 
+#### guild convert
+>**Descrição:** Comando que converte o money disponivel para recompensar os membros do servidor.
+
+>**Modo de Uso:** `ash guild convert `
+
+#### guild reward
+>**Descrição:** Comando que entrega sua recompença do servidor de cadastro.
+
+>**Modo de Uso:** `ash guild reward `
+
 #### treasure
 >**Descrição:** Comando usado pra ver a quantia de dinheiro de um server
 Use ash treasure
@@ -589,7 +626,7 @@ use ash ia ou ash ai
 ## IdentifierClass
 
 #### identifier
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando usado para identificar as ?-bollash, assim liberando uma bola para captura de pets.
 
 >**Modo de Uso:** `ash identifier `
 
@@ -602,6 +639,26 @@ Use ash instagram <mensagem desejada>
 >**Modo de Uso:** `ash instagram [resp]`
 
 ## InventoryClass
+
+#### equip
+>**Descrição:** Comando para mostrar o painel de equipamentos do seu personagem
+
+>**Modo de Uso:** `ash equip `
+
+#### equip info
+>**Descrição:** Comando que mostra as informações dos equipamentos do seu personagem
+
+>**Modo de Uso:** `ash equip info `
+
+#### equip item
+>**Descrição:** Esse comando equipa um item do seu inventario de equipamento no seu personagem
+
+>**Modo de Uso:** `ash equip item [item]`
+
+#### equip reset
+>**Descrição:** Esse comando retira todos os equipamentos do seu persoangem, para o seu inventario
+
+>**Modo de Uso:** `ash equip reset `
 
 #### inventory
 >**Descrição:** Comando usado pra ver seu inventario
@@ -634,7 +691,7 @@ Use ash invite
 ## JewelClass
 
 #### jewel
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando especial usado para craftar joias para seu personagem
 
 >**Modo de Uso:** `ash jewel `
 
@@ -701,17 +758,22 @@ Use ash logger edit <log desejado> e siga as instruções do comando
 ## LoverClass
 
 #### lover
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Esse comando te transforma em um lover da ahsley, sendo pingado para novidades.
 
 >**Modo de Uso:** `ash lover `
 
+#### lower_net
+>**Descrição:** Comando para ativar/desativar imagens e gifs do battle.
+
+>**Modo de Uso:** `ash lower_net `
+
 #### status
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Esse comando mostra seus status atuais, numa visao geral do bot.
 
 >**Modo de Uso:** `ash status `
 
 #### unlover
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Esse comando retira seu lover, assim voce nao é mais notificado
 
 >**Modo de Uso:** `ash unlover `
 
@@ -732,38 +794,60 @@ Use ash marry <@pessoa desejada>
 ## MeltedClass
 
 #### melted
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando especial para derreter artefatos, criando o item artefato derretido
 
 >**Modo de Uso:** `ash melted `
 
 #### unsealed
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando especial para liberar/remover o selo de uma armadura.
 
 >**Modo de Uso:** `ash unsealed [equip]`
+
+## MerchantClass
+
+#### merchant
+>**Descrição:** Mercado da ashley, onde todas as lojas sao dos proprios jogadores
+
+>**Modo de Uso:** `ash merchant `
+
+#### merchant add
+>**Descrição:** Comando para adicionar loja no mercado
+
+>**Modo de Uso:** `ash merchant add [value] [amount] [item]`
+
+#### merchant buy
+>**Descrição:** Comando para comprar itens das lojas do mercado.
+
+>**Modo de Uso:** `ash merchant buy [id_shop] [amount]`
+
+#### merchant remove
+>**Descrição:** Comando para remover uma loja do mercado
+
+>**Modo de Uso:** `ash merchant remove [id_shop]`
 
 ## MergeClass
 
 #### merge
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando especial para fundir itens de uma mesma raridade para uma maior
 
 >**Modo de Uso:** `ash merge [item]`
 
 ## MineClass
 
 #### mine
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando para minerar pedras preciosas.
 
 >**Modo de Uso:** `ash mine `
 
 ## OpenClass
 
 #### gift
->**Descrição:** Evento de Caixas...
+>**Descrição:** Esse comando libera premios do giftcard que voce abriu no comando 'ash open'
 
 >**Modo de Uso:** `ash gift [gift]`
 
 #### open
->**Descrição:** Evento de Caixas...
+>**Descrição:** Abra um presente para liberar seu giftcard.
 
 >**Modo de Uso:** `ash open `
 
@@ -793,6 +877,11 @@ Use ash pokemon ou ash poke pra jogar
 
 ## ProfileSystem
 
+#### about
+>**Descrição:** Comando usado para alterar o 'about me' do ash perfil
+
+>**Modo de Uso:** `ash about [text]`
+
 #### profile
 >**Descrição:** Comando usado pra ver o seu perfil da ashley
 Use ash profile <@usuario em questão se não colocar vera seu proprio perfil>
@@ -815,31 +904,36 @@ Use ash push <@usuario a sua escolha>
 
 >**Modo de Uso:** `ash push `
 
+## Raid
+
+#### raid
+>**Descrição:** Comando usado pra batalhar no rpg da ashley
+Use ash raid
+
+>**Modo de Uso:** `ash raid `
+
 ## RankingClass
 
 #### rank
 >**Descrição:** Mostra seu rank da Ashley
 Use ash rank
 
->**Modo de Uso:** `ash rank `
+>**Modo de Uso:** `ash rank [user]`
 
-## ReceptionClass
+#### stars
+>**Descrição:** Comando para DEVs, adicionar ou retirar estrelas de um usuario
 
-#### reception
->**Descrição:** comando pra configurar o welcome
-Use ash reception ou ash rp e siga as instruções no comando(use # pra marcar os canais)
-
->**Modo de Uso:** `ash reception `
+>**Modo de Uso:** `ash stars `
 
 ## RecipeClass
 
 #### craft
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando para criar itens de receitas, para fabricar suas armaduras.
 
 >**Modo de Uso:** `ash craft [item]`
 
 #### recipe
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Lista de receitas disponiveis.
 
 >**Modo de Uso:** `ash recipe `
 
@@ -903,7 +997,7 @@ Use ash roleinfo <@cargo_em_questão>
 ## RpgStart
 
 #### rpg
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando necessario para iniciar sua jornada no rpg da ashley
 
 >**Modo de Uso:** `ash rpg `
 
@@ -1054,9 +1148,15 @@ Use ash top roxo
 
 >**Modo de Uso:** `ash top purple `
 
+#### top raid
+>**Descrição:** Comando usado pra retornar o top 20 em questão das RAIDS
+Use ash top raid
+
+>**Modo de Uso:** `ash top raid `
+
 #### top rpg
->**Descrição:** Comando usado pra retornar o top 20 em questão de comandos usados
-Use ash top command
+>**Descrição:** Comando usado pra retornar o top 20 em questão do RPG
+Use ash top rpg
 
 >**Modo de Uso:** `ash top rpg `
 
@@ -1080,6 +1180,16 @@ Use ash top amarelo
 >**Modo de Uso:** `ash total_de_comandos `
 
 ## TradeClass
+
+#### sell
+>**Descrição:** Comando usado para vender equipamentos, para o proprio bot
+
+>**Modo de Uso:** `ash sell [amount] [item]`
+
+#### trade
+>**Descrição:** Comando usado para trocar equipamentos com os jogadores
+
+>**Modo de Uso:** `ash trade [member] [amount] [item]`
 
 ## TransferClass
 
@@ -1111,8 +1221,23 @@ Use ash twitter <mensagem desejada>
 
 >**Modo de Uso:** `ash bollash [stone]`
 
+#### give
+>**Descrição:** De aquele item de craft como presente para um amigo seu ou troque com alguem.
+
+>**Modo de Uso:** `ash give [member] [amount] [item]`
+
+#### pay
+>**Descrição:** Pague aquele dinheiro que voce ficou devendo
+
+>**Modo de Uso:** `ash pay [member] [amount]`
+
+#### shop
+>**Descrição:** A lojinha da ashley, compre itens e crafts que voce ainda nao conseguiu pegar em outros comandos.
+
+>**Modo de Uso:** `ash shop [quant] [item]`
+
 #### stone
->**Descrição:** bola para capitura dos pets da ashley
+>**Descrição:** pedra da liberação usada para tirar o selo das armaduras seladas.
 
 >**Modo de Uso:** `ash stone [stone]`
 
@@ -1137,18 +1262,33 @@ Use ash userinfo <@usuario em questão>
 
 ## UtilityClass
 
+#### create_equip
+>**Descrição:** Comando usado apelas por DEVS para criar equipamentos para doadores
+
+>**Modo de Uso:** `ash create_equip [member] [amount] [item]`
+
 #### create_gift
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando usado apelas por DEVS para presentar eventos e doadores
 
 >**Modo de Uso:** `ash create_gift [time]`
 
+#### create_item
+>**Descrição:** Comando usado apelas por DEVS para criar itens de crafts para doadores
+
+>**Modo de Uso:** `ash create_item [member] [amount] [item]`
+
+#### create_money
+>**Descrição:** Comando usado apelas por DEVS para criar money para usuarios doadores
+
+>**Modo de Uso:** `ash create_money [member] [amount]`
+
 #### create_vip
->**Descrição:** raspadinha da sorte da ashley
+>**Descrição:** Comando usado apelas por DEVS para dar vip para doadores.
 
 >**Modo de Uso:** `ash create_vip [member]`
 
 #### reset_user
->**Descrição:** Esse nem eu sei...
+>**Descrição:** Comando usado apelas por DEVS para resetar status bugados...
 
 >**Modo de Uso:** `ash reset_user [member]`
 

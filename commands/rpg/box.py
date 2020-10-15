@@ -108,7 +108,8 @@ ITEMS:
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='buy', aliases=['comprar'])
     async def _buy(self, ctx):
-        """Esse nem eu sei..."""
+        """Subcomando de box, para comprar uma box ativa.
+        recomenda-se sempre pegar box de raridades mamiores."""
         global summon
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -236,7 +237,7 @@ ITEMS:
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='booster', aliases=['pacote', 'abrir', 'open'])
     async def _booster(self, ctx):
-        """Esse nem eu sei..."""
+        """Esse comando esvazia a box, assim que voce zerar uma box ganha um item extra"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 

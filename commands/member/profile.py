@@ -117,6 +117,7 @@ class ProfileSystem(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='about', aliases=['sobre'])
     async def about(self, ctx, *, text: str = None):
+        """Comando usado para alterar o 'about me' do ash perfil"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if text is None:

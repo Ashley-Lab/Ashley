@@ -19,6 +19,7 @@ class InventoryClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.group(name='equip', aliases=['e', 'equipamento'])
     async def equip(self, ctx):
+        """Comando para mostrar o painel de equipamentos do seu personagem"""
         if ctx.invoked_subcommand is None:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
 
@@ -118,6 +119,7 @@ class InventoryClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @equip.command(name='info')
     async def _info(self, ctx):
+        """Comando que mostra as informações dos equipamentos do seu personagem"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
@@ -159,6 +161,7 @@ class InventoryClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @equip.command(name='reset', aliases=['r'])
     async def _reset(self, ctx):
+        """Esse comando retira todos os equipamentos do seu persoangem, para o seu inventario"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
@@ -211,6 +214,7 @@ class InventoryClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @equip.command(name='item', aliases=['i'])
     async def _item(self, ctx, *, item=None):
+        """Esse comando equipa um item do seu inventario de equipamento no seu personagem"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 

@@ -41,7 +41,7 @@ class MeltedClass(commands.Cog):
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @commands.command(name='unsealed', aliases=['liberar', 'libertar'])
     async def unsealed(self, ctx, *, equip=None):
-        """Esse nem eu sei..."""
+        """Comando especial para liberar/remover o selo de uma armadura."""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
