@@ -58,8 +58,7 @@ class ServerInfo(commands.Cog):
         data = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
 
         if data is not None:
-            link = f"https://api-ashley.herokuapp.com/get-guilds/{data['_id']}"
-            database = f"[Clique Aqui]({link})"
+            database = f"SERVIDOR CADASTRADO"
         else:
             database = "SERVIDOR NAO CADASTRADO"
 
@@ -77,7 +76,7 @@ class ServerInfo(commands.Cog):
         embed.set_thumbnail(url=ctx.guild.icon_url)
         embed.set_footer(text="{} • {}".format(ctx.author, hour))
         embed.add_field(name="Nome:", value=ctx.guild.name, inline=True)
-        embed.add_field(name="Dono:", value=ctx.guild.owner.mention)
+        embed.add_field(name="Dono:", value=str(ctx.guild.owner))
         embed.add_field(name="ID:", value=ctx.guild.id, inline=True)
         embed.add_field(name="Cargos:", value=str(len(ctx.guild.roles)), inline=True)
         embed.add_field(name="Membros:", value=str(len(ctx.guild.members)), inline=True)

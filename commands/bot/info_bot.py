@@ -38,7 +38,7 @@ class BotInfo(commands.Cog):
         embed_bot.add_field(name="<:processor:522400972094308362> | Porcentagem da CPU",
                             value="**{}%**".format(psutil.cpu_percent()))
         embed_bot.add_field(name="<:memory:522400971406573578> | Memoria Usada", value=f'**{self.bot.get_ram()}**')
-        embed_bot.add_field(name="<:bot:526147892919140371> | Entre no meu servidor",
+        embed_bot.add_field(name="<:mito:745375589145247804> | Entre no meu servidor",
                             value="[Clique Aqui](https://discord.gg/rYT6QrM)")
         embed_bot.add_field(name='`💮 | Nome`', value=self.bot.user.name)
         embed_bot.add_field(name='`◼ | Id bot`', value=self.bot.user.id)
@@ -48,10 +48,10 @@ class BotInfo(commands.Cog):
         embed_bot.add_field(name='👥 | Usuarios', value='{} ({} online)'.format(total_members, total_online))
         embed_bot.add_field(name='‍⚙ | Programador', value=str(owner))
         embed_bot.add_field(name='🐍 Python  | Version', value=f"`{self.bot.python_version}`")
-        embed_bot.add_field(name='<:ashley:525348179734953995> Bot  | Version', value=str(ver_))
+        embed_bot.add_field(name='<:cool:745375589245911190> Bot  | Version', value=str(ver_))
         embed_bot.add_field(name="<a:loading:520418506567843860> | Tempo Online",
                             value=f"{dt.utcnow() - self.bot.start_time}")
-        embed_bot.add_field(name="<:bot:526147892919140371> | Me add em seu Servidor",
+        embed_bot.add_field(name="<:yep:745375589564809216> | Me add em seu Servidor",
                             value="[Clique Aqui](https://discordapp.com/oauth2/authorize?client_id=478977311266570242&s"
                                   "cope=bot&permissions=8)")
         embed_bot.set_footer(text="Comando usado por {} as {} Hrs".format(ctx.author, datetime.now().hour),

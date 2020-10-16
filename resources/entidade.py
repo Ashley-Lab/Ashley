@@ -264,6 +264,7 @@ class Entity(object):
                     armor_now = self.armor if self.armor > 0 else 1
                     if 'damage' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
+                        damage = damage if damage > 0 else 1
                         percent = int(armor_now / (damage / 100))
                         if percent < 45:
                             dn = int(damage - self.armor)

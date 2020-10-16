@@ -13,6 +13,7 @@ raid_rank = {}
 player = {}
 monster = {}
 money = {}
+xp_tot = {}
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -55,7 +56,7 @@ class Raid(commands.Cog):
     async def raid(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash raid"""
-        global raid_rank, monster, player, money
+        global raid_rank, monster, player, money, xp_tot
         raid_rank[ctx.author.id] = 0
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -150,6 +151,7 @@ class Raid(commands.Cog):
         # criando as entidade do monstro...
         monster[ctx.author.id] = Entity(db_monster, False)
         money[ctx.author.id] = db_monster['ethernya']
+        xp_tot[ctx.author.id] = db_monster['xp']
 
         # durante a batalha
         while not self.bot.is_closed():
@@ -167,6 +169,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
+                xp_tot[ctx.author.id] = db_monster['xp']
 
             skill = await player[ctx.author.id].turn([monster[ctx.author.id].status, monster[ctx.author.id].rate,
                                                       monster[ctx.author.id].name, monster[ctx.author.id].lvl],
@@ -187,6 +190,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
+                xp_tot[ctx.author.id] = db_monster['xp']
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -234,6 +238,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
+                xp_tot[ctx.author.id] = db_monster['xp']
 
             skill = await monster[ctx.author.id].turn(monster[ctx.author.id].status['hp'], self.bot, ctx)
 
@@ -252,6 +257,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
+                xp_tot[ctx.author.id] = db_monster['xp']
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -289,7 +295,7 @@ class Raid(commands.Cog):
             # --------======== ............... ========--------
 
         # calculo de xp
-        xp, lp, lm = db_monster['xp'], db_player['level'], db_monster['level']
+        xp, lp, lm = xp_tot[ctx.author.id], db_player['level'], db_monster['level']
         perc = xp if lp - lm <= 0 else xp + abs(0.25 * (db_player['level'] - db_monster['level']))
         data_xp = calc_xp(db_player['xp'], db_player['level'])
 
@@ -328,9 +334,9 @@ class Raid(commands.Cog):
         else:
             # premiação
             if data['rpg']['vip']:
-                await self.bot.data.add_xp(ctx, xp_reward[0] * raid_rank[ctx.author.id])
+                await self.bot.data.add_xp(ctx, xp_reward[0])
             else:
-                await self.bot.data.add_xp(ctx, xp_reward[1] * raid_rank[ctx.author.id])
+                await self.bot.data.add_xp(ctx, xp_reward[1])
             answer_ = await self.bot.db.add_money(ctx, money[ctx.author.id], True)
             msg = f"``{ctx.author.name.upper()} GANHOU!`` {answer_}"
             embed = discord.Embed(description=msg, color=0x000000)

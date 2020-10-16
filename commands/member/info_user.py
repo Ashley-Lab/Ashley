@@ -22,8 +22,7 @@ class UserInfo(commands.Cog):
 
         data = await self.bot.db.get_data("user_id", member.id, "users")
         if data is not None:
-            link = f"https://api-ashley.herokuapp.com/get-users/{data['_id']}"
-            database = f"[Clique Aqui]({link})"
+            database = f"USUARIO CADASTRADO"
         else:
             database = "USUARIO NAO CADASTRADO"
 

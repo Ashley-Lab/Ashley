@@ -35,7 +35,8 @@ with open("data/equips.json", encoding="utf-8") as _equips:
 
 
 def calc_xp(xp, lvl):
-    xp_now, xp_lvl_now, xp_lvl_back = xp, data['xp'][str(lvl)], data['xp'][str(lvl - 1 if lvl > 1 else 1)]
+    # xp_now, xp_lvl_now, xp_lvl_back = xp, data['xp'][str(lvl)], data['xp'][str(lvl - 1 if lvl > 1 else 1)]
+    xp_now, xp_lvl_now, xp_lvl_back = xp, (lvl + 1) ** 5, lvl ** 5
     try:
         percent = int(int((xp_now - xp_lvl_back) * 100 / (xp_lvl_now - xp_lvl_back)) / 2)
     except ZeroDivisionError:

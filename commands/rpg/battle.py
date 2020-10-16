@@ -9,6 +9,8 @@ from resources.check import check_it
 from resources.db import Database
 from resources.img_edit import calc_xp
 
+player = {}
+monster = {}
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -29,6 +31,7 @@ class Battle(commands.Cog):
     async def battle(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
+        global player, monster
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -127,22 +130,24 @@ class Battle(commands.Cog):
                         db_monster["status"][k] += randint(1, 2)
 
         # criando as entidades...
-        player = Entity(db_player, True)
-        monster = Entity(db_monster, False)
+        player[ctx.author.id] = Entity(db_player, True)
+        monster[ctx.author.id] = Entity(db_monster, False)
 
         # durante a batalha
         while not self.bot.is_closed():
 
             # -----------------------------------------------------------------------------
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0 or monster[ctx.author.id].status['hp'] <= 0:
                 break
 
-            skill = await player.turn([monster.status, monster.rate, monster.name, monster.lvl], self.bot, ctx)
+            skill = await player[ctx.author.id].turn([monster[ctx.author.id].status, monster[ctx.author.id].rate,
+                                                      monster[ctx.author.id].name, monster[ctx.author.id].lvl],
+                                                     self.bot, ctx)
 
             if skill == "BATALHA-CANCELADA":
-                player.status['hp'] = 0
+                player[ctx.author.id].status['hp'] = 0
 
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0 or monster[ctx.author.id].status['hp'] <= 0:
                 break
             # -----------------------------------------------------------------------------
 
@@ -158,12 +163,15 @@ class Battle(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
-            lvlp, lvlm, atk = player.lvl, monster.lvl, int(player.status['atk'] * 2)
-            if randint(1, 20 + lvlp) + player.status['prec'] > randint(1, 16 + lvlm) + monster.status['agi']:
-                await monster.damage(skill, player.level_skill, atk, ctx, player.name)
+            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
+            atk = int(player[ctx.author.id].status['atk'] * 2)
+            if randint(1, 20 + lvlp) + player[ctx.author.id].status['prec'] > randint(1, 16 + lvlm) + \
+                    monster[ctx.author.id].status['agi']:
+                await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
+                                                    player[ctx.author.id].name)
             else:
                 embed = discord.Embed(
-                    description=f"``{monster.name.upper()} EVADIU``",
+                    description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
                     color=0x000000
                 )
                 if not data['rpg']['lower_net']:
@@ -176,15 +184,15 @@ class Battle(commands.Cog):
             # --------======== ............... ========--------
 
             # -----------------------------------------------------------------------------
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0 or monster[ctx.author.id].status['hp'] <= 0:
                 break
 
-            skill = await monster.turn(monster.status['hp'], self.bot, ctx)
+            skill = await monster[ctx.author.id].turn(monster[ctx.author.id].status['hp'], self.bot, ctx)
 
             if skill == "BATALHA-CANCELADA":
-                player.status['hp'] = 0
+                player[ctx.author.id].status['hp'] = 0
 
-            if player.status['hp'] <= 0 or monster.status['hp'] <= 0:
+            if player[ctx.author.id].status['hp'] <= 0 or monster[ctx.author.id].status['hp'] <= 0:
                 break
             # -----------------------------------------------------------------------------
 
@@ -200,10 +208,14 @@ class Battle(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
-            atk_bonus = monster.status['atk'] * 1 if player.lvl > 25 else monster.status['atk'] * 0.25
-            lvlp, lvlm, atk = player.lvl, monster.lvl, int(monster.status['atk'] + atk_bonus)
-            if randint(1, 20 + lvlm) + monster.status['prec'] > randint(1, 16 + lvlp) + player.status['agi']:
-                await player.damage(skill, monster.level_skill, atk, ctx, monster.name)
+            atk_bonus = monster[ctx.author.id].status['atk'] * 1 if player[ctx.author.id].lvl > 25 else \
+                monster[ctx.author.id].status['atk'] * 0.25
+            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
+            atk = int(monster[ctx.author.id].status['atk'] + atk_bonus)
+            if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
+                    player[ctx.author.id].status['agi']:
+                await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
+                                                   monster[ctx.author.id].name)
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",
@@ -243,7 +255,7 @@ class Battle(commands.Cog):
         change = randint(1, 100)
 
         # depois da batalha
-        if monster.status['hp'] > 0:
+        if monster[ctx.author.id].status['hp'] > 0:
             await self.bot.data.add_xp(ctx, xp_reward[2])
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} PERDEU!``",
@@ -325,7 +337,7 @@ class Battle(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if change < 10 and player.status['hp'] > 0 and db_player['level'] > 25:
+        if change < 10 and player[ctx.author.id].status['hp'] > 0 and db_player['level'] > 25:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():
@@ -355,7 +367,7 @@ class Battle(commands.Cog):
                 await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ESPADA/ESCUDO** ✨\n'
                                f'{rew["icon"]} `1 {rew["name"]}` **{rew["rarity"]}**')
 
-        elif change < 25 and player.status['hp'] > 0:
+        elif change < 25 and player[ctx.author.id].status['hp'] > 0:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():

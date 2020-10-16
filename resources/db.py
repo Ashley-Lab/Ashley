@@ -437,27 +437,44 @@ class DataInteraction(object):
         data = await self.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if update['rpg']['level'] < 50:
+        if update['rpg']['level'] < 81:
             update['rpg']['xp'] += exp
+            lvl, xp = update['rpg']['level'], update['rpg']['xp']
+            update['rpg']['xp'] = ((lvl + 1) ** 5) - 1 if int(xp ** 0.2) == 81 else xp
             experience = update['rpg']['xp']
             lvl_anterior = update['rpg']['level']
             lvl_now = int(experience ** 0.2)
             if lvl_anterior < lvl_now:
-                update['rpg']['level'] = lvl_now
-                update['rpg']['status']['pdh'] += 1
+
+                pdh = lvl_now - lvl_anterior
+                pdh = pdh if pdh > 0 else 1
+                coins = pdh * 200
+
+                update['rpg']['level'] = lvl_now if lvl_now < 81 else 80
+                update['rpg']['status']['pdh'] += pdh if lvl_now < 81 else 0
 
                 try:
-                    update['inventory']['coins'] += 200
+                    update['inventory']['coins'] += coins if lvl_now < 81 else 0
                 except KeyError:
-                    update['inventory']['coins'] = 200
+                    update['inventory']['coins'] = coins if lvl_now < 81 else 0
 
-                if lvl_now != 26:
+                if lvl_now == 26 and lvl_now < 81:
+
                     msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
-                          f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``'
+                          f'``ganhou`` **+{coins}** ``Fichas e +{pdh} PDH (olhe o comando \"ash skill\")``\n' \
+                          f'```Markdown\n[>>]: AGORA VOCE TAMBEM GANHOU O BONUS DE STATUS DA SUA CLASSE```'
+                    img = "https://i.gifer.com/143t.gif"
+
+                elif lvl_now < 81:
+
+                    msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
+                          f'``ganhou`` **+{coins}** ``Fichas e +{pdh} PDH (olhe o comando \"ash skill\")``'
                     img = "https://i.pinimg.com/originals/7e/58/1c/7e581c87b8cf5cdae354258789b2fc32.gif"
+
                 else:
-                    msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **{lvl_now},** ' \
-                          f'``ganhou`` **+200** ``Fichas e +1 PDH (olhe o comando \"ash skill\")``\n' \
+
+                    msg = f'🎊 **PARABENS** 🎉 {ctx.author.mention} ``você upou no RPG para o level`` **MAXIMO,** ' \
+                          f'``ganhou`` **+{coins}** ``Fichas e +{pdh} PDH (olhe o comando \"ash skill\")``\n' \
                           f'```Markdown\n[>>]: AGORA VOCE TAMBEM GANHOU O BONUS DE STATUS DA SUA CLASSE```'
                     img = "https://i.gifer.com/143t.gif"
 
