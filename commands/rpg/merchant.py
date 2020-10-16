@@ -286,6 +286,8 @@ class MerchantClass(commands.Cog):
                                  f"mercado.``\n``CODIGO:`` **{data_shop['_id']}**\n``ITEM:`` {icon} ``{name}``")
             except discord.errors.Forbidden:
                 pass
+            except AttributeError:
+                pass
             await self.bot.db.delete_data({"_id": data_shop['_id']}, "merchant")
         await self.bot.db.update_data(data_shop, update_shop, 'merchant')
         await self.bot.db.update_data(data_user, update_user, 'users')

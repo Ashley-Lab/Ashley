@@ -10,7 +10,7 @@ levels = [5, 10, 15, 20, 25]
 
 
 class Entity(object):
-    def __init__(self, db, is_player):
+    def __init__(self, db, is_player, pvp=False):
         self.db = db
         self.name = self.db['name']
         self.status = self.db['status']
@@ -24,6 +24,7 @@ class Entity(object):
         self.armor = self.db['armor']
         self.img = self.db['img']
         self.ln = self.db['lower_net']
+        self.pvp = pvp
 
         if self.is_player:
             for c in range(5):
@@ -54,7 +55,8 @@ class Entity(object):
             self.status['mp'] = self.status['con'] * self.rate[1]
             self.level_skill = self.db['level'] // 10 + randint(1, 5)
 
-    async def turn(self, enemy_info, bot, ctx):
+    async def turn(self, enemy_info, bot, ctx, user=None):
+        user = ctx.author if user is None else user
         stun = False
         ice = False
         self.atack = None
@@ -128,7 +130,7 @@ class Entity(object):
                     description=description,
                     color=0x000000
                 )
-                embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
+                embed.set_thumbnail(url="{}".format(user.avatar_url))
                 msg = await ctx.send(embed=embed)
                 await sleep(0.5)
                 for c in range(0, len(atacks)):
@@ -137,9 +139,9 @@ class Entity(object):
                 await msg.add_reaction('<:fechar:749090949413732352>')
                 while not bot.is_closed():
                     try:
-                        reaction = await bot.wait_for('reaction_add', timeout=30.0)
-                        while reaction[1].id != ctx.author.id:
-                            reaction = await bot.wait_for('reaction_add', timeout=30.0)
+                        reaction = await bot.wait_for('reaction_add', timeout=60.0)
+                        while reaction[1].id != user.id:
+                            reaction = await bot.wait_for('reaction_add', timeout=60.0)
                     except TimeoutError:
                         return "COMANDO-CANCELADO"
                     pass_turn = "<:pass:692967573649752194>"
@@ -184,12 +186,12 @@ class Entity(object):
                                     break
                                 else:
                                     embed = discord.Embed(
-                                        description=f"``{ctx.author.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
+                                        description=f"``{user.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
                                                     f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
                                                     f"**Obs:** Passar a vez regenera a mana!",
                                         color=0x000000
                                     )
-                                    embed.set_thumbnail(url=f"{ctx.author.avatar_url}")
+                                    embed.set_thumbnail(url=f"{user.avatar_url}")
                                     await ctx.send(embed=embed)
                         except TypeError:
                             break
@@ -311,7 +313,7 @@ class Entity(object):
         if skill is None:
             description = f'**{name.upper()}** ``não pode atacar!``'
             hp_max = self.status['con'] * self.rate[0]
-            monster = not self.is_player
+            monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
             return await ctx.send(embed=embed_)
@@ -319,7 +321,7 @@ class Entity(object):
         if skill == "PASS-TURN":
             description = f'**{name.upper()}** ``passou o turno!``'
             hp_max = self.status['con'] * self.rate[0]
-            monster = not self.is_player
+            monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
             return await ctx.send(embed=embed_)
@@ -328,7 +330,10 @@ class Entity(object):
             if not self.is_player:
                 key = [k for k, v in skill['effs'][lvlskill].items()]
             else:
-                key = [k for k, v in skill['effs'].items()]
+                if self.pvp:
+                    key = [k for k, v in skill['effs'][lvlskill].items()]
+                else:
+                    key = [k for k, v in skill['effs'].items()]
             for c in key:
 
                 chance = randint(1, 100)
@@ -344,21 +349,24 @@ class Entity(object):
                     if not self.is_player:
                         self.effects[c] = skill['effs'][lvlskill][c]
                     else:
-                        self.effects[c] = skill['effs'][c]
+                        if self.pvp:
+                            self.effects[c] = skill['effs'][lvlskill][c]
+                        else:
+                            self.effects[c] = skill['effs'][c]
 
                     if self.effects[c]['turns'] == 0:
                         self.effects[c]['turns'] = randint(1, 2)
 
                     description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
                     hp_max = self.status['con'] * self.rate[0]
-                    monster = not self.is_player
+                    monster = not self.is_player if self.pvp else self.is_player
                     embed_ = embed_creator(description, skill['img'], monster, hp_max,
                                            self.status['hp'], self.img, self.ln)
                     await ctx.send(embed=embed_)
                 else:
                     description = f'**{self.name.upper()}** ``não recebeu o efeito de`` **{c.upper()}**'
                     hp_max = self.status['con'] * self.rate[0]
-                    monster = not self.is_player
+                    monster = not self.is_player if self.pvp else self.is_player
                     img_ = "https://uploads1.yugioh.com/card_images/2383/detail/110.jpg?1385098437"
                     embed_ = embed_creator(description, img_, monster, hp_max,
                                            self.status['hp'], self.img, self.ln)
@@ -367,7 +375,10 @@ class Entity(object):
         if not self.is_player:
             damage = skill['damage'][lvlskill]
         else:
-            damage = skill['damage']
+            if self.pvp:
+                damage = skill['damage'][lvlskill]
+            else:
+                damage = skill['damage']
         dice1 = int(damage[:damage.find('d')])
         dice2 = int(damage[damage.find('d') + 1:])
         bk = 0
@@ -386,7 +397,7 @@ class Entity(object):
         if dn < 0:
             description = f'**{self.name.upper()}** ``obsorveu todo o dano e recebeu`` **0** ``de dano``'
             hp_max = self.status['con'] * self.rate[0]
-            monster = not self.is_player
+            monster = not self.is_player if self.pvp else self.is_player
             embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)
         else:
@@ -401,6 +412,6 @@ class Entity(object):
                 description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
 
             hp_max = self.status['con'] * self.rate[0]
-            monster = not self.is_player
+            monster = not self.is_player if self.pvp else self.is_player
             embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)

@@ -22,16 +22,17 @@ class RegisterClass(commands.Cog):
                                       'favor digite:`` **ash register guild** ``para cadastrar sua guilda '
                                       'no meu`` **banco de dados!**')
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            if data is None and ctx.author.id in [r.id for r in ctx.guild.members if not r.bot]:
-                await self.bot.db.add_user(ctx)
-                data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-                update_guild = data_guild
-                update_guild['data']['accounts'] += 1
-                await self.bot.db.update_data(data_guild, update_guild, 'guilds')
+            if data is not None:
+                return await ctx.send('<:negate:721581573396496464>│``Você já está registrado em meu banco de dados!``')
+            if ctx.author.bot:
+                return await ctx.send('<:negate:721581573396496464>│``Não aceito cadastros de bots!``')
 
-                await ctx.send('<:confirmed:721581574461587496>│``Cadastro feito com sucesso!``')
-            else:
-                await ctx.send('<:negate:721581573396496464>│``Você já está registrado em meu banco de dados!``')
+            await self.bot.db.add_user(ctx)
+            data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
+            update_guild = data_guild
+            update_guild['data']['accounts'] += 1
+            await self.bot.db.update_data(data_guild, update_guild, 'guilds')
+            await ctx.send('<:confirmed:721581574461587496>│``Cadastro feito com sucesso!``')
 
     @check_it(no_pm=True, manage_guild=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)

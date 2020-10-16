@@ -7,7 +7,7 @@ from random import randint
 from collections import Counter
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient as Client
-from resources.utility import parse_duration, quant_etherny
+from resources.utility import parse_duration, quant_etherny, create_id
 from resources.structure import user_data_structure, guild_data_structure
 
 with open("data/auth.json") as auth:
@@ -66,17 +66,16 @@ class Database(object):
     # ---------------------------------- ============================ -----------------------------------
 
     async def add_user(self, ctx):
-
         if await self.get_data("user_id", ctx.author.id, "users") is None:
-            data = user_data_structure
-            data["_id"] = ctx.author.id
-            data["user_id"] = ctx.author.id
-            data["guild_id"] = ctx.guild.id
-            await self.push_data(data, "users")
+            _data = user_data_structure
+            _data["_id"] = create_id()
+            _data["user_id"] = ctx.author.id
+            _data["guild_id"] = ctx.guild.id
+            await self.push_data(_data, "users")
 
     async def add_guild(self, guild, data):
         _data = guild_data_structure
-        _data['_id'] = guild.id
+        _data['_id'] = create_id()
         _data['guild_id'] = guild.id
 
         _data['log_config']['log'] = data.get("log", False)
@@ -140,6 +139,8 @@ class Database(object):
                 await _user.send(f"<:confirmed:721581574461587496>│``Voce acabou de vender um item no mercado, "
                                  f"e recebeu o valor de`` **R$ {d}** ``Ethernyas. Aproveite e olhe sua lojinha.``")
             except discord.errors.Forbidden:
+                pass
+            except AttributeError:
                 pass
 
         return f"<:confirmed:721581574461587496>│**R$ {d}** ``DE`` **Ethernyas** ``ADICIONADOS COM SUCESSO!``"

@@ -172,6 +172,8 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
 - [OpenClass](#openclass-commands)
   - [gift](#gift)
   - [open](#open)
+- [PVP](#pvp-commands)
+  - [pvp](#pvp)
 - [Pet](#pet-commands)
   - [pet](#pet)
 - [PingMS](#pingms-commands)
@@ -850,6 +852,14 @@ Use ash marry <@pessoa desejada>
 >**Descrição:** Abra um presente para liberar seu giftcard.
 
 >**Modo de Uso:** `ash open `
+
+## PVP
+
+#### pvp
+>**Descrição:** Comando usado pra ir PVP no rpg da ashley
+Use ash pvp
+
+>**Modo de Uso:** `ash pvp [member]`
 
 ## Pet
 
