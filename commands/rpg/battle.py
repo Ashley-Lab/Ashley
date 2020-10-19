@@ -168,7 +168,7 @@ class Battle(commands.Cog):
             if randint(1, 20 + lvlp) + player[ctx.author.id].status['prec'] > randint(1, 16 + lvlm) + \
                     monster[ctx.author.id].status['agi']:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
-                                                    player[ctx.author.id].name)
+                                                    player[ctx.author.id].name, player[ctx.author.id].cc)
             else:
                 embed = discord.Embed(
                     description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
@@ -215,7 +215,7 @@ class Battle(commands.Cog):
             if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
                     player[ctx.author.id].status['agi']:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
-                                                   monster[ctx.author.id].name)
+                                                   monster[ctx.author.id].name, monster[ctx.author.id].cc)
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",

@@ -210,7 +210,7 @@ class Raid(commands.Cog):
             if randint(1, 20 + lvlp) + player[ctx.author.id].status['prec'] > randint(1, 16 + lvlm) + \
                     monster[ctx.author.id].status['agi']:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
-                                                    player[ctx.author.id].name)
+                                                    player[ctx.author.id].name, player[ctx.author.id].cc)
             else:
                 embed = discord.Embed(
                     description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
@@ -279,7 +279,7 @@ class Raid(commands.Cog):
             if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
                     player[ctx.author.id].status['agi']:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
-                                                   monster[ctx.author.id].name)
+                                                   monster[ctx.author.id].name, monster[ctx.author.id].cc)
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",
@@ -445,7 +445,7 @@ class Raid(commands.Cog):
                 await ctx.send(f"<:confirmed:721581574461587496>│``VOCÊ CONSEGUIU MATAR:`` "
                                f"**{raid_rank[ctx.author.id]}** ``MONSTROS!``")
 
-        if raid_rank[ctx.author.id] >= 15:
+        if raid_rank[ctx.author.id] >= 10:
             try:
                 update['inventory']['boss_key'] += 1
             except KeyError:

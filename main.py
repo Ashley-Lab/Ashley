@@ -480,15 +480,14 @@ class Ashley(commands.AutoShardedBot):
 
     async def on_guild_join(self, guild):
         if str(guild.id) in self.blacklist:
-            owner = self.get_user(guild.owner.id)
             msg = "EU FUI RETIRADA DESSE SERVIDOR SEM MOTIVO APARENTE, LOGO VC DEVE ENTRAR COM UM PEDIDO PARA RETIRAR" \
                   " SEU SERVIDOR (GUILD) DA MINHA LISTA NEGRA, VOCÊ PODE FAZER ISSO ENTRANDO NO MEU SERVIDOR (GUILD)" \
                   " DE SUPORTE E FALANDO COM UM DOS MEUS DESENVOLVEDORES\n LINK DO SERVIDOR:\n " \
                   "https://discord.gg/rYT6QrM"
             try:
-                await owner.send(msg)
-            except discord.errors.Forbidden:
                 await guild.system_channel.send(msg)
+            except discord.errors.Forbidden:
+                pass
             await guild.leave()
         else:
             entrance = self.get_channel(619899848082063372)
@@ -562,7 +561,10 @@ class Ashley(commands.AutoShardedBot):
                             await message.guild.system_channel.send(embed=embed)
                         except discord.Forbidden:
                             try:
-                                await message.guild.owner.send(embed=embed)
+                                if message.guild.owner is not None:
+                                    await message.guild.owner.send(embed=embed)
+                                else:
+                                    await message.channel.send(embed=embed)
                             except discord.Forbidden:
                                 pass
             if str(ctx.command) in ['channel', 'daily']:

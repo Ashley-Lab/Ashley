@@ -40,6 +40,8 @@ def calc_xp(xp, lvl):
         percent = int(int((xp_now - xp_lvl_back) * 100 / (xp_lvl_now - xp_lvl_back)) / 2)
     except ZeroDivisionError:
         percent = 0
+    if percent < 0:
+        percent = 0
     return percent, xp_lvl_now, xp_lvl_back
 
 

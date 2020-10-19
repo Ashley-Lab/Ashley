@@ -3,14 +3,12 @@ import discord
 import operator
 import unicodedata
 
-from aiohttp_requests import requests
-from io import BytesIO
 from discord.ext import commands
 from asyncio import TimeoutError
 from resources.db import Database
 from resources.check import check_it
-from PIL import Image, ImageDraw, ImageFont, ImageOps
-from resources.check import validate_url
+from PIL import Image, ImageDraw, ImageFont
+from resources.img_edit import get_avatar
 
 
 def remove_acentos_e_caracteres_especiais(word):
@@ -101,23 +99,7 @@ class RankingClass(commands.Cog):
         # take name of member
         nome = remove_acentos_e_caracteres_especiais(str(user))
 
-        # take avatar member
-        if validate_url(str(user.avatar_url_as(format="png"))):
-            link = str(user.avatar_url_as(format="png"))
-        else:
-            link = "https://festsonho.com.br/images/sem_foto.png"
-        url_avatar = await requests.get(link)
-        avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
-        avatar = avatar.resize((250, 250))
-        big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
-        mascara = Image.new('L', big_avatar, 0)
-        trim = ImageDraw.Draw(mascara)
-        trim.ellipse((0, 0) + big_avatar, fill=255)
-        mascara = mascara.resize(avatar.size, Image.ANTIALIAS)
-        avatar.putalpha(mascara)
-        exit_avatar = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
-        exit_avatar.putalpha(mascara)
-        avatar = exit_avatar
+        avatar = await get_avatar(ctx.author.avatar_url_as(format="png"), 250, 250)
 
         # patent image
         patent_img = Image.open('images/patente/{}.png'.format(patent)).convert('RGBA')
@@ -163,17 +145,9 @@ class RankingClass(commands.Cog):
 
         # guild image
         guild_ = self.bot.get_guild(data['guild_id'])
-        if guild_ is not None:
-            if validate_url(str(guild_.icon_url)):
-                link = str(guild_.icon_url)
-            else:
-                link = "https://festsonho.com.br/images/sem_foto.png"
-            url_guild = await requests.get(link)
-            icon_guild = Image.open(BytesIO(await url_guild.read())).convert("RGBA")
-            icon_guild = icon_guild.resize((190, 190))
-        else:
-            icon_guild = Image.open('images/elements/no_found.png').convert("RGBA")
-            icon_guild = icon_guild.resize((190, 190))
+        link_off = "https://festsonho.com.br/images/sem_foto.png"
+        link_img = guild_.icon_url_as(format="png") if guild_ is not None else link_off
+        icon_guild = await get_avatar(link_img, 190, 190)
 
         # load fonts
         font = ImageFont.truetype('fonts/bot.otf', 100)

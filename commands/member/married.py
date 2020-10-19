@@ -35,7 +35,7 @@ class MarriedSystem(commands.Cog):
             return await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ EM PROCESSO DE CASAMENTO!``')
 
         if member is None:
-            return await ctx.send('<:alert:739251822920728708>│``Você precisa mencionar alguem.``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA MENCIONAR ALGUEM.``')
 
         if member.id == ctx.author.id:
             return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO PODE CASAR CONSIGO MESMO!``')
@@ -115,7 +115,7 @@ class MarriedSystem(commands.Cog):
         update_user = data_user
 
         if not data_user['user']['married']:
-            return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO CASADO(A)!``')
+            return await ctx.send('<:alert:739251822920728708>│``VOCE NÃO É CASADO(A)!``')
 
         member = self.bot.get_user(data_user['user']['married_at'])
 
@@ -130,7 +130,9 @@ class MarriedSystem(commands.Cog):
         update_member['user']['married_at'] = None
         await self.bot.db.update_data(data_member, update_member, 'users')
 
-        await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member.name} **agora vocês estão SEPARADOS!**"
+        member = member.name if member is not None else "NINGUEM!"
+
+        await ctx.send(f"😢 **QUE PENA** 😢 {ctx.author.mention} **e** {member} **estão SEPARADOS!**"
                        f" ``ESCOLHAM MELHOR DA PROXIMA VEZ!``")
 
 

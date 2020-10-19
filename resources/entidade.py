@@ -42,6 +42,13 @@ class Entity(object):
             self.status['mp'] = self.status['con'] * self.rate[1]
             self.level_skill = self.status["luk"] // 2 if self.status["luk"] // 2 < 10 else 9
 
+            if self.db['level'] > 25:
+                self.cc = [_class[self.db['next_class']]['cc'], self.db['next_class']]
+            else:
+                self.cc = [_class[self.db['class']]['cc'], self.db['class']]
+
+            self.p_class = self.db['next_class'] if self.db['level'] > 25 else self.db['class']
+
         else:
 
             self.atacks = self.db['atacks']
@@ -54,6 +61,8 @@ class Entity(object):
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
             self.level_skill = self.db['level'] // 10 + randint(1, 5)
+
+            self.cc = [self.db['cc'], "monster"]
 
     async def turn(self, enemy_info, bot, ctx, user=None):
         user = ctx.author if user is None else user
@@ -115,9 +124,13 @@ class Entity(object):
                     except TypeError:
                         effect_skill = "sem efeito"
 
+                    regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
+                    eff_mana = effect_skill.replace('dict_keys([', '').replace('])', '').replace('\'', '')
+                    _mana = self.atacks[c2]['mana'][self.level_skill] if eff_mana != "cura" else regen
+
                     description += f"{icon} **{c2.upper()}** ``Lv:`` **{ls + 1 if ls + 1 < 11 else 10}**\n" \
                                    f"``Dano:`` **{dado} + {damage} de ATK -** ``{skill_type.upper()}``\n" \
-                                   f"``Mana:`` **{self.atacks[c2]['mana'][self.level_skill]}**\n" \
+                                   f"``Mana:`` **{_mana}**\n" \
                                    f"``Efeito(s):`` **{effect_skill}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
 
@@ -158,7 +171,15 @@ class Entity(object):
                                 self.status['mp'] = (self.status['con'] * self.rate[1])
 
                             # regeneração de HP
-                            hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 10)
+                            if self.p_class in ['priest', 'assassin', 'default']:
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 12)
+
+                            elif self.p_class in ['paladin', 'warrior']:
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 9)
+
+                            else:
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 6)
+
                             if (self.status['hp'] + hp_regen) <= (self.status['con'] * self.rate[0]):
                                 self.status['hp'] += hp_regen
                             else:
@@ -180,6 +201,15 @@ class Entity(object):
                                 test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
                                 _atack = atacks[test_atack]
                                 remove = self.atacks[_atack]['mana'][self.level_skill]
+
+                                effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.level_skill].items()]
+                                heal = False
+                                for eff in effects_skill:
+                                    if eff == "cura":
+                                        heal = True
+                                if heal:
+                                    remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
+
                                 if self.status['mp'] >= remove:
                                     self.status['mp'] -= remove
                                     self.atack = atacks[test_atack]
@@ -299,6 +329,14 @@ class Entity(object):
                         img_ = "https://media1.giphy.com/media/pDLxcNa1r3QA0/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
+                    if 'cegueira' in self.effects.keys() and self.effects[c]['turns'] > 0:
+                        description = f"**{self.name.upper()}** ``esta sobe o efeito de`` " \
+                                      f"**{c.upper()}!**"
+                        hp_max = self.status['con'] * self.rate[0]
+                        monster = not self.is_player
+                        img_ = "https://vignette.wikia.nocookie.net/yugioh/images/9/95/MesmericControl-TF04-JP-VG.jpg"
+                        embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
+                        await ctx.send(embed=embed_)
                 except KeyError:
                     pass
 
@@ -310,7 +348,11 @@ class Entity(object):
 
         return self.atack if self.atack != "PASS-TURN" else "PASS-TURN"
 
-    async def damage(self, skill, lvlskill, enemy_atack, ctx, name):
+    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc):
+
+        # chance de critital 100%
+        lethal = False
+
         if skill is None:
             description = f'**{name.upper()}** ``não pode atacar!``'
             hp_max = self.status['con'] * self.rate[0]
@@ -358,7 +400,9 @@ class Entity(object):
                     if self.effects[c]['turns'] == 0:
                         self.effects[c]['turns'] = randint(1, 2)
 
-                    description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}**'
+                    turns = self.effects[c]['turns']
+                    description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}** ``por`` ' \
+                                  f'**{turns - 1}** ``turno{"s" if turns > 0 else ""}``'
                     hp_max = self.status['con'] * self.rate[0]
                     monster = not self.is_player if self.pvp else self.is_player
                     embed_ = embed_creator(description, skill['img'], monster, hp_max,
@@ -386,6 +430,34 @@ class Entity(object):
         for c in range(0, dice1):
             bk += randint(1, dice2)
         damage = enemy_atack + bk
+
+        critical = False
+        critical_chance = randint(1, 20)
+        critical_damage = enemy_cc[0]
+        value_critical = 20
+
+        if enemy_cc[1] in ['assassin', 'priest']:
+            value_critical = 15
+
+        if enemy_cc[1] in ['necromancer', 'wizard']:
+            value_critical = 18
+
+        try:
+            if self.effects["cegueira"]['turns'] > 0:
+                lethal = True
+        except KeyError:
+            lethal = False
+
+        if critical_chance >= value_critical or lethal:
+            critical = True
+
+        if critical:
+            damage = int(damage + damage / 100 * critical_damage)
+
+            file = discord.File("images/elements/critical.gif", filename="critical.gif")
+            embed = discord.Embed(title="CRITICAL", color=0x38105e)
+            embed.set_image(url="attachment://critical.gif")
+            await ctx.send(file=file, embed=embed)
 
         armor_now = self.armor if self.armor > 0 else 1
         percent = int(armor_now / (damage / 100))

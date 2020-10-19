@@ -78,8 +78,8 @@ class ProfileSystem(commands.Cog):
                 married = user.avatar_url_as(format="png")
             except AttributeError:
                 married = "https://w-dog.net/wallpapers/2/13/487318654230690/abandoned-church-the-altar-interior.jpg"
-                await ctx.send("<:alert:739251822920728708>│``VOCE TA CASADO COM ALGUEM QUE NAO EXISTE MAIS, "
-                               "FAÇA UM FAVOR PRA VC MESMO E PEÇA O DIVORCIO!``")
+                """await ctx.send("<:alert:739251822920728708>│``VOCE TA CASADO COM ALGUEM QUE NAO EXISTE MAIS, "
+                               "FAÇA UM FAVOR PRA VC MESMO E PEÇA O DIVORCIO!``")"""
         else:
             married = None
 

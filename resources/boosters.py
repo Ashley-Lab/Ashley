@@ -180,10 +180,10 @@ class Booster(object):
 
         return self.item_
 
-    async def buy_booster(self, bot, ctx):
+    async def buy_booster(self, bot, ctx, vip):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         if not data['box']['status']['active']:
-            return
+            return "<:alert:739251822920728708>|``BOX INATIVA!``", None
 
         price = 500
         if data['user']['ranking'] == "Bronze":
@@ -196,17 +196,18 @@ class Booster(object):
             price -= 50
 
         if data['treasure']['money'] < price:
-            return await ctx.send(f"<:alert:739251822920728708>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
-                                  f"\nVOCÊ PRECISA DE {price} ETHENYAS PARA COMPRAR UM BOOSTER.``")
+            return (f"<:alert:739251822920728708>│``VOCÊ NÃO TEM DINHEIRO PARA COMPRAR UM BOOSTER"
+                    f"\nVOCÊ PRECISA DE {price} ETHENYAS PARA COMPRAR UM BOOSTER.``", None)
 
         answer = await bot.db.take_money(ctx, price)
-        await ctx.send(answer)
+        if not vip:
+            await ctx.send(answer)
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
         item = self.buy_item(data['box'])
         if item is None:
-            return await ctx.send("<:negate:721581573396496464>│``VOCÊ FALHOU EM COMPRAR O ITEM...``")
+            return "<:alert:739251822920728708>│``VOCÊ FALHOU EM COMPRAR O ITEM...``", None
 
         for k, v in self.items.items():
             if v == item['data']:
@@ -252,18 +253,30 @@ class Booster(object):
                              'SoulStoneDarkGreen', 'SoulStoneBlue'])
             reward = [item_1, item_2, item_3]
             response = await bot.db.add_reward(ctx, reward)
-            await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX`` "
-                           f"``COMO PREMIO VOCE ACABA DE GANHAR UM ITEM:`` ✨ **HEROIC** ✨\n{response.upper()}")
+            empty = f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE ACABA DE ESVAZIAR SUA BOX, " \
+                    f"COMO PREMIO VOCE ACABA DE GANHAR UM ITEM:`` ✨ **HEROIC** ✨\n{response.upper()}"
+        else:
+            empty = None
 
         if rarity.lower() in ["ultra raro", "secret"]:
-            return await ctx.send(f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE TIROU:``\n"
-                                  f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
-                                  f"``ELE TEM O TIER`` ✨ **{rarity.upper()}** ✨\n"
-                                  f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
-                                  f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**")
+            if vip:
+                return (f"``{quant_1}`` - **{item['data'][1]}**\n"
+                        f"**+{quant_2}** - {self.items[bonus_1][1]} | "
+                        f"**+{quant_3}** - {self.items[bonus_2][1]}", empty)
 
-        await ctx.send(f"<:mito:745375589145247804>│``VOCE TIROU:``\n"
-                       f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
-                       f"``ELE TEM O TIER`` **{rarity.upper()}**\n"
-                       f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
-                       f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**")
+            return (f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE TIROU:``\n"
+                    f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
+                    f"``ELE TEM O TIER`` ✨ **{rarity.upper()}** ✨\n"
+                    f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
+                    f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**", empty)
+
+        if vip:
+            return (f"**{quant_1}** - {item['data'][1]}\n"
+                    f"**+{quant_2}** - {self.items[bonus_1][1]} | "
+                    f"**+{quant_3}** - {self.items[bonus_2][1]}", empty)
+
+        return (f"<:mito:745375589145247804>│``VOCE TIROU:``\n"
+                f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
+                f"``ELE TEM O TIER`` **{rarity.upper()}**\n"
+                f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
+                f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**", empty)

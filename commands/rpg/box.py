@@ -14,6 +14,7 @@ legend = {
     "Secret": [100, [0.40, 0.20, 0.15, 0.10, 0.10, 0.05]]
 }
 summon = None
+msg_b = {}
 
 
 class BoxClass(commands.Cog):
@@ -236,50 +237,65 @@ ITEMS:
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @box.command(name='booster', aliases=['pacote', 'abrir', 'open'])
-    async def _booster(self, ctx):
+    async def _booster(self, ctx, amount: int = 0):
         """Esse comando esvazia a box, assim que voce zerar uma box ganha um item extra"""
+        global msg_b
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
+        msg_b[ctx.author.id] = None
 
         if data['config']['buying']:
             return await ctx.send('<:alert:739251822920728708>│``VOCE JA ESTA EM PROCESSO DE COMPRA...``')
 
         if not data['box']['status']['active']:
-            return await ctx.send("<:negate:520418505993093130>│``Você não tem uma box ativa...``\n"
+            return await ctx.send("<:negate:721581573396496464>│``Você não tem uma box ativa...``\n"
                                   "``Para ativar sua box use o comando:`` **ash box buy**")
 
         update['config']['buying'] = True
         await self.bot.db.update_data(data, update, 'users')
 
         msg = await ctx.send("<a:loading:520418506567843860>│``Comprando booster...``")
-        await ctx.send("<:alert:739251822920728708>│``Quantos boosters você deseja comprar?``")
 
-        def check(m):
-            return m.author.id == ctx.author.id and m.content.isdigit()
+        if amount == 0:
+            await ctx.send("<:alert:739251822920728708>│``Quantos boosters você deseja comprar?``")
 
-        try:
-            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+            def check(m):
+                return m.author.id == ctx.author.id and m.content.isdigit()
 
-        except TimeoutError:
-            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update = data
-            update['config']['buying'] = False
-            await self.bot.db.update_data(data, update, 'users')
-            await msg.delete()
-            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                  ' CANCELADO**')
+            try:
+                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
+            except TimeoutError:
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                update['config']['buying'] = False
+                await self.bot.db.update_data(data, update, 'users')
+                await msg.delete()
+                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
+                                      ' CANCELADO**')
+            num = int(answer.content)
+        else:
+            num = amount
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-        num = int(answer.content)
 
         if num > 10:
-            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-            update = data
-            update['config']['buying'] = False
-            await self.bot.db.update_data(data, update, 'users')
-            await msg.delete()
-            return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar mais que 10 boosters"
-                                  " de uma vez...``")
+            if not data['rpg']['vip']:
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                update['config']['buying'] = False
+                await self.bot.db.update_data(data, update, 'users')
+                await msg.delete()
+                return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar mais que 10 boosters"
+                                      " de uma vez, apenas um usuario que tem vip rpg podem comprar mais que 10"
+                                      " boosters de uma vez...``")
+            if num > 20:
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                update['config']['buying'] = False
+                await self.bot.db.update_data(data, update, 'users')
+                await msg.delete()
+                return await ctx.send("<:negate:721581573396496464>│``Você não pode comprar mais que 20 boosters"
+                                      " de uma vez, mesmo sendo vip...``")
 
         if num < 1:
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -306,10 +322,25 @@ ITEMS:
             await self.bot.db.update_data(data, update, 'users')
             await msg.delete()
             return await ctx.send("<:negate:721581573396496464>│``Você não tem dinheiro o suficiente...``")
+        reward_booster = "\n"
         for _ in range(num):
             if data['box']['status']['active']:
-                await self.bot.booster.buy_booster(self.bot, ctx)
-                await sleep(0.5)
+                msg_b[ctx.author.id] = await self.bot.booster.buy_booster(self.bot, ctx, data['rpg']['vip'])
+
+                if "<:alert:739251822920728708>" in msg_b[ctx.author.id][0]:
+                    continue
+
+                if data['rpg']['vip']:
+                    reward_booster += f"{msg_b[ctx.author.id][0]}\n"
+                else:
+                    await ctx.send(msg_b[ctx.author.id][0])
+                    await sleep(0.5)
+
+        if data['rpg']['vip']:
+            await ctx.send(reward_booster)
+
+        if msg_b[ctx.author.id][1] is not None:
+            await ctx.send(msg_b[ctx.author.id][1])
 
         await msg.delete()
         await ctx.send("<:confirmed:721581574461587496>│``Obrigado pelas compras, volte sempre!``")

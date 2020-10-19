@@ -235,6 +235,54 @@ class UtilityClass(commands.Cog):
 
     @check_it(no_pm=True, is_owner=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='set_level', aliases=['sl'])
+    async def set_level(self, ctx, member: discord.Member = None, lvl: int = None):
+        """Comando usado apelas por DEVS para criar equipamentos para doadores"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
+        if lvl is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer um level!``")
+        if lvl <= 0 or lvl > 80:
+            return await ctx.send("<:alert:739251822920728708>│``level invalido!``")
+
+        data_member = await self.bot.db.get_data("user_id", member.id, "users")
+        update_member = data_member
+
+        if data_member is None:
+            return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
+                                  '``esse usuário não está cadastrado!``', delete_after=5.0)
+
+        if data_member['config']['playing']:
+            return await ctx.send("<:alert:739251822920728708>│``O usuario está jogando, aguarde para quando"
+                                  " ele estiver livre!``")
+
+        if not data_member['rpg']['active']:
+            embed = discord.Embed(
+                color=self.bot.color,
+                description='<:negate:721581573396496464>│``O USUARIO DEVE USAR O COMANDO`` **ASH RPG** ``ANTES!``')
+            return await ctx.send(embed=embed)
+
+        if data_member['config']['battle']:
+            msg = '<:negate:721581573396496464>│``O USUARIO ESTÁ BATALHANDO!``'
+            embed = discord.Embed(color=self.bot.color, description=msg)
+            return await ctx.send(embed=embed)
+
+        update_member['rpg']['status']['con'] = 5
+        update_member['rpg']['status']['prec'] = 5
+        update_member['rpg']['status']['agi'] = 5
+        update_member['rpg']['status']['atk'] = 5
+        update_member['rpg']['status']['luk'] = 0
+        update_member['rpg']['status']['pdh'] = lvl
+        update_member['rpg']['xp'] = lvl ** 5
+        update_member['rpg']['level'] = lvl
+
+        await self.bot.db.update_data(data_member, update_member, 'users')
+        return await ctx.send(f'<a:hack:525105069994278913>│``PARABENS, VC SETOU O LEVEL`` **{lvl}** ``PARA`` '
+                              f'**{member.name}** ``COM SUCESSO, ALEM DISSO RESETOU OS PONTOS DE HABILIDADE!``')
+
+    @check_it(no_pm=True, is_owner=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='create_gift', aliases=['cg'])
     async def create_gift(self, ctx, time=None):

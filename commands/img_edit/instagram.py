@@ -7,6 +7,7 @@ from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from resources.check import check_it
 from resources.db import Database
+from resources.img_edit import get_avatar
 
 
 class InstagramClass(commands.Cog):
@@ -48,18 +49,7 @@ class InstagramClass(commands.Cog):
 ''') > rede[4]:
             await ctx.send('<:alert:739251822920728708>│``Sua mensagem foi muito grande!``')
         else:
-            avatarurl = requests.get(ctx.author.avatar_url_as(format="png"))
-            avatar = Image.open(BytesIO(avatarurl.content)).convert('RGBA')
-            avatar = avatar.resize((rede[0][0], rede[0][0]))
-            big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
-            mascara = Image.new('L', big_avatar, 0)
-            trim = ImageDraw.Draw(mascara)
-            trim.ellipse((0, 0) + big_avatar, fill=255)  # opacidade
-            mascara = mascara.resize(avatar.size, Image.ANTIALIAS)
-            avatar.putalpha(mascara)
-            exit_avatar = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
-            exit_avatar.putalpha(mascara)
-            avatar = exit_avatar
+            avatar = await get_avatar(ctx.author.avatar_url_as(format="png"), rede[0][0], rede[0][0])
 
             imgurl = random.choice(['https://i.imgur.com/2Owhe1y.jpg',
                                     'https://i.imgur.com/pFuPCUE.jpg',
