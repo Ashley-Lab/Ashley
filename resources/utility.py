@@ -472,7 +472,8 @@ ERRORS = ['The check functions for command staff ban failed.',
           'The check functions for command staff slowmode failed.',
           'The check functions for command staff delete failed.',
           'The check functions for command logger failed.',
-          'The check functions for command guild convert failed.']
+          'The check functions for command guild convert failed.',
+          'The check functions for command source failed.']
 
 enforcado = ['''
 ```

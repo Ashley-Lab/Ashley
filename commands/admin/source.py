@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from resources.utility import ERRORS
 
 
 class SourceGit(commands.Cog):
@@ -50,6 +51,12 @@ class SourceGit(commands.Cog):
             final_url = '<{}/blob/master/{}#L{}>'.format(base, location, src.co_firstlineno)
 
         await ctx.send(final_url)
+
+    @source.error
+    async def source_error(self, ctx, error):
+        if error.__str__() in ERRORS[12]:
+            return await ctx.send('<:negate:721581573396496464>│``Você precisa de uma permissão especifica:`` '
+                                  '**manage_guild / Gerenciar Servidor**')
 
 
 def setup(bot):

@@ -348,7 +348,7 @@ class Entity(object):
 
         return self.atack if self.atack != "PASS-TURN" else "PASS-TURN"
 
-    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc):
+    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img):
 
         # chance de critital 100%
         lethal = False
@@ -366,7 +366,7 @@ class Entity(object):
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
-            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
             return await ctx.send(embed=embed_)
 
         if skill['effs'] is not None:
@@ -379,15 +379,26 @@ class Entity(object):
                     key = [k for k, v in skill['effs'].items()]
             for c in key:
 
+                rate_chance = 95
                 chance = randint(1, 100)
                 chance += self.status['luk']
+                if c in ["cegueira"]:
+                    rate_chance -= int(self.status['luk'] / 2) if self.status['luk'] > 0 else 0
 
-                if chance >= 95:
+                if chance >= rate_chance:
                     self.chance = True
                 else:
                     self.chance = False
 
                 if self.chance:
+                    if c in self.effects.keys() and self.effects[c]['turns'] > 0:
+                        description = f'**{self.name.upper()}** ``ainda está sob o efeito de`` **{c.upper()}**'
+                        hp_max = self.status['con'] * self.rate[0]
+                        monster = not self.is_player if self.pvp else self.is_player
+                        img_ = "https://vignette.wikia.nocookie.net/yugioh/images/c/c6/RingofDefense-OW.png"
+                        embed_ = embed_creator(description, img_, monster, hp_max,
+                                               self.status['hp'], self.img, self.ln)
+                        await ctx.send(embed=embed_)
 
                     if not self.is_player:
                         self.effects[c] = skill['effs'][lvlskill][c]
@@ -397,7 +408,7 @@ class Entity(object):
                         else:
                             self.effects[c] = skill['effs'][c]
 
-                    if self.effects[c]['turns'] == 0:
+                    if self.effects[c]['turns'] <= 0:
                         self.effects[c]['turns'] = randint(1, 2)
 
                     turns = self.effects[c]['turns']

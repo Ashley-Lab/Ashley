@@ -190,7 +190,8 @@ class PVP(commands.Cog):
             p2_chance = randint(1, 16 + lvlp2) + player_2[member.id].status['agi']
             if p1_chance > p2_chance:
                 await player_2[member.id].damage(skill, player_1[ctx.author.id].level_skill, atk, ctx,
-                                                 player_1[ctx.author.id].name, player_1[ctx.author.id].cc)
+                                                 player_1[ctx.author.id].name, player_1[ctx.author.id].cc,
+                                                 player_1[ctx.author.id].img)
             else:
                 embed = discord.Embed(
                     description=f"``{player_2[member.id].name.upper()} EVADIU``",
@@ -234,7 +235,8 @@ class PVP(commands.Cog):
             p1_chance = randint(1, 16 + lvlp1) + player_1[ctx.author.id].status['agi']
             if p2_chance > p1_chance:
                 await player_1[ctx.author.id].damage(skill, player_2[member.id].level_skill, atk, ctx,
-                                                     player_2[member.id].name, player_2[member.id].cc)
+                                                     player_2[member.id].name, player_2[member.id].cc,
+                                                     player_2[member.id].img)
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",

@@ -80,10 +80,10 @@ class Raid(commands.Cog):
             return await ctx.send(embed=embed)
 
         try:
-            if data['inventory']['coins'] < 1:
+            if data['inventory']['coins'] < 50:
                 embed = discord.Embed(
                     color=self.bot.color,
-                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 1 FICHAS PARA BATALHAR!``\n'
+                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 50 FICHAS PARA BATALHAR!``\n'
                                 '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
                 return await ctx.send(embed=embed)
         except KeyError:
@@ -92,7 +92,7 @@ class Raid(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        update['inventory']['coins'] -= 1
+        update['inventory']['coins'] -= 50
         update['config']['battle'] = True
         await self.bot.db.update_data(data, update, 'users')
 
@@ -210,7 +210,8 @@ class Raid(commands.Cog):
             if randint(1, 20 + lvlp) + player[ctx.author.id].status['prec'] > randint(1, 16 + lvlm) + \
                     monster[ctx.author.id].status['agi']:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
-                                                    player[ctx.author.id].name, player[ctx.author.id].cc)
+                                                    player[ctx.author.id].name, player[ctx.author.id].cc,
+                                                    player[ctx.author.id].img)
             else:
                 embed = discord.Embed(
                     description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
@@ -279,7 +280,8 @@ class Raid(commands.Cog):
             if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
                     player[ctx.author.id].status['agi']:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
-                                                   monster[ctx.author.id].name, monster[ctx.author.id].cc)
+                                                   monster[ctx.author.id].name, monster[ctx.author.id].cc,
+                                                   monster[ctx.author.id].img)
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",

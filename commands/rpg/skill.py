@@ -4,6 +4,9 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from resources.img_edit import skill_points
+from asyncio import TimeoutError, sleep
+
+botmsg = {}
 
 
 class SkillClass(commands.Cog):
@@ -18,7 +21,13 @@ class SkillClass(commands.Cog):
         """Comando usado pra ver seus status no rpg da Ashley
         Use ash skill"""
         if ctx.invoked_subcommand is None:
-            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            global botmsg
+            try:
+                member = ctx.message.mentions[0]
+            except IndexError:
+                member = ctx.author
+
+            data = await self.bot.db.get_data("user_id", member.id, "users")
 
             if not data['rpg']['active']:
                 embed = discord.Embed(
@@ -27,8 +36,8 @@ class SkillClass(commands.Cog):
                 return await ctx.send(embed=embed)
 
             db = {
-                "name": ctx.author.name,
-                "avatar_member": ctx.author.avatar_url_as(format="png"),
+                "name": member.name,
+                "avatar_member": member.avatar_url_as(format="png"),
                 "vip": data['rpg']['vip'],
                 "xp": data['rpg']['xp'],
                 "level": str(data['rpg']['level']),
@@ -42,23 +51,53 @@ class SkillClass(commands.Cog):
             }
 
             await skill_points(db)
-            await ctx.send("``--==ENTENDA O QUE OS ATRIBUTOS ALTERAM NO SEU PERSONAGEM==--``\n"
-                           ">>> >>> `ATK` - **O ATK é somado ao seu dano de Skill e a chance de critical.**\n"
-                           ">>> `DEX` - **O DEX aumenta sua chance de esquiva.**\n"
-                           ">>> `ACC` - **O ACC aumenta sua chance de acerto da Skill.**\n"
-                           ">>> `CON` - **O CON aumenta seu HP e sua MANA total.**\n"
-                           ">>> `LUK` - **LUK aumenta a chance de efeito da Skill e o level da skill.**\n"
-                           "```Markdown\n[>>]: PARA ADICIONAR PONTOS DE HABILIDADE USE O COMANDO\n<ASH SKILL ADD>\n"
-                           "[>>]: PARA RESETAR OS PONTOS DE HABILIDADE USE O COMANDO\n<ASH SKILL RESET>```")
             if discord.File('skill_points.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
-            await ctx.send(file=discord.File('skill_points.png'))
+            botmsg[ctx.author.id] = await ctx.send(file=discord.File('skill_points.png'))
+            await botmsg[ctx.author.id].add_reaction('<a:help:767825933892583444>')
+
+            text = "``--==ENTENDA O QUE OS ATRIBUTOS ALTERAM NO SEU PERSONAGEM==--``\n" \
+                   ">>> >>> `ATK` - **O ATK é somado ao seu dano de Skill e a " \
+                   "chance de critical.**\n>>> `DEX` - **O DEX aumenta sua chance de esquiva.**\n" \
+                   ">>> `ACC` - **O ACC aumenta sua chance de acerto da Skill.**\n" \
+                   ">>> `CON` - **O CON aumenta seu HP e sua MANA total.**\n" \
+                   ">>> `LUK` - **LUK aumenta a chance de efeito da Skill e o level da " \
+                   "skill.**\n```Markdown\n[>>]: PARA ADICIONAR PONTOS DE HABILIDADE USE" \
+                   " O COMANDO\n<ASH SKILL ADD>\n[>>]: PARA RESETAR OS PONTOS DE " \
+                   "HABILIDADE USE O COMANDO\n<ASH SKILL RESET>```"
+
+            again = False
+            msg = None
+
+            while not self.bot.is_closed():
+                try:
+                    reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
+                    while reaction[1].id != ctx.author.id:
+                        reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
+
+                    emo = "<a:help:767825933892583444>"
+                    emoji = str(emo).replace('<a:', '').replace(emo[emo.rfind(':'):], '')
+                    try:
+                        if reaction[0].emoji.name == emoji and not again:
+                            again = True
+                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            msg = await ctx.send(text)
+
+                        elif reaction[0].emoji.name == emoji and again:
+                            again = False
+                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            await msg.delete()
+
+                    except AttributeError:
+                        pass
+                except TimeoutError:
+                    return await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.me)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
     @skill.command(name='add', aliases=['adicionar'])
-    async def _add(self, ctx, status=None, n=1):
+    async def _add(self, ctx, status: str = None, n: int = 1):
         """Comando usado pra distribuir seus status no rpg da Ashley
         Use ash skill add e siga as instruções do comando"""
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")

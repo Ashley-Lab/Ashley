@@ -5,7 +5,9 @@ from resources.check import check_it
 from resources.db import Database
 from resources.utility import paginator
 from resources.img_edit import equips
-from asyncio import sleep
+from asyncio import sleep, TimeoutError
+
+botmsg = {}
 
 
 class InventoryClass(commands.Cog):
@@ -21,6 +23,7 @@ class InventoryClass(commands.Cog):
     async def equip(self, ctx):
         """Comando para mostrar o painel de equipamentos do seu personagem"""
         if ctx.invoked_subcommand is None:
+            global botmsg
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
 
             if not data['rpg']['active']:
@@ -107,12 +110,41 @@ class InventoryClass(commands.Cog):
             }
 
             equips(data_test)
-            await ctx.send("```Markdown\n[>>]: PARA EQUIPAR UM ITEM USE O COMANDO\n<ASH EQUIP ITEM NOME_DO_ITEM>\n"
-                           "[>>]: PARA RESETAR OS EQUIPAMENTOS USE O COMANDO\n<ASH EQUIP RESET>\n\n"
-                           "[>>]: PARA MAIS INFORMAÇÕES USE O COMANDO\n<ASH EQUIP INFO>```")
             if discord.File('equips.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
-            await ctx.send(file=discord.File('equips.png'))
+            botmsg[ctx.author.id] = await ctx.send(file=discord.File('equips.png'))
+            await botmsg[ctx.author.id].add_reaction('<a:help:767825933892583444>')
+
+            text = "```Markdown\n[>>]: PARA EQUIPAR UM ITEM USE O COMANDO\n<ASH EQUIP ITEM NOME_DO_ITEM>\n" \
+                   "[>>]: PARA RESETAR OS EQUIPAMENTOS USE O COMANDO\n<ASH EQUIP RESET>\n\n" \
+                   "[>>]: PARA MAIS INFORMAÇÕES USE O COMANDO\n<ASH EQUIP INFO>```"
+
+            again = False
+            msg = None
+
+            while not self.bot.is_closed():
+                try:
+                    reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
+                    while reaction[1].id != ctx.author.id:
+                        reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
+
+                    emo = "<a:help:767825933892583444>"
+                    emoji = str(emo).replace('<a:', '').replace(emo[emo.rfind(':'):], '')
+                    try:
+                        if reaction[0].emoji.name == emoji and not again:
+                            again = True
+                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            msg = await ctx.send(text)
+
+                        elif reaction[0].emoji.name == emoji and again:
+                            again = False
+                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            await msg.delete()
+
+                    except AttributeError:
+                        pass
+                except TimeoutError:
+                    return await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.me)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
