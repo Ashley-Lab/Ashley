@@ -78,7 +78,7 @@ class MerchantClass(commands.Cog):
                 equips_list.append((k, v))
 
         if item not in [i[1]["name"] for i in equips_list]:
-            if "sealed" in item.lower():
+            if "sealed" in item.lower() and item.lower() != "unsealed stone":
                 return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM ESTÁ SELADO, ANTES DISSO TIRE O SELO "
                                       "USANDO O COMANDO:`` **ASH LIBERAR**")
             if _type is None:

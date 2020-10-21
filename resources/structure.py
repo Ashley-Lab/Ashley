@@ -65,7 +65,8 @@ user_data_structure = {
                     "earring": None,
                     "ring": None
                 },
-                "active": False
+                "active": False,
+                "activated_at": None
             },
             "pet": {
                 "status": False,

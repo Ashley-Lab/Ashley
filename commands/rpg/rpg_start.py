@@ -4,6 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError
+from datetime import datetime
 
 
 class RpgStart(commands.Cog):
@@ -137,7 +138,8 @@ class RpgStart(commands.Cog):
                     "earring": None,
                     "ring": None
                 },
-                "active": True
+                "active": True,
+                "activated_at": datetime.today()
             }
         else:
             rpg = {
@@ -160,6 +162,28 @@ class RpgStart(commands.Cog):
         await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         msg = f'<:confirmed:721581574461587496>│``CONFIGURAÇÃO DO RPG FEITA COM SUCESSO!``'
         embed = discord.Embed(color=self.bot.color, description=msg)
+        await ctx.send(embed=embed)
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='rpg_verify', aliases=['rpgv'])
+    async def rpg_verify(self, ctx, member: discord.Member = None):
+        """Comando para verificar a data de entrada no RPG da ASHLEY"""
+        if member is None:
+            member = ctx.author
+
+        data = await self.bot.db.get_data("user_id", member.id, "users")
+        date_old = data['rpg']['activated_at']
+        date_now = datetime.today()
+        d1 = date_old.strftime("%d-%m-%Y")
+        days = abs((date_old - date_now).days)
+        hour = datetime.now().strftime("%H:%M:%S")
+        msg = f"**Data de Entrada no RPG:** ``{d1}``\n" \
+              f"**Faz{'em' if days > 1 else ''}:** ``{days} dia{'s' if days > 1 else ''}``"
+        embed = discord.Embed(color=self.bot.color, description=msg)
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_footer(text="{} • {}".format(ctx.author, hour))
         await ctx.send(embed=embed)
 
 

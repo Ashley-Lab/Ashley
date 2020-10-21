@@ -281,7 +281,7 @@ class Raid(commands.Cog):
                 monster[ctx.author.id].status['atk'] * 0.25
             lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
             atk = int(monster[ctx.author.id].status['atk'] + atk_bonus) + (2 * bonus_raid)
-            if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
+            if randint(1, 20) + lvlm + monster[ctx.author.id].status['prec'] > randint(1, 16) + lvlp + \
                     player[ctx.author.id].status['agi']:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
                                                    monster[ctx.author.id].name, raid_info, monster[ctx.author.id].img,

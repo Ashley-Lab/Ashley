@@ -188,12 +188,15 @@ class PVP(commands.Cog):
             lvlp1 = player_1[ctx.author.id].lvl
             lvlp2 = player_2[member.id].lvl
             atk = int(player_1[ctx.author.id].status['atk'] * 2)
-            p1_chance = randint(1, 20) + lvlp1 + player_1[ctx.author.id].status['prec']
-            p2_chance = randint(1, 16) + lvlp2 + player_2[member.id].status['agi']
+            d20, d16 = randint(1, 20), randint(1, 16)
+            acc = player_1[ctx.author.id].status['prec']
+            dex = player_2[member.id].status['agi']
+            p1_chance = d20 + lvlp1 + acc
+            p2_chance = d16 + lvlp2 + dex
             if p1_chance > p2_chance:
                 await player_2[member.id].damage(skill, player_1[ctx.author.id].level_skill, atk, ctx,
                                                  player_1[ctx.author.id].name, player_1[ctx.author.id].cc,
-                                                 player_1[ctx.author.id].img, player[ctx.author.id].status['luk'])
+                                                 player_1[ctx.author.id].img, player_1[ctx.author.id].status['luk'])
             else:
                 embed = discord.Embed(
                     description=f"``{player_2[member.id].name.upper()} EVADIU``",
@@ -233,8 +236,11 @@ class PVP(commands.Cog):
             lvlp2 = player_2[member.id].lvl
             lvlp1 = player_1[ctx.author.id].lvl
             atk = int(player_2[member.id].status['atk'] * 2)
-            p2_chance = randint(1, 20 + lvlp2) + player_2[member.id].status['prec']
-            p1_chance = randint(1, 16 + lvlp1) + player_1[ctx.author.id].status['agi']
+            d20, d16 = randint(1, 20), randint(1, 16)
+            acc = player_2[member.id].status['prec']
+            dex = player_1[ctx.author.id].status['agi']
+            p2_chance = d20 + lvlp2 + acc
+            p1_chance = d16 + lvlp1 + dex
             if p2_chance > p1_chance:
                 await player_1[ctx.author.id].damage(skill, player_2[member.id].level_skill, atk, ctx,
                                                      player_2[member.id].name, player_2[member.id].cc,
