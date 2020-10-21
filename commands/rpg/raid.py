@@ -57,6 +57,7 @@ class Raid(commands.Cog):
         """Comando usado pra batalhar no rpg da ashley
         Use ash raid"""
         global raid_rank, monster, player, money, xp_tot
+
         raid_rank[ctx.author.id] = 0
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -207,11 +208,11 @@ class Raid(commands.Cog):
 
             lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
             atk = int(player[ctx.author.id].status['atk'] * 2)
-            if randint(1, 20 + lvlp) + player[ctx.author.id].status['prec'] > randint(1, 16 + lvlm) + \
+            if randint(1, 20) + lvlp + player[ctx.author.id].status['prec'] > randint(1, 16) + lvlm + \
                     monster[ctx.author.id].status['agi']:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
                                                     player[ctx.author.id].name, player[ctx.author.id].cc,
-                                                    player[ctx.author.id].img)
+                                                    player[ctx.author.id].img, player[ctx.author.id].status['luk'])
             else:
                 embed = discord.Embed(
                     description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
@@ -273,15 +274,18 @@ class Raid(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
+            bonus_raid = int(5 * raid_rank[ctx.author.id])
+            raid_info = monster[ctx.author.id].cc
+            raid_info[0] += bonus_raid
             atk_bonus = monster[ctx.author.id].status['atk'] * 1 if player[ctx.author.id].lvl > 25 else \
                 monster[ctx.author.id].status['atk'] * 0.25
             lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
-            atk = int(monster[ctx.author.id].status['atk'] + atk_bonus) + int(5 * raid_rank[ctx.author.id])
+            atk = int(monster[ctx.author.id].status['atk'] + atk_bonus) + (2 * bonus_raid)
             if randint(1, 20 + lvlm) + monster[ctx.author.id].status['prec'] > randint(1, 16 + lvlp) + \
                     player[ctx.author.id].status['agi']:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
-                                                   monster[ctx.author.id].name, monster[ctx.author.id].cc,
-                                                   monster[ctx.author.id].img)
+                                                   monster[ctx.author.id].name, raid_info, monster[ctx.author.id].img,
+                                                   monster[ctx.author.id].status['luk'])
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",
@@ -318,7 +322,7 @@ class Raid(commands.Cog):
         xp_reward = [int(xpr + xpr * 0.25), int(xpr), int(xpr * 0.25)]
 
         # chance de drop
-        change = randint(1, 100)
+        change = randint(1, 100) + raid_rank[ctx.author.id]
 
         # depois da raid
         if raid_rank[ctx.author.id] <= 0:
@@ -354,6 +358,38 @@ class Raid(commands.Cog):
                 else:
                     reward = [choice(db_monster['reward']) for _ in range(4)]
 
+                raid_reward = ["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
+                               "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
+                               "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
+                               "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                               "unsealed_stone", "melted_artifact"]
+
+                msg = "\n"
+
+                if raid_rank[ctx.author.id] >= 5:
+                    reward.append(choice(raid_reward))
+                    msg += "Ganhou +1 por matar 5 monstros\n"
+
+                if raid_rank[ctx.author.id] >= 10:
+                    reward.append(choice(raid_reward))
+                    msg += "Ganhou +1 por matar 10 monstros\n"
+
+                if raid_rank[ctx.author.id] >= 15:
+                    reward.append(choice(raid_reward))
+                    msg += "Ganhou +1 por matar 15 monstros\n"
+
+                if raid_rank[ctx.author.id] >= 20:
+                    reward.append(choice(raid_reward))
+                    msg += "Ganhou +1 por matar 20 monstros\n"
+
+                if raid_rank[ctx.author.id] >= 25:
+                    reward.append(choice(raid_reward))
+                    msg += "Ganhou +1 por matar 25 monstros\n"
+
+                if raid_rank[ctx.author.id] >= 30:
+                    reward.append(choice(raid_reward))
+                    msg += "Ganhou +1 por matar 30 monstros\n"
+
                 if db_player['level'] > 25:
                     bonus = ['stone_crystal_white', 'stone_crystal_red', 'stone_crystal_green',
                              'stone_crystal_blue', 'stone_crystal_yellow']
@@ -375,34 +411,9 @@ class Raid(commands.Cog):
                     else:
                         reward.append(choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal']))
 
-                if change < 25:
-                    raid_reward = ["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
-                                   "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
-                                   "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
-                                   "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
-                                   "unsealed_stone", "melted_artifact"]
-
-                    if raid_rank[ctx.author.id] >= 5:
-                        reward.append(choice(raid_reward))
-
-                    if raid_rank[ctx.author.id] >= 10:
-                        reward.append(choice(raid_reward))
-
-                    if raid_rank[ctx.author.id] >= 15:
-                        reward.append(choice(raid_reward))
-
-                    if raid_rank[ctx.author.id] >= 20:
-                        reward.append(choice(raid_reward))
-
-                    if raid_rank[ctx.author.id] >= 25:
-                        reward.append(choice(raid_reward))
-
-                    if raid_rank[ctx.author.id] >= 30:
-                        reward.append(choice(raid_reward))
-
                 response = await self.bot.db.add_reward(ctx, reward)
-                await ctx.send('<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
-                               '{}'.format(response))
+                await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS DO RPG** ✨ '
+                               f'{response}\n{msg}')
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data

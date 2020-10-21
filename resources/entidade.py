@@ -124,9 +124,13 @@ class Entity(object):
                     except TypeError:
                         effect_skill = "sem efeito"
 
-                    regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
+                    rm = int(((self.status['con'] * self.rate[1]) / 100) * 35)
+                    ru = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                     eff_mana = effect_skill.replace('dict_keys([', '').replace('])', '').replace('\'', '')
-                    _mana = self.atacks[c2]['mana'][self.level_skill] if eff_mana != "cura" else regen
+                    a_mana = self.atacks[c2]['mana'][self.level_skill] + self.lvl
+                    a_mana = self.atacks[c2]['mana'][self.level_skill] + (self.lvl * 2) if self.lvl > 25 else a_mana
+                    _mana = a_mana if eff_mana != "cura" else rm
+                    _mana = ru if self.atacks[c2]['type'] == "especial" else _mana
 
                     description += f"{icon} **{c2.upper()}** ``Lv:`` **{ls + 1 if ls + 1 < 11 else 10}**\n" \
                                    f"``Dano:`` **{dado} + {damage} de ATK -** ``{skill_type.upper()}``\n" \
@@ -200,14 +204,20 @@ class Entity(object):
                             if reaction[0].emoji.name == emoji:
                                 test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
                                 _atack = atacks[test_atack]
-                                remove = self.atacks[_atack]['mana'][self.level_skill]
+                                a_mana_1 = self.atacks[_atack]['mana'][self.level_skill] + self.lvl
+                                a_mana_2 = self.atacks[_atack]['mana'][self.level_skill] + (self.lvl * 2)
+                                remove = a_mana_2 if self.lvl > 25 else a_mana_1
 
                                 effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.level_skill].items()]
                                 heal = False
                                 for eff in effects_skill:
                                     if eff == "cura":
                                         heal = True
+
                                 if heal:
+                                    remove = int(((self.status['con'] * self.rate[1]) / 100) * 35)
+
+                                if self.atacks[_atack]['type'] == "especial":
                                     remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
 
                                 if self.status['mp'] >= remove:
@@ -238,12 +248,8 @@ class Entity(object):
                 embed.set_thumbnail(url=f"{self.img}")
                 await ctx.send(embed=embed)
 
-            try:
+            if self.atack is not None and self.atack != "PASS-TURN":
                 self.atack = self.atacks[self.atack]
-            except KeyError:
-                pass
-            except TypeError:
-                pass
 
         else:
             description = f'**{self.name.upper()}** ``esta`` **{"STUNADO" if stun else "CONGELADO"}**'
@@ -295,12 +301,12 @@ class Entity(object):
                     if 'damage' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
                         damage = damage if damage > 0 else 1
-                        percent = int(armor_now / (damage / 100))
+                        percent = abs(int(armor_now / (damage / 100)))
                         if percent < 45:
-                            dn = int(damage - self.armor)
+                            dn = abs(int(damage - self.armor))
                         else:
                             dn_chance = randint(1, 100)
-                            dn = int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65))
+                            dn = abs(int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65)))
                         self.status['hp'] -= dn
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
@@ -329,7 +335,7 @@ class Entity(object):
                         img_ = "https://media1.giphy.com/media/pDLxcNa1r3QA0/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
-                    if 'cegueira' in self.effects.keys() and self.effects[c]['turns'] > 0:
+                    if self.effects[c]['turns'] > 0 and c == "cegueira":
                         description = f"**{self.name.upper()}** ``esta sobe o efeito de`` " \
                                       f"**{c.upper()}!**"
                         hp_max = self.status['con'] * self.rate[0]
@@ -348,7 +354,7 @@ class Entity(object):
 
         return self.atack if self.atack != "PASS-TURN" else "PASS-TURN"
 
-    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img):
+    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img, enemy_luk):
 
         # chance de critital 100%
         lethal = False
@@ -358,7 +364,7 @@ class Entity(object):
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
-            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
             return await ctx.send(embed=embed_)
 
         if skill == "PASS-TURN":
@@ -381,9 +387,12 @@ class Entity(object):
 
                 rate_chance = 95
                 chance = randint(1, 100)
-                chance += self.status['luk']
-                if c in ["cegueira"]:
-                    rate_chance -= int(self.status['luk'] / 2) if self.status['luk'] > 0 else 0
+
+                if c not in ["gelo"]:
+                    chance += enemy_luk
+
+                if c in ["cegueira", "stun"]:
+                    rate_chance -= int(enemy_luk / 2) if enemy_luk > 0 else 0
 
                 if chance >= rate_chance:
                     self.chance = True
@@ -391,6 +400,7 @@ class Entity(object):
                     self.chance = False
 
                 if self.chance:
+
                     if c in self.effects.keys() and self.effects[c]['turns'] > 0:
                         description = f'**{self.name.upper()}** ``ainda está sob o efeito de`` **{c.upper()}**'
                         hp_max = self.status['con'] * self.rate[0]
@@ -400,25 +410,35 @@ class Entity(object):
                                                self.status['hp'], self.img, self.ln)
                         await ctx.send(embed=embed_)
 
-                    if not self.is_player:
-                        self.effects[c] = skill['effs'][lvlskill][c]
                     else:
-                        if self.pvp:
+
+                        if not self.is_player:
                             self.effects[c] = skill['effs'][lvlskill][c]
+                            max_turn = skill['effs'][lvlskill][c]['turns']
+                            self.effects[c]['turns'] = randint(1, max_turn) if max_turn > 1 else max_turn
                         else:
-                            self.effects[c] = skill['effs'][c]
+                            if self.pvp:
+                                self.effects[c] = skill['effs'][lvlskill][c]
+                                max_turn = skill['effs'][lvlskill][c]['turns']
+                                self.effects[c]['turns'] = randint(1, max_turn) if max_turn > 1 else max_turn
+                            else:
+                                self.effects[c] = skill['effs'][c]
+                                max_turn = skill['effs'][c]['turns']
+                                self.effects[c]['turns'] = randint(1, max_turn) if max_turn > 1 else max_turn
 
-                    if self.effects[c]['turns'] <= 0:
-                        self.effects[c]['turns'] = randint(1, 2)
+                        if self.effects[c]['turns'] < 1 or self.effects[c]['turns'] > 9:
+                            self.effects[c]['turns'] = randint(1, 2)
 
-                    turns = self.effects[c]['turns']
-                    description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}** ``por`` ' \
-                                  f'**{turns - 1}** ``turno{"s" if turns > 0 else ""}``'
-                    hp_max = self.status['con'] * self.rate[0]
-                    monster = not self.is_player if self.pvp else self.is_player
-                    embed_ = embed_creator(description, skill['img'], monster, hp_max,
-                                           self.status['hp'], self.img, self.ln)
-                    await ctx.send(embed=embed_)
+                        turns = self.effects[c]['turns']
+
+                        description = f'**{self.name.upper()}** ``recebeu o efeito de`` **{c.upper()}** ``por`` ' \
+                                      f'**{turns}** ``turno{"s" if turns > 1 else ""}``'
+                        hp_max = self.status['con'] * self.rate[0]
+                        monster = not self.is_player if self.pvp else self.is_player
+                        embed_ = embed_creator(description, skill['img'], monster, hp_max,
+                                               self.status['hp'], self.img, self.ln)
+                        await ctx.send(embed=embed_)
+
                 else:
                     description = f'**{self.name.upper()}** ``não recebeu o efeito de`` **{c.upper()}**'
                     hp_max = self.status['con'] * self.rate[0]
@@ -447,11 +467,11 @@ class Entity(object):
         critical_damage = enemy_cc[0]
         value_critical = 20
 
-        if enemy_cc[1] in ['assassin', 'priest']:
-            value_critical = 15
-
         if enemy_cc[1] in ['necromancer', 'wizard']:
             value_critical = 18
+
+        if enemy_cc[1] in ['assassin', 'priest']:
+            value_critical = 16
 
         try:
             if self.effects["cegueira"]['turns'] > 0:
@@ -471,12 +491,12 @@ class Entity(object):
             await ctx.send(file=file, embed=embed)
 
         armor_now = self.armor if self.armor > 0 else 1
-        percent = int(armor_now / (damage / 100))
+        percent = abs(int(armor_now / (damage / 100)))
         if percent < 45:
-            dn = int(damage - self.armor)
+            dn = abs(int(damage - self.armor))
         else:
             dn_chance = randint(1, 100)
-            dn = int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65))
+            dn = abs(int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65)))
 
         if dn < 0:
             description = f'**{self.name.upper()}** ``obsorveu todo o dano e recebeu`` **0** ``de dano``'

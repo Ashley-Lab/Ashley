@@ -70,6 +70,8 @@ class PVP(commands.Cog):
     async def pvp(self, ctx, member: discord.Member = None):
         """Comando usado pra ir PVP no rpg da ashley
         Use ash pvp"""
+        global player_1, player_2
+
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if member.id == ctx.author.id:
@@ -186,12 +188,12 @@ class PVP(commands.Cog):
             lvlp1 = player_1[ctx.author.id].lvl
             lvlp2 = player_2[member.id].lvl
             atk = int(player_1[ctx.author.id].status['atk'] * 2)
-            p1_chance = randint(1, 20 + lvlp1) + player_1[ctx.author.id].status['prec']
-            p2_chance = randint(1, 16 + lvlp2) + player_2[member.id].status['agi']
+            p1_chance = randint(1, 20) + lvlp1 + player_1[ctx.author.id].status['prec']
+            p2_chance = randint(1, 16) + lvlp2 + player_2[member.id].status['agi']
             if p1_chance > p2_chance:
                 await player_2[member.id].damage(skill, player_1[ctx.author.id].level_skill, atk, ctx,
                                                  player_1[ctx.author.id].name, player_1[ctx.author.id].cc,
-                                                 player_1[ctx.author.id].img)
+                                                 player_1[ctx.author.id].img, player[ctx.author.id].status['luk'])
             else:
                 embed = discord.Embed(
                     description=f"``{player_2[member.id].name.upper()} EVADIU``",
@@ -236,7 +238,7 @@ class PVP(commands.Cog):
             if p2_chance > p1_chance:
                 await player_1[ctx.author.id].damage(skill, player_2[member.id].level_skill, atk, ctx,
                                                      player_2[member.id].name, player_2[member.id].cc,
-                                                     player_2[member.id].img)
+                                                     player_2[member.id].img, player_2[member.id].status['luk'])
             else:
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",

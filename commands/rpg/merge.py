@@ -178,7 +178,7 @@ class MergeClass(commands.Cog):
 
         if item is None:
             return await ctx.send("<:negate:721581573396496464>│``Você precisa colocar o nome de um item que deseja "
-                                  "equipar em voce:`` **ash equip i <nome_do_item>** ``voce consegue ver os itens "
+                                  "fundir:`` **ash equip i <nome_do_item>** ``voce consegue ver os itens "
                                   "usando o comando:`` **ash inventory e**")
 
         equips_list = list()

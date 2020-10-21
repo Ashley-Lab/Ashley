@@ -625,7 +625,9 @@ if __name__ == "__main__":
                          f"**Adicione para seu servidor:**: {config['config']['default_link']}\n" \
                          f"**Servidor de Origem**: {config['config']['default_invite']}\n"
 
-    bot = Ashley(command_prefix=['ash.', 'ash '], description=description_ashley, pm_help=True)
+    intents = discord.Intents.default()
+    # intents.members = True
+    bot = Ashley(command_prefix=['ash.', 'ash '], description=description_ashley, pm_help=True, intents=intents)
     bot.remove_command('help')
     cont = 0
     emojis = {"ON": "🟢", "IDLE": "🟡", "OFF": "🔴", "VIP": "🟣"}

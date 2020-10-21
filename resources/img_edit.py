@@ -1,5 +1,6 @@
 import re
 import json
+import aiohttp
 # import asyncio  // colocar para testes
 import textwrap
 import unicodedata
@@ -64,6 +65,10 @@ async def get_avatar(avatar_url, x, y):
     try:
         avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
     except UnidentifiedImageError:
+        link = "https://festsonho.com.br/images/sem_foto.png"
+        url_avatar = await requests.get(link)
+        avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
+    except aiohttp.client_exceptions.ClientPayloadError:
         link = "https://festsonho.com.br/images/sem_foto.png"
         url_avatar = await requests.get(link)
         avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
