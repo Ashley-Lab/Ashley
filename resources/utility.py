@@ -78,10 +78,10 @@ def embed_creator(description, img_url, monster, hp_max, hp, monster_img, lower_
     if monster:
         color_embed = 0xf15a02
     else:
-        color_value = (hp / (hp_max / 100))
-        checkpoints = [1, 31, 71]
+        color_value = int(hp / (hp_max / 100))
+        checkpoints = [0, 31, 71]
         for c in range(0, 3):
-            if color_value > checkpoints[c]:
+            if color_value >= checkpoints[c]:
                 color_embed = color[c]
     embed = discord.Embed(
         description=description,

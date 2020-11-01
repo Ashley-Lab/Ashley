@@ -49,22 +49,22 @@ class OnReady(commands.Cog):
                 all_data = await self.bot.db.get_all_data("users")
                 for data in all_data:
                     update = data
-                    try:
-                        last_verify = date.mktime(update['security']['last_verify'].timetuple())
-                        last_blocked = date.mktime(update['security']['last_blocked'].timetuple())
-                        minutes = int(int(last_verify - last_blocked) / 60)
-                        if minutes > 4320:
-                            update['security']['blocked'] = False
-                    except KeyError:
-                        pass
-                    except AttributeError:
-                        pass
+
+                    if update['security']['last_verify'] is not None:
+                        if update['security']['last_blocked'] is not None:
+                            last_verify = date.mktime(update['security']['last_verify'].timetuple())
+                            last_blocked = date.mktime(update['security']['last_blocked'].timetuple())
+                            minutes = int(int(last_verify - last_blocked) / 60)
+                            if minutes > 4320:
+                                update['security']['blocked'] = False
+
                     if not update['security']['blocked']:
                         update['security']['commands'] = 0
                         update['security']['commands_today'] = 0
                         update['security']['strikes'] = 0
                         update['security']['last_verify'] = dt.today()
                         update['security']['status'] = True
+                        update['security']['warns'] = {"80": False, "85": False, "90": False, "95": False, "100": False}
                     else:
                         update['security']['commands'] = 0
                         update['security']['commands_today'] = 0
@@ -76,49 +76,75 @@ class OnReady(commands.Cog):
     async def draw_member(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
-            if await verify_cooldown(self.bot, "draw_member", 7200):
+            if await verify_cooldown(self.bot, "draw_member", 3600):
+                all_data = await self.bot.db.get_all_data("users")
                 for guild in self.bot.guilds:
                     data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
-                    if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:
+                    if data is None:
+                        continue
+                    if len([m for m in guild.members if not m.bot]) >= 50 and data['data']['accounts'] >= 10:
                         if data['bot_config']['ash_draw']:
                             channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
                             if channel__ is None:
                                 continue
 
-                            draw_member = choice([member for member in guild.members if not member.bot])
-                            try:
-                                member = discord.utils.get(guild.members, name="{}".format(draw_member.name))
-                            except TypeError:
-                                continue
-                            data_member = await self.bot.db.get_data("user_id", member.id, "users")
+                            members = []
+                            for data in all_data:
+                                if data['guild_id'] == guild.id:
+                                    members.append(data['user_id'])
+
+                            _member = choice(members)
+                            _member_ = self.bot.get_user(_member)
+                            while _member_ is None:
+                                _member = choice(members)
+                                _member_ = self.bot.get_user(_member)
+
+                            data_member = await self.bot.db.get_data("user_id", _member, "users")
                             update_member = data_member
-                            if data_member is None:
-                                await channel__.send(f"<:alert:739251822920728708>│{member.name} ``FOI SORTEADO"
-                                                     f" POREM NÃO TINHA REGISTRO!`` **USE ASH REGISTER**")
-                                continue
-                            c = randint(50, 150)
-                            e = randint(25, 75)
-                            embed = discord.Embed(
-                                title="``Fiz o sorteio de um membro``",
-                                colour=self.color,
-                                description=f"Membro sorteado foi **{member.mention}**\n <a:palmas:520418512011788309>│"
-                                            f"``Parabens você acaba de ganhar:``\n"
-                                            f"{self.bot.items['coins'][0]} **{c}** ``{self.bot.items['coins'][1]}``\n"
-                                            f"{self.bot.items['Energy'][0]} **{e}** ``{self.bot.items['Energy'][1]}``")
+
+                            rewards = {'coins': randint(50, 150), 'Energy': randint(25, 75)}
+
+                            item_plus = choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal'])
+                            rewards[item_plus] = randint(1, 5)
+
+                            chance = randint(1, 100)
+
+                            if chance <= 75:
+                                item_plus = choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal'])
+                                rewards[item_plus] = randint(1, 5)
+
+                            if chance <= 45:
+                                item_plus = choice(['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal'])
+                                rewards[item_plus] = randint(1, 5)
+
+                            if chance <= 5:
+                                item_bonus = choice(['solution_agent_green', 'solution_agent_blue', 'enchanted_stone'])
+                                rewards[item_bonus] = randint(1, 3)
+
+                            ext = ''.join([f"{self.bot.items[k][0]} **{v}** ``{self.bot.items[k][1]}``\n"
+                                           for k, v in rewards.items()])
+                            embed = discord.Embed(title="``Fiz o sorteio de um membro``", colour=self.color,
+                                                  description=f"Membro sorteado foi **{str(_member_)}**\n "
+                                                              f"<a:palmas:520418512011788309>│"
+                                                              f"``Parabens você acaba de ganhar:``\n{ext}")
                             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-                            embed.set_thumbnail(url=member.avatar_url)
+                            embed.set_thumbnail(url=_member_.avatar_url)
                             await channel__.send(embed=embed)
 
                             try:
-                                update_member['inventory']['coins'] += c
-                            except KeyError:
-                                update_member['inventory']['coins'] = c
+                                await _member_.send(f"<a:palmas:520418512011788309>│``Parabens você acaba de ser "
+                                                    f"sorteado no servidor`` **{str(guild)}** ``verifique seu "
+                                                    f"iventario.`` **Obs: caso esse tipo de mensagem incomode voce, "
+                                                    f"surigo silenciar minhas mesagens no seu privado.**")
+                            except discord.errors.Forbidden:
+                                pass
 
-                            try:
-                                update_member['inventory']['Energy'] += e
-                            except KeyError:
-                                update_member['inventory']['Energy'] = e
+                            for k, v in rewards.items():
+                                try:
+                                    update_member['inventory'][k] += v
+                                except KeyError:
+                                    update_member['inventory'][k] = v
 
                             await self.bot.db.update_data(data_member, update_member, 'users')
             await asyncio.sleep(300)

@@ -29,9 +29,19 @@ class OnMemberRemove(commands.Cog):
                     }
 
                     await welcome(data_goodbye)
-                    if discord.File('goodbye.png') is None:
-                        return
-                    await canal.send(file=discord.File('goodbye.png'))
+
+                    file = discord.File('goodbye.png')
+                    if file is not None:
+                        await canal.send(file=file)
+                    else:
+                        embed = discord.Embed(title=f"{member.name.upper()} Saiu!", color=self.bot.color)
+                        userjoinedat = str(member.joined_at).split('.', 1)[0]
+                        usercreatedat = str(member.created_at).split('.', 1)[0]
+                        embed.add_field(name="Entrou no server em:", value=userjoinedat, inline=True)
+                        embed.add_field(name="Conta criada em:", value=usercreatedat, inline=True)
+                        embed.add_field(name="ID:", value=str(member.id), inline=True)
+                        embed.set_thumbnail(url=member.avatar_url)
+                        await canal.send(embed=embed)
 
             except AttributeError:
                 pass

@@ -319,10 +319,11 @@ class UserBank(commands.Cog):
         # DATA NATIVA DO SERVIDOR
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        update_guild_native['data'][f"total_{coin}"] -= cost
-        if update_guild_native['data'][f"total_{coin}"] < 0:
-            update_guild_native['data'][f"total_{coin}"] = 0
-        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        if update_guild_native is not None:
+            update_guild_native['data'][f"total_{coin}"] -= cost
+            if update_guild_native['data'][f"total_{coin}"] < 0:
+                update_guild_native['data'][f"total_{coin}"] = 0
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         msg = await ctx.send("<a:loading:520418506567843860>│``RASPANDO TICKET...``")
         await sleep(1)
@@ -458,10 +459,11 @@ class UserBank(commands.Cog):
         # DATA NATIVA DO SERVIDOR
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        update_guild_native['data'][f"total_{coin}"] -= cost
-        if update_guild_native['data'][f"total_{coin}"] < 0:
-            update_guild_native['data'][f"total_{coin}"] = 0
-        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        if update_guild_native is not None:
+            update_guild_native['data'][f"total_{coin}"] -= cost
+            if update_guild_native['data'][f"total_{coin}"] < 0:
+                update_guild_native['data'][f"total_{coin}"] = 0
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         msg = await ctx.send("<a:loading:520418506567843860>│``TENTANDO DROPAR UMA ASHBOLL...``")
         await sleep(1)
@@ -565,10 +567,11 @@ class UserBank(commands.Cog):
         # DATA NATIVA DO SERVIDOR
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
-        update_guild_native['data'][f"total_{coin}"] -= cost
-        if update_guild_native['data'][f"total_{coin}"] < 0:
-            update_guild_native['data'][f"total_{coin}"] = 0
-        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
+        if update_guild_native is not None:
+            update_guild_native['data'][f"total_{coin}"] -= cost
+            if update_guild_native['data'][f"total_{coin}"] < 0:
+                update_guild_native['data'][f"total_{coin}"] = 0
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         msg = await ctx.send("<a:loading:520418506567843860>│``TENTANDO DROPAR UMA UNSEALED STONE...``")
         await sleep(1)

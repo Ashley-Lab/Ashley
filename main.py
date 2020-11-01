@@ -189,11 +189,7 @@ class Ashley(commands.AutoShardedBot):
                     update_guild['data']['commands'] += 1
 
                 update_user['security']['commands'] += 1
-                try:
-                    update_user['security']['commands_today'] += 1
-                except KeyError:
-                    update_user['security']['commands_today'] = 1
-
+                update_user['security']['commands_today'] += 1
                 update_user['security']['last_command'] = dt.today()
                 update_user['security']['last_channel'] = ctx.channel.id
 
@@ -319,85 +315,69 @@ class Ashley(commands.AutoShardedBot):
                 # -----------------------------------------------------------------------------------------
                 #                                  INICIO DO MACRO SYSTEM
                 # -----------------------------------------------------------------------------------------
-                data_ = date_format(dt.now())
-                m_last_verify = 0
-                last_command, last_verify, last_command, date_now = None, None, None, dt.today()
-                if update_user['security']['last_verify'] is not None:
-                    last_command = update_user['security']['last_verify']
-                    last_verify = date.mktime(date_now.timetuple())
-                    last_command = date.mktime(last_command.timetuple())
-                    m_last_verify = int(int(last_verify - last_command) / 60)
+                data_, m_last_verify, limit = date_format(dt.now()), 0, 2500
+                last_command, last_verify, date_now = update_user['security']['last_command'], None, dt.today()
 
-                last_command = None
+                if update_user['security']['last_verify'] is None:
+                    update_user['security']['last_verify'] = dt.today()
+                    update_user['security']['blocked'] = False
+
+                last_verify = date.mktime(date_now.timetuple())
+                last_command_date = date.mktime(last_command.timetuple())
+                m_last_verify = int(int(last_verify - last_command_date) / 60)
+
                 if m_last_verify > 5:
                     update_user['security']['last_verify'] = dt.today()
                     update_user['security']['blocked'] = False
                     last_verify = update_user['security']['last_verify']
-                    last_command = update_user['security']['last_command']
 
-                if last_command is not None and update_user['security']['status'] and m_last_verify > 5:
-                    if update_user['security']['commands_today'] > (2500 / 100 * 80):
-                        if update_user['security']['commands_today'] < 2500:
-                            try:
-                                warn = False
-                                percent = update_user['security']['commands_today'] * 100 / 2500
-                                if update_user['security']['commands_today'] >= (2500 / 100 * 80):
-                                    percent = 80
-                                if update_user['security']['commands_today'] >= (2500 / 100 * 85):
-                                    percent = 85
-                                if update_user['security']['commands_today'] >= (2500 / 100 * 90):
-                                    percent = 90
-                                if update_user['security']['commands_today'] >= (2500 / 100 * 95):
-                                    percent = 95
-                                if update_user['security']['commands_today'] >= (2500 / 100 * 100):
-                                    percent = 100
-                                if percent >= 80:
-                                    if not update_user['security']['warn'][str(percent)]:
-                                        warn = True
-                                if update_user['security']['last_channel'] is not None and warn:
-                                    channel_ = self.get_channel(update_user['security']['last_channel'])
-                                    if channel_ is not None:
-                                        cmds = update_user['security']['commands_today']
-                                        pe = update_user['security']['commands_today'] * 100 / 2500
-                                        await channel_.send(f'<a:red:525032764211200002>│``VOCE JA ATINGIU`` **{pe}%**'
-                                                            f' ``DA SUA COTA DIARIA DE COMANDOS:`` **{cmds}/2500** '
-                                                            f'``SE CONTINUAR ASSIM VAI SER BLOQUEADO POR 72 HORAS.``')
-                                        update_user['security']['warn'][str(percent)] = True
-                            except KeyError:
-                                pass
+                if last_command is not None and update_user['security']['status'] and m_last_verify < 5:
+                    if update_user['security']['commands_today'] > int(limit / 100 * 80):
+                        if update_user['security']['commands_today'] < limit:
+                            warns = False
+                            percent = int(update_user['security']['commands_today'] * 100 / limit)
+                            if update_user['security']['commands_today'] >= int(limit / 100 * 80):
+                                percent = 80
+                            if update_user['security']['commands_today'] >= int(limit / 100 * 85):
+                                percent = 85
+                            if update_user['security']['commands_today'] >= int(limit / 100 * 90):
+                                percent = 90
+                            if update_user['security']['commands_today'] >= int(limit / 100 * 95):
+                                percent = 95
+                            if update_user['security']['commands_today'] >= int(limit / 100 * 100):
+                                percent = 100
+                            if percent >= 80 and not update_user['security']['warns'][str(percent)]:
+                                warns = True
+                            if update_user['security']['last_channel'] is not None and warns:
+                                channel_ = self.get_channel(update_user['security']['last_channel'])
+                                if channel_ is not None:
+                                    cmds = update_user['security']['commands_today']
+                                    pe = update_user['security']['commands_today'] * 100 / limit
+                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE JA ATINGIU`` **{pe}%**'
+                                                        f' ``DA SUA COTA DIARIA DE COMANDOS:`` **{cmds}/{limit}** '
+                                                        f'``SE CONTINUAR ASSIM VAI SER BLOQUEADO POR 72 HORAS.``')
+                                    update_user['security']['warns'][str(percent)] = True
 
-                    if update_user['security']['commands_today'] > 2500:
-                        try:
-                            update_user['security']['status'] = not update_user['security']['status']
-                            update_user['security']['blocked'] = not update_user['security']['blocked']
-                        except KeyError:
-                            update_user['security']['status'] = False
-                            update_user['security']['blocked'] = True
-
+                    if update_user['security']['commands_today'] > limit:
+                        update_user['security']['status'] = not update_user['security']['status']
+                        update_user['security']['blocked'] = not update_user['security']['blocked']
                         update_user['security']['last_blocked'] = dt.today()
-
-                        try:
-                            update_user['security']['strikes_to_ban'] += 1
-                        except KeyError:
-                            update_user['security']['strikes_to_ban'] = 1
-
+                        update_user['security']['strikes_to_ban'] += 1
                         channel_ = self.get_channel(737467830571761786)
                         user = self.get_user(update_user["user_id"])
                         await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO'
                                             f' MACRO E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
-                        try:
-                            if update_user['security']['last_channel'] is not None:
-                                channel_ = self.get_channel(update_user['security']['last_channel'])
-                                if channel_ is not None:
-                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
-                                                        f'POIS EXTRAPOLOU OS LIMITES HOJE``\n<a:red:525032764211200002>'
-                                                        f' **OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
-                                                        f'PRIVILEGIOS DE GANHAR OS ITENS** ``ESSE BLOQUEIO FOI MAIS '
-                                                        f'RIGIDO,`` **SE VOCE CONTINUAR LEVANDO ESSE BLOQUEIO IRÁ SER'
-                                                        f' BANIDO DE USAR MEUS SERVIÇOS** ``AVISO PARA BANIMENTO:`` '
-                                                        f'**{update_user["security"]["strikes_to_ban"]}**/10')
-                        except KeyError:
-                            pass
+
+                        if update_user['security']['last_channel'] is not None:
+                            channel_ = self.get_channel(update_user['security']['last_channel'])
+                            if channel_ is not None:
+                                await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO POR 72 HORAS '
+                                                    f'POIS EXTRAPOLOU OS LIMITES HOJE``\n<a:red:525032764211200002>'
+                                                    f' **OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
+                                                    f'PRIVILEGIOS DE GANHAR OS ITENS** ``ESSE BLOQUEIO FOI MAIS '
+                                                    f'RIGIDO,`` **SE VOCE CONTINUAR LEVANDO ESSE BLOQUEIO IRÁ SER'
+                                                    f' BANIDO DE USAR MEUS SERVIÇOS** ``AVISO PARA BANIMENTO:`` '
+                                                    f'**{update_user["security"]["strikes_to_ban"]}**/10')
 
                     if update_user['security']['strikes_to_ban'] > 10:
                         answer = await self.ban_(update_user['user_id'], "BANIDO POR USAR MACRO!")
@@ -406,18 +386,12 @@ class Ashley(commands.AutoShardedBot):
                                 color=discord.Color.red(),
                                 description=f'<:cry:530735037243719687>│``VOCE FOI BANIDO POR USAR MACRO!``'
                                             f' **SE QUISER CONTESTAR ENTRE NO MEU SERVIDOR DE SUPORTE!**')
-                            try:
-                                if update_user['security']['last_channel'] is not None:
-                                    channel_ = self.get_channel(update_user['security']['last_channel'])
-                                    if channel_ is not None:
-                                        await channel_.send(embed=embed)
-                            except KeyError:
-                                pass
+                            if update_user['security']['last_channel'] is not None:
+                                channel_ = self.get_channel(update_user['security']['last_channel'])
+                                if channel_ is not None:
+                                    await channel_.send(embed=embed)
 
-                    last_verify = date.mktime(last_verify.timetuple())
-                    last_command = date.mktime(last_command.timetuple())
-                    minutes = int(int(last_verify - last_command) / 60)
-
+                    minutes = int(int(last_verify - last_command_date) / 60)
                     if minutes < 5 and update_user['security']['commands'] > 40:
 
                         update_user['security']['strikes'] += 1
@@ -426,18 +400,16 @@ class Ashley(commands.AutoShardedBot):
                         user = self.get_user(update_user["user_id"])
                         await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} FOI DETECTADO POSSIVELMENTE'
                                             f' USANDO MACRO\nNa Data e Hora: {data_}```')
-                        try:
-                            if update_user['security']['strikes'] < 11:
-                                if update_user['security']['last_channel'] is not None:
-                                    channel_ = self.get_channel(update_user['security']['last_channel'])
-                                    if channel_ is not None:
-                                        await channel_.send(f'<a:red:525032764211200002>│``EI TENHA CALMA VOCE TA '
-                                                            f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER'
-                                                            f' BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
-                                                            f'<a:red:525032764211200002>'
-                                                            f'**AVISO {update_user["security"]["strikes"]}/10**')
-                        except KeyError:
-                            pass
+
+                        if update_user['security']['strikes'] < 11:
+                            if update_user['security']['last_channel'] is not None:
+                                channel_ = self.get_channel(update_user['security']['last_channel'])
+                                if channel_ is not None:
+                                    await channel_.send(f'<a:red:525032764211200002>│``EI TENHA CALMA VOCE TA '
+                                                        f'USANDO COMANDOS RAPIDO DEMAIS, SE CONTINUAR ASSIM VAI SER'
+                                                        f' BLOQUEADO ATE AS 0 HORAS DO DIA DE HOJE.`` '
+                                                        f'<a:red:525032764211200002>'
+                                                        f'**AVISO {update_user["security"]["strikes"]}/10**')
 
                     if update_user['security']['commands'] > 0:
                         update_user['security']['commands'] = 0
@@ -450,19 +422,16 @@ class Ashley(commands.AutoShardedBot):
                         update_user['security']['status'] = not update_user['security']['status']
                         channel_ = self.get_channel(737467830571761786)
                         user = self.get_user(update_user["user_id"])
-                        await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO '
-                                            f'MACRO E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
+                        await channel_.send(f'```O USUARIO {update_user["user_id"]} {user} ESTAVA POSSIVELMENTE USANDO'
+                                            f' MACRO E FOI BLOQUEADO\nNa Data e Hora: {data_}```')
 
-                        try:
-                            if update_user['security']['last_channel'] is not None:
-                                channel_ = self.get_channel(update_user['security']['last_channel'])
-                                if channel_ is not None:
-                                    await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO ATE AS 0 '
-                                                        f'HORAS DO DIA DE HOJE..`` <a:red:525032764211200002>'
-                                                        f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
-                                                        f'PRIVILEGIOS DE GANHAR OS ITENS**')
-                        except KeyError:
-                            pass
+                        if update_user['security']['last_channel'] is not None:
+                            channel_ = self.get_channel(update_user['security']['last_channel'])
+                            if channel_ is not None:
+                                await channel_.send(f'<a:red:525032764211200002>│``VOCE FOI BLOQUEADO ATE AS 0 '
+                                                    f'HORAS DO DIA DE HOJE..`` <a:red:525032764211200002>'
+                                                    f'**OBS: VOCE AINDA PODE USAR O BOT, POREM PERDEU OS '
+                                                    f'PRIVILEGIOS DE GANHAR OS ITENS**')
 
                 # -----------------------------------------------------------------------------------------
                 #                                    FIM DO MACRO SYSTEM
@@ -626,7 +595,7 @@ if __name__ == "__main__":
                          f"**Servidor de Origem**: {config['config']['default_invite']}\n"
 
     intents = discord.Intents.default()
-    # intents.members = True
+    intents.members = True
     bot = Ashley(command_prefix=['ash.', 'ash '], description=description_ashley, pm_help=True, intents=intents)
     bot.remove_command('help')
     cont = 0

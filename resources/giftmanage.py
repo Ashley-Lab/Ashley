@@ -38,7 +38,6 @@ async def register_gift(bot, time):
 
 
 async def open_gift(bot, gift):
-
     if "-" in gift:
         key = "gift_t"
     else:
@@ -68,6 +67,14 @@ async def open_gift(bot, gift):
             item_3 = choice(['SoulStoneYellow', 'SoulStoneRed', 'SoulStonePurple', 'SoulStoneGreen',
                              'SoulStoneDarkGreen', 'SoulStoneBlue'])
             rare = [item_1, item_2, item_3]
+
+            if chance < 15:
+                item_plus = choice(["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
+                                    "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
+                                    "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
+                                    "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                                    "unsealed_stone", "melted_artifact"])
+                rare.append(item_plus)
 
         return {"money": ethernyas, "coins": coins, "items": items, "rare": rare, "validity": validity}
 

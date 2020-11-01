@@ -30,9 +30,10 @@ class TransferClass(commands.Cog):
             return await ctx.send('<:negate:721581573396496464>│``Desculpe, você já está casdastrado nessa guilda!``')
 
         def check(m):
-            perms = ctx.channel.permissions_for(m.author)
-            if m.channel.id == ctx.channel.id and perms.manage_messages and m.content.upper() in ['S', 'N']:
-                return True
+            if m.channel.id == ctx.channel.id and m.content.upper() in ['S', 'N']:
+                perms = ctx.channel.permissions_for(m.author)
+                if perms.manage_messages:
+                    return True
             return False
 
         await ctx.send(f'**CAROS ADMINISTRADORES** ``o membro`` {ctx.author.mention} ``quer associar sua conta do meu '
@@ -46,11 +47,12 @@ class TransferClass(commands.Cog):
                                   '**COMANDO CANCELADO**')
 
         if answer.content.upper() == "S":
-            update_guild_native['data']['total_money'] -= update_user['treasure']['money']
+            if update_guild_native is not None:
+                update_guild_native['data']['total_money'] -= update_user['treasure']['money']
+                await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             update_guild_future['data']['total_money'] += update_user['treasure']['money']
             update_user["guild_id"] = ctx.guild.id
             await self.bot.db.update_data(data_user, update_user, 'users')
-            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
             await self.bot.db.update_data(data_guild_future, update_guild_future, 'guilds')
             await ctx.send(f'<:confirmed:721581574461587496>│🎊 **PARABENS** 🎉 {ctx.author.mention} ``Seu pedido foi'
                            f' aceito com sucesso, você agora faz parte da guilda`` **{ctx.guild.name}**')

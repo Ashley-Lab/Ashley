@@ -30,15 +30,54 @@ class OpenClass(commands.Cog):
             I_BOX = self.bot.box[ctx.guild.id]['boxes'].index(BOX)
             del (self.bot.box[ctx.guild.id]['boxes'][I_BOX])
             self.bot.box[ctx.guild.id]['quant'] -= 1
-            time = randint(60, 600)
+            time = randint(90, 600)
             gift = await register_gift(self.bot, time)
-            await ctx.send(f"> 🎊 **PARABENS** 🎉 ``VOCÊ GANHOU UM GIFT``\n"
-                           f"``USE O COMANDO:`` **ASH GIFT** ``PARA RECEBER SEU PRÊMIO!!``")
-            gt(gift, f"{time} SEGUNDOS")
 
-            if discord.File('giftcard.png') is None:
-                return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
-            await ctx.send(file=discord.File('giftcard.png'))
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+
+            if not data['rpg']['vip']:
+                await ctx.send(f"> 🎊 **PARABENS** 🎉 ``VOCÊ GANHOU UM GIFT``\n"
+                               f"``USE O COMANDO:`` **ASH GIFT** ``PARA RECEBER SEU PRÊMIO!!``")
+                gt(gift, f"{time} SEGUNDOS")
+                if discord.File('giftcard.png') is None:
+                    return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
+                await ctx.send(file=discord.File('giftcard.png'))
+            else:
+                if not data['security']['status']:
+                    return await ctx.send("<:negate:721581573396496464>│'``USUARIO DE MACRO / OU USANDO COMANDOS "
+                                          "RAPIDO DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
+
+                reward = await open_gift(self.bot, gift.upper())
+                await ctx.send("🎊 **PARABENS** 🎉 ``VC USOU SEU GIFT COM SUCESSO!!``")
+                answer_ = await self.bot.db.add_money(ctx, reward['money'], True)
+                await ctx.send(f'<:rank:519896825411665930>│``você GANHOU:``\n {answer_}')
+
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                update['inventory']['coins'] += reward["coins"]
+                await self.bot.db.update_data(data, update, 'users')
+                await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
+                               f'<:coin:546019942936608778> **{reward["coins"]}** ``fichas!``')
+
+                data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+                update = data
+                response = '``Caiu pra você:`` \n'
+                for item in reward['items']:
+                    amount = randint(10, 25)
+                    try:
+                        update['inventory'][item] += amount
+                    except KeyError:
+                        update['inventory'][item] = amount
+                    response += f"{self.bot.items[item][0]} ``{amount}`` ``{self.bot.items[item][1]}``\n"
+                response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
+                await self.bot.db.update_data(data, update, 'users')
+                await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
+
+                if reward['rare'] is not None:
+                    response = await self.bot.db.add_reward(ctx, reward['rare'])
+                    await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS RAROS** ✨ '
+                                   f'{response}')
+
         else:
             await ctx.send(f"<:negate:721581573396496464>│``Esse Servidor não tem presentes disponiveis...``\n"
                            f"**OBS:** se eu for reiniciada, todos os presentes disponiveis sao resetados. Isso é feito"

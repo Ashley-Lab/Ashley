@@ -5,7 +5,7 @@ psutil
 motor
 pymongo
 asyncio
-aiohttp
+aiohttp==3.6.0
 requests
 pyfiglet
 websockets

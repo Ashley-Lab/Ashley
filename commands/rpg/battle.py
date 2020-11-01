@@ -11,6 +11,7 @@ from resources.img_edit import calc_xp
 
 player = {}
 monster = {}
+xp_off = {}
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -31,7 +32,8 @@ class Battle(commands.Cog):
     async def battle(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
-        global player, monster
+        global player, monster, xp_off
+        xp_off[ctx.author.id] = False
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -146,6 +148,7 @@ class Battle(commands.Cog):
 
             if skill == "BATALHA-CANCELADA":
                 player[ctx.author.id].status['hp'] = 0
+                xp_off[ctx.author.id] = True
 
             if player[ctx.author.id].status['hp'] <= 0 or monster[ctx.author.id].status['hp'] <= 0:
                 break
@@ -163,10 +166,21 @@ class Battle(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
-            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
             atk = int(player[ctx.author.id].status['atk'] * 2)
-            if randint(1, 20) + lvlp + player[ctx.author.id].status['prec'] > randint(1, 16) + lvlm + \
-                    monster[ctx.author.id].status['agi']:
+
+            # player chance
+            d20 = randint(1, 20)
+            lvlp = int(player[ctx.author.id].lvl / 10)
+            prec = int(player[ctx.author.id].status['prec'] / 2)
+            chance_player = d20 + lvlp + prec
+
+            # monster chance
+            d16 = randint(1, 16)
+            lvlm = int(monster[ctx.author.id].lvl / 10)
+            agi = int(monster[ctx.author.id].status['agi'] / 3)
+            chance_monster = d16 + lvlm + agi
+
+            if chance_player > chance_monster:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
                                                     player[ctx.author.id].name, player[ctx.author.id].cc,
                                                     player[ctx.author.id].img, player[ctx.author.id].status['luk'])
@@ -192,6 +206,7 @@ class Battle(commands.Cog):
 
             if skill == "BATALHA-CANCELADA":
                 player[ctx.author.id].status['hp'] = 0
+                xp_off[ctx.author.id] = True
 
             if player[ctx.author.id].status['hp'] <= 0 or monster[ctx.author.id].status['hp'] <= 0:
                 break
@@ -211,10 +226,21 @@ class Battle(commands.Cog):
 
             atk_bonus = monster[ctx.author.id].status['atk'] * 1 if player[ctx.author.id].lvl > 25 else \
                 monster[ctx.author.id].status['atk'] * 0.25
-            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
             atk = int(monster[ctx.author.id].status['atk'] + atk_bonus)
-            if randint(1, 20) + lvlm + monster[ctx.author.id].status['prec'] > randint(1, 16) + lvlp + \
-                    player[ctx.author.id].status['agi']:
+
+            # monster chance
+            d20 = randint(1, 20)
+            lvlm = int(monster[ctx.author.id].lvl / 10)
+            prec = int(monster[ctx.author.id].status['prec'] / 2)
+            chance_monster = d20 + lvlm + prec
+
+            # player chance
+            d16 = randint(1, 16)
+            lvlp = int(player[ctx.author.id].lvl / 10)
+            agi = int(player[ctx.author.id].status['agi'] / 3)
+            chance_player = d16 + lvlp + agi
+
+            if chance_monster > chance_player:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
                                                    monster[ctx.author.id].name, monster[ctx.author.id].cc,
                                                    monster[ctx.author.id].img, monster[ctx.author.id].status['luk'])
@@ -258,7 +284,8 @@ class Battle(commands.Cog):
 
         # depois da batalha
         if monster[ctx.author.id].status['hp'] > 0:
-            await self.bot.data.add_xp(ctx, xp_reward[2])
+            if not xp_off[ctx.author.id]:
+                await self.bot.data.add_xp(ctx, xp_reward[2])
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} PERDEU!``",
                 color=0x000000

@@ -29,9 +29,21 @@ class OnMemberJoin(commands.Cog):
                     }
 
                     await welcome(data_welcome)
-                    if discord.File('welcome.png') is None:
-                        return
-                    await channel_.send(file=discord.File('welcome.png'))
+
+                    file = discord.File('welcome.png')
+                    if file is not None:
+                        await channel_.send(file=file)
+                    else:
+                        embed = discord.Embed(
+                            title=f"{member.name.upper()} Entrou!", color=self.bot.color,
+                            description=f"Seja bem vindo ao servidor {member.guild.name.upper()}, divirta-se!")
+                        userjoinedat = str(member.joined_at).split('.', 1)[0]
+                        usercreatedat = str(member.created_at).split('.', 1)[0]
+                        embed.add_field(name="Entrou no server em:", value=userjoinedat, inline=True)
+                        embed.add_field(name="Conta criada em:", value=usercreatedat, inline=True)
+                        embed.add_field(name="ID:", value=str(member.id), inline=True)
+                        embed.set_thumbnail(url=member.avatar_url)
+                        await channel_.send(embed=embed)
 
                 except discord.errors.Forbidden:
                     pass

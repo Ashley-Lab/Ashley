@@ -43,10 +43,7 @@ class UserInfo(commands.Cog):
         embed.add_field(name="DataBase:", value=database)
         embed.set_footer(text="Pedido por {}#{}".format(ctx.author.name, ctx.author.discriminator))
         embed.set_thumbnail(url=member.avatar_url)
-        try:
-            await ctx.send(embed=embed)
-        except discord.errors.HTTPException:
-            await ctx.send("<:negate:721581573396496464>│``ALGUM DADO FALTANDO NESSE USUARIO!``")
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

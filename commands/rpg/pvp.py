@@ -185,12 +185,12 @@ class PVP(commands.Cog):
             # --------======== TEMPO DE ESPERA ========--------
             await sleep(0.5)
             # --------======== ............... ========--------
-            lvlp1 = player_1[ctx.author.id].lvl
-            lvlp2 = player_2[member.id].lvl
+            lvlp1 = int(player_1[ctx.author.id].lvl / 10)
+            lvlp2 = int(player_2[member.id].lvl / 10)
             atk = int(player_1[ctx.author.id].status['atk'] * 2)
             d20, d16 = randint(1, 20), randint(1, 16)
-            acc = player_1[ctx.author.id].status['prec']
-            dex = player_2[member.id].status['agi']
+            acc = int(player_1[ctx.author.id].status['prec'] / 2)
+            dex = int(player_2[member.id].status['agi'] / 3)
             p1_chance = d20 + lvlp1 + acc
             p2_chance = d16 + lvlp2 + dex
             if p1_chance > p2_chance:
@@ -233,12 +233,12 @@ class PVP(commands.Cog):
             # --------======== TEMPO DE ESPERA ========--------
             await sleep(0.5)
             # --------======== ............... ========--------
-            lvlp2 = player_2[member.id].lvl
-            lvlp1 = player_1[ctx.author.id].lvl
+            lvlp2 = int(player_2[member.id].lvl / 10)
+            lvlp1 = int(player_1[ctx.author.id].lvl / 10)
             atk = int(player_2[member.id].status['atk'] * 2)
             d20, d16 = randint(1, 20), randint(1, 16)
-            acc = player_2[member.id].status['prec']
-            dex = player_1[ctx.author.id].status['agi']
+            acc = int(player_2[member.id].status['prec'] / 2)
+            dex = int(player_1[ctx.author.id].status['agi'] / 3)
             p2_chance = d20 + lvlp2 + acc
             p1_chance = d16 + lvlp1 + dex
             if p2_chance > p1_chance:

@@ -200,43 +200,38 @@ class Entity(object):
 
                     for c in emojis:
                         emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
-                        try:
-                            if reaction[0].emoji.name == emoji:
-                                test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
-                                _atack = atacks[test_atack]
-                                a_mana_1 = self.atacks[_atack]['mana'][self.level_skill] + self.lvl
-                                a_mana_2 = self.atacks[_atack]['mana'][self.level_skill] + (self.lvl * 2)
-                                remove = a_mana_2 if self.lvl > 25 else a_mana_1
-
+                        if reaction[0].emoji.name == emoji:
+                            test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
+                            _atack = atacks[test_atack]
+                            a_mana_1 = self.atacks[_atack]['mana'][self.level_skill] + self.lvl
+                            a_mana_2 = self.atacks[_atack]['mana'][self.level_skill] + (self.lvl * 2)
+                            remove = a_mana_2 if self.lvl > 25 else a_mana_1
+                            try:
                                 effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.level_skill].items()]
-                                heal = False
-                                for eff in effects_skill:
-                                    if eff == "cura":
-                                        heal = True
+                            except TypeError:
+                                effects_skill = ['nenhum']
+                            heal = False
+                            for eff in effects_skill:
+                                if eff == "cura":
+                                    heal = True
+                            if heal:
+                                remove = int(((self.status['con'] * self.rate[1]) / 100) * 35)
+                            if self.atacks[_atack]['type'] == "especial":
+                                remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
+                            if self.status['mp'] >= remove:
+                                self.status['mp'] -= remove
+                                self.atack = atacks[test_atack]
+                                break
+                            else:
+                                embed = discord.Embed(
+                                    description=f"``{user.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
+                                                f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
+                                                f"**Obs:** Passar a vez regenera a mana!",
+                                    color=0x000000
+                                )
+                                embed.set_thumbnail(url=f"{user.avatar_url}")
+                                await ctx.send(embed=embed)
 
-                                if heal:
-                                    remove = int(((self.status['con'] * self.rate[1]) / 100) * 35)
-
-                                if self.atacks[_atack]['type'] == "especial":
-                                    remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
-
-                                if self.status['mp'] >= remove:
-                                    self.status['mp'] -= remove
-                                    self.atack = atacks[test_atack]
-                                    break
-                                else:
-                                    embed = discord.Embed(
-                                        description=f"``{user.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
-                                                    f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
-                                                    f"**Obs:** Passar a vez regenera a mana!",
-                                        color=0x000000
-                                    )
-                                    embed.set_thumbnail(url=f"{user.avatar_url}")
-                                    await ctx.send(embed=embed)
-                        except TypeError:
-                            break
-                        except AttributeError:
-                            pass
                     if self.atack is not None:
                         break
             else:
@@ -305,8 +300,8 @@ class Entity(object):
                         if percent < 45:
                             dn = abs(int(damage - self.armor))
                         else:
-                            dn_chance = randint(1, 100)
-                            dn = abs(int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65)))
+                            dn_ = randint(1, 100)
+                            dn = abs(int(damage - self.armor) if dn_ < 5 else int(damage / 100 * randint(46, 65)))
                         self.status['hp'] -= dn
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0

@@ -587,8 +587,8 @@ async def welcome(data_welcome):
     # add text to img
     for k in rectangles.keys():
         if k == "name":
-            color = (211, 36, 7) if data_welcome['type'] == "welcome" else (79, 0, 38)
-            back_color = (255, 255, 255) if data_welcome['type'] == "welcome" else (255, 255, 255)
+            color = (255, 255, 255) if data_welcome['type'] == "welcome" else (79, 0, 38)
+            back_color = (0, 0, 0) if data_welcome['type'] == "welcome" else (255, 255, 255)
             font = ImageFont.truetype("fonts/bot.otf", 50)
             x_, y_ = text_align(rectangles[k], data_welcome[k], font)
             show.text(xy=(x_ + 1, y_ + 13), text=data_welcome[k].upper(), fill=back_color, font=font)
@@ -597,6 +597,6 @@ async def welcome(data_welcome):
         if k == "text" and data_welcome['type'] == "welcome":
             font = ImageFont.truetype("fonts/times.ttf", 24)
             x_, y_ = text_align(rectangles[k], data_welcome[k], font)
-            show.text(xy=(x_, y_), text=data_welcome[k].upper(), fill=(255, 255, 255), font=font)
+            show.text(xy=(x_, y_), text=data_welcome[k].upper(), fill=(246, 94, 84), font=font)
 
     image.save(f"{data_welcome['type']}.png")

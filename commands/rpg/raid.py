@@ -14,6 +14,7 @@ player = {}
 monster = {}
 money = {}
 xp_tot = {}
+xp_off = {}
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -56,7 +57,8 @@ class Raid(commands.Cog):
     async def raid(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash raid"""
-        global raid_rank, monster, player, money, xp_tot
+        global raid_rank, monster, player, money, xp_tot, xp_off
+        xp_off[ctx.author.id] = False
 
         raid_rank[ctx.author.id] = 0
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
@@ -178,6 +180,7 @@ class Raid(commands.Cog):
 
             if skill == "BATALHA-CANCELADA":
                 player[ctx.author.id].status['hp'] = 0
+                xp_off[ctx.author.id] = True
 
             if player[ctx.author.id].status['hp'] <= 0:
                 break
@@ -206,10 +209,21 @@ class Raid(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
-            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
             atk = int(player[ctx.author.id].status['atk'] * 2)
-            if randint(1, 20) + lvlp + player[ctx.author.id].status['prec'] > randint(1, 16) + lvlm + \
-                    monster[ctx.author.id].status['agi']:
+
+            # player chance
+            d20 = randint(1, 20)
+            lvlp = int(player[ctx.author.id].lvl / 10)
+            prec = int(player[ctx.author.id].status['prec'] / 2)
+            chance_player = d20 + lvlp + prec
+
+            # monster chance
+            d16 = randint(1, 16)
+            lvlm = int(monster[ctx.author.id].lvl / 10)
+            agi = int(monster[ctx.author.id].status['agi'] / 3)
+            chance_monster = d16 + lvlm + agi
+
+            if chance_player > chance_monster:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
                                                     player[ctx.author.id].name, player[ctx.author.id].cc,
                                                     player[ctx.author.id].img, player[ctx.author.id].status['luk'])
@@ -246,6 +260,7 @@ class Raid(commands.Cog):
 
             if skill == "BATALHA-CANCELADA":
                 player[ctx.author.id].status['hp'] = 0
+                xp_off[ctx.author.id] = True
 
             if player[ctx.author.id].status['hp'] <= 0:
                 break
@@ -277,12 +292,24 @@ class Raid(commands.Cog):
             bonus_raid = int(5 * raid_rank[ctx.author.id])
             raid_info = monster[ctx.author.id].cc
             raid_info[0] += bonus_raid
+
             atk_bonus = monster[ctx.author.id].status['atk'] * 1 if player[ctx.author.id].lvl > 25 else \
                 monster[ctx.author.id].status['atk'] * 0.25
-            lvlp, lvlm = player[ctx.author.id].lvl, monster[ctx.author.id].lvl
-            atk = int(monster[ctx.author.id].status['atk'] + atk_bonus) + (2 * bonus_raid)
-            if randint(1, 20) + lvlm + monster[ctx.author.id].status['prec'] > randint(1, 16) + lvlp + \
-                    player[ctx.author.id].status['agi']:
+            atk = int(monster[ctx.author.id].status['atk'] + atk_bonus)
+
+            # monster chance
+            d20 = randint(1, 20)
+            lvlm = int(monster[ctx.author.id].lvl / 10)
+            prec = int(monster[ctx.author.id].status['prec'] / 2)
+            chance_monster = d20 + lvlm + prec
+
+            # player chance
+            d16 = randint(1, 16)
+            lvlp = int(player[ctx.author.id].lvl / 10)
+            agi = int(player[ctx.author.id].status['agi'] / 3)
+            chance_player = d16 + lvlp + agi
+
+            if chance_monster > chance_player:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
                                                    monster[ctx.author.id].name, raid_info, monster[ctx.author.id].img,
                                                    monster[ctx.author.id].status['luk'])
@@ -326,7 +353,8 @@ class Raid(commands.Cog):
 
         # depois da raid
         if raid_rank[ctx.author.id] <= 0:
-            await self.bot.data.add_xp(ctx, xp_reward[2])
+            if not xp_off[ctx.author.id]:
+                await self.bot.data.add_xp(ctx, xp_reward[2])
             embed = discord.Embed(
                 description=f"``{ctx.author.name.upper()} PERDEU!``",
                 color=0x000000

@@ -106,9 +106,10 @@ class Database(object):
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_user['treasure']['money'] -= amount
-        update_guild_native['data']['total_money'] -= amount
+        if update_guild_native is not None:
+            update_guild_native['data']['total_money'] -= amount
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         await self.bot.db.update_data(data_user, update_user, 'users')
-        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         a = '{:,.2f}'.format(float(amount))
         b = a.replace(',', 'v')
@@ -124,9 +125,10 @@ class Database(object):
         data_guild_native = await self.bot.db.get_data("guild_id", data_user['guild_id'], "guilds")
         update_guild_native = data_guild_native
         update_user['treasure']['money'] += amount
-        update_guild_native['data']['total_money'] += amount
+        if update_guild_native is not None:
+            update_guild_native['data']['total_money'] += amount
+            await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
         await self.bot.db.update_data(data_user, update_user, 'users')
-        await self.bot.db.update_data(data_guild_native, update_guild_native, 'guilds')
 
         a = '{:,.2f}'.format(float(amount))
         b = a.replace(',', 'v')
