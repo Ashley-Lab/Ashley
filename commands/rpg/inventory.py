@@ -131,14 +131,24 @@ class InventoryClass(commands.Cog):
                     emo = "<a:help:767825933892583444>"
                     emoji = str(emo).replace('<a:', '').replace(emo[emo.rfind(':'):], '')
                     try:
-                        if reaction[0].emoji.name == emoji and not again:
+                        try:
+                            _reaction = reaction[0].emoji.name
+                        except AttributeError:
+                            _reaction = reaction[0].emoji
+                        if _reaction == emoji and not again and reaction[0].message.id == botmsg[ctx.author.id].id:
                             again = True
-                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            try:
+                                await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            except discord.errors.Forbidden:
+                                pass
                             msg = await ctx.send(text)
 
-                        elif reaction[0].emoji.name == emoji and again:
+                        elif _reaction == emoji and again and reaction[0].message.id == botmsg[ctx.author.id].id:
                             again = False
-                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            try:
+                                await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            except discord.errors.Forbidden:
+                                pass
                             await msg.delete()
 
                     except AttributeError:
@@ -184,7 +194,9 @@ class InventoryClass(commands.Cog):
         msg = '```Markdown\n'
         for item in equipped_items:
             text = "DAMAGE_ABSORPTION"
-            msg += f"[>>]: {item['name'].upper()}\n<{text} = {item['armor']} RARITY = \"{item['rarity']}\">\n\n"
+            msg += f"[>>]: {item['name'].upper()}\n<{text} = {item['armor']} RARITY = \"{item['rarity']}\">\n" \
+                   f"<STATUS: ATK = \"{item['modifier']['atk']}\" DEX = \"{item['modifier']['agi']}\" " \
+                   f"ACC = \"{item['modifier']['prec']}\" CON = \"{item['modifier']['con']}\">\n\n"
         msg += "```"
         await ctx.send(f"<:confirmed:721581574461587496>│``ITENS EQUIPADOS EM VOCE:``\n{msg}")
 

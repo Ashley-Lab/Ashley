@@ -47,3 +47,4 @@ commands.money.economy
 commands.rpg.battle
 commands.rpg.raid
 commands.rpg.pvp
+commands.rpg.enchanter

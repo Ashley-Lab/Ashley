@@ -101,7 +101,7 @@ class RecipeClass(commands.Cog):
                     return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito! Comando '
                                           'cancelado.``', delete_after=5.0)
 
-                if reaction[0].emoji == '▶':
+                if reaction[0].emoji == '▶' and reaction[0].message.id == msg.id:
                     try:
                         for c in recipe['cost']:
                             if update['inventory'][c[0]] >= c[1]:
@@ -129,7 +129,7 @@ class RecipeClass(commands.Cog):
                         except KeyError:
                             update['inventory'][c[0]] = c[1]
 
-                elif reaction[0].emoji == '⏩':
+                elif reaction[0].emoji == '⏩' and reaction[0].message.id == msg.id:
                     await ctx.send('<:alert:739251822920728708>│``Quantas receitas você quer fazer?``')
                     try:
                         resp = await self.bot.wait_for('message', check=check, timeout=60.0)
@@ -194,7 +194,7 @@ class RecipeClass(commands.Cog):
                         except KeyError:
                             update['inventory'][c[0]] = c[1] * resp
 
-                elif reaction[0].emoji == '⏭':
+                elif reaction[0].emoji == '⏭' and reaction[0].message.id == msg.id:
                     if maximo < 1:
                         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                         update = data
@@ -231,7 +231,7 @@ class RecipeClass(commands.Cog):
                         except KeyError:
                             update['inventory'][c[0]] = c[1] * maximo
 
-                if reaction[0].emoji == "❌":
+                if reaction[0].emoji == "❌" and reaction[0].message.id == msg.id:
                     await msg.delete()
                     data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
                     update = data
@@ -240,9 +240,9 @@ class RecipeClass(commands.Cog):
                     return
 
                 quantidade = 1
-                if reaction[0].emoji == '⏩':
+                if reaction[0].emoji == '⏩' and reaction[0].message.id == msg.id:
                     quantidade = resp
-                if reaction[0].emoji == '⏭':
+                if reaction[0].emoji == '⏭' and reaction[0].message.id == msg.id:
                     quantidade = maximo
 
                 await msg.delete()

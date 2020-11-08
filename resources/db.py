@@ -445,7 +445,7 @@ class DataInteraction(object):
             update['rpg']['xp'] = ((lvl + 1) ** 5) - 1 if int(xp ** 0.2) == 81 else xp
             experience = update['rpg']['xp']
             lvl_anterior = update['rpg']['level']
-            lvl_now = int(experience ** 0.2)
+            lvl_now = int(experience ** 0.2) if lvl_anterior > 1 else 2
             if lvl_anterior < lvl_now:
 
                 pdh = lvl_now - lvl_anterior

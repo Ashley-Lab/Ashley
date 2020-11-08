@@ -88,6 +88,9 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [draw](#draw)
 - [Economy](#economy-commands)
   - [economy](#economy)
+- [EnchanterClass](#enchanterclass-commands)
+  - [enchant](#enchant)
+  - [enchant add](#enchant-add)
 - [EvalSintax](#evalsintax-commands)
   - [eval](#eval)
 - [FacebookClass](#facebookclass-commands)
@@ -211,6 +214,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [roleinfo](#roleinfo)
 - [RpgStart](#rpgstart-commands)
   - [rpg](#rpg)
+  - [rpg_verify](#rpg_verify)
 - [SaySomething](#saysomething-commands)
   - [say](#say)
   - [say channel](#say-channel)
@@ -273,6 +277,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [create_money](#create_money)
   - [create_vip](#create_vip)
   - [reset_user](#reset_user)
+  - [set_level](#set_level)
 - [WhatsappClass](#whatsappclass-commands)
   - [whatsapp](#whatsapp)
 
@@ -369,7 +374,7 @@ Use ash box e siga as instruções
 #### box booster
 >**Descrição:** Esse comando esvazia a box, assim que voce zerar uma box ganha um item extra
 
->**Modo de Uso:** `ash box booster `
+>**Modo de Uso:** `ash box booster [amount=0]`
 
 #### box buy
 >**Descrição:** Subcomando de box, para comprar uma box ativa.
@@ -504,6 +509,20 @@ Use ash draw
 Use ash economy
 
 >**Modo de Uso:** `ash economy `
+
+## EnchanterClass
+
+#### enchant
+>**Descrição:** Comando usado pra ver os encatamentos das suas habilidades no rpg da Ashley
+Use ash enchant
+
+>**Modo de Uso:** `ash enchant `
+
+#### enchant add
+>**Descrição:** Comando usado pra encantar suas habilidades no rpg da Ashley
+Use ash enchant add numero_da_skill
+
+>**Modo de Uso:** `ash enchant add [skill]`
 
 ## EvalSintax
 
@@ -1011,6 +1030,11 @@ Use ash roleinfo <@cargo_em_questão>
 
 >**Modo de Uso:** `ash rpg `
 
+#### rpg_verify
+>**Descrição:** Comando para verificar a data de entrada no RPG da ASHLEY
+
+>**Modo de Uso:** `ash rpg_verify [member]`
+
 ## SaySomething
 
 #### say
@@ -1301,6 +1325,11 @@ Use ash userinfo <@usuario em questão>
 >**Descrição:** Comando usado apelas por DEVS para resetar status bugados...
 
 >**Modo de Uso:** `ash reset_user [member]`
+
+#### set_level
+>**Descrição:** Comando usado apelas por DEVS para criar equipamentos para doadores
+
+>**Modo de Uso:** `ash set_level [member] [lvl]`
 
 ## WhatsappClass
 

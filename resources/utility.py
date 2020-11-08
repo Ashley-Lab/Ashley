@@ -278,27 +278,47 @@ async def paginator(bot, items, inventory, embed, ctx):
 
         try:
             emoji = str(emojis[0]).replace('<:', '').replace(emojis[0][emojis[0].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+            try:
+                _reaction = reaction[0].emoji.name
+            except AttributeError:
+                _reaction = reaction[0].emoji
+            if _reaction == emoji and reaction[0].message.id == msg.id:
                 cont = 0
 
             emoji = str(emojis[1]).replace('<:', '').replace(emojis[1][emojis[1].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+            try:
+                _reaction = reaction[0].emoji.name
+            except AttributeError:
+                _reaction = reaction[0].emoji
+            if _reaction == emoji and reaction[0].message.id == msg.id:
                 cont -= 1
                 if cont < 0:
                     cont = 0
 
             emoji = str(emojis[2]).replace('<:', '').replace(emojis[2][emojis[2].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+            try:
+                _reaction = reaction[0].emoji.name
+            except AttributeError:
+                _reaction = reaction[0].emoji
+            if _reaction == emoji and reaction[0].message.id == msg.id:
                 cont += 1
                 if cont > len(descriptions) - 1:
                     cont = len(descriptions) - 1
 
             emoji = str(emojis[3]).replace('<:', '').replace(emojis[3][emojis[3].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+            try:
+                _reaction = reaction[0].emoji.name
+            except AttributeError:
+                _reaction = reaction[0].emoji
+            if _reaction == emoji and reaction[0].message.id == msg.id:
                 cont = len(descriptions) - 1
 
             emoji = str(emojis[4]).replace('<:', '').replace(emojis[4][emojis[4].rfind(':'):], '')
-            if reaction[0].emoji.name == emoji and reaction[0].message.id == msg.id:
+            try:
+                _reaction = reaction[0].emoji.name
+            except AttributeError:
+                _reaction = reaction[0].emoji
+            if _reaction == emoji and reaction[0].message.id == msg.id:
                 break
         except AttributeError:
             break
@@ -348,6 +368,9 @@ async def get_response(message):
                     return response
                 elif questions['perg_qual'][c] == "o que" or questions['perg_qual'][c] == "oq":
                     response = choice(responses['resposta_o_que'])
+                    return response
+                elif questions['perg_qual'][c] == "posso":
+                    response = choice(responses['resposta_posso'])
                     return response
                 else:
                     response = choice(responses['resposta_outras'])

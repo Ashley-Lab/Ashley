@@ -188,11 +188,6 @@ class Ashley(commands.AutoShardedBot):
                 if update_user['security']['status']:
                     update_guild['data']['commands'] += 1
 
-                update_user['security']['commands'] += 1
-                update_user['security']['commands_today'] += 1
-                update_user['security']['last_command'] = dt.today()
-                update_user['security']['last_channel'] = ctx.channel.id
-
                 if (update_guild['data']['commands'] // 1000) > 5 and update_guild['data']['ranking'] == "Bronze":
                     min_ = 1 + (update_guild['data']['commands'] // 1000)
                     chance = randint(min_, 200)
@@ -315,23 +310,28 @@ class Ashley(commands.AutoShardedBot):
                 # -----------------------------------------------------------------------------------------
                 #                                  INICIO DO MACRO SYSTEM
                 # -----------------------------------------------------------------------------------------
-                data_, m_last_verify, limit = date_format(dt.now()), 0, 2500
-                last_command, last_verify, date_now = update_user['security']['last_command'], None, dt.today()
+
+                update_user['security']['commands'] += 1
+                update_user['security']['commands_today'] += 1
+                update_user['security']['last_command'] = dt.today()
+                update_user['security']['last_channel'] = ctx.channel.id
 
                 if update_user['security']['last_verify'] is None:
                     update_user['security']['last_verify'] = dt.today()
                     update_user['security']['blocked'] = False
 
-                last_verify = date.mktime(date_now.timetuple())
-                last_command_date = date.mktime(last_command.timetuple())
-                m_last_verify = int(int(last_verify - last_command_date) / 60)
+                last_verify_date, date_now = update_user['security']['last_verify'], dt.today()
+                data_, limit = date_format(date_now), 2500
+                last_verify = date.mktime(last_verify_date.timetuple())
+                last_command = date.mktime(date_now.timetuple())
+                m_last_verify = int(int(last_command - last_verify) / 60)
 
                 if m_last_verify > 5:
                     update_user['security']['last_verify'] = dt.today()
                     update_user['security']['blocked'] = False
-                    last_verify = update_user['security']['last_verify']
+                    last_verify = date.mktime(update_user['security']['last_verify'].timetuple())
 
-                if last_command is not None and update_user['security']['status'] and m_last_verify < 5:
+                if update_user['security']['last_command'] is not None and update_user['security']['status']:
                     if update_user['security']['commands_today'] > int(limit / 100 * 80):
                         if update_user['security']['commands_today'] < limit:
                             warns = False
@@ -391,8 +391,8 @@ class Ashley(commands.AutoShardedBot):
                                 if channel_ is not None:
                                     await channel_.send(embed=embed)
 
-                    minutes = int(int(last_verify - last_command_date) / 60)
-                    if minutes < 5 and update_user['security']['commands'] > 40:
+                    m_last_verify = int(int(last_command - last_verify) / 60)
+                    if m_last_verify < 5 and update_user['security']['commands'] > 40:
 
                         update_user['security']['strikes'] += 1
                         update_user['security']['commands'] = 0
@@ -485,8 +485,12 @@ class Ashley(commands.AutoShardedBot):
         if message.author.id == self.user.id:
             return
 
-        msg = copy.copy(message)
-        msg.content = message.content.lower()
+        ctx = await self.get_context(message)
+        if str(ctx.command) != "eval":
+            msg = copy.copy(message)
+            msg.content = message.content.lower()
+        else:
+            msg = copy.copy(message)
 
         ctx = await self.get_context(msg)
         perms = ctx.channel.permissions_for(ctx.me)

@@ -154,7 +154,7 @@ class Raid(commands.Cog):
         # criando as entidade do monstro...
         monster[ctx.author.id] = Entity(db_monster, False)
         money[ctx.author.id] = db_monster['ethernya']
-        xp_tot[ctx.author.id] = db_monster['xp']
+        xp_tot[ctx.author.id] = [(db_monster['xp'], db_monster['level'])]
 
         # durante a batalha
         while not self.bot.is_closed():
@@ -172,7 +172,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
-                xp_tot[ctx.author.id] = db_monster['xp']
+                xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
 
             skill = await player[ctx.author.id].turn([monster[ctx.author.id].status, monster[ctx.author.id].rate,
                                                       monster[ctx.author.id].name, monster[ctx.author.id].lvl],
@@ -194,7 +194,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
-                xp_tot[ctx.author.id] = db_monster['xp']
+                xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -254,7 +254,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
-                xp_tot[ctx.author.id] = db_monster['xp']
+                xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
 
             skill = await monster[ctx.author.id].turn(monster[ctx.author.id].status['hp'], self.bot, ctx)
 
@@ -274,7 +274,7 @@ class Raid(commands.Cog):
                 # criando as entidade do monstro...
                 monster[ctx.author.id] = Entity(db_monster, False)
                 money[ctx.author.id] += db_monster['ethernya']
-                xp_tot[ctx.author.id] = db_monster['xp']
+                xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -328,8 +328,12 @@ class Raid(commands.Cog):
             # --------======== ............... ========--------
 
         # calculo de xp
-        xp, lp, lm = xp_tot[ctx.author.id], db_player['level'], db_monster['level']
-        perc = xp if lp - lm <= 0 else xp + abs(0.25 * (db_player['level'] - db_monster['level']))
+        perc = 0
+
+        for xp_now in xp_tot[ctx.author.id]:
+            xp, lp, lm = xp_now[0], db_player['level'], xp_now[1]
+            perc += xp if lp - lm <= 0 else xp + abs(0.5 * (db_player['level'] - xp_now[1]))
+
         data_xp = calc_xp(db_player['xp'], db_player['level'])
 
         if db_player['xp'] < 32:
@@ -346,7 +350,7 @@ class Raid(commands.Cog):
         if xpr < xpm / 100 * 1:
             xpr = int(xpm / 100 * 1)
 
-        xp_reward = [int(xpr + xpr * 0.25), int(xpr), int(xpr * 0.25)]
+        xp_reward = [int(xpr + xpr * 0.5), int(xpr), int(xpr * 0.5)]
 
         # chance de drop
         change = randint(1, 100) + raid_rank[ctx.author.id]
@@ -396,27 +400,27 @@ class Raid(commands.Cog):
 
                 if raid_rank[ctx.author.id] >= 5:
                     reward.append(choice(raid_reward))
-                    msg += "Ganhou +1 por matar 5 monstros\n"
+                    msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **5** ``monstros``\n"
 
                 if raid_rank[ctx.author.id] >= 10:
                     reward.append(choice(raid_reward))
-                    msg += "Ganhou +1 por matar 10 monstros\n"
+                    msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **10** ``monstros``\n"
 
                 if raid_rank[ctx.author.id] >= 15:
                     reward.append(choice(raid_reward))
-                    msg += "Ganhou +1 por matar 15 monstros\n"
+                    msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **15** ``monstros``\n"
 
                 if raid_rank[ctx.author.id] >= 20:
                     reward.append(choice(raid_reward))
-                    msg += "Ganhou +1 por matar 20 monstros\n"
+                    msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **20** ``monstros``\n"
 
                 if raid_rank[ctx.author.id] >= 25:
                     reward.append(choice(raid_reward))
-                    msg += "Ganhou +1 por matar 25 monstros\n"
+                    msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **25** ``monstros``\n"
 
                 if raid_rank[ctx.author.id] >= 30:
                     reward.append(choice(raid_reward))
-                    msg += "Ganhou +1 por matar 30 monstros\n"
+                    msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **30** ``monstros``\n"
 
                 if db_player['level'] > 25:
                     bonus = ['stone_crystal_white', 'stone_crystal_red', 'stone_crystal_green',
@@ -491,7 +495,7 @@ class Raid(commands.Cog):
                 update['inventory']['boss_key'] += 1
             except KeyError:
                 update['inventory']['boss_key'] = 1
-            await ctx.send(f"<:confirmed:721581574461587496>│🎊 **PARABENS** 🎉 ``Por matar`` **15+** ``monstros,"
+            await ctx.send(f"<:confirmed:721581574461587496>│🎊 **PARABENS** 🎉 ``Por matar`` **10+** ``monstros,"
                            f" voce dropou`` ✨ <:bosskey:766048658470600714> ✨ ``1`` **Boss Key** "
                            f"``adicionando ao seu inventario o item com sucesso...``")
 

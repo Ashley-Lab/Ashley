@@ -108,4 +108,5 @@ commands.rpg.trade
 commands.bot.lover
 commands.rpg.raid
 commands.rpg.pvp
+commands.rpg.enchanter
 # O NUMERO DO INDICE É O NUMERO DA LINHA -1

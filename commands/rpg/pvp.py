@@ -99,7 +99,7 @@ class PVP(commands.Cog):
             return await ctx.send(embed=embed)
 
         if data_user['rpg']['level'] < 26:
-            msg = '<:negate:721581573396496464>│``VOCE PRECISA ESTA NO NIVEL 26 OU MAIOR PARA TROCAR EQUIPAMENTOS!\n' \
+            msg = '<:negate:721581573396496464>│``VOCE PRECISA ESTA NO NIVEL 26 OU MAIOR PARA IR PVP!\n' \
                   'OLHE O SEU NIVEL NO COMANDO:`` **ASH SKILL**'
             embed = discord.Embed(color=self.bot.color, description=msg)
             return await ctx.send(embed=embed)
@@ -124,8 +124,8 @@ class PVP(commands.Cog):
             return await ctx.send(embed=embed)
 
         if data_member['rpg']['level'] < 26:
-            msg = '<:negate:721581573396496464>│``O USUARIO PRECISA ESTA NO NIVEL 26 OU MAIOR PARA TROCAR ' \
-                  'EQUIPAMENTOS!\nPEÇA PARA ELE OLHAR O NIVEL NO COMANDO:`` **ASH SKILL**'
+            msg = '<:negate:721581573396496464>│``O USUARIO PRECISA ESTA NO NIVEL 26 OU MAIOR PARA  IR PVP!\n' \
+                  'PEÇA PARA ELE OLHAR O NIVEL NO COMANDO:`` **ASH SKILL**'
             embed = discord.Embed(color=self.bot.color, description=msg)
             return await ctx.send(embed=embed)
 

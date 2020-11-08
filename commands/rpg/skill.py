@@ -57,12 +57,12 @@ class SkillClass(commands.Cog):
             await botmsg[ctx.author.id].add_reaction('<a:help:767825933892583444>')
 
             text = "``--==ENTENDA O QUE OS ATRIBUTOS ALTERAM NO SEU PERSONAGEM==--``\n" \
-                   ">>> >>> `ATK` - **O ATK é somado ao seu dano de Skill e a " \
-                   "chance de critical.**\n>>> `DEX` - **O DEX aumenta sua chance de esquiva.**\n" \
+                   ">>> >>> `ATK` - **O ATK é somado ao seu dano de Skill e ao dano critico**\n" \
+                   ">>> `DEX` - **O DEX aumenta sua chance de esquiva.**\n" \
                    ">>> `ACC` - **O ACC aumenta sua chance de acerto da Skill.**\n" \
                    ">>> `CON` - **O CON aumenta seu HP e sua MANA total.**\n" \
-                   ">>> `LUK` - **LUK aumenta a chance de efeito da Skill e o level da " \
-                   "skill.**\n```Markdown\n[>>]: PARA ADICIONAR PONTOS DE HABILIDADE USE" \
+                   ">>> `LUK` - **LUK aumenta a chance de efeito da Skill e a chance de critico.**\n" \
+                   "```Markdown\n[>>]: PARA ADICIONAR PONTOS DE HABILIDADE USE" \
                    " O COMANDO\n<ASH SKILL ADD>\n[>>]: PARA RESETAR OS PONTOS DE " \
                    "HABILIDADE USE O COMANDO\n<ASH SKILL RESET>```"
 
@@ -78,14 +78,24 @@ class SkillClass(commands.Cog):
                     emo = "<a:help:767825933892583444>"
                     emoji = str(emo).replace('<a:', '').replace(emo[emo.rfind(':'):], '')
                     try:
-                        if reaction[0].emoji.name == emoji and not again:
+                        try:
+                            _reaction = reaction[0].emoji.name
+                        except AttributeError:
+                            _reaction = reaction[0].emoji
+                        if _reaction == emoji and not again and reaction[0].message.id == botmsg[ctx.author.id].id:
                             again = True
-                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            try:
+                                await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            except discord.errors.Forbidden:
+                                pass
                             msg = await ctx.send(text)
 
-                        elif reaction[0].emoji.name == emoji and again:
+                        elif _reaction == emoji and again and reaction[0].message.id == botmsg[ctx.author.id].id:
                             again = False
-                            await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            try:
+                                await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
+                            except discord.errors.Forbidden:
+                                pass
                             await msg.delete()
 
                     except AttributeError:

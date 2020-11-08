@@ -52,6 +52,7 @@ user_data_structure = {
                 "artifacts": dict(),
                 "relics": dict(),
                 'items': dict(),
+                'skills': [0, 0, 0, 0, 0],
                 'equipped_items': {
                     "shoulder": None,
                     "breastplate": None,
@@ -80,7 +81,6 @@ user_data_structure = {
                 "rank_point": 0,
                 "coins": 100
             },
-            "inventory_quest": dict(),
             "artifacts": dict(),
             "box": {"status": {"active": False, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}},
             "security": {
@@ -191,6 +191,5 @@ guild_data_structure = {
                 "status": False,
                 "while_list": list(),
                 "black_list": list()
-            },
-            "receptions": dict()
+            }
 }

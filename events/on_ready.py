@@ -20,6 +20,7 @@ cor = {
     'verm': '\033[1;31m',
     'pers': '\033[1;35;47m'
 }
+members = {}
 
 
 class OnReady(commands.Cog):
@@ -74,6 +75,7 @@ class OnReady(commands.Cog):
             await asyncio.sleep(300)
 
     async def draw_member(self):
+        global members
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
             if await verify_cooldown(self.bot, "draw_member", 3600):
@@ -88,15 +90,16 @@ class OnReady(commands.Cog):
                             if channel__ is None:
                                 continue
 
-                            members = []
+                            members[guild.id] = []
                             for data in all_data:
                                 if data['guild_id'] == guild.id:
-                                    members.append(data['user_id'])
+                                    if data['user_id'] in [m.id for m in guild.members if not m.bot]:
+                                        members[guild.id].append(data['user_id'])
 
-                            _member = choice(members)
+                            _member = choice(members[guild.id])
                             _member_ = self.bot.get_user(_member)
                             while _member_ is None:
-                                _member = choice(members)
+                                _member = choice(members[guild.id])
                                 _member_ = self.bot.get_user(_member)
 
                             data_member = await self.bot.db.get_data("user_id", _member, "users")
@@ -133,10 +136,12 @@ class OnReady(commands.Cog):
                             await channel__.send(embed=embed)
 
                             try:
-                                await _member_.send(f"<a:palmas:520418512011788309>│``Parabens você acaba de ser "
-                                                    f"sorteado no servidor`` **{str(guild)}** ``verifique seu "
-                                                    f"iventario.`` **Obs: caso esse tipo de mensagem incomode voce, "
-                                                    f"surigo silenciar minhas mesagens no seu privado.**")
+                                if chance <= 5:
+                                    await _member_.send(f"<a:palmas:520418512011788309>│``Parabens você acaba de ter "
+                                                        f"uma sorte grande ao ser sorteado no servidor`` "
+                                                        f"**{str(guild)}** ``verifique seu iventario.`` "
+                                                        f"**Obs: caso esse tipo de mensagem incomode "
+                                                        f"voce, surigo silenciar minhas mesagens no seu privado.**")
                             except discord.errors.Forbidden:
                                 pass
 
@@ -155,7 +160,9 @@ class OnReady(commands.Cog):
             if await verify_cooldown(self.bot, "draw_gift", 17280):
                 for guild in self.bot.guilds:
                     data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
-                    if data is not None and len(guild.members) >= 50 and data['data']['accounts'] >= 10:
+                    if data is None:
+                        continue
+                    if len([m for m in guild.members if not m.bot]) >= 50 and data['data']['accounts'] >= 10:
                         if data['bot_config']['ash_draw']:
                             channel__ = self.bot.get_channel(data['bot_config']['ash_draw_id'])
                             if channel__ is None:

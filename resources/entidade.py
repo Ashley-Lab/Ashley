@@ -25,6 +25,7 @@ class Entity(object):
         self.img = self.db['img']
         self.ln = self.db['lower_net']
         self.pvp = pvp
+        self.ls = 0
 
         if self.is_player:
             for c in range(5):
@@ -40,7 +41,7 @@ class Entity(object):
 
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
-            self.level_skill = self.status["luk"] // 2 if self.status["luk"] // 2 < 10 else 9
+            self.level_skill = self.db['skills']
 
             if self.db['level'] > 25:
                 self.cc = [_class[self.db['next_class']]['cc'], self.db['next_class']]
@@ -51,17 +52,15 @@ class Entity(object):
 
         else:
 
-            self.atacks = self.db['atacks']
-
             if self.db['enemy']['level'] > 25:
                 self.rate = [(12 + self.db['level'] // 10), (12 + self.db['level'] // 10)]
             else:
                 self.rate = [(6 + self.db['level'] // 10), (6 + self.db['level'] // 10)]
 
+            self.atacks = self.db['atacks']
             self.status['hp'] = self.status['con'] * self.rate[0]
             self.status['mp'] = self.status['con'] * self.rate[1]
-            self.level_skill = self.db['level'] // 10 + randint(1, 5)
-
+            self.level_skill = 10
             self.cc = [self.db['cc'], "monster"]
 
     async def turn(self, enemy_info, bot, ctx, user=None):
@@ -110,15 +109,22 @@ class Entity(object):
                                                                      enemy_info[3])
                 description = ''
                 for c in range(0, len(atacks)):
-                    c2, ls = atacks[c], self.level_skill
-                    damage = int(self.status['atk'] * 2)
-                    dado = self.atacks[c2]['damage'][self.level_skill]
+                    lvs = self.level_skill[c]
+                    self.ls = lvs if 0 <= lvs <= 9 else 9
+                    c2, ls = atacks[c], self.ls
+                    damage = int(self.status['atk'] * 2 / 100 * (80 + c * 10))
+                    dado = self.atacks[c2]['damage'][self.ls]
+                    d1 = int(dado[:dado.find('d')])
+                    d2 = int(dado[dado.find('d') + 1:])
+                    dd = f"{f'{d2}-{d2 * d1}' if d2 != d2 * d1 else d2}"
+                    if lvs >= 11:
+                        dd = f'{d2 + int((lvs - 10) * 10)}-{d2 * d1}'
                     icon = self.atacks[c2]['icon']
                     skill_type = self.atacks[c2]['type']
                     emojis.append(self.atacks[c2]['icon'])
 
                     try:
-                        effect_skill = str(self.atacks[c2]['effs'][self.level_skill].keys())
+                        effect_skill = str(self.atacks[c2]['effs'][self.ls].keys())
                     except KeyError:
                         effect_skill = "sem efeito"
                     except TypeError:
@@ -127,20 +133,23 @@ class Entity(object):
                     rm = int(((self.status['con'] * self.rate[1]) / 100) * 35)
                     ru = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                     eff_mana = effect_skill.replace('dict_keys([', '').replace('])', '').replace('\'', '')
-                    a_mana = self.atacks[c2]['mana'][self.level_skill] + self.lvl
-                    a_mana = self.atacks[c2]['mana'][self.level_skill] + (self.lvl * 2) if self.lvl > 25 else a_mana
+                    a_mana = self.atacks[c2]['mana'][self.ls] + self.lvl
+                    a_mana = self.atacks[c2]['mana'][self.ls] + (self.lvl * 2) if self.lvl > 25 else a_mana
                     _mana = a_mana if eff_mana != "cura" else rm
                     _mana = ru if self.atacks[c2]['type'] == "especial" else _mana
 
-                    description += f"{icon} **{c2.upper()}** ``Lv:`` **{ls + 1 if ls + 1 < 11 else 10}**\n" \
-                                   f"``Dano:`` **{dado} + {damage} de ATK -** ``{skill_type.upper()}``\n" \
+                    description += f"{icon} **{c2.upper()}** ``+{lvs}``\n" \
+                                   f"``Dano:`` {f'**{dd} + {damage}**' if ls > 0 else f'**{damage}**'}\n" \
+                                   f"``Tipo:`` **{skill_type.upper()}**\n" \
                                    f"``Mana:`` **{_mana}**\n" \
                                    f"``Efeito(s):`` **{effect_skill}**" \
                                    f"\n\n".replace('dict_keys([', '').replace('])', '').replace('\'', '')
 
                 regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
-                description += f'<:pass:692967573649752194> **{"Pass turn".upper()}**\n' \
-                               f'``Mana Recovery:`` **+{regen} de Mana** + **HP Regen**\n\n' \
+                description += f'<:MP:774699585620672534> **{"Pass turn MP".upper()}**\n' \
+                               f'``MP Recovery:`` **+{regen} de Mana**\n\n' \
+                               f'<:HP:774699585070825503> **{"Pass turn HP".upper()}**\n' \
+                               f'``HP Recovery:`` **6-12% de HP**\n\n' \
                                f'<:fechar:749090949413732352> **Finalizar batalha**'
                 embed = discord.Embed(
                     title=title,
@@ -152,7 +161,8 @@ class Entity(object):
                 await sleep(0.5)
                 for c in range(0, len(atacks)):
                     await msg.add_reaction(emojis[c])
-                await msg.add_reaction('<:pass:692967573649752194>')
+                await msg.add_reaction('<:MP:774699585620672534>')
+                await msg.add_reaction('<:HP:774699585070825503>')
                 await msg.add_reaction('<:fechar:749090949413732352>')
                 while not bot.is_closed():
                     try:
@@ -161,12 +171,14 @@ class Entity(object):
                             reaction = await bot.wait_for('reaction_add', timeout=60.0)
                     except TimeoutError:
                         return "COMANDO-CANCELADO"
-                    pass_turn = "<:pass:692967573649752194>"
-                    f_battle = "<:fechar:749090949413732352>"
-                    emoji_pass_turn = str(pass_turn).replace('<:', '').replace(pass_turn[pass_turn.rfind(':'):], '')
-                    emoji_fb = str(f_battle).replace('<:', '').replace(f_battle[f_battle.rfind(':'):], '')
+                    emohp = "<:HP:774699585070825503>"
+                    emomp = "<:MP:774699585620672534>"
+                    emob = "<:fechar:749090949413732352>"
+                    emoji_hp = str(emohp).replace('<:', '').replace(emohp[emohp.rfind(':'):], '')
+                    emoji_mp = str(emomp).replace('<:', '').replace(emomp[emomp.rfind(':'):], '')
+                    emoji_fb = str(emob).replace('<:', '').replace(emob[emob.rfind(':'):], '')
                     try:
-                        if reaction[0].emoji.name == emoji_pass_turn:
+                        if reaction[0].emoji.name == emoji_mp:
                             # regeneração de MP
                             regen = int(((self.status['con'] * self.rate[1]) / 100) * 50)
                             if (self.status['mp'] + regen) <= (self.status['con'] * self.rate[1]):
@@ -174,15 +186,19 @@ class Entity(object):
                             else:
                                 self.status['mp'] = (self.status['con'] * self.rate[1])
 
+                            self.atack = "PASS-TURN"
+                            break
+
+                        if reaction[0].emoji.name == emoji_hp:
                             # regeneração de HP
                             if self.p_class in ['priest', 'assassin', 'default']:
                                 hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 12)
 
                             elif self.p_class in ['paladin', 'warrior']:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 9)
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 6)
 
                             else:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 6)
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 9)
 
                             if (self.status['hp'] + hp_regen) <= (self.status['con'] * self.rate[0]):
                                 self.status['hp'] += hp_regen
@@ -200,14 +216,20 @@ class Entity(object):
 
                     for c in emojis:
                         emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
-                        if reaction[0].emoji.name == emoji:
+                        try:
+                            _reaction = reaction[0].emoji.name
+                        except AttributeError:
+                            _reaction = reaction[0].emoji
+                        if _reaction == emoji:
                             test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
                             _atack = atacks[test_atack]
-                            a_mana_1 = self.atacks[_atack]['mana'][self.level_skill] + self.lvl
-                            a_mana_2 = self.atacks[_atack]['mana'][self.level_skill] + (self.lvl * 2)
+                            lvs = self.level_skill[self.atacks[_atack]['skill'] - 1]
+                            self.ls = lvs if 0 <= lvs <= 9 else 9
+                            a_mana_1 = self.atacks[_atack]['mana'][self.ls] + self.lvl
+                            a_mana_2 = self.atacks[_atack]['mana'][self.ls] + (self.lvl * 2)
                             remove = a_mana_2 if self.lvl > 25 else a_mana_1
                             try:
-                                effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.level_skill].items()]
+                                effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.ls].items()]
                             except TypeError:
                                 effects_skill = ['nenhum']
                             heal = False
@@ -257,8 +279,10 @@ class Entity(object):
         try:
             if self.atack['effs'] is not None:
                 if self.is_player:
-                    if self.atack['effs'][self.level_skill]['cura']['type'] == "cura":
-                        percent = self.atack['effs'][self.level_skill]['cura']['damage']
+                    lvs = self.level_skill[self.atack['skill'] - 1]
+                    self.ls = lvs if 0 <= lvs <= 9 else 9
+                    if self.atack['effs'][self.ls]['cura']['type'] == "cura":
+                        percent = self.atack['effs'][self.ls]['cura']['damage']
                         regen = int(((self.status['con'] * self.rate[0]) / 100) * percent)
                         if (self.status['hp'] + regen) <= (self.status['con'] * self.rate[0]):
                             self.status['hp'] += regen
@@ -292,17 +316,10 @@ class Entity(object):
         if effects is not None:
             for c in effects:
                 try:
-                    armor_now = self.armor if self.armor > 0 else 1
                     if 'damage' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
                         damage = damage if damage > 0 else 1
-                        percent = abs(int(armor_now / (damage / 100)))
-                        if percent < 45:
-                            dn = abs(int(damage - self.armor))
-                        else:
-                            dn_ = randint(1, 100)
-                            dn = abs(int(damage - self.armor) if dn_ < 5 else int(damage / 100 * randint(46, 65)))
-                        self.status['hp'] -= dn
+                        self.status['hp'] -= damage
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
                         description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
@@ -314,13 +331,8 @@ class Entity(object):
                         await ctx.send(embed=embed_)
                     elif 'manadrain' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
-                        percent = int(armor_now / (damage / 100))
-                        if percent < 45:
-                            dn = int(damage - self.armor)
-                        else:
-                            dn_chance = randint(1, 100)
-                            dn = int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65))
-                        self.status['mp'] -= dn
+                        damage = damage if damage > 0 else 1
+                        self.status['mp'] -= damage
                         if self.status['mp'] < 0:
                             self.status['mp'] = 0
                         description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
@@ -370,12 +382,15 @@ class Entity(object):
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
             return await ctx.send(embed=embed_)
 
+        lvs = lvlskill[skill['skill'] - 1] if not self.is_player or self.pvp else lvlskill
+        self.ls = lvs if 0 <= lvs <= 9 else 9
+
         if skill['effs'] is not None:
             if not self.is_player:
-                key = [k for k, v in skill['effs'][lvlskill].items()]
+                key = [k for k, v in skill['effs'][self.ls].items()]
             else:
                 if self.pvp:
-                    key = [k for k, v in skill['effs'][lvlskill].items()]
+                    key = [k for k, v in skill['effs'][self.ls].items()]
                 else:
                     key = [k for k, v in skill['effs'].items()]
             for c in key:
@@ -408,13 +423,13 @@ class Entity(object):
                     else:
 
                         if not self.is_player:
-                            self.effects[c] = skill['effs'][lvlskill][c]
-                            max_turn = skill['effs'][lvlskill][c]['turns']
+                            self.effects[c] = skill['effs'][self.ls][c]
+                            max_turn = skill['effs'][self.ls][c]['turns']
                             self.effects[c]['turns'] = randint(1, max_turn) if max_turn > 1 else max_turn
                         else:
                             if self.pvp:
-                                self.effects[c] = skill['effs'][lvlskill][c]
-                                max_turn = skill['effs'][lvlskill][c]['turns']
+                                self.effects[c] = skill['effs'][self.ls][c]
+                                max_turn = skill['effs'][self.ls][c]['turns']
                                 self.effects[c]['turns'] = randint(1, max_turn) if max_turn > 1 else max_turn
                             else:
                                 self.effects[c] = skill['effs'][c]
@@ -444,18 +459,28 @@ class Entity(object):
                     await ctx.send(embed=embed_)
 
         if not self.is_player:
-            damage = skill['damage'][lvlskill]
+            damage = skill['damage'][self.ls]
         else:
             if self.pvp:
-                damage = skill['damage'][lvlskill]
+                damage = skill['damage'][self.ls]
             else:
                 damage = skill['damage']
-        dice1 = int(damage[:damage.find('d')])
-        dice2 = int(damage[damage.find('d') + 1:])
-        bk = 0
-        for c in range(0, dice1):
-            bk += randint(1, dice2)
-        damage = enemy_atack + bk
+        d1 = int(damage[:damage.find('d')])
+        d2 = int(damage[damage.find('d') + 1:])
+
+        dd = (d2, d2 * d1) if d2 != d2 * d1 else (d2, d2)
+        if lvs >= 11:
+            dd = (d2 + int((lvs - 10) * 10), d2 * d1)
+
+        if dd[0] != dd[1]:
+            bk = randint(dd[0], dd[1])
+        else:
+            bk = dd[0]
+
+        if not self.is_player or self.pvp:
+            damage = int(enemy_atack / 100 * (80 + skill['skill'] * 10)) + bk
+        else:
+            damage = enemy_atack + bk
 
         critical = False
         critical_chance = randint(1, 20)
@@ -467,6 +492,9 @@ class Entity(object):
 
         if enemy_cc[1] in ['assassin', 'priest']:
             value_critical = 16
+
+        if not self.is_player or self.pvp:
+            value_critical += int(enemy_luk / 2)
 
         try:
             if self.effects["cegueira"]['turns'] > 0:

@@ -260,24 +260,27 @@ class Battle(commands.Cog):
 
         # calculo de xp
         xp, lp, lm = db_monster['xp'], db_player['level'], db_monster['level']
-        perc = xp if lp - lm <= 0 else xp + abs(0.25 * (db_player['level'] - db_monster['level']))
+        perc = xp if lp - lm <= 0 else xp + abs(0.15 * (db_player['level'] - db_monster['level']))
         data_xp = calc_xp(db_player['xp'], db_player['level'])
 
         if db_player['xp'] < 32:
             xpm = data_xp[2]
             xpr = xpm
+
         else:
             if 1 < db_player['level'] < 7:
                 percent = [randint(50, 75), randint(40, 60), randint(30, 55), randint(25, 45), randint(20, 40)]
                 xpm = data_xp[1] - data_xp[2]
                 xpr = int(xpm / 100 * percent[db_player['level'] - 2])
+
             else:
                 xpm = data_xp[1] - data_xp[2]
                 xpr = int(xpm / 100 * perc)
+
         if xpr < xpm / 100 * 1:
             xpr = int(xpm / 100 * 1)
 
-        xp_reward = [int(xpr + xpr * 0.25), int(xpr), int(xpr * 0.25)]
+        xp_reward = [int(xpr + xpr * 0.15), int(xpr), int(xpr * 0.15)]
 
         # chance de drop
         change = randint(1, 100)

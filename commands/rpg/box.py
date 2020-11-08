@@ -339,8 +339,9 @@ ITEMS:
         if data['rpg']['vip']:
             await ctx.send(reward_booster)
 
-        if msg_b[ctx.author.id][1] is not None:
-            await ctx.send(msg_b[ctx.author.id][1])
+        if msg_b[ctx.author.id] is not None:
+            if msg_b[ctx.author.id][1] is not None:
+                await ctx.send(msg_b[ctx.author.id][1])
 
         await msg.delete()
         await ctx.send("<:confirmed:721581574461587496>│``Obrigado pelas compras, volte sempre!``")
