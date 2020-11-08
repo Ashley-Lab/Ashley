@@ -25,8 +25,8 @@ class CommandErrorHandler(commands.Cog):
     async def on_command_error(self, ctx, error):
 
         # Isso evita que quaisquer comandos com manipuladores locais sejam manipulados aqui em on_command_error.
-        if hasattr(ctx.command, 'on_error'):
-            return
+        """if hasattr(ctx.command, 'on_error'):
+            return"""
 
         # Isso faz com que os comandos com argumentos invalidos tenham um retorno explicatorio!
         if isinstance(error, commands.BadArgument):
@@ -39,13 +39,15 @@ class CommandErrorHandler(commands.Cog):
         # Todos os eventos de erros ignorados, qualquer coisa ignorada retornará e impedirá que algo aconteça.
         if isinstance(error, commands.CommandNotFound) or isinstance(error, commands.UserInputError):
             if ctx.author.id not in self.bot.testers and self.bot.maintenance:
-                msg = self.bot.config['attribute']['maintenance']
-                embed = discord.Embed(color=self.bot.color, description=msg)
-                return await ctx.send(embed=embed)
+                perms = ctx.channel.permissions_for(ctx.me)
+                if perms.send_messages and perms.read_messages:
+                    msg = self.bot.config['attribute']['maintenance']
+                    embed = discord.Embed(color=self.bot.color, description=msg)
+                    return await ctx.send(embed=embed)
             return
 
         # Qualquer comando desabilitado retornará uma mensagem de aviso
-        elif isinstance(error, commands.DisabledCommand):
+        if isinstance(error, commands.DisabledCommand):
             perms = ctx.channel.permissions_for(ctx.me)
             if perms.send_messages and perms.read_messages:
                 return await ctx.send(f'<:negate:721581573396496464>│**{ctx.command}** ``foi desabilitado``')
@@ -58,7 +60,7 @@ class CommandErrorHandler(commands.Cog):
                 if perms.send_messages and perms.read_messages:
                     return await ctx.send(f"<:negate:721581573396496464>│``VOCÊ NÃO TEM PERMISSÃO PARA USAR ESSE "
                                           f"COMANDO!``")
-            elif error.__str__() not in ERRORS:
+            if error.__str__() not in ERRORS:
                 perms = ctx.channel.permissions_for(ctx.me)
                 if perms.send_messages and perms.read_messages:
                     return await ctx.send(f"{error}")

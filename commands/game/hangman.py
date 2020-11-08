@@ -4,6 +4,7 @@ from resources.utility import enforcado
 from resources.check import check_it
 from resources.db import Database
 from asyncio import TimeoutError
+from datetime import datetime
 
 errors = {}
 resp = None
@@ -35,9 +36,17 @@ class ForceCass(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        if data['inventory']['coins'] > 25 and not data['config']['playing']:
+        ct = 25
+        if data['rpg']['active']:
+            date_old = data['rpg']['activated_at']
+            date_now = datetime.today()
+            days = abs((date_old - date_now).days)
+            if days <= 10:
+                ct = 5
+
+        if data['inventory']['coins'] > ct and not data['config']['playing']:
             update['config']['playing'] = True
-            update['inventory']['coins'] -= 25
+            update['inventory']['coins'] -= ct
             await self.bot.db.update_data(data, update, 'users')
 
             self.trying[ctx.author.id] = 0
@@ -166,8 +175,8 @@ Dica: **{}**'''.format(senha, dica))
             if data['config']['playing']:
                 await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 25 FICHAS PARA JOGAR``\n'
-                               '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
+                await ctx.send(f'<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE {ct} FICHAS PARA JOGAR``\n'
+                               f'**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
 
 
 def setup(bot):

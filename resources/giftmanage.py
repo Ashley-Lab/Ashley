@@ -73,6 +73,7 @@ async def open_gift(bot, gift):
                                     "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
                                     "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
                                     "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                                    "fused_sapphire", "fused_sapphire", "fused_emerald", "fused_emerald",
                                     "unsealed_stone", "melted_artifact"])
                 rare.append(item_plus)
 

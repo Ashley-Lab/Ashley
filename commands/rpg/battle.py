@@ -8,6 +8,7 @@ from resources.entidade import Entity
 from resources.check import check_it
 from resources.db import Database
 from resources.img_edit import calc_xp
+from datetime import datetime
 
 player = {}
 monster = {}
@@ -50,12 +51,20 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``USE O COMANDO`` **ASH RPG** ``ANTES!``')
             return await ctx.send(embed=embed)
 
+        ct = 50
+        if data['rpg']['active']:
+            date_old = data['rpg']['activated_at']
+            date_now = datetime.today()
+            days = abs((date_old - date_now).days)
+            if days <= 10:
+                ct = 5
+
         try:
-            if data['inventory']['coins'] < 50:
+            if data['inventory']['coins'] < ct:
                 embed = discord.Embed(
                     color=self.bot.color,
-                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 50 FICHAS PARA BATALHAR!``\n'
-                                '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
+                    description=f'<:negate:721581573396496464>│``VOCE PRECISA DE + DE {ct} FICHAS PARA BATALHAR!``\n'
+                                f'**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
                 return await ctx.send(embed=embed)
         except KeyError:
             embed = discord.Embed(
@@ -63,7 +72,7 @@ class Battle(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        update['inventory']['coins'] -= 50
+        update['inventory']['coins'] -= ct
         update['config']['battle'] = True
         await self.bot.db.update_data(data, update, 'users')
 
@@ -347,6 +356,7 @@ class Battle(commands.Cog):
                                          "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
                                          "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
                                          "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                                         "fused_sapphire", "fused_sapphire", "fused_emerald", "fused_emerald",
                                          "unsealed_stone", "melted_artifact"])
 
                     icon, name = self.bot.items[item_event][0], self.bot.items[item_event][1]

@@ -8,6 +8,7 @@ from resources.entidade import Entity
 from resources.check import check_it
 from resources.db import Database
 from resources.img_edit import calc_xp
+from datetime import datetime
 
 raid_rank = {}
 player = {}
@@ -82,12 +83,20 @@ class Raid(commands.Cog):
             embed = discord.Embed(color=self.bot.color, description=msg)
             return await ctx.send(embed=embed)
 
+        ct = 50
+        if data['rpg']['active']:
+            date_old = data['rpg']['activated_at']
+            date_now = datetime.today()
+            days = abs((date_old - date_now).days)
+            if days <= 10:
+                ct = 5
+
         try:
-            if data['inventory']['coins'] < 50:
+            if data['inventory']['coins'] < ct:
                 embed = discord.Embed(
                     color=self.bot.color,
-                    description='<:negate:721581573396496464>│``VOCE PRECISA DE + DE 50 FICHAS PARA BATALHAR!``\n'
-                                '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
+                    description=f'<:negate:721581573396496464>│``VOCE PRECISA DE + DE {ct} FICHAS PARA BATALHAR!``\n'
+                                f'**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
                 return await ctx.send(embed=embed)
         except KeyError:
             embed = discord.Embed(
@@ -95,7 +104,7 @@ class Raid(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        update['inventory']['coins'] -= 50
+        update['inventory']['coins'] -= ct
         update['config']['battle'] = True
         await self.bot.db.update_data(data, update, 'users')
 
@@ -291,7 +300,7 @@ class Raid(commands.Cog):
 
             bonus_raid = int(5 * raid_rank[ctx.author.id])
             raid_info = monster[ctx.author.id].cc
-            raid_info[0] += bonus_raid
+            raid_info[0] = bonus_raid
 
             atk_bonus = monster[ctx.author.id].status['atk'] * 1 if player[ctx.author.id].lvl > 25 else \
                 monster[ctx.author.id].status['atk'] * 0.25
@@ -394,6 +403,7 @@ class Raid(commands.Cog):
                                "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
                                "soul_crystal_of_hate", "soul_crystal_of_hate", "soul_crystal_of_hate",
                                "fused_diamond", "fused_diamond", "fused_ruby", "fused_ruby",
+                               "fused_sapphire", "fused_sapphire", "fused_emerald", "fused_emerald",
                                "unsealed_stone", "melted_artifact"]
 
                 msg = "\n"

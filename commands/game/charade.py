@@ -5,6 +5,7 @@ from random import choice
 from asyncio import TimeoutError
 from resources.check import check_it
 from resources.db import Database
+from datetime import datetime
 
 
 class CharadeClass(commands.Cog):
@@ -31,7 +32,15 @@ class CharadeClass(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        if data['inventory']['coins'] > 25 and not data['config']['playing']:
+        ct = 25
+        if data['rpg']['active']:
+            date_old = data['rpg']['activated_at']
+            date_now = datetime.today()
+            days = abs((date_old - date_now).days)
+            if days <= 10:
+                ct = 5
+
+        if data['inventory']['coins'] > ct and not data['config']['playing']:
             update['config']['playing'] = True
             await self.bot.db.update_data(data, update, 'users')
 
@@ -63,7 +72,7 @@ class CharadeClass(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
-            update['inventory']['coins'] -= 25
+            update['inventory']['coins'] -= ct
             if answer.content.lower() == self.charade[charade].lower().replace('resposta: ', ''):
                 await ctx.send(f'<:rank:519896825411665930>│``VOCÊ ACERTOU!`` 🎊 **PARABENS** 🎉 ``A resposta era `` '
                                f'**{self.charade[charade].lower().replace("resposta: ", "")}** ``e vc respondeu`` '
@@ -98,8 +107,8 @@ class CharadeClass(commands.Cog):
             if data['config']['playing']:
                 await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 25 FICHAS PARA JOGAR``\n'
-                               '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
+                await ctx.send(f'<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE {ct} FICHAS PARA JOGAR``\n'
+                               f'**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
 
 
 def setup(bot):

@@ -3,6 +3,7 @@ from asyncio import sleep, TimeoutError
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
+from datetime import datetime
 
 
 class HeadsOrTails(commands.Cog):
@@ -28,7 +29,15 @@ class HeadsOrTails(commands.Cog):
                 description='<:negate:721581573396496464>│``VOCE NÃO TEM FICHA!``')
             return await ctx.send(embed=embed)
 
-        if data['inventory']['coins'] > 25 and not data['config']['playing']:
+        ct = 25
+        if data['rpg']['active']:
+            date_old = data['rpg']['activated_at']
+            date_now = datetime.today()
+            days = abs((date_old - date_now).days)
+            if days <= 10:
+                ct = 5
+
+        if data['inventory']['coins'] > ct and not data['config']['playing']:
             update['config']['playing'] = True
             await self.bot.db.update_data(data, update, 'users')
 
@@ -51,7 +60,7 @@ class HeadsOrTails(commands.Cog):
                 return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
                                       ' CANCELADO**')
 
-            update['inventory']['coins'] -= 25
+            update['inventory']['coins'] -= ct
             await self.bot.db.update_data(data, update, 'users')
             reward = ['crystal_fragment_light', 'crystal_fragment_energy', 'crystal_fragment_dark', 'Energy']
             change = randint(5, 100)
@@ -94,8 +103,8 @@ class HeadsOrTails(commands.Cog):
             if data['config']['playing']:
                 await ctx.send('<:alert:739251822920728708>│``VOCÊ JÁ ESTÁ JOGANDO!``')
             else:
-                await ctx.send('<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE 25 FICHAS PARA JOGAR``\n'
-                               '**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
+                await ctx.send(f'<:alert:739251822920728708>│``VOCÊ PRECISA DE + DE {ct} FICHAS PARA JOGAR``\n'
+                               f'**OBS:** ``USE O COMANDO`` **ASH SHOP** ``PARA COMPRAR FICHAS!``')
 
 
 def setup(bot):

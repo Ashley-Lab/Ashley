@@ -287,7 +287,6 @@ class Database(object):
         if ctx.guild is not None:
             data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
             data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
-
             update_user = data_user
 
             if data_guild is None:
@@ -313,12 +312,8 @@ class Database(object):
                 except KeyError:
                     if self.bot.guilds_commands[ctx.guild.id] > 50 and str(ctx.command) == "daily work" or \
                             str(ctx.command) != "daily work":
-                        try:
-                            update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
-                                                                         - epoch).total_seconds()
-                        except KeyError:
-                            update_user['cooldown'] = {str(ctx.command): (datetime.datetime.utcnow() -
-                                                                          epoch).total_seconds()}
+                        update_user['cooldown'][str(ctx.command)] = (datetime.datetime.utcnow()
+                                                                     - epoch).total_seconds()
 
                 if self.bot.guilds_commands[ctx.guild.id] > 50 and str(ctx.command) == "daily work" or \
                         str(ctx.command) != "daily work":
@@ -327,11 +322,14 @@ class Database(object):
                 if kwargs.get("g_vip") and data_guild['vip']:
                     if kwargs.get("vip") and data_user['config']['vip']:
                         return True
-                    elif kwargs.get("vip") and data_user['config']['vip'] is False:
+                    if kwargs.get("vip") and not data_user['config']['vip']:
                         if ctx.guild.id == 519894833783898112:
                             raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO "
                                                         "PODEM USAR ESSE COMANDO``\n **Para ganhar seu vip diário use "
-                                                        "ASH INVITE**")
+                                                        "ASH VIP**")
+                        raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS USUARIOS COM VIP ATIVO PODEM "
+                                                    "USAR ESSE COMANDO``\n **Para ganhar seu vip diário use ASH INVITE "
+                                                    "entre no meu canal de suporte e use o comando ASH VIP**")
                     return True
                 elif kwargs.get("g_vip") and data_guild['vip'] is False:
                     raise commands.CheckFailure("<:alert:739251822920728708>│``APENAS SERVIDORES COM VIP ATIVO PODEM "

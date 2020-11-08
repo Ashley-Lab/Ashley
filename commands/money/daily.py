@@ -56,7 +56,15 @@ class DailyClass(commands.Cog):
             return await ctx.send("<:alert:739251822920728708>│``USUARIO DE MACRO / OU USANDO COMANDOS RAPIDO "
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**")
 
-        coin = randint(250, 500)
+        cc, ct = 350, 1100
+        if data_user['rpg']['active']:
+            date_old = data_user['rpg']['activated_at']
+            date_now = datetime.today()
+            days = abs((date_old - date_now).days)
+            if days <= 10:
+                cc, ct = 1100, 2400
+
+        coin = randint(cc, ct)
         try:
             update_user['inventory']['coins'] += coin
         except KeyError:
@@ -80,8 +88,8 @@ class DailyClass(commands.Cog):
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**")
 
         patent = update_user['user']['patent']
-        energy = randint(25, 50)
-        energy += patent * 2
+        energy = randint(250, 500)
+        energy += patent * 25
         try:
             update_user['inventory']['Energy'] += energy
         except KeyError:

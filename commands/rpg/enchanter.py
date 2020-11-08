@@ -226,6 +226,10 @@ class EnchanterClass(commands.Cog):
         try:
             if update['inventory']['angel_stone'] >= 1:
                 pass
+            else:
+                msg = '<:negate:721581573396496464>│``VOCE NÃO TEM ANGEL STONE!``'
+                embed = discord.Embed(color=self.bot.color, description=msg)
+                return await ctx.send(embed=embed)
         except KeyError:
             msg = '<:negate:721581573396496464>│``VOCE NÃO TEM ANGEL STONE!``'
             embed = discord.Embed(color=self.bot.color, description=msg)
@@ -240,6 +244,11 @@ class EnchanterClass(commands.Cog):
             try:
                 if update['inventory']['angel_wing'] >= 1:
                     update['inventory']['angel_wing'] -= 1
+                else:
+                    msg = '<:negate:721581573396496464>│``VOCE NÃO TEM ANGEL WING, A PARTIR DO ENCANTAMENTO +10 VOCE ' \
+                          'PRECISA DE 1 ANGEL STONE E 1 ANGEL WING!``'
+                    embed = discord.Embed(color=self.bot.color, description=msg)
+                    return await ctx.send(embed=embed)
             except KeyError:
                 msg = '<:negate:721581573396496464>│``VOCE NÃO TEM ANGEL WING, A PARTIR DO ENCANTAMENTO +10 VOCE ' \
                       'PRECISA DE 1 ANGEL STONE E 1 ANGEL WING!``'
