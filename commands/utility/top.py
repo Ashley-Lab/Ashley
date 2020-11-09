@@ -34,7 +34,7 @@ class TopClass(commands.Cog):
                                 f"{self.st[67]} `top ey` Top 20 dos usuarios com mais PEDRAS AMARELAS.\n"
                                 f"{self.st[67]} `top command` Top 20 dos usuarios com mais COMANDOS.\n"
                                 f"{self.st[67]} `top point` Top 20 dos usuarios com mais PONTOS.\n"
-                                f"{self.st[67]} `top rpg` Top 20 dos usuarios com maiores LEVEIS do RPG."
+                                f"{self.st[67]} `top rpg` Top 20 dos usuarios com maiores LEVEIS do RPG.\n"
                                 f"{self.st[67]} `top raid` Top 20 dos usuarios com maiores RAIDS do RPG.")
             top.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
             top.set_thumbnail(url=self.bot.user.avatar_url)
@@ -50,7 +50,7 @@ class TopClass(commands.Cog):
         Use ash top xp"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_xp(20)
+        top = await self.bot.data.get_rank_xp(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP XP**```py\n{top}```')
         await msg.delete()
 
@@ -63,7 +63,7 @@ class TopClass(commands.Cog):
         Use ash top level"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_level(20)
+        top = await self.bot.data.get_rank_level(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP LEVEL/NIVEL**```py\n{top}```')
         await msg.delete()
 
@@ -76,7 +76,7 @@ class TopClass(commands.Cog):
         Use ash top ethernia"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_money(20)
+        top = await self.bot.data.get_rank_money(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP MONEY/ETHERNYA**```py\n{top}```')
         await msg.delete()
 
@@ -89,7 +89,7 @@ class TopClass(commands.Cog):
         Use ash top preto"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_gold(20)
+        top = await self.bot.data.get_rank_gold(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP ETHERNYA BLACK**```py\n{top}```')
         await msg.delete()
 
@@ -102,7 +102,7 @@ class TopClass(commands.Cog):
         Use ash top roxo"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_silver(20)
+        top = await self.bot.data.get_rank_silver(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP ETHERNYA PURPLE**```py\n{top}```')
         await msg.delete()
 
@@ -115,7 +115,7 @@ class TopClass(commands.Cog):
         Use ash top amarelo"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_bronze(20)
+        top = await self.bot.data.get_rank_bronze(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP ETHENYA YELLOW**```py\n{top}```')
         await msg.delete()
 
@@ -128,7 +128,7 @@ class TopClass(commands.Cog):
         Use ash top point"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_point(20)
+        top = await self.bot.data.get_rank_point(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP POINT**```py\n{top}```')
         await msg.delete()
 
@@ -141,7 +141,7 @@ class TopClass(commands.Cog):
         Use ash top command"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_commands(20)
+        top = await self.bot.data.get_rank_commands(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP COMMAND**```py\n{top}```')
         await msg.delete()
 
@@ -154,7 +154,7 @@ class TopClass(commands.Cog):
         Use ash top rpg"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_rpg(20)
+        top = await self.bot.data.get_rank_rpg(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP RPG**```py\n{top}```')
         await msg.delete()
 
@@ -167,7 +167,7 @@ class TopClass(commands.Cog):
         Use ash top raid"""
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``\n"
                              "**mesmo que demore, aguarde o fim do processamento...**")
-        top = await self.bot.data.get_rank_raid(20)
+        top = await self.bot.data.get_rank_raid(20, ctx)
         await ctx.send(f'<:rank:519896825411665930>|**TOP RAID**```py\n{top}```')
         await msg.delete()
 

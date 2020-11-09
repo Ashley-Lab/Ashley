@@ -4,200 +4,149 @@ import operator
 import unicodedata
 
 from discord.ext import commands
-from asyncio import TimeoutError
 from resources.db import Database
 from resources.check import check_it
 from PIL import Image, ImageDraw, ImageFont
 from resources.img_edit import get_avatar
-
-
-def remove_acentos_e_caracteres_especiais(word):
-    # Unicode normalize transforma um caracter em seu equivalente em latin.
-    nfkd = unicodedata.normalize('NFKD', word)
-    palavra_sem_acento = u"".join([c for c in nfkd if not unicodedata.combining(c)])
-
-    # Usa expressão regular para retornar a palavra apenas com números, letras e espaço
-    return re.sub('[^a-zA-Z \\\]', '', palavra_sem_acento)
+from random import choice
 
 
 class RankingClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @check_it(no_pm=True, is_owner=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
-    @commands.command(name='stars', aliases=['estrelas'])
-    async def stars(self, ctx):
-        """Comando para DEVs, adicionar ou retirar estrelas de um usuario"""
-        try:
-            user = ctx.message.mentions[0]
-        except IndexError:
-            user = ctx.author
+    @staticmethod
+    def remove_acentos_e_caracteres_especiais(word):
+        # Unicode normalize transforma um caracter em seu equivalente em latin.
+        nfkd = unicodedata.normalize('NFKD', word)
+        palavra_sem_acento = u"".join([c for c in nfkd if not unicodedata.combining(c)])
 
-        def check(m):
-            return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
-
-        await ctx.send(f'<a:loading:520418506567843860>│``Quantas estrelas deseja registrar para`` **{user.name}?**',
-                       delete_after=30.0)
-
-        try:
-            answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-        except TimeoutError:
-            return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
-                                  '**COMANDO CANCELADO**')
-
-        try:
-            valor = int(answer.content)
-            if valor > 20:
-                valor = 20
-        except ValueError:
-            return await ctx.send("<:negate:721581573396496464>│``Digite apenas Números!``")
-
-        data = await self.bot.db.get_data("user_id", user.id, "users")
-        update = data
-        if data is not None:
-            update['user']['stars'] = valor
-            await self.bot.db.update_data(data, update, "users")
-            await ctx.send(f'<:confirmed:721581574461587496>│**{valor}** ``Estrelas Registradas!``',
-                           delete_after=10.0)
-        else:
-            await ctx.send('<:negate:721581573396496464>│``Usuário não encontrado!``', delete_after=10.0)
+        # Usa expressão regular para retornar a palavra apenas com números, letras e espaço
+        return re.sub('[^a-zA-Z \\\]', '', palavra_sem_acento)
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='rank', aliases=['r'])
-    async def rank(self, ctx, user: discord.Member = None):
+    async def rank(self, ctx, member: discord.Member = None):
         """Mostra seu rank da Ashley
         Use ash rank"""
-        if user is None:
-            user = ctx.author
+        if member is None:
+            member = ctx.author
 
-        data = await self.bot.db.get_data("user_id", user.id, "users")
-
+        data = await self.bot.db.get_data("user_id", member.id, "users")
         if data is None:
             return await ctx.send('<:alert:739251822920728708>│**ATENÇÃO** : '
                                   '``esse usuário não está cadastrado!``', delete_after=5.0)
 
-        star_ = "star_default"
-        medal = data['inventory']['medal']
-        rank_point = data['inventory']['rank_point']
-        data_ = await self.bot.db.get_all_data("users")
-
-        dict_ = dict()
-        for _ in data_:
-            dict_[str(_.get('user_id'))] = _['user'].get('experience', 0)
-        sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
-        rank = [int(sorted_x[x][0]) for x in range(len(data_))]
-
-        position = int(rank.index(user.id)) + 1
-        patent = data['user']['patent']
-
         msg = await ctx.send("<a:loading:520418506567843860>│ ``AGUARDE, ESTOU PROCESSANDO SEU PEDIDO!``")
 
-        # take name of member
-        nome = remove_acentos_e_caracteres_especiais(str(user))
+        # load dashboard image base
+        background = {
+            "01": "background_1",
+            "02": "background_2",
+            "03": "background_3",
+            "04": "background_4",
+            "05": "background_5",
+            "06": "background_6",
+            "07": "background_7",
+            "08": "background_8",
+            "09": "background_9",
+            "10": "staffer",
+            "11": "vip",
+        }
 
-        avatar = await get_avatar(ctx.author.avatar_url_as(format="png"), 250, 250)
+        key_bg = choice(["01", "02", "03", "04", "05", "06", "07", "08", "09"])
 
-        # patent image
-        patent_img = Image.open('images/patente/{}.png'.format(patent)).convert('RGBA')
-        patent_img = patent_img.resize((205, 248))
+        if data['rpg']['vip']:
+            key_bg = "11"
 
-        # champion image
-        champion = dict()
-        for n in range(1, 21):
-            if data['user']['stars']:
-                if data['user']['stars'] == 0:
-                    star_ = 'star_default'
-                    champion[n - 1] = Image.open(f'images/elements/{star_}.png').convert('RGBA')
-                    champion[n - 1] = champion[n - 1].resize((130, 90))
-                else:
-                    if data['user']['ranking'] == "Bronze":
-                        star_ = 'star_bronze'
+        if member.id in self.bot.team:
+            key_bg = "10"
 
-                    if data['user']['ranking'] == "Silver":
-                        star_ = 'star_silver'
+        image = Image.open(f"images/rank/background/{background[key_bg]}.png").convert('RGBA')
+        show = ImageDraw.Draw(image)
 
-                    if data['user']['ranking'] == "Gold":
-                        star_ = 'star_gold'
+        # Rank Position Member
+        async def rank_position(bot, member_now):
+            data_ = await bot.db.get_all_data("users")
+            dict_ = dict()
+            for _ in data_:
+                dict_[str(_.get('user_id'))] = _['user'].get('experience', 0)
+            sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+            rank = [int(sorted_x[x][0]) for x in range(len(data_))]
+            _position = int(rank.index(member_now.id)) + 1
+            return _position
 
-                    if user == ctx.guild.owner:
-                        star_ = "star_pink"
+        # load dashboard image detail
+        star = data['user']['stars']
+        if star > 20:
+            star = 20
+        position = str(await rank_position(self.bot, member))
+        stars_dashboard = Image.open(f'images/rank/star/star_{star}.png').convert('RGBA')
+        image.paste(stars_dashboard, (0, 0), stars_dashboard)
 
-                    if position < 11:
-                        star_ = "star_greem"
+        # Text Align
+        def text_align(box, text, font_t):
+            nonlocal show
+            x1, y1, x2, y2 = box
+            w, h = show.textsize(text.upper(), font=font_t)
+            x = (x2 - x1 - w) // 2 + x1
+            y = (y2 - y1 - h) // 2 + y1
+            return x, y
 
-                    if user.id in self.bot.staff:
-                        star_ = "star_blue"
-
-                    if n <= data['user']['stars']:
-                        star = star_
-                    else:
-                        star = 'star_default'
-                    champion[n - 1] = Image.open(f'images/elements/{star}.png').convert('RGBA')
-                    champion[n - 1] = champion[n - 1].resize((130, 90))
-            else:
-                star_ = 'star_default'
-                champion[n - 1] = Image.open(f'images/elements/{star_}.png').convert('RGBA')
-                champion[n - 1] = champion[n - 1].resize((130, 90))
-
-        # guild image
-        guild_ = self.bot.get_guild(data['guild_id'])
-        link_off = "https://festsonho.com.br/images/sem_foto.png"
-        link_img = guild_.icon_url_as(format="png") if guild_ is not None else link_off
-        icon_guild = await get_avatar(link_img, 190, 190)
-
-        # load fonts
-        font = ImageFont.truetype('fonts/bot.otf', 100)
-
-        # User Align
-        bounding_box = [150, 275, 2200, 375]
-        x1, y1, x2, y2 = bounding_box
-        img = Image.open('images/dashboards/rank.png').convert('RGBA')
-        show = ImageDraw.Draw(img)
-        w, h = show.textsize(nome.upper(), font=font)
-        x = (x2 - x1 - w) / 2 + x1
-        y = (y2 - y1 - h) / 2 + y1
-        top = 182
+        # rectangles' texts
+        rectangles = {
+            "avatar": [9, 8, 119, 142],
+            "patent": [149, 59, 239, 145],
+            "num": [220, 126, 238, 144],
+            "top": [327, 64, 388, 93],
+            "title": [263, 113, 390, 142],
+            "name": [0, 160, 399, 191],
+        }
 
         # add text to img
-        show = ImageDraw.Draw(img)
-        show.text(xy=(x + 2, y + 2), text=nome.upper(), fill=(0, 0, 0), font=font)
-        show.text(xy=(x, y), text=nome.upper(), fill=(255, 255, 255), font=font)
-        show.text(xy=(792, 440), text=f'{medal}', fill=(0, 0, 0), font=font)
-        show.text(xy=(790, 438), text=f'{medal}', fill=(128, 0, 128), font=font)
-        show.text(xy=(1942, 440), text=f'{rank_point}', fill=(0, 0, 0), font=font)
-        show.text(xy=(1940, 438), text=f'{rank_point}', fill=(128, 0, 128), font=font)
-        show.text(xy=(1102, 440), text=f'#{position}', fill=(0, 0, 0), font=font)
-        show.text(xy=(1100, 438), text=f'#{position}', fill=(255, 255, 255), font=font)
+        for k in rectangles.keys():
+            if k == "avatar":
+                # take name of member
+                avatar = await get_avatar(member.avatar_url_as(format="png"), 111, 135, True)
+                image.paste(avatar, (rectangles[k][0], rectangles[k][1]), avatar)
 
-        # add img to main img
-        img.paste(avatar, (1050, 600), avatar)
-        img.paste(patent_img, (765, 595), patent_img)
-        img.paste(icon_guild, (1373, 620), icon_guild)
-        img.paste(champion[0], (130, top), champion[0])
-        img.paste(champion[1], (230, top), champion[1])
-        img.paste(champion[2], (330, top), champion[2])
-        img.paste(champion[3], (430, top), champion[3])
-        img.paste(champion[4], (530, top), champion[4])
-        img.paste(champion[5], (630, top), champion[5])
-        img.paste(champion[6], (730, top), champion[6])
-        img.paste(champion[7], (830, top), champion[7])
-        img.paste(champion[8], (930, top), champion[8])
-        img.paste(champion[9], (1030, top), champion[9])
-        img.paste(champion[10], (1130, top), champion[10])
-        img.paste(champion[11], (1230, top), champion[11])
-        img.paste(champion[12], (1330, top), champion[12])
-        img.paste(champion[13], (1430, top), champion[13])
-        img.paste(champion[14], (1530, top), champion[14])
-        img.paste(champion[15], (1630, top), champion[15])
-        img.paste(champion[16], (1730, top), champion[16])
-        img.paste(champion[17], (1830, top), champion[17])
-        img.paste(champion[18], (1930, top), champion[18])
-        img.paste(champion[19], (2030, top), champion[19])
-        img.save('rank.png')
+            if k == "patent":
+                # patent image
+                patent = data['user']['patent']
+                patent_img = Image.open('images/patente/{}.png'.format(patent)).convert('RGBA')
+                patent_img = patent_img.resize((80, 80))
+                image.paste(patent_img, (rectangles[k][0] + 5, rectangles[k][1] - 10), patent_img)
+
+            if k == "num":
+                patent = str(data['user']['patent'])
+                font = ImageFont.truetype("fonts/bot.otf", 12)
+                x_, y_ = text_align(rectangles[k], patent, font)
+                show.text(xy=(x_, y_), text=patent.upper(), fill=(255, 255, 255), font=font)
+
+            if k == "top":
+                font = ImageFont.truetype("fonts/bot.otf", 28)
+                x_, y_ = text_align(rectangles[k], position, font)
+                show.text(xy=(x_, y_), text=position.upper(), fill=(0, 0, 0), font=font)
+
+            if k == "title":
+                if member.id in self.bot.team:
+                    title = str("STAFF")
+                else:
+                    title = str("PLAYER")
+                font = ImageFont.truetype("fonts/bot.otf", 28)
+                x_, y_ = text_align(rectangles[k], title, font)
+                show.text(xy=(x_, y_), text=title.upper(), fill=(0, 0, 0), font=font)
+
+            if k == "name":
+                nome = self.remove_acentos_e_caracteres_especiais(str(member))
+                font = ImageFont.truetype("fonts/bot.otf", 38)
+                x_, y_ = text_align(rectangles[k], nome, font)
+                show.text(xy=(x_ + 1, y_ + 1), text=nome.upper(), fill=(0, 0, 0), font=font)
+                show.text(xy=(x_, y_), text=nome.upper(), fill=(255, 255, 255), font=font)
+
+        image.save('rank.png')
         await msg.delete()
         await ctx.send(file=discord.File('rank.png'))
 

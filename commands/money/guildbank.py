@@ -236,6 +236,12 @@ class GuildBank(commands.Cog):
         if error.__str__() in ERRORS[11]:
             await ctx.send('<:negate:721581573396496464>│``Você não tem permissão para usar esse comando!``')
 
+        if isinstance(error, commands.CheckFailure):
+            if error.__str__() not in ERRORS:
+                perms = ctx.channel.permissions_for(ctx.me)
+                if perms.send_messages and perms.read_messages:
+                    return await ctx.send(f"{error}")
+
 
 def setup(bot):
     bot.add_cog(GuildBank(bot))

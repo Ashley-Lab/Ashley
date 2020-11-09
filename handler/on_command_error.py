@@ -25,8 +25,8 @@ class CommandErrorHandler(commands.Cog):
     async def on_command_error(self, ctx, error):
 
         # Isso evita que quaisquer comandos com manipuladores locais sejam manipulados aqui em on_command_error.
-        """if hasattr(ctx.command, 'on_error'):
-            return"""
+        if hasattr(ctx.command, 'on_error'):
+            return
 
         # Isso faz com que os comandos com argumentos invalidos tenham um retorno explicatorio!
         if isinstance(error, commands.BadArgument):

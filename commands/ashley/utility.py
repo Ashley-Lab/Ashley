@@ -10,7 +10,6 @@ from resources.img_edit import gift as gt
 from resources.giftmanage import register_gift
 from resources.utility import convert_item_name
 
-
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -299,6 +298,29 @@ class UtilityClass(commands.Cog):
         await ctx.send(file=discord.File('giftcard.png'))
         await ctx.send(f"> 🎊 **PARABENS** 🎉 ``VOCÊ GANHOU UM GIFT``\n"
                        f"``USE O COMANDO:`` **ASH GIFT** ``PARA RECEBER SEU PRÊMIO!!``")
+
+    @check_it(no_pm=True, is_owner=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
+    @commands.command(name='create_star', aliases=['cs'])
+    async def create_stars(self, ctx, member: discord.Member = None, stars: int = None):
+        """Comando para DEVs, adicionar ou retirar estrelas de um usuario"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
+        if stars is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantidade de estrelas!``")
+        if stars <= 0 or stars > 20:
+            return await ctx.send("<:alert:739251822920728708>│``quantidade de estrelas invalidas!``")
+
+        data = await self.bot.db.get_data("user_id", member.id, "users")
+        update = data
+        if data is None:
+            return await ctx.send('<:negate:721581573396496464>│``Usuário não encontrado!``', delete_after=10.0)
+
+        update['user']['stars'] = stars
+        await self.bot.db.update_data(data, update, "users")
+        await ctx.send(f'<a:hack:525105069994278913>│``PARABENS, VC SETOU O LEVEL`` **{lvl}** ``PARA`` '
+                       f'**{member.name}** ``COM SUCESSO, ALEM DISSO RESETOU OS PONTOS DE HABILIDADE!``')
 
 
 def setup(bot):

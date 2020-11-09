@@ -93,6 +93,12 @@ class EnchanterClass(commands.Cog):
 
             self.atacks = {}
             data_player = self.config_player(ctx.author, data['rpg'], data['rpg']['lower_net'])
+            rate = [_class[data_player['class']]['rate']['life'], _class[data_player['class']]['rate']['mana']]
+            if data_player['level'] > 25:
+                rate[0] += _class[data_player['next_class']]['rate']['life']
+                rate[1] += _class[data_player['next_class']]['rate']['mana']
+            data_player['status']['hp'] = data_player['status']['con'] * rate[0]
+            data_player['status']['mp'] = data_player['status']['con'] * rate[1]
 
             self.db = data_player
             for c in range(5):

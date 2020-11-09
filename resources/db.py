@@ -518,13 +518,15 @@ class DataInteraction(object):
                 update['vip'] = False
             await self.db.update_data(data, update, "guilds")
 
-    async def get_rank_xp(self, limit):
+    async def get_rank_xp(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('experience')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -541,15 +543,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['user']['experience'])}"
         return rank
 
-    async def get_rank_level(self, limit):
+    async def get_rank_level(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('level')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -566,15 +574,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['user']['level'])}"
         return rank
 
-    async def get_rank_money(self, limit):
+    async def get_rank_money(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('money')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -592,15 +606,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > R$ " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > R$ {money_(data_user['treasure']['money'])}"
         return rank
 
-    async def get_rank_gold(self, limit):
+    async def get_rank_gold(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('gold')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -617,15 +637,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['treasure']['gold'])}"
         return rank
 
-    async def get_rank_silver(self, limit):
+    async def get_rank_silver(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('silver')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -642,15 +668,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['treasure']['silver'])}"
         return rank
 
-    async def get_rank_bronze(self, limit):
+    async def get_rank_bronze(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['treasure'].get('bronze')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -667,9 +699,13 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['treasure']['bronze'])}"
         return rank
 
-    async def get_rank_point(self, limit):
+    async def get_rank_point(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
@@ -677,6 +713,8 @@ class DataInteraction(object):
             if _['config'].get('points') is not None:
                 dict_[str(_.get('user_id'))] = _['config'].get('points')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -693,15 +731,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['config']['points'])}"
         return rank
 
-    async def get_rank_commands(self, limit):
+    async def get_rank_commands(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('commands', 0)
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -718,15 +762,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['user']['commands'])}"
         return rank
 
-    async def get_rank_rpg(self, limit):
+    async def get_rank_rpg(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['rpg'].get('level')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -743,15 +793,21 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['rpg']['level'])}"
         return rank
 
-    async def get_rank_raid(self, limit):
+    async def get_rank_raid(self, limit, ctx):
         global cont
         data = await self.db.get_all_data("users")
         dict_ = dict()
         for _ in data:
             dict_[str(_.get('user_id'))] = _['user'].get('raid')
         sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
+        rank = [int(sorted_x[x][0]) for x in range(len(data))]
+        position = int(rank.index(ctx.author.id)) + 1
         cont['list'] = 0
 
         def money_(money):
@@ -768,4 +824,8 @@ class DataInteraction(object):
         rank = "\n".join([str(counter()) + "º: " +
                           str(await self.bot.fetch_user(int(sorted_x[x][0]))).replace("'", "").replace("#", "_") +
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
+        data_user = await self.db.get_data("user_id", ctx.author.id, "users")
+        player = str(ctx.author).replace("'", "").replace("#", "_")
+        rank += f"\n-------------------------------------------------------------------------\n" \
+                f"{position}º: {player} > {money_(data_user['user']['raid'])}"
         return rank

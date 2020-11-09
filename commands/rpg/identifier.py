@@ -4,7 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from random import choice
-from asyncio import sleep
+from asyncio import sleep, TimeoutError
 
 
 class IdentifierClass(commands.Cog):

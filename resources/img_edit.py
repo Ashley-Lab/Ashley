@@ -55,7 +55,8 @@ def remove_acentos_e_caracteres_especiais(word):
     return re.sub('[^a-zA-Z \\\]', '', palavra_sem_acento)
 
 
-async def get_avatar(avatar_url, x, y):
+async def get_avatar(avatar_url, x: int = -1, y: int = -1, rect: bool = False):
+
     if validate_url(str(avatar_url)):
         link = str(avatar_url)
     else:
@@ -73,16 +74,20 @@ async def get_avatar(avatar_url, x, y):
         url_avatar = await requests.get(link)
         avatar = Image.open(BytesIO(await url_avatar.read())).convert('RGBA')
 
-    avatar = avatar.resize((x, y))
-    big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
-    mascara = Image.new('L', big_avatar, 0)
-    trim = ImageDraw.Draw(mascara)
-    trim.ellipse((0, 0) + big_avatar, fill=255)
-    mascara = mascara.resize(avatar.size, Image.ANTIALIAS)
-    avatar.putalpha(mascara)
-    exit_avatar = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
-    exit_avatar.putalpha(mascara)
-    avatar = exit_avatar
+    if x >= 0 and y >= 0:
+        avatar = avatar.resize((x, y))
+
+    if not rect:
+        big_avatar = (avatar.size[0] * 3, avatar.size[1] * 3)
+        mascara = Image.new('L', big_avatar, 0)
+        trim = ImageDraw.Draw(mascara)
+        trim.ellipse((0, 0) + big_avatar, fill=255)
+        mascara = mascara.resize(avatar.size, Image.ANTIALIAS)
+        avatar.putalpha(mascara)
+        exit_avatar = ImageOps.fit(avatar, mascara.size, centering=(0.5, 0.5))
+        exit_avatar.putalpha(mascara)
+        avatar = exit_avatar
+
     return avatar
 
 

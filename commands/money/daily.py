@@ -116,18 +116,19 @@ class DailyClass(commands.Cog):
 
                 if data_user['user']['ranking'] == "Bronze":
                     money = 70 * 5
-                    m = 5
+                    m = 4
                 elif data_user['user']['ranking'] == "Silver":
                     money = 70 * 10
-                    m = 10
+                    m = 8
                 elif data_user['user']['ranking'] == "Gold":
                     money = 70 * 15
-                    m = 15
+                    m = 12
 
                 msg = await self.bot.db.add_money(ctx, money)
                 await ctx.send(f'<:confirmed:721581574461587496>│``Você trabalhou duro e acabou de ganhar:`` \n'
                                f'{msg}')
-                msg = await self.bot.db.add_money(ctx, self.bot.user_commands[ctx.author.id] * m)
+                commands_work = data_user['security']['commands_today'] + self.bot.user_commands[ctx.author.id]
+                msg = await self.bot.db.add_money(ctx, commands_work * m)
                 await ctx.send(f'<:confirmed:721581574461587496>│``Você tambem ganhou:``\n{msg}\n'
                                f'``de ETHERNYAS a mais por usar {self.bot.user_commands[ctx.author.id]} comandos.``')
             else:

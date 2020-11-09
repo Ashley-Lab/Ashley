@@ -194,7 +194,6 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [raid](#raid)
 - [RankingClass](#rankingclass-commands)
   - [rank](#rank)
-  - [stars](#stars)
 - [RecipeClass](#recipeclass-commands)
   - [craft](#craft)
   - [recipe](#recipe)
@@ -275,6 +274,7 @@ Entre no servidor de suporte [clicando aqui](https://discord.gg/rYT6QrM)!👈
   - [create_gift](#create_gift)
   - [create_item](#create_item)
   - [create_money](#create_money)
+  - [create_star](#create_star)
   - [create_vip](#create_vip)
   - [reset_user](#reset_user)
   - [set_level](#set_level)
@@ -947,12 +947,7 @@ Use ash raid
 >**Descrição:** Mostra seu rank da Ashley
 Use ash rank
 
->**Modo de Uso:** `ash rank [user]`
-
-#### stars
->**Descrição:** Comando para DEVs, adicionar ou retirar estrelas de um usuario
-
->**Modo de Uso:** `ash stars `
+>**Modo de Uso:** `ash rank [member]`
 
 ## RecipeClass
 
@@ -1315,6 +1310,11 @@ Use ash userinfo <@usuario em questão>
 >**Descrição:** Comando usado apelas por DEVS para criar money para usuarios doadores
 
 >**Modo de Uso:** `ash create_money [member] [amount]`
+
+#### create_star
+>**Descrição:** Comando para DEVs, adicionar ou retirar estrelas de um usuario
+
+>**Modo de Uso:** `ash create_star [member] [stars]`
 
 #### create_vip
 >**Descrição:** Comando usado apelas por DEVS para dar vip para doadores.

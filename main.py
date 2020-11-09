@@ -58,6 +58,7 @@ class Ashley(commands.AutoShardedBot):
         self.python_version = "3.9.0"
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.staff = self.config['attribute']['staff']
+        self.team = self.config['attribute']['team']
         self.version = "API: " + str(discord.__version__) + " | BOT: 8.7.34 | PROGRESS: " + str(self.progress)
         self.shortcut = self.config['attribute']['shortcut']
         self.block = self.config['attribute']['block']

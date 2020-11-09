@@ -125,6 +125,7 @@ class RpgStart(commands.Cog):
                 "artifacts": dict(),
                 "relics": dict(),
                 'items': dict(),
+                'skills': [0, 0, 0, 0, 0],
                 'equipped_items': {
                     "shoulder": None,
                     "breastplate": None,
@@ -153,6 +154,7 @@ class RpgStart(commands.Cog):
                 "artifacts": update['rpg']['artifacts'],
                 "relics": update['rpg']['relics'],
                 'items': update['rpg']['items'],
+                'skills': update['rpg']['skills'],
                 'equipped_items': update['rpg']['equipped_items'],
                 "active": True
             }
