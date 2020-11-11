@@ -133,10 +133,18 @@ class OnReady(commands.Cog):
                             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                             embed.set_thumbnail(url=_member_.avatar_url)
-                            await channel__.send(embed=embed)
+                            ash_member = channel__.guild.get_member(self.bot.user.id)
+                            perms = channel__.permissions_for(ash_member)
+                            if perms.send_messages or perms.read_messages:
+                                if not perms.embed_links or not perms.attach_files:
+                                    await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                                   "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                                   " CORRETAMENTE!**")
+                                else:
+                                    await channel__.send(embed=embed)
 
                             try:
-                                if chance <= 5:
+                                if chance <= 5 and perms.send_messages or perms.read_messages:
                                     await _member_.send(f"<a:palmas:520418512011788309>│``Parabens você acaba de ter "
                                                         f"uma sorte grande ao ser sorteado no servidor`` "
                                                         f"**{str(guild)}** ``verifique seu iventario.`` "
@@ -193,7 +201,15 @@ class OnReady(commands.Cog):
                             embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
                             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                             embed.set_thumbnail(url=BOX)
-                            await channel__.send(embed=embed)
+                            ash_member = channel__.guild.get_member(self.bot.user.id)
+                            perms = channel__.permissions_for(ash_member)
+                            if perms.send_messages or perms.read_messages:
+                                if not perms.embed_links or not perms.attach_files:
+                                    await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                                   "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                                   " CORRETAMENTE!**")
+                                else:
+                                    await channel__.send(embed=embed)
 
                             guild__ = self.bot.get_guild(data['guild_id'])
                             role = discord.utils.find(lambda r: r.name == "</Ash_Lovers>", guild__.roles)
@@ -204,7 +220,10 @@ class OnReady(commands.Cog):
                                       f"{role.mention}\n **Obs:** ``se voce tambem quiser ser pingado use o comando``" \
                                       f" **ASH LOVER** ``ou se vc nao quiser mais ser pingado, use o comando`` " \
                                       f"**ASH UNLOVER**."
-                            await channel__.send(msg)
+                            ash_member = channel__.guild.get_member(self.bot.user.id)
+                            perms = channel__.permissions_for(ash_member)
+                            if perms.send_messages or perms.read_messages:
+                                await channel__.send(msg)
 
             await asyncio.sleep(300)
 

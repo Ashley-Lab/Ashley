@@ -35,6 +35,10 @@ class SystemMessage(commands.Cog):
                                         perms = ctx.channel.permissions_for(ctx.me)
                                         if not perms.send_messages or not perms.read_messages:
                                             return
+                                        if not perms.embed_links or not perms.attach_files:
+                                            return await ctx.send(
+                                                "<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                                "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
                                         msg = message.content.replace("here", "[censored]")
                                         await channel_.send(msg.replace("everyone", "[censored]"))
                             except discord.Forbidden:
@@ -53,6 +57,10 @@ class SystemMessage(commands.Cog):
                                         perms = ctx.channel.permissions_for(ctx.me)
                                         if not perms.send_messages or not perms.read_messages:
                                             return
+                                        if not perms.embed_links or not perms.attach_files:
+                                            return await ctx.send(
+                                                "<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                                "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
 
                                         await channel_.send(embed=message.embeds[0])
                             except discord.Forbidden:

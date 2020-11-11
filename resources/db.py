@@ -23,7 +23,7 @@ cont = Counter()
 class Database(object):
     def __init__(self, bot):
         self.bot = bot
-        self._connect = Client(_auth['db_url'] + "?retryWrites=false", connectTimeoutMS=30000)
+        self._connect = Client(_auth['db_url'], connectTimeoutMS=30000)
         self._database = self._connect[_auth['db_name']]
 
     # nao deve ser usado em comandos

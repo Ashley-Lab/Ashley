@@ -116,7 +116,11 @@ class Ashley(commands.AutoShardedBot):
                                     f'```{announce}```')
                     perms = ctx.channel.permissions_for(ctx.me)
                     if perms.send_messages and perms.read_messages:
-                        await ctx.send(embed=embed)
+                        if perms.embed_links and perms.attach_files:
+                            await ctx.send(embed=embed)
+                        else:
+                            await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                           "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
 
             commands_log = self.get_channel(575688812068339717)
             await commands_log.send(f"``O membro`` {ctx.author.name} ``acabou de usar o comando`` "
@@ -246,7 +250,11 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_thumbnail(url=BOX)
                     perms = ctx.channel.permissions_for(ctx.me)
                     if perms.send_messages and perms.read_messages:
-                        await ctx.send(embed=embed)
+                        if perms.embed_links and perms.attach_files:
+                            await ctx.send(embed=embed)
+                        else:
+                            await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                           "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
 
                 patent = patent_calculator(update_user['inventory']['rank_point'], update_user['inventory']['medal'])
                 if patent > update_user['user']['patent']:
@@ -257,7 +265,11 @@ class Ashley(commands.AutoShardedBot):
                     embed.set_image(url="attachment://patent.png")
                     perms = ctx.channel.permissions_for(ctx.me)
                     if perms.send_messages and perms.read_messages:
-                        await ctx.send(file=file, embed=embed)
+                        if perms.embed_links and perms.attach_files:
+                            await ctx.send(file=file, embed=embed)
+                        else:
+                            await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                           "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
 
                 if update_user['config']['vip'] and str(ctx.command).lower() != "daily vip":
                     try:
@@ -499,6 +511,9 @@ class Ashley(commands.AutoShardedBot):
             return
 
         if ctx.command is not None:
+            if not perms.embed_links or not perms.attach_files:
+                return await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                      "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
             if message.author.id not in self.testers and self.maintenance:
                 msg = self.config['attribute']['maintenance']
                 embed = discord.Embed(color=self.color, description=msg)

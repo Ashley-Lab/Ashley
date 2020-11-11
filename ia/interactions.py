@@ -49,6 +49,8 @@ class IaInteractions(commands.Cog):
                 perms = ctx.channel.permissions_for(ctx.me)
                 if not perms.send_messages or not perms.read_messages:
                     return
+                if not perms.embed_links or not perms.attach_files:
+                    return
                 # -----------======================-----------
 
                 # sistema de chance da ashley  responder a um usuario
