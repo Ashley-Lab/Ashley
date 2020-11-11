@@ -1,3 +1,4 @@
+import logging
 import sys
 import discord
 import traceback
@@ -20,6 +21,7 @@ cor = {
 class CommandErrorHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.log = self.bot.logger
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -96,6 +98,8 @@ class CommandErrorHandler(commands.Cog):
         if not isinstance(error, commands.CommandOnCooldown):
             # e como nao quero print de comando mal executado pelo usuario faço a outra exceção
             if not isinstance(error, commands.CheckFailure):
+                # aqui so passa os logs dos erros nao tratados
+                self.log.info(f"Error in {ctx.command}, {ctx.guild}, {ctx.author}: {ctx.channel}. With error: {error}")
                 print(f"{cor['verm']}( ❌ ) | error in command: {cor['azul']}{str(ctx.command).upper()}\n"
                       f"{cor['verm']}>> in Guild: "
                       f"{cor['azul']}{ctx.guild} {cor['verm']}- {cor['amar']}ID: {ctx.guild.id}\n"

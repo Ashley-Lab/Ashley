@@ -132,7 +132,7 @@ chamado de mobrau''', (147, 216), 7], ['''pare com as drogas''', (177, 237), 7]]
             image = Image.open('images/social/zapzap.png').convert('RGBA')
             escrita = ImageDraw.Draw(image)
             for c in (rede[2]):
-                font = ImageFont.truetype('fonts/Arial.ttf', c[2])
+                font = ImageFont.truetype('fonts/arial.ttf', c[2])
                 texto = str(c[0])
                 escrita.text(xy=c[1], text=texto, fill=(10, 10, 10), font=font)
             image.paste(avatar, rede[0][1], avatar)

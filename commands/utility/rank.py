@@ -115,9 +115,10 @@ class RankingClass(commands.Cog):
             if k == "patent":
                 # patent image
                 patent = data['user']['patent']
-                patent_img = Image.open('images/patente/{}.png'.format(patent)).convert('RGBA')
-                patent_img = patent_img.resize((80, 80))
-                image.paste(patent_img, (rectangles[k][0] + 5, rectangles[k][1] - 10), patent_img)
+                if 0 < patent < 31:
+                    patent_img = Image.open('images/patente/{}.png'.format(patent)).convert('RGBA')
+                    patent_img = patent_img.resize((80, 80))
+                    image.paste(patent_img, (rectangles[k][0] + 5, rectangles[k][1] - 10), patent_img)
 
             if k == "num":
                 patent = str(data['user']['patent'])

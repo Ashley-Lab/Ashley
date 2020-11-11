@@ -129,7 +129,7 @@ class InstagramClass(commands.Cog):
             image = Image.open('images/social/instagram.png').convert('RGBA')
             escrita = ImageDraw.Draw(image)
             for c in (rede[2]):
-                font = ImageFont.truetype('fonts/Arial.ttf', c[2])
+                font = ImageFont.truetype('fonts/arial.ttf', c[2])
                 texto = str(c[0])
                 escrita.text(xy=c[1], text=texto, fill=(10, 10, 10), font=font)
             image.paste(avatar, rede[0][1], avatar)

@@ -1,11 +1,13 @@
 # ARQUIVO PRINCIPAL DE INICIALIZAÇÃO DO BOT: ASHLEY PARA DISCORD.
 # CRIADO POR: DANIEL AMARAL -> Denky#5960
 # SEGUE ABAIXO OS IMPORTS COMPLETOS
+import logging
 import discord
 import psutil
 import json
 import copy
 import sys
+import os
 import traceback
 # SEGUE ABAIXO OS IMPORTS PARCIAIS
 import time as date
@@ -53,13 +55,20 @@ class Ashley(commands.AutoShardedBot):
         self.testers = self.config['attribute']['testers']
         self.maintenance = False
 
-        self.server_ = "HEROKU"
-        self.progress = "V.8 -> 73.4%"
-        self.python_version = "3.9.0"
+        self.log_dir = os.path.join('log', 'discord.log')
+        self.logger = logging.getLogger('discord')
+        self.logger.setLevel(logging.INFO)
+        self.handler = logging.FileHandler(filename=self.log_dir, encoding='utf-8', mode='w')
+        self.handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+        self.logger.addHandler(self.handler)
+
+        self.server_ = "EXTRAVM.COM"
+        self.progress = "V.9 -> 5.0%"
+        self.python_version = "3.8.2"
         self.github = "https://github.com/Ashley-Lab/Ashley"
         self.staff = self.config['attribute']['staff']
         self.team = self.config['attribute']['team']
-        self.version = "API: " + str(discord.__version__) + " | BOT: 8.7.34 | PROGRESS: " + str(self.progress)
+        self.version = "API: " + str(discord.__version__) + " | BOT: 9.0.50 | PROGRESS: " + str(self.progress)
         self.shortcut = self.config['attribute']['shortcut']
         self.block = self.config['attribute']['block']
         self.data_cog = {}
