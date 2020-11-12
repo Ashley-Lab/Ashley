@@ -10,28 +10,25 @@ class MemberBanClass(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_ban(self, guild, user):
-        if guild is not None:
-            data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
-            if data is not None:
-                try:
-                    if data['log_config']['log'] and data['log_config']['member_ban']:
-                        canal = self.bot.get_channel(data['log_config']['log_channel_id'])
-                        if canal is None:
-                            return
-                        to_send = discord.Embed(
-                            title=":star2: **Membro Banido**",
-                            color=self.color,
-                            description=f"**Membro:** {user.name}")
-                        to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
-                        await canal.send(embed=to_send)
-                except AttributeError:
-                    pass
-                except discord.errors.NotFound:
-                    pass
-                except discord.errors.HTTPException:
-                    pass
-                except TypeError:
-                    pass
+        data = await self.bot.db.get_data("guild_id", guild.id, "guilds")
+
+        if not data:
+            return
+
+        data = data["log_config"]
+
+        if dat['log'] and data['member_ban']:
+            canal = self.bot.get_channel(data['log_channel_id'])
+
+            if not canal:
+                return
+
+            embed = discord.Embed(color=self.color,
+                title=":star2: **Membro Banido**",
+                description=f"**Membro:** {user.name}")
+            embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+
+            await canal.send(embed=embed)
 
 
 def setup(bot):

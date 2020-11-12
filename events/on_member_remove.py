@@ -13,6 +13,10 @@ class OnMemberRemove(commands.Cog):
     async def on_member_remove(self, member):
 
         data = await self.bot.db.get_data("guild_id", member.guild.id, "guilds")
+
+        if not data:
+            return
+        
         if data is not None:
             try:
                 if data['func_config']['member_remove']:

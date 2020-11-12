@@ -3,6 +3,7 @@
 # SEGUE ABAIXO OS IMPORTS COMPLETOS
 import logging
 import discord
+import aiohttp
 import psutil
 import json
 import copy
@@ -37,6 +38,7 @@ class Ashley(commands.AutoShardedBot):
         self.user_commands = Counter()
         self.blacklist = list()
         self.shutdowns = list()
+        self.session = aiohttp.ClientSession()
 
         self.config = config
         self.em = self.config["emojis"]["msg"]

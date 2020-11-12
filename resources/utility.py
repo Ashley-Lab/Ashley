@@ -201,7 +201,7 @@ async def paginator(bot, items, inventory, embed, ctx):
             try:
                 rarity = list(legend.keys())[list(legend.values()).index(items[key][3])]
                 string = f'{items[key][0]} ``{inventory[key]}{("⠀" * (5 - len(str(inventory[key]))))}`` ' \
-                         f'``{items[key][1]}{("-" * (30 - len(items[key][1])))}>`` **{rarity.lower()}**\n'
+                         f'``{items[key][1]}{(" " * (30 - len(items[key][1])))}`` **{rarity.lower()}**\n'
             except KeyError:
                 string = f"<:negate:721581573396496464> ``{key.upper()}: ITEM NÃO ENCONTRADO!``"
 
@@ -225,7 +225,7 @@ async def paginator(bot, items, inventory, embed, ctx):
         elif str(ctx.command) == "inventory equip":
             rarity = items[key]['rarity']
             string = f'{items[key]["icon"]} ``{inventory[key]}{("⠀" * (5 - len(str(inventory[key]))))}`` ' \
-                     f'``{items[key]["name"]}{("-" * (30 - len(items[key]["name"])))}`` **{rarity.lower()}**\n'
+                     f'``{items[key]["name"]}{(" " * (35 - len(items[key]["name"])))}`` **{rarity.lower()}**\n'
 
         else:
             cost = "\n".join(f"{items[i[0]][0]} ``{i[1]}`` ``{items[i[0]][1]}``" for i in inventory[key]['cost'])

@@ -11,8 +11,7 @@ class OnTypingClass(commands.Cog):
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
         if channel.id == 546753700517904405:
-            embed = discord.Embed(
-                color=self.color,
+            embed = discord.Embed(color=self.color,
                 description=f'Usuario: {user.mention}\n Quando: {when}')
             await channel.send(embed=embed)
 
