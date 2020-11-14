@@ -45,7 +45,15 @@ class OnMemberRemove(commands.Cog):
                         embed.add_field(name="Conta criada em:", value=usercreatedat, inline=True)
                         embed.add_field(name="ID:", value=str(member.id), inline=True)
                         embed.set_thumbnail(url=member.avatar_url)
-                        await canal.send(embed=embed)
+                        ashley = canal.guild.get_member(self.bot.user.id)
+                        perms = canal.permissions_for(ashley)
+                        if perms.send_messages or perms.read_messages:
+                            if not perms.embed_links or not perms.attach_files:
+                                await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                                 "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                                 " CORRETAMENTE!**")
+                            else:
+                                await canal.send(embed=embed)
 
             except AttributeError:
                 pass
@@ -60,15 +68,23 @@ class OnMemberRemove(commands.Cog):
                                '<:3_:578615683424976916>', '<:4_:578615679406833685>', '<:5_:578615684708171787>',
                                '<:6_:578617070309343281>', '<:7_:578615679041798144>', '<:8_:578617071521497088>',
                                '<:9_:578617070317469708>']
-                    channel_ = self.bot.get_channel(data['func_config']['cont_users_id'])
-                    if channel_ is None:
+                    canal = self.bot.get_channel(data['func_config']['cont_users_id'])
+                    if canal is None:
                         return
                     text = str(member.guild.member_count)
                     list_ = list()
                     for letter in text:
                         list_.append(numbers[int(letter)])
                     list_ = str(list_).replace('[', '').replace(']', '').replace(',', '.')
-                    await channel_.edit(topic="<a:caralho:525105064873033764> **Membros:**  " + list_)
+                    ashley = canal.guild.get_member(self.bot.user.id)
+                    perms = canal.permissions_for(ashley)
+                    if perms.send_messages or perms.read_messages:
+                        if not perms.embed_links or not perms.attach_files:
+                            await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                             "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                             " CORRETAMENTE!**")
+                        else:
+                            await canal.edit(topic="<a:caralho:525105064873033764> **Membros:**  " + list_)
             except discord.Forbidden:
                 pass
             except discord.errors.NotFound:

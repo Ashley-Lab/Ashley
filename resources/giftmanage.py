@@ -91,7 +91,13 @@ def open_chest(chest):
         max_coin = 100
         max_energy = 75
         bonus = choice(['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur'])
-        items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
+        if randint(1, 100) < 20:
+            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
+        else:
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
         relics = {
             "WrathofNatureCapsule": 1,
             "UltimateSpiritCapsule": 1,
@@ -114,7 +120,13 @@ def open_chest(chest):
         max_coin = 150
         max_energy = 100
         bonus = choice(["soul_crystal_of_love", "soul_crystal_of_hope", "soul_crystal_of_hate"])
-        items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
+        if randint(1, 100) < 40:
+            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
+        else:
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
         relics = {
             "WrathofNatureCapsule": 2,
             "UltimateSpiritCapsule": 2,
@@ -137,7 +149,13 @@ def open_chest(chest):
         max_coin = 200
         max_energy = 125
         bonus = choice(["solution_agent_green", "solution_agent_blue", "nucleo_z", "nucleo_y", "nucleo_x"])
-        items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
+        if randint(1, 100) < 60:
+            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
+        else:
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
         relics = {
             "WrathofNatureCapsule": 3,
             "UltimateSpiritCapsule": 3,
@@ -160,7 +178,13 @@ def open_chest(chest):
         max_coin = 250
         max_energy = 150
         bonus = choice(["fused_diamond", "fused_ruby", "fused_sapphire", "fused_emerald"])
-        items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
+        if randint(1, 100) < 80:
+            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
+        else:
+            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+
         relics = {
             "WrathofNatureCapsule": 4,
             "UltimateSpiritCapsule": 4,
@@ -189,4 +213,4 @@ def open_chest(chest):
             list_relic += [k] * v
         relic = choice(list_relic)
 
-    return {"money": ethernyas, "coins": coins, "Energy": Energy, "items": items, "relic": relic}
+    return {"money": ethernyas, "coins": coins, "Energy": Energy, "items": items, "relic": [relic]}

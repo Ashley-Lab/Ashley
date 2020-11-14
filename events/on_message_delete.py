@@ -32,7 +32,15 @@ class OnMessageDelete(commands.Cog):
                         to_send.set_author(name=message.author, icon_url=message.author.avatar_url)
                         to_send.set_thumbnail(url=message.author.avatar_url)
                         to_send.set_footer(text="Ashley ® Todos os direitos reservados.")
-                        await canal.send(embed=to_send)
+                        ashley = canal.guild.get_member(self.bot.user.id)
+                        perms = canal.permissions_for(ashley)
+                        if perms.send_messages or perms.read_messages:
+                            if not perms.embed_links or not perms.attach_files:
+                                await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                                 "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                                 " CORRETAMENTE!**")
+                            else:
+                                await canal.send(embed=to_send)
                 except AttributeError:
                     pass
                 except discord.errors.NotFound:

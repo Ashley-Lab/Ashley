@@ -26,7 +26,15 @@ class RoleDelete(commands.Cog):
             embed = discord.Embed(color=self.color, title=":put_litter_in_its_place: **Cargo Deletado**",
                                   description=f"**Cargo:** {role.mention}")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
-            await canal.send(embed=embed)
+            ashley = canal.guild.get_member(self.bot.user.id)
+            perms = canal.permissions_for(ashley)
+            if perms.send_messages or perms.read_messages:
+                if not perms.embed_links or not perms.attach_files:
+                    await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                     "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                     " CORRETAMENTE!**")
+                else:
+                    await canal.send(embed=embed)
 
 
 def setup(bot):

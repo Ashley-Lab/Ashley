@@ -190,8 +190,6 @@ class DailyClass(commands.Cog):
 
         data_user = await self.bot.db.get_data("user_id", member.id, "users")
         update_user = data_user
-        data_guild = await self.bot.db.get_data("guild_id", ctx.guild.id, "guilds")
-        update_guild = data_guild
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         chance = randint(1, 100)
@@ -235,21 +233,14 @@ class DailyClass(commands.Cog):
 
         if (update_user['user']['rec'] % 2) == 0:
             if chance <= 25:
-                if update_user['user']['stars'] < 20:
+                if update_user['user']['stars'] < 25:
                     update_user['user']['stars'] += 1
                     await ctx.send(embed=embed)
                     await ctx.send(f'<:rank:519896825411665930>│{member.mention} ``GANHOU 1 ESTRELA!`` '
                                    f'🎊 **PARABENS** 🎉 **APROVEITE E OLHE SEU RANK PARA VER SUA ESTRELINHA NOVA COM '
                                    f'O COMANDO:** ``ASH RANK``')
-                    if update_user['user']['stars'] >= 10:
-                        if data_guild['vip'] is False and member.id == ctx.guild.owner.id:
-                            update_guild['vip'] = True
-                            await ctx.send('<:rank:519896825411665930>│🎊 **PARABENS** 🎉 '
-                                           '**O LIDER TORNOU SUA GUILDA COMUM EM UMA GUILDA VIP!** '
-                                           '``AGORA VOCÊ É CAPAZ DE CADASTRAR ANUNCIOS NO MEU SISTEMA USANDO '
-                                           '"ASH ANNOUNCE" E USAR O SISTEMA DE MUSICA!``')
                     if chance < 6:
-                        if update['user']['stars'] < 21:
+                        if update['user']['stars'] < 25:
                             update['user']['stars'] += 1
                             await ctx.send(embed=embed)
                             await ctx.send(f'<:rank:519896825411665930>│{ctx.author.mention} ``TAMBEM GANHOU 1 '
@@ -258,7 +249,7 @@ class DailyClass(commands.Cog):
                         else:
                             reward = True
                 else:
-                    if update['user']['stars'] < 21:
+                    if update['user']['stars'] < 25:
                         update['user']['stars'] += 1
                         await ctx.send(embed=embed)
                         await ctx.send(f'<:rank:519896825411665930>│{ctx.author.mention} ``GANHOU 1 ESTRELA, PORQUE`` '
@@ -280,7 +271,7 @@ class DailyClass(commands.Cog):
                            f'ESTRELAS POR JA TER TODAS AS 20 ESTRELAS DISPONIVEIS VOCE GANHOU`` '
                            f'✨ **ITENS PARA PET** ✨ {response}')
 
-        elif update_user['user']['stars'] > 19 and update['user']['stars'] > 19:
+        elif update_user['user']['stars'] >= 25 and update['user']['stars'] >= 25:
             response = await self.bot.db.add_reward(ctx, ['?-Bollash'])
             await ctx.send(f'<a:fofo:524950742487007233>│{ctx.author.mention} ``COMO NEM VOCE NEM`` '
                            f'{member.mention} ``PODEM MAIS GANHAR ESTRELAS POR JA TEREM TODAS AS 20``'

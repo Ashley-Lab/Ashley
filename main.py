@@ -268,7 +268,7 @@ class Ashley(commands.AutoShardedBot):
                                            f'partir de agora e `` **+2000** ``Fichas para jogar``')
 
                 cmds_event = len(self.cmd_event[ctx.author.id].keys())
-                if randint(1, 300) - cmds_event < 5 and update_user['security']['status'] and self.event_special:
+                if randint(1, 300) - cmds_event < 10 and update_user['security']['status'] and self.event_special:
                     del self.cmd_event[ctx.author.id]
                     list_chests = []
                     for k, v in self.chests.items():

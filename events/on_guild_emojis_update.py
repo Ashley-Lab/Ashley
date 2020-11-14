@@ -27,9 +27,9 @@ class EmojiUpdate(commands.Cog):
                 return
 
             self.bot.logger.info('Servidor %s adicinou %s emojis.', guild, len(added))
-            channel = self.bot.get_channel(data['log_channel_id'])
+            canal = self.bot.get_channel(data['log_channel_id'])
 
-            if not channel:
+            if not canal:
                 return
 
             for _ in added:
@@ -39,8 +39,16 @@ class EmojiUpdate(commands.Cog):
                             continue
 
                         data = io.BytesIO(await resp.read())
-                        await channel.send(_.name, file=discord.File(data, f'{_.name}.png'))
-                        await asyncio.sleep(1)
+                        ashley = canal.guild.get_member(self.bot.user.id)
+                        perms = canal.permissions_for(ashley)
+                        if perms.send_messages or perms.read_messages:
+                            if not perms.embed_links or not perms.attach_files:
+                                await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
+                                                 "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
+                                                 " CORRETAMENTE!**")
+                            else:
+                                await canal.send(_.name, file=discord.File(data, f'{_.name}.png'))
+                            await asyncio.sleep(1)
                 except TypeError:
                     continue
 

@@ -80,8 +80,8 @@ class RankingClass(commands.Cog):
 
         # load dashboard image detail
         star = data['user']['stars']
-        if star > 20:
-            star = 20
+        if star > 25:
+            star = 25
         position = str(await rank_position(self.bot, member))
         stars_dashboard = Image.open(f'images/rank/star/star_{star}.png').convert('RGBA')
         image.paste(stars_dashboard, (0, 0), stars_dashboard)

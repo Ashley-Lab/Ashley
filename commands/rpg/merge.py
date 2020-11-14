@@ -13,142 +13,20 @@ git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.g
        "https://media1.tenor.com/images/17e1414f1dc91bc1f76159d7c3fa03ea/tenor.gif?itemid=15744166",
        "https://media1.tenor.com/images/39c363015f2ae22f212f9cd8df2a1063/tenor.gif?itemid=15894886"]
 
-merge_data = {
-    "assassin_1": "assassin_2",
-    "assassin_2": "assassin_3",
-    "assassin_3": "assassin_4",
-    "assassin_4": "assassin_5",
-
-    "necromancer_1": "necromancer_2",
-    "necromancer_2": "necromancer_3",
-    "necromancer_3": "necromancer_4",
-    "necromancer_4": "necromancer_5",
-
-    "paladin_1": "paladin_2",
-    "paladin_2": "paladin_3",
-    "paladin_3": "paladin_4",
-    "paladin_4": "paladin_5",
-
-    "priest_1": "priest_2",
-    "priest_2": "priest_3",
-    "priest_3": "priest_4",
-    "priest_4": "priest_5",
-
-    "warlock_1": "warlock_2",
-    "warlock_2": "warlock_3",
-    "warlock_3": "warlock_4",
-    "warlock_4": "warlock_5",
-
-    "warrior_1": "warrior_2",
-    "warrior_2": "warrior_3",
-    "warrior_3": "warrior_4",
-    "warrior_4": "warrior_5",
-
-    "wizard_1": "wizard_2",
-    "wizard_2": "wizard_3",
-    "wizard_3": "wizard_4",
-    "wizard_4": "wizard_5",
-
-    "11": "21",
-    "12": "22",
-    "13": "23",
-    "14": "24",
-    "15": "25",
-
-    "21": "31",
-    "22": "32",
-    "23": "33",
-    "24": "34",
-    "25": "35",
-
-    "31": "41",
-    "32": "42",
-    "33": "43",
-    "34": "44",
-    "35": "45",
-
-    "41": "51",
-    "42": "52",
-    "43": "53",
-    "44": "54",
-    "45": "55",
-
-    "16": "26",
-    "17": "27",
-    "18": "28",
-    "19": "29",
-    "20": "30",
-
-    "26": "36",
-    "27": "37",
-    "28": "38",
-    "29": "39",
-    "30": "40",
-
-    "36": "46",
-    "37": "47",
-    "38": "48",
-    "39": "49",
-    "40": "50",
-
-    "46": "56",
-    "47": "57",
-    "48": "58",
-    "49": "59",
-    "50": "60",
-
-    "61": "71",
-    "62": "72",
-    "63": "73",
-    "64": "74",
-    "65": "75",
-
-    "71": "81",
-    "72": "82",
-    "73": "83",
-    "74": "84",
-    "75": "85",
-
-    "81": "91",
-    "82": "92",
-    "83": "93",
-    "84": "94",
-    "85": "95",
-
-    "91": "66",
-    "92": "67",
-    "93": "68",
-    "94": "69",
-    "95": "70",
-
-    "101": "104",
-    "102": "105",
-    "103": "106",
-
-    "104": "107",
-    "105": "108",
-    "106": "109",
-
-    "107": "110",
-    "108": "111",
-    "109": "112",
-}
-
-MAX_LEVEL = ['assassin_5', 'necromancer_5', 'paladin_5', 'priest_5', 'warlock_5', 'warrior_5', 'wizard_5',
-             '25', '35', '45', '55', '30', '40', '50', '60', '75', '85', '95', '70', '110', '111', '112']
-
 
 class MergeClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.i = self.bot.items
+        self.merge_data = self.bot.config['attribute']['merge_data']
+        self.max_level = self.bot.config['attribute']['max_level']
 
         self.cost = {
-            "solution_agent_green": 3,
-            "solution_agent_blue": 3,
-            "Discharge_Crystal": 5,
-            "Acquittal_Crystal": 5,
-            "Crystal_of_Energy": 5
+            "solution_agent_green": 1,
+            "solution_agent_blue": 1,
+            "Discharge_Crystal": 15,
+            "Acquittal_Crystal": 15,
+            "Crystal_of_Energy": 15
         }
 
     @check_it(no_pm=True)
@@ -206,7 +84,7 @@ class MergeClass(commands.Cog):
 
         if key_item[1] < 3:
             return await ctx.send("<:negate:721581573396496464>│``VOCE NAO TEM 3 DESSE ITEM PARA FUNDIR...``")
-        if key_item[0] in MAX_LEVEL:
+        if key_item[0] in self.max_level:
             return await ctx.send("<:negate:721581573396496464>│``ESSE ITEM JA ESTA NO NIVEL MAXIMO!``")
 
         # =========================================================================================
@@ -266,9 +144,9 @@ class MergeClass(commands.Cog):
             del update['rpg']['items'][key_item[0]]
 
         try:
-            update['rpg']['items'][merge_data[key_item[0]]] += 1
+            update['rpg']['items'][self.merge_data[key_item[0]]] += 1
         except KeyError:
-            update['rpg']['items'][merge_data[key_item[0]]] = 1
+            update['rpg']['items'][self.merge_data[key_item[0]]] = 1
 
         await msg.edit(content=f"<:confirmed:721581574461587496>│``itens retirados com sucesso...``")
         await sleep(2)
