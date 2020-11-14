@@ -27,7 +27,7 @@ class EmojiUpdate(commands.Cog):
                 return
 
             self.bot.logger.info('Servidor %s adicinou %s emojis.', guild, len(added))
-            channel = self.bot.get_channel(data['log_config']['log_channel_id'])
+            channel = self.bot.get_channel(data['log_channel_id'])
 
             if not channel:
                 return

@@ -123,7 +123,7 @@ class MarriedSystem(commands.Cog):
         update_member = data_member
 
         update_user['user']['married'] = False
-        update_user['user']['married_at'] = None
+        # update_user['user']['married_at'] = None
         await self.bot.db.update_data(data_user, update_user, 'users')
 
         update_member['user']['married'] = False

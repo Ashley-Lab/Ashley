@@ -32,6 +32,7 @@ class Ashley(commands.AutoShardedBot):
         super().__init__(*args, shard_count=1, **kwargs)
         self.owner_id = 300592580381376513
         self.start_time = dt.utcnow()
+        self.cmd_event = {}
         self.commands_used = Counter()
         self.guilds_commands = Counter()
         self.guilds_messages = Counter()
@@ -48,7 +49,9 @@ class Ashley(commands.AutoShardedBot):
         self.vip_cog = self.config['attribute']['vip_cog']
         self.titling = self.config['attribute']['titling']
         self.boxes_l = self.config['attribute']['boxes_l']
+        self.chests_l = self.config['attribute']['chests_l']
         self.boxes = self.config['attribute']['boxes']
+        self.chests = self.config['attribute']['chests']
         self.money = self.config['attribute']['money']
         self.items = self.config['items']
         self.icons = self.config['icons']
@@ -56,6 +59,7 @@ class Ashley(commands.AutoShardedBot):
         self.no_panning = self.config['attribute']['no_panning']
         self.testers = self.config['attribute']['testers']
         self.maintenance = False
+        self.event_special = True
 
         self.log_dir = os.path.join('log', 'discord.log')
         self.logger = logging.getLogger('discord')
@@ -75,6 +79,7 @@ class Ashley(commands.AutoShardedBot):
         self.block = self.config['attribute']['block']
         self.data_cog = {}
         self.box = {}
+        self.chests_users = {}
         self.msg_cont = 0
 
         self.db: Database = Database(self)
@@ -154,6 +159,14 @@ class Ashley(commands.AutoShardedBot):
                 self.commands_used[ctx.command] += 1
                 self.guilds_commands[ctx.guild.id] += 1
 
+                if ctx.author.id in self.cmd_event.keys():
+                    try:
+                        self.cmd_event[ctx.author.id][str(ctx.command).lower()] += 1
+                    except KeyError:
+                        self.cmd_event[ctx.author.id][str(ctx.command).lower()] = 1
+                else:
+                    self.cmd_event[ctx.author.id] = {str(ctx.command).lower(): 1}
+
                 if update_user['security']['status']:
                     update_user['user']['commands'] += 1
                 if (update_user['user']['commands'] % 10) == 0:
@@ -188,6 +201,26 @@ class Ashley(commands.AutoShardedBot):
                 for key in self.titling.keys():
                     if update_user['user']['commands'] >= int(key):
                         update_user['user']['titling'] = self.titling[key]
+
+                if str(ctx.command).lower() in ['marry', 'divorce']:
+                    if update_user['user']['married']:
+                        dm = await self.db.get_data("user_id", update_user['user']['married_at'], "users")
+                        um = dm
+                        um['user']['married'] = True
+                        um['user']['married_at'] = ctx.author.id
+                        um['user']['marrieding'] = False
+                        await self.db.update_data(dm, um, 'users')
+                        update_user['user']['married'] = True
+                        update_user['user']['married_at'] = update_user['user']['married_at']
+                        update_user['user']['marrieding'] = False
+                    else:
+                        dm = await self.db.get_data("user_id", update_user['user']['married_at'], "users")
+                        um = dm
+                        um['user']['married'] = False
+                        um['user']['married_at'] = None
+                        await self.db.update_data(dm, um, 'users')
+                        update_user['user']['married'] = False
+                        update_user['user']['married_at'] = None
 
                 if str(ctx.command).lower() in ['card', 'whats', 'hot', 'guess', 'hangman', 'jkp', 'pokemon']:
                     update_user['config']['playing'] = False
@@ -233,6 +266,42 @@ class Ashley(commands.AutoShardedBot):
                             await ctx.send(f'🎊 **PARABENS** 🎉 {ctx.author} ``você upou sua guilda para o ranking`` '
                                            f'**Gold** ``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
                                            f'partir de agora e `` **+2000** ``Fichas para jogar``')
+
+                cmds_event = len(self.cmd_event[ctx.author.id].keys())
+                if randint(1, 300) - cmds_event < 5 and update_user['security']['status'] and self.event_special:
+                    del self.cmd_event[ctx.author.id]
+                    list_chests = []
+                    for k, v in self.chests.items():
+                        list_chests += [k] * v
+                    CHEST = choice(list_chests)
+                    chest_type = [k for k in self.chests.keys()].index(CHEST)
+                    for _ in range(chest_type + 1):
+                        if ctx.author.id not in self.chests_users:
+                            self.chests_users[ctx.author.id] = {"quant": 1, "chests": [chest_type]}
+                        else:
+                            self.chests_users[ctx.author.id]['quant'] += 1
+                            self.chests_users[ctx.author.id]['chests'].append(chest_type)
+
+                    embed = discord.Embed(
+                        title="**Baú de Evento Liberado**",
+                        colour=self.color,
+                        description=f"Você foi gratificado com 1 **{self.chests_l[str(chest_type)]}**!\n "
+                                    f"Para abri-lo é so usar o comando ``ash event``\n "
+                                    f"**Apenas você pode abrir seu baú**\n"
+                                    f"**Obs:** Você tem {self.chests_users[ctx.author.id]['quant']} bau(s)!")
+                    embed.set_author(name=self.user.name, icon_url=self.user.avatar_url)
+                    embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+                    embed.set_thumbnail(url=CHEST)
+                    awards = 'images/elements/chest.gif'
+                    file = discord.File(awards, filename="reward_chest.gif")
+                    embed.set_image(url="attachment://reward_chest.gif")
+                    perms = ctx.channel.permissions_for(ctx.me)
+                    if perms.send_messages and perms.read_messages:
+                        if perms.embed_links and perms.attach_files:
+                            await ctx.send(file=file, embed=embed)
+                        else:
+                            await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` **ADICIONAR "
+                                           "LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR CORRETAMENTE!**")
 
                 if randint(1, 200) < 3 and update_user['security']['status'] and cmd not in self.block:
                     list_boxes = []

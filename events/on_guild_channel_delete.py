@@ -23,8 +23,8 @@ class ChannelDelete(commands.Cog):
                 return
 
             embed = discord.Embed(color=self.bot.color,
-                title=":put_litter_in_its_place: **Canal de texto deletado**",
-                description=f"**Canal de texto:** ``{channel.name}``")
+                                  title=":put_litter_in_its_place: **Canal de texto deletado**",
+                                  description=f"**Canal de texto:** ``{channel.name}``")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
 
             await canal.send(embed=embed)

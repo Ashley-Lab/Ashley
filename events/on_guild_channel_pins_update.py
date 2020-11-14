@@ -24,15 +24,15 @@ class ChannelPinUpdate(commands.Cog):
                 return
 
             fix_ = "fixada"
-            time = ''
+            time_ = ''
             if last_pin:
                 time_ = "em: " + str(last_pin)
             else:
                 fix_ = "dex" + fix_
 
             embed = discord.Embed(color=self.color,
-                title=f":bangbang: **Uma mensagem foi {fix_}**",
-                description=f"**Canal de texto:** {channel!s} \n{time_}")
+                                  title=f":bangbang: **Uma mensagem foi {fix_}**",
+                                  description=f"**Canal de texto:** {channel!s} \n{time_}")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
 
             await canal.send(embed=embed)

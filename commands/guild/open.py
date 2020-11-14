@@ -4,7 +4,7 @@ from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
 from random import choice, randint
-from resources.giftmanage import register_gift, open_gift
+from resources.giftmanage import register_gift, open_gift, open_chest
 from resources.img_edit import gift as gt
 
 
@@ -132,6 +132,85 @@ class OpenClass(commands.Cog):
         if reward['rare'] is not None:
             response = await self.bot.db.add_reward(ctx, reward['rare'])
             await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS RAROS** ✨ {response}')
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='event', aliases=['evento'])
+    async def event(self, ctx):
+        """Abra um presente para liberar seu giftcard."""
+        if not self.bot.event_special:
+            return await ctx.send(f"<:negate:721581573396496464>│``ATUALMENTE NAO TEM NENHUM EVENTO ESPECIAL!``")
+
+        if ctx.author.id in self.bot.chests_users:
+            try:
+                CHEST = choice(self.bot.chests_users[ctx.author.id]['chests'])
+            except IndexError:
+                return await ctx.send(f"<:negate:721581573396496464>│``Você nao tem mais baus disponiveis...``\n"
+                                      f"``TODOS OS BAUS FORAM UTILIZADOS, AGUARDE UM NOVO BÁU DROPAR E FIQUE "
+                                      f"ATENTO!``")
+
+            I_CHEST = self.bot.chests_users[ctx.author.id]['chests'].index(CHEST)
+            del (self.bot.chests_users[ctx.author.id]['chests'][I_CHEST])
+            self.bot.chests_users[ctx.author.id]['quant'] -= 1
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            if not data['security']['status']:
+                return await ctx.send("<:negate:721581573396496464>│'``USUARIO DE MACRO / OU USANDO COMANDOS "
+                                      "RAPIDO DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
+
+            reward = open_chest(CHEST)
+            await ctx.send("🎊 **PARABENS** 🎉 ``VC ABRIU O SEU BAU COM SUCESSO!!``")
+            answer_ = await self.bot.db.add_money(ctx, reward['money'], True)
+            await ctx.send(f'<:rank:519896825411665930>│``você GANHOU:``\n {answer_}')
+
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['inventory']['coins'] += reward["coins"]
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
+                           f'<:coin:546019942936608778> **{reward["coins"]}** ``fichas!``')
+
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            update['inventory']['Energy'] += reward["Energy"]
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
+                           f'<:energy:546019943603503114> **{reward["Energy"]}** ``energias!``')
+
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
+            response = '``Caiu pra você:`` \n'
+            for item in reward['items']:
+                amount = randint(1, 5)
+                try:
+                    update['inventory'][item] += amount
+                except KeyError:
+                    update['inventory'][item] = amount
+                response += f"{self.bot.items[item][0]} ``{amount}`` ``{self.bot.items[item][1]}``\n"
+            response += '```dê uma olhada no seu inventario com o comando: "ash i"```'
+            await self.bot.db.update_data(data, update, 'users')
+            await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
+
+            if reward['rare'] is not None:
+                response = await self.bot.db.add_reward(ctx, reward['rare'])
+                await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS RAROS** ✨ '
+                               f'{response}')
+
+            relics = ["WrathofNatureCapsule", "UltimateSpiritCapsule", "SuddenDeathCapsule", "InnerPeacesCapsule",
+                      "EternalWinterCapsule", "EssenceofAsuraCapsule", "DivineCalderaCapsule", "DemoniacEssenceCapsule"]
+            cr = 0
+            for relic in relics:
+                if relic in update['inventory'].keys():
+                    cr += 1
+            if cr == 8:
+                channel = self.bot.get_channel(774400939293409290)
+                if channel is not None:
+                    await channel.send(f'<a:caralho:525105064873033764>│``{ctx.author}`` ✨ **GANHOU O EVENTO** ✨')
+
+        else:
+            await ctx.send(f"<:negate:721581573396496464>│``Você nao tem mais baus disponiveis...``\n"
+                           f"**OBS:** se eu for reiniciada, todos os baus disponiveis sao resetados. Isso é feito"
+                           f" por medidas de segurança da minha infraestrutura!")
 
 
 def setup(bot):

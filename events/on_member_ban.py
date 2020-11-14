@@ -17,15 +17,15 @@ class MemberBanClass(commands.Cog):
 
         data = data["log_config"]
 
-        if dat['log'] and data['member_ban']:
+        if data['log'] and data['member_ban']:
             canal = self.bot.get_channel(data['log_channel_id'])
 
             if not canal:
                 return
 
             embed = discord.Embed(color=self.color,
-                title=":star2: **Membro Banido**",
-                description=f"**Membro:** {user.name}")
+                                  title=":star2: **Membro Banido**",
+                                  description=f"**Membro:** {user.name}")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
 
             await canal.send(embed=embed)

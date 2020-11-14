@@ -23,8 +23,8 @@ class ChannelCreate(commands.Cog):
                 return
 
             embed = discord.Embed(color=self.bot.color,
-                title=":star2: **Canal de texto criado**",
-                description=f"**Canal de texto:** {channel.mention}")
+                                  title=":star2: **Canal de texto criado**",
+                                  description=f"**Canal de texto:** {channel.mention}")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
 
             await canal.send(embed=embed)

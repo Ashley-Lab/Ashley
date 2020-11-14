@@ -10,7 +10,7 @@ class RoleCreate(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_role_create(self, role):
         data = await self.bot.db.get_data("guild_id", role.guild.id, "guilds")
-        
+
         if not data:
             return
 
@@ -18,13 +18,13 @@ class RoleCreate(commands.Cog):
 
         if data['log'] and data['role_created']:
             canal = self.bot.get_channel(data['log_channel_id'])
-            
+
             if not canal:
                 return
 
             embed = discord.Embed(color=self.bot.color,
-                title=":star2: **Cargo Criado**",
-                description=f"**Cargo:** {role.mention}")
+                                  title=":star2: **Cargo Criado**",
+                                  description=f"**Cargo:** {role.mention}")
             embed.set_footer(text="Ashley ® Todos os direitos reservados.")
 
             await canal.send(embed=embed)

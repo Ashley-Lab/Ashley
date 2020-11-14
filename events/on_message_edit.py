@@ -17,7 +17,7 @@ class OnMessageEdit(commands.Cog):
             return
 
         data = await self.bot.db.get_data("guild_id", after.guild.id, "guilds")
-        
+
         if not data:
             return
 
@@ -29,9 +29,8 @@ class OnMessageEdit(commands.Cog):
             if not canal:
                 return
 
-            embed = discord.Embed(color=self.color,
-                title=f":pencil: {after.author} **editou uma mensagem de texto**",
-                description=f"**Canal de texto:** {after.channel.mention}")
+            embed = discord.Embed(color=self.color, title=f":pencil: {after.author} **editou uma mensagem de texto**",
+                                  description=f"**Canal de texto:** {after.channel.mention}")
 
             embed.add_field(name="**Antiga mensagem:**",
                             value=f"```{before.content}```")

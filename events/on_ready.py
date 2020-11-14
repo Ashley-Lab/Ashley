@@ -143,16 +143,6 @@ class OnReady(commands.Cog):
                                 else:
                                     await channel__.send(embed=embed)
 
-                            try:
-                                if chance <= 5 and perms.send_messages or perms.read_messages:
-                                    await _member_.send(f"<a:palmas:520418512011788309>│``Parabens você acaba de ter "
-                                                        f"uma sorte grande ao ser sorteado no servidor`` "
-                                                        f"**{str(guild)}** ``verifique seu iventario.`` "
-                                                        f"**Obs: caso esse tipo de mensagem incomode "
-                                                        f"voce, surigo silenciar minhas mesagens no seu privado.**")
-                            except discord.errors.Forbidden:
-                                pass
-
                             for k, v in rewards.items():
                                 try:
                                     update_member['inventory'][k] += v
