@@ -158,7 +158,7 @@ class OpenClass(commands.Cog):
                 return await ctx.send("<:negate:721581573396496464>│'``USUARIO DE MACRO / OU USANDO COMANDOS "
                                       "RAPIDO DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**'")
 
-            reward = open_chest(CHEST)
+            reward = open_chest(self.bot.chests_l[str(CHEST)])
             await ctx.send("🎊 **PARABENS** 🎉 ``VC ABRIU O SEU BAU COM SUCESSO!!``")
             answer_ = await self.bot.db.add_money(ctx, reward['money'], True)
             await ctx.send(f'<:rank:519896825411665930>│``você GANHOU:``\n {answer_}')

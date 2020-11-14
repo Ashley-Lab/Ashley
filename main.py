@@ -275,12 +275,12 @@ class Ashley(commands.AutoShardedBot):
                         list_chests += [k] * v
                     CHEST = choice(list_chests)
                     chest_type = [k for k in self.chests.keys()].index(CHEST)
-                    for _ in range(chest_type + 1):
-                        if ctx.author.id not in self.chests_users:
-                            self.chests_users[ctx.author.id] = {"quant": 1, "chests": [chest_type]}
-                        else:
-                            self.chests_users[ctx.author.id]['quant'] += 1
-                            self.chests_users[ctx.author.id]['chests'].append(chest_type)
+
+                    if ctx.author.id not in self.chests_users:
+                        self.chests_users[ctx.author.id] = {"quant": 1, "chests": [chest_type]}
+                    else:
+                        self.chests_users[ctx.author.id]['quant'] += 1
+                        self.chests_users[ctx.author.id]['chests'].append(chest_type)
 
                     embed = discord.Embed(
                         title="**Baú de Evento Liberado**",
