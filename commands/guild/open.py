@@ -147,8 +147,8 @@ class OpenClass(commands.Cog):
                 CHEST = choice(self.bot.chests_users[ctx.author.id]['chests'])
             except IndexError:
                 return await ctx.send(f"<:negate:721581573396496464>│``Você nao tem mais baus disponiveis...``\n"
-                                      f"``TODOS OS BAUS FORAM UTILIZADOS, AGUARDE UM NOVO BÁU DROPAR E FIQUE "
-                                      f"ATENTO!``")
+                                      f"``TODOS OS BAUS FORAM UTILIZADOS, DROPE UM NOVO BÁU UTILIZANDO O MAXIMO DE "
+                                      f"COMANDOS DIFERENTES POSSIVEIS!``")
 
             I_CHEST = self.bot.chests_users[ctx.author.id]['chests'].index(CHEST)
             del (self.bot.chests_users[ctx.author.id]['chests'][I_CHEST])
@@ -191,9 +191,9 @@ class OpenClass(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
-            if reward['rare'] is not None:
-                response = await self.bot.db.add_reward(ctx, reward['rare'])
-                await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **ITENS RAROS** ✨ '
+            if reward['relic'] is not None:
+                response = await self.bot.db.add_reward(ctx, reward['relic'])
+                await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **O ITEM SECRETO** ✨ '
                                f'{response}')
 
             relics = ["WrathofNatureCapsule", "UltimateSpiritCapsule", "SuddenDeathCapsule", "InnerPeacesCapsule",

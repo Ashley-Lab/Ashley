@@ -112,6 +112,7 @@ ITEMS:
         """Subcomando de box, para comprar uma box ativa.
         recomenda-se sempre pegar box de raridades mamiores."""
         global summon
+        summon = None
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
         if data['config']['buying']:

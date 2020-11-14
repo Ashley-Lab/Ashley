@@ -189,4 +189,4 @@ def open_chest(chest):
             list_relic += [k] * v
         relic = choice(list_relic)
 
-    return {"money": ethernyas, "coins": coins, "Energy": Energy, "items": items, "rare": relic}
+    return {"money": ethernyas, "coins": coins, "Energy": Energy, "items": items, "relic": relic}
