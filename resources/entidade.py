@@ -353,11 +353,14 @@ class Entity(object):
                 except KeyError:
                     pass
 
-                if self.effects[c]['turns'] > 0:
-                    self.effects[c]['turns'] -= 1
+                try:
+                    if self.effects[c]['turns'] > 0:
+                        self.effects[c]['turns'] -= 1
 
-                if self.effects[c]['turns'] == 0:
-                    del self.effects[c]
+                    if self.effects[c]['turns'] == 0:
+                        del self.effects[c]
+                except KeyError:
+                    pass
 
         return self.atack if self.atack != "PASS-TURN" else "PASS-TURN"
 

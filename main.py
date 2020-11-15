@@ -267,9 +267,16 @@ class Ashley(commands.AutoShardedBot):
                                            f'**Gold** ``e ganhou a`` **chance** ``de garimpar mais ethernyas a '
                                            f'partir de agora e `` **+2000** ``Fichas para jogar``')
 
-                cmds_event = len(self.cmd_event[ctx.author.id].keys())
+                try:
+                    cmds_event = len(self.cmd_event[ctx.author.id].keys())
+                except KeyError:
+                    cmds_event = 0
+
                 if randint(1, 200) - cmds_event < 5 and update_user['security']['status'] and self.event_special:
-                    del self.cmd_event[ctx.author.id]
+                    try:
+                        del self.cmd_event[ctx.author.id]
+                    except KeyError:
+                        pass
                     list_chests = []
                     for k, v in self.chests.items():
                         list_chests += [k] * v
@@ -289,7 +296,7 @@ class Ashley(commands.AutoShardedBot):
                                     f"**{self.chests_l[str(chest_type)]}**!\n "
                                     f"Para abri-lo é so usar o comando ``ash event``\n "
                                     f"**Apenas você pode abrir seu baú**\n"
-                                    f"**Obs:** Você tem {self.chests_users[ctx.author.id]['quant']} bau(s)!")
+                                    f"**Obs:** Você tem **{self.chests_users[ctx.author.id]['quant']}** bau(s)!")
                     embed.set_author(name=self.user.name, icon_url=self.user.avatar_url)
                     embed.set_footer(text="Ashley ® Todos os direitos reservados.")
                     embed.set_thumbnail(url=CHEST)

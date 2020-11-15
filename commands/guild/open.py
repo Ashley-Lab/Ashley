@@ -181,7 +181,7 @@ class OpenClass(commands.Cog):
             update = data
             response = '``Caiu pra você:`` \n'
             for item in reward['items']:
-                amount = randint(1, 5)
+                amount = randint(1, 3)
                 try:
                     update['inventory'][item] += amount
                 except KeyError:
@@ -192,7 +192,7 @@ class OpenClass(commands.Cog):
             await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
             if reward['relic'][0] is not None:
-                response = await self.bot.db.add_reward(ctx, reward['relic'])
+                response = await self.bot.db.add_reward(ctx, reward['relic'], True)
                 await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **O ITEM SECRETO** ✨ '
                                f'{response}')
 

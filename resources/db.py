@@ -231,7 +231,7 @@ class Database(object):
                        f"**{answer['list'][2]}**  {self.bot.money[2]}\n"
             return msg
 
-    async def add_reward(self, ctx, list_):
+    async def add_reward(self, ctx, list_, one=False):
         data_user = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update_user = data_user
 
@@ -240,7 +240,7 @@ class Database(object):
 
         response = '``Caiu pra você:`` \n'
         for item in list_:
-            amount = randint(1, 3)
+            amount = randint(1, 3) if not one else 1
             try:
                 update_user['inventory'][item] += amount
             except KeyError:

@@ -86,17 +86,12 @@ async def open_gift(bot, gift):
 def open_chest(chest):
 
     if chest == "Baú de Evento - Incomum":
-        chance_relic = 5
+        chance_relic = 30
         max_money = 250
         max_coin = 100
         max_energy = 75
         bonus = choice(['Unearthly', 'Surpassing', 'Hurricane', 'Heavenly', 'Blazing', 'Augur'])
-
-        if randint(1, 100) < 20:
-            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
-            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
-        else:
-            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+        items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
 
         relics = {
             "WrathofNatureCapsule": 1,
@@ -107,44 +102,39 @@ def open_chest(chest):
             "EssenceofAsuraCapsule": 1,
             "DivineCalderaCapsule": 1,
             "DemoniacEssenceCapsule": 1,
-            "unsealed_stone": 20,
-            "melted_artifact": 15,
-            "boss_key": 25,
-            "angel_stone": 30,
-            "angel_wing": 12
+            "unsealed_stone": 3,
+            "melted_artifact": 3,
+            "boss_key": 3,
+            "angel_stone": 3,
+            "angel_wing": 3
         }
 
     elif chest == "Baú de Evento - Raro":
-        chance_relic = 10
+        chance_relic = 60
         max_money = 300
         max_coin = 150
         max_energy = 100
         bonus = choice(["soul_crystal_of_love", "soul_crystal_of_hope", "soul_crystal_of_hate"])
-
-        if randint(1, 100) < 40:
-            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
-            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
-        else:
-            items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
+        items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
 
         relics = {
-            "WrathofNatureCapsule": 2,
-            "UltimateSpiritCapsule": 2,
-            "SuddenDeathCapsule": 2,
-            "InnerPeacesCapsule": 2,
-            "EternalWinterCapsule": 2,
-            "EssenceofAsuraCapsule": 2,
-            "DivineCalderaCapsule": 2,
-            "DemoniacEssenceCapsule": 2,
-            "unsealed_stone": 15,
-            "melted_artifact": 10,
-            "boss_key": 20,
-            "angel_stone": 25,
-            "angel_wing": 7
+            "WrathofNatureCapsule": 3,
+            "UltimateSpiritCapsule": 3,
+            "SuddenDeathCapsule": 3,
+            "InnerPeacesCapsule": 3,
+            "EternalWinterCapsule": 3,
+            "EssenceofAsuraCapsule": 3,
+            "DivineCalderaCapsule": 3,
+            "DemoniacEssenceCapsule": 3,
+            "unsealed_stone": 3,
+            "melted_artifact": 3,
+            "boss_key": 3,
+            "angel_stone": 3,
+            "angel_wing": 3
         }
 
     elif chest == "Baú de Evento - Super Raro":
-        chance_relic = 15
+        chance_relic = 90
         max_money = 350
         max_coin = 200
         max_energy = 125
@@ -157,48 +147,43 @@ def open_chest(chest):
             items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
 
         relics = {
-            "WrathofNatureCapsule": 3,
-            "UltimateSpiritCapsule": 3,
-            "SuddenDeathCapsule": 3,
-            "InnerPeacesCapsule": 3,
-            "EternalWinterCapsule": 3,
-            "EssenceofAsuraCapsule": 3,
-            "DivineCalderaCapsule": 3,
-            "DemoniacEssenceCapsule": 3,
-            "unsealed_stone": 10,
-            "melted_artifact": 5,
-            "boss_key": 15,
-            "angel_stone": 20,
-            "angel_wing": 2
+            "WrathofNatureCapsule": 5,
+            "UltimateSpiritCapsule": 5,
+            "SuddenDeathCapsule": 5,
+            "InnerPeacesCapsule": 5,
+            "EternalWinterCapsule": 5,
+            "EssenceofAsuraCapsule": 5,
+            "DivineCalderaCapsule": 5,
+            "DemoniacEssenceCapsule": 5,
+            "unsealed_stone": 1,
+            "melted_artifact": 1,
+            "boss_key": 1,
+            "angel_stone": 1,
+            "angel_wing": 1
         }
 
     else:
-        chance_relic = 20
+        chance_relic = 100
         max_money = 400
         max_coin = 250
         max_energy = 150
         bonus = choice(["fused_diamond", "fused_ruby", "fused_sapphire", "fused_emerald"])
 
         if randint(1, 100) < 80:
-            bb = choice(['crystal_of_death', 'enchanted_stone', '?-Bollash', 'nucleo_z', 'nucleo_y', 'nucleo_x'])
+            bb = choice(['unsealed_stone', 'melted_artifact', 'boss_key', 'angel_stone', 'angel_wing'])
             items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus, bb]
         else:
             items = ['Discharge_Crystal', 'Crystal_of_Energy', 'Acquittal_Crystal', bonus]
 
         relics = {
-            "WrathofNatureCapsule": 4,
-            "UltimateSpiritCapsule": 4,
-            "SuddenDeathCapsule": 4,
-            "InnerPeacesCapsule": 4,
-            "EternalWinterCapsule": 4,
-            "EssenceofAsuraCapsule": 4,
-            "DivineCalderaCapsule": 4,
-            "DemoniacEssenceCapsule": 4,
-            "unsealed_stone": 5,
-            "melted_artifact": 5,
-            "boss_key": 5,
-            "angel_stone": 5,
-            "angel_wing": 5
+            "WrathofNatureCapsule": 1,
+            "UltimateSpiritCapsule": 1,
+            "SuddenDeathCapsule": 1,
+            "InnerPeacesCapsule": 1,
+            "EternalWinterCapsule": 1,
+            "EssenceofAsuraCapsule": 1,
+            "DivineCalderaCapsule": 1,
+            "DemoniacEssenceCapsule": 1
         }
 
     ethernyas = randint(200, max_money)
@@ -206,8 +191,7 @@ def open_chest(chest):
     Energy = randint(50, max_energy)
 
     relic = None
-    chance = randint(1, 100)
-    if chance <= chance_relic:
+    if randint(1, 100) <= chance_relic:
         list_relic = []
         for k, v in relics.items():
             list_relic += [k] * v
