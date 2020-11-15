@@ -15,9 +15,11 @@ class HugClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='hug', aliases=['abraço', 'abraco'])
-    async def hug(self, ctx):
+    async def hug(self, ctx, member: discord.Member = None):
         """Comando de gifs de abraço
         Use ash hug <@usuario a sua escolha>"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
@@ -33,7 +35,7 @@ class HugClass(commands.Cog):
             hug = choice(hug_img)
             hug_embed = discord.Embed(title='Abraço :heart:',
                                       description='**{}** Ele(a) recebeu um abraço de **{}**! Que casal fofo! '
-                                                  ':heart_eyes: '.format(ctx.message.mentions[0].name, ctx.author.name),
+                                                  ':heart_eyes: '.format(member.name, ctx.author.name),
                                       color=self.color)
             hug_embed.set_image(url=hug)
             hug_embed.set_footer(text="Ashley ® Todos os direitos reservados.")

@@ -15,9 +15,11 @@ class KissClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='kiss', aliases=['beijo', 'beijar', 'beijao', 'beijão'])
-    async def kiss(self, ctx):
+    async def kiss(self, ctx, member: discord.Member = None):
         """Comando de gifs de beijo
         Use ash kiss <@usuario a sua escolha>"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
@@ -31,7 +33,7 @@ class KissClass(commands.Cog):
             kiss = choice(kissimg)
             kissemb = discord.Embed(title='Beijo :heart:',
                                     description='**{}** Ele(a) recebeu um beijo de **{}**! Que casal fofo! '
-                                                ':heart_eyes: '.format(ctx.message.mentions[0].name, ctx.author.name),
+                                                ':heart_eyes: '.format(member.name, ctx.author.name),
                                     color=self.color)
             kissemb.set_image(url=kiss)
             kissemb.set_footer(text="Ashley ® Todos os direitos reservados.")

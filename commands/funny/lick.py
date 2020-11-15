@@ -15,9 +15,11 @@ class LickClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='lick', aliases=['lambida', 'lamber'])
-    async def lick(self, ctx):
+    async def lick(self, ctx, member: discord.Member = None):
         """Comando de gifs de lambida
         Use ash lick <@usuario a sua escolha>"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
@@ -31,7 +33,7 @@ class LickClass(commands.Cog):
             lick = choice(lickimg)
             lickemb = discord.Embed(title='Lambida :heart:',
                                     description='**{}** Ele(a) recebeu uma lambida de **{}**! Que casal fofo! '
-                                                ':heart_eyes: '.format(ctx.message.mentions[0].name, ctx.author.name),
+                                                ':heart_eyes: '.format(member.name, ctx.author.name),
                                     color=self.color)
             lickemb.set_image(url=lick)
             lickemb.set_footer(text="Ashley ® Todos os direitos reservados.")

@@ -15,9 +15,11 @@ class PushClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='push', aliases=['empurrao', 'empurrão', 'empurrar'])
-    async def push(self, ctx):
+    async def push(self, ctx, member: discord.Member = None):
         """Comando de gifs de empurrão
         Use ash push <@usuario a sua escolha>"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
@@ -31,10 +33,10 @@ class PushClass(commands.Cog):
 
             chance = randint(1, 100)
 
-            if ctx.message.mentions[0].id == self.bot.owner_id:
+            if member.id == self.bot.owner_id:
                 chance = 1
 
-            if ctx.message.mentions[0].id == self.bot.user.id:
+            if member.id == self.bot.user.id:
                 return await ctx.send('<:pqp:530031187331121152>│``Você quer me bater com meu proprio recurso?``')
 
             if chance <= 10:
@@ -56,7 +58,7 @@ class PushClass(commands.Cog):
                 push = 'https://media1.tenor.com/images/62ef360ace36ba9e60a11e6dec2edb59/tenor.gif?itemid=5416860'
 
             pushemb = discord.Embed(title='Empurrão :raised_hands:',
-                                    description='**{}** {} **{}**! {}'.format(ctx.message.mentions[0].name, text,
+                                    description='**{}** {} **{}**! {}'.format(member.name, text,
                                                                               ctx.author.name, end),
                                     color=self.color)
             pushemb.set_image(url=push)

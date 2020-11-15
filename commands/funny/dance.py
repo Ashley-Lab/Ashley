@@ -15,9 +15,11 @@ class DanceClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='dance', aliases=['dançar'])
-    async def dance(self, ctx):
+    async def dance(self, ctx, member: discord.Member = None):
         """Comando de gifs de dança
         Use ash dance <@usuario a sua escolha>"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
@@ -31,8 +33,7 @@ class DanceClass(commands.Cog):
             dance = choice(dance_img)
             dance_embed = discord.Embed(title='Dance <a:dyno:541775159460102167>',
                                         description='**{}** Ele(a) esta dançando com **{}**! Alguem tira foto! EU '
-                                                    'SHIPPO! :heart_eyes: '.format(ctx.message.mentions[0].name,
-                                                                                   ctx.author.name),
+                                                    'SHIPPO! :heart_eyes: '.format(member.name, ctx.author.name),
                                         color=self.color)
             dance_embed.set_image(url=dance)
             dance_embed.set_footer(text="Ashley ® Todos os direitos reservados.")

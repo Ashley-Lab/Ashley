@@ -15,9 +15,11 @@ class SlapClass(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.user)
     @commands.check(lambda ctx: Database.is_registered(ctx, ctx))
     @commands.command(name='slap', aliases=['tapa', 'tapão', 'tapao'])
-    async def slap(self, ctx):
+    async def slap(self, ctx, member: discord.Member = None):
         """Comando de gifs de tapa
         Use ash slap <@usuario a sua escolha>"""
+        if member is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
@@ -32,10 +34,10 @@ class SlapClass(commands.Cog):
 
             chance = randint(1, 100)
 
-            if ctx.message.mentions[0].id == self.bot.owner_id:
+            if member.id == self.bot.owner_id:
                 chance = 1
 
-            if ctx.message.mentions[0].id == self.bot.user.id:
+            if member.id == self.bot.user.id:
                 return await ctx.send('<:pqp:530031187331121152>│``Você quer me bater com meu proprio recurso?``')
 
             if chance <= 10:
@@ -57,7 +59,7 @@ class SlapClass(commands.Cog):
                 slap = 'https://media1.tenor.com/images/b8ff9e6e9cb5a8652f18cc388c4028b0/tenor.gif?itemid=5389796'
 
             slapemb = discord.Embed(title='Tapa :wave:',
-                                    description='**{}** {} **{}**! {}'.format(ctx.message.mentions[0].name, text,
+                                    description='**{}** {} **{}**! {}'.format(member.name, text,
                                                                               ctx.author.name, end),
                                     color=self.color)
             slapemb.set_image(url=slap)
