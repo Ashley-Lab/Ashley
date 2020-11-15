@@ -125,7 +125,7 @@ class SkillClass(commands.Cog):
             return await ctx.send(embed=embed)
 
         if status is None:
-            return await ctx.send("<:negate:520418505993093130>│``Você precisa colocar o nome do atributo que deseja "
+            return await ctx.send("<:negate:721581573396496464>│``Você precisa colocar o nome do atributo que deseja "
                                   "adicionar o ponto:`` **ash skill add con 1**")
 
         if status.lower() not in ['con', 'atk', 'acc', 'dex', 'luk']:

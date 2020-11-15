@@ -191,7 +191,7 @@ class OpenClass(commands.Cog):
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f'<a:fofo:524950742487007233>│``VOCÊ GANHOU`` ✨ **ITENS DO RPG** ✨ {response}')
 
-            if reward['relic'] is not None:
+            if reward['relic'][0] is not None:
                 response = await self.bot.db.add_reward(ctx, reward['relic'])
                 await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **O ITEM SECRETO** ✨ '
                                f'{response}')

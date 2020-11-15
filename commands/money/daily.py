@@ -263,7 +263,6 @@ class DailyClass(commands.Cog):
 
         await self.bot.db.update_data(data, update, 'users')
         await self.bot.db.update_data(data_user, update_user, 'users')
-        await self.bot.db.update_data(data_guild, update_guild, 'guilds')
 
         if reward:
             response = await self.bot.db.add_reward(ctx, ['?-Bollash'])

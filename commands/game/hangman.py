@@ -147,7 +147,7 @@ Dica: **{}**'''.format(senha, dica))
                         update = data
                         update['config']['playing'] = False
                         await self.bot.db.update_data(data, update, 'users')
-                        return await ctx.send('<:negate:520418505993093130>│``Desculpe, você demorou muito:`` '
+                        return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` '
                                               '**COMANDO CANCELADO**')
 
                     if tentativa in digitadas:
