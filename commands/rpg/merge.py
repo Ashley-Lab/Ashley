@@ -5,6 +5,7 @@ from resources.check import check_it
 from resources.db import Database
 from random import choice
 from asyncio import sleep, TimeoutError
+from resources.utility import convert_item_name
 
 
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
@@ -20,6 +21,7 @@ class MergeClass(commands.Cog):
         self.i = self.bot.items
         self.merge_data = self.bot.config['attribute']['merge_data']
         self.max_level = self.bot.config['attribute']['max_level']
+        self.sealed_items = [k for k, v in self.bot.items.items() if v[3] == 9]
 
         self.cost = {
             "solution_agent_green": 1,
@@ -27,6 +29,12 @@ class MergeClass(commands.Cog):
             "Discharge_Crystal": 15,
             "Acquittal_Crystal": 15,
             "Crystal_of_Energy": 15
+        }
+
+        self.cost_convert = {
+            "crystal_fragment_light": 50,
+            "crystal_fragment_energy": 50,
+            "crystal_fragment_dark": 50
         }
 
     @check_it(no_pm=True)
@@ -56,7 +64,7 @@ class MergeClass(commands.Cog):
 
         if item is None:
             return await ctx.send("<:negate:721581573396496464>│``Você precisa colocar o nome de um item que deseja "
-                                  "fundir:`` **ash equip i <nome_do_item>** ``voce consegue ver os itens "
+                                  "fundir:`` **ash merge <nome_do_item>** ``voce consegue ver os itens "
                                   "usando o comando:`` **ash inventory e**")
 
         equips_list = list()
@@ -159,6 +167,116 @@ class MergeClass(commands.Cog):
         embed = discord.Embed(color=self.bot.color)
         embed.set_image(url=img)
         await ctx.send(embed=embed)
+
+    @check_it(no_pm=True)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.check(lambda ctx: Database.is_registered(ctx, ctx, vip=True))
+    @commands.command(name='convert', aliases=['converter'])
+    async def convert(self, ctx, *, item=None):
+        if item is None:
+            return await ctx.send("<:alert:739251822920728708>│``Você esqueceu de falar o nome do item para "
+                                  "converter!``")
+
+        item_key = convert_item_name(item, self.bot.items)
+        if item_key is None:
+            return await ctx.send("<:alert:739251822920728708>│``Item Inválido!``")
+
+        if item_key not in self.sealed_items:
+            return await ctx.send("<:alert:739251822920728708>│``Esse item nao é um equipamento selado!``")
+
+        data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+        update = data
+
+        if item_key not in data['inventory']:
+            return await ctx.send("<:alert:739251822920728708>│``Você não tem esse item no seu inventario!``")
+
+        # =========================================================================================
+
+        msg = f"\n".join([f"{self.i[k][0]} ``{v}`` ``{self.i[k][1]}``" for k, v in self.cost_convert.items()])
+        msg += "\n\n**OBS:** ``PARA CONSEGUIR OS ITENS VOCE PRECISA USAR O COMANDO`` **ASH BOX**"
+
+        Embed = discord.Embed(
+            title="O CUSTO PARA VOCE CONVERTER UM EQUIPAMENTO SELADO:",
+            color=self.bot.color,
+            description=msg)
+        Embed.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
+        Embed.set_thumbnail(url="{}".format(ctx.author.avatar_url))
+        Embed.set_footer(text="Ashley ® Todos os direitos reservados.")
+        await ctx.send(embed=Embed)
+
+        cost = {}
+        for i_, amount in self.cost_convert.items():
+            if i_ in data['inventory']:
+                if data['inventory'][i_] < self.cost_convert[i_]:
+                    cost[i_] = self.cost_convert[i_]
+            else:
+                cost[i_] = self.cost_convert[i_]
+
+        if len(cost) > 0:
+            msg = f"\n".join([f"{self.i[key][0]} **{key.upper()}**" for key in cost.keys()])
+            return await ctx.send(f"<:alert:739251822920728708>│``Falta esses itens para converter um equipamento:``"
+                                  f"\n{msg}\n``OLHE SEU INVENTARIO E VEJA A QUANTIDADE QUE ESTÁ FALTANDO.``")
+
+        def check_option(m):
+            return m.author == ctx.author and m.content == '0' or m.author == ctx.author and m.content == '1'
+
+        msg = await ctx.send(f"<:alert:739251822920728708>│``VOCE JA TEM TODOS OS ITEM NECESSARIOS, DESEJA CONVERTER "
+                             f"SEU EQUIPAMENTO SELADO AGORA?``\n**1** para ``SIM`` ou **0** para ``NÃO``")
+        try:
+            answer = await self.bot.wait_for('message', check=check_option, timeout=30.0)
+        except TimeoutError:
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+        if answer.content == "0":
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+
+        await sleep(2)
+        await msg.edit(content=f"<a:loading:520418506567843860>│``removendo os itens de custo e o equipamento da sua"
+                               f" conta...``")
+
+        # =========================================================================================
+
+        for i_, amount in self.cost_convert.items():
+            update['inventory'][i_] -= amount
+            if update['inventory'][i_] < 1:
+                del update['inventory'][i_]
+
+        update['inventory'][key_item] -= 1
+        if update['inventory'][key_item] < 1:
+            del update['inventory'][key_item]
+
+        def check_item(m):
+            return m.author == ctx.author
+
+        msg = await ctx.send(f"<:alert:739251822920728708>│``QUAL O NOME DO EQUIPAMENTO SELADO, QUE VOCE SEJA QUE SEU"
+                             f" EQUIPAMENTO ATUAL SEJA CONVERTIDO?``")
+        try:
+            answer = await self.bot.wait_for('message', check=check_item, timeout=30.0)
+        except TimeoutError:
+            await msg.delete()
+            return await ctx.send("<:negate:721581573396496464>│``COMANDO CANCELADO!``")
+
+        item_convert = convert_item_name(answer.content, self.bot.items)
+        if item_convert is None:
+            await msg.delete()
+            return await ctx.send("<:alert:739251822920728708>│``Item Inválido!``")
+        if item_convert not in self.sealed_items:
+            await msg.delete()
+            return await ctx.send("<:alert:739251822920728708>│``Esse item nao é um equipamento selado!``")
+
+        try:
+            update['inventory'][item_convert] += 1
+        except KeyError:
+            update['inventory'][item_convert] = 1
+
+        await msg.edit(content=f"<:confirmed:721581574461587496>│``itens retirados com sucesso...``")
+        await sleep(2)
+        await msg.delete()
+
+        await self.bot.db.update_data(data, update, 'users')
+        await ctx.send(f"<:confirmed:721581574461587496>│``O ITEM {item.upper()} FOI CONVERTIDO PARA "
+                       f"{item_convert.upper()} COM SUCESSO, OLHE O SEU INVENTARIO DE ITENS E VEJA SEU NOVO ITEM!``")
 
 
 def setup(bot):

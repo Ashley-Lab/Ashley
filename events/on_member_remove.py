@@ -47,7 +47,7 @@ class OnMemberRemove(commands.Cog):
                         embed.set_thumbnail(url=member.avatar_url)
                         ashley = canal.guild.get_member(self.bot.user.id)
                         perms = canal.permissions_for(ashley)
-                        if perms.send_messages or perms.read_messages:
+                        if perms.send_messages and perms.read_messages:
                             if not perms.embed_links or not perms.attach_files:
                                 await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
                                                  "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
@@ -78,7 +78,7 @@ class OnMemberRemove(commands.Cog):
                     list_ = str(list_).replace('[', '').replace(']', '').replace(',', '.')
                     ashley = canal.guild.get_member(self.bot.user.id)
                     perms = canal.permissions_for(ashley)
-                    if perms.send_messages or perms.read_messages:
+                    if perms.send_messages and perms.read_messages:
                         if not perms.embed_links or not perms.attach_files:
                             await canal.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
                                              "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"

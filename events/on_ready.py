@@ -33,6 +33,9 @@ class OnReady(commands.Cog):
         self.time = [0, 1]
         self.details = ['Yu-gi-oh!', 'RPG', 'Pokemon']
         self.state = [discord.Status.online, discord.Status.idle, discord.Status.dnd]
+        self.relics = ["WrathofNatureCapsule", "UltimateSpiritCapsule", "SuddenDeathCapsule", "InnerPeacesCapsule",
+                       "EternalWinterCapsule", "EssenceofAsuraCapsule", "DivineCalderaCapsule",
+                       "DemoniacEssenceCapsule"]
         self.status = ['minha equipe nos pensamentos!', '😢 + 💸 = 😍 & 🍫',
                        'meus cabelos ao vento!', '😢 + 💸 = 😍 & 🍫',
                        'minha amiga no buraco!', '😢 + 💸 = 😍 & 🍫',
@@ -135,7 +138,7 @@ class OnReady(commands.Cog):
                             embed.set_thumbnail(url=_member_.avatar_url)
                             ash_member = channel__.guild.get_member(self.bot.user.id)
                             perms = channel__.permissions_for(ash_member)
-                            if perms.send_messages or perms.read_messages:
+                            if perms.send_messages and perms.read_messages:
                                 if not perms.embed_links or not perms.attach_files:
                                     await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
                                                    "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
@@ -193,7 +196,7 @@ class OnReady(commands.Cog):
                             embed.set_thumbnail(url=BOX)
                             ash_member = channel__.guild.get_member(self.bot.user.id)
                             perms = channel__.permissions_for(ash_member)
-                            if perms.send_messages or perms.read_messages:
+                            if perms.send_messages and perms.read_messages:
                                 if not perms.embed_links or not perms.attach_files:
                                     await ctx.send("<:negate:721581573396496464>│``PRECISO DA PERMISSÃO DE:`` "
                                                    "**ADICIONAR LINKS E DE ADICIONAR IMAGENS, PARA PODER FUNCIONAR"
@@ -212,7 +215,7 @@ class OnReady(commands.Cog):
                                       f"**ASH UNLOVER**."
                             ash_member = channel__.guild.get_member(self.bot.user.id)
                             perms = channel__.permissions_for(ash_member)
-                            if perms.send_messages or perms.read_messages:
+                            if perms.send_messages and perms.read_messages:
                                 await channel__.send(msg)
 
             await asyncio.sleep(300)
@@ -281,6 +284,13 @@ class OnReady(commands.Cog):
             update['config']['buying'] = False
             update['config']['mine'] = False
             update['user']['marrieding'] = False
+
+            if not self.bot.event_special:
+                items = list(update['inventory'].keys())
+                for item in items:
+                    if item in self.relics:
+                        del update['inventory'][item]
+
             await self.bot.db.update_data(data, update, "users")
         print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mPLAYING\033[1;32m redefinida com sucesso!\33[m')
         print('\033[1;32m( 🔶 ) | Status da variavel \033[1;34mBATTLE\033[1;32m foi redefinida com sucesso!\33[m')

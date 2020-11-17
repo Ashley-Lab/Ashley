@@ -165,14 +165,20 @@ class OpenClass(commands.Cog):
 
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
-            update['inventory']['coins'] += reward["coins"]
+            try:
+                update['inventory']['coins'] += reward["coins"]
+            except KeyError:
+                update['inventory']['coins'] = reward["coins"]
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                            f'<:coin:546019942936608778> **{reward["coins"]}** ``fichas!``')
 
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
             update = data
-            update['inventory']['Energy'] += reward["Energy"]
+            try:
+                update['inventory']['Energy'] += reward["Energy"]
+            except KeyError:
+                update['inventory']['Energy'] = reward["Energy"]
             await self.bot.db.update_data(data, update, 'users')
             await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
                            f'<:energy:546019943603503114> **{reward["Energy"]}** ``energias!``')
@@ -196,16 +202,20 @@ class OpenClass(commands.Cog):
                 await ctx.send(f'<a:caralho:525105064873033764>│``VOCÊ TAMBEM GANHOU`` ✨ **O ITEM SECRETO** ✨ '
                                f'{response}')
 
+            data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+            update = data
             relics = ["WrathofNatureCapsule", "UltimateSpiritCapsule", "SuddenDeathCapsule", "InnerPeacesCapsule",
                       "EternalWinterCapsule", "EssenceofAsuraCapsule", "DivineCalderaCapsule", "DemoniacEssenceCapsule"]
             cr = 0
             for relic in relics:
-                if relic in update['inventory'].keys():
+                if relic in data['inventory'].keys():
                     cr += 1
-            if cr == 8:
+            if cr == 8 and not update['event']['sam']:
+                update['event']['sam'] = True
                 channel = self.bot.get_channel(774400939293409290)
                 if channel is not None:
-                    await channel.send(f'<a:caralho:525105064873033764>│``{ctx.author}`` ✨ **GANHOU O EVENTO** ✨')
+                    await channel.send(f'<a:caralho:525105064873033764>│{ctx.author.mention} ✨ **GANHOU O EVENTO** ✨')
+                await self.bot.db.update_data(data, update, 'users')
 
         else:
             await ctx.send(f"<:negate:721581573396496464>│``Você nao tem mais baus disponiveis...``\n"

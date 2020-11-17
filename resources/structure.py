@@ -102,7 +102,8 @@ user_data_structure = {
                 "status": True,
                 "blocked": False
             },
-            "cooldown": dict()
+            "cooldown": dict(),
+            "event": {"sam": False}
 }
 
 guild_data_structure = {

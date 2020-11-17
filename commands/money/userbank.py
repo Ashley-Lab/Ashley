@@ -5,7 +5,7 @@ from asyncio import sleep, TimeoutError
 from discord.ext import commands
 from resources.check import check_it
 from resources.db import Database
-from resources.utility import convert_item_name
+from resources.utility import convert_item_name, paginator
 
 coin, cost, plus = 0, 0, 0
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
@@ -22,42 +22,7 @@ class UserBank(commands.Cog):
         self.gold = 0
         self.silver = 0
         self.bronze = 0
-
-        self.items = {
-            "Fichas": 65,
-
-            "Crystal Fragment Light": 154,
-            "Crystal Fragment Energy": 167,
-            "Crystal Fragment Dark": 178,
-
-            "Energy": 200,
-            "Melted Bone": 212,
-            "Life Crystal": 211,
-            "Death Blow": 221,
-            "Stone of Soul": 222,
-            "Vital Force": 213,
-
-            "Stone Crystal White": 312,
-            "Stone Crystal Red": 345,
-            "Stone Crystal Green": 354,
-            "Stone Crystal Blue": 364,
-            "Stone Crystal Yellow": 365,
-
-            "Dust Wind": 432,
-            "Dust Water": 412,
-            "Dust Light": 468,
-            "Dust Fire": 454,
-            "Dust Earth": 444,
-            "Dust Dark": 468,
-
-            "Stone Wind": 563,
-            "Stone Water": 543,
-            "Stone Light": 525,
-            "Stone Fire": 512,
-            "Stone Earth": 532,
-            "Stone Dark": 587,
-
-        }
+        self.items = self.bot.config['attribute']['shop']
 
     @staticmethod
     def format_num(num):
@@ -85,12 +50,10 @@ class UserBank(commands.Cog):
         update = data
 
         if item is None or quant is None:
-            msg = "```Markdown\n"
-            for k, v in self.items.items():
-                msg += f"[>>]: {k.upper()}\n<1 UND = {v} ETHERNYAS>\n\n"
-            msg += "```"
-            return await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA:``\n{msg}\n"
-                                  f"**EXEMPLO:** ``USE`` **ASH SHOP 50 FICHAS** ``PARA COMPRAR 50 FICHAS!``")
+            await ctx.send(f"<:alert:739251822920728708>│``ITENS DISPONIVEIS PARA COMPRA ABAIXO``\n"
+                           f"**EXEMPLO:** ``USE`` **ASH SHOP 50 FICHAS** ``PARA COMPRAR 50 FICHAS!``")
+            embed = ['Loja de Itens:', self.bot.color, 'Lista: \n']
+            return await paginator(self.bot, self.items, self.items, embed, ctx)
 
         name = None
         for key in self.items.keys():

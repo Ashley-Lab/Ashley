@@ -59,7 +59,7 @@ class Ashley(commands.AutoShardedBot):
         self.no_panning = self.config['attribute']['no_panning']
         self.testers = self.config['attribute']['testers']
         self.maintenance = False
-        self.event_special = True
+        self.event_special = False
 
         self.log_dir = os.path.join('log', 'discord.log')
         self.logger = logging.getLogger('discord')
