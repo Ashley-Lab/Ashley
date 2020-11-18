@@ -309,7 +309,7 @@ class UtilityClass(commands.Cog):
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
         if stars is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa dizer uma quantidade de estrelas!``")
-        if stars <= 0 or stars > 20:
+        if stars < 0 or stars > 25:
             return await ctx.send("<:alert:739251822920728708>│``quantidade de estrelas invalidas!``")
 
         data = await self.bot.db.get_data("user_id", member.id, "users")
@@ -319,8 +319,8 @@ class UtilityClass(commands.Cog):
 
         update['user']['stars'] = stars
         await self.bot.db.update_data(data, update, "users")
-        await ctx.send(f'<a:hack:525105069994278913>│``PARABENS, VC SETOU O LEVEL`` **{lvl}** ``PARA`` '
-                       f'**{member.name}** ``COM SUCESSO, ALEM DISSO RESETOU OS PONTOS DE HABILIDADE!``')
+        await ctx.send(f'<a:hack:525105069994278913>│``PARABENS, VC SETOU`` **{stars}** ``ESTRELAS PARA`` '
+                       f'**{member.name}** ``COM SUCESSO!``')
 
 
 def setup(bot):

@@ -60,6 +60,7 @@ class Ashley(commands.AutoShardedBot):
         self.testers = self.config['attribute']['testers']
         self.maintenance = False
         self.event_special = False
+        self.help_emoji = {}
 
         self.log_dir = os.path.join('log', 'discord.log')
         self.logger = logging.getLogger('discord')
@@ -216,11 +217,12 @@ class Ashley(commands.AutoShardedBot):
                     else:
                         dm = await self.db.get_data("user_id", update_user['user']['married_at'], "users")
                         um = dm
-                        um['user']['married'] = False
-                        um['user']['married_at'] = None
-                        await self.db.update_data(dm, um, 'users')
-                        update_user['user']['married'] = False
-                        update_user['user']['married_at'] = None
+                        if dm is not None:
+                            um['user']['married'] = False
+                            um['user']['married_at'] = None
+                            await self.db.update_data(dm, um, 'users')
+                            update_user['user']['married'] = False
+                            update_user['user']['married_at'] = None
 
                 if str(ctx.command).lower() in ['card', 'whats', 'hot', 'guess', 'hangman', 'jkp', 'pokemon']:
                     update_user['config']['playing'] = False

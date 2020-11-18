@@ -385,7 +385,12 @@ class Entity(object):
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
             return await ctx.send(embed=embed_)
 
-        lvs = lvlskill[skill['skill'] - 1] if not self.is_player or self.pvp else lvlskill
+        if not self.is_player or self.pvp:
+            skill_number = int(skill['skill'])
+            lvs = lvlskill[skill_number - 1]
+        else:
+            lvs = lvlskill
+
         self.ls = lvs if 0 <= lvs <= 9 else 9
 
         if skill['effs'] is not None:

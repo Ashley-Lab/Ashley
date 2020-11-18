@@ -242,9 +242,9 @@ class MergeClass(commands.Cog):
             if update['inventory'][i_] < 1:
                 del update['inventory'][i_]
 
-        update['inventory'][key_item] -= 1
-        if update['inventory'][key_item] < 1:
-            del update['inventory'][key_item]
+        update['inventory'][item_key] -= 1
+        if update['inventory'][item_key] < 1:
+            del update['inventory'][item_key]
 
         def check_item(m):
             return m.author == ctx.author

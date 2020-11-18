@@ -6,8 +6,7 @@ from resources.db import Database
 from resources.utility import paginator
 from resources.img_edit import equips
 from asyncio import sleep, TimeoutError
-
-botmsg = {}
+from resources.utility import create_id
 
 
 class InventoryClass(commands.Cog):
@@ -15,6 +14,8 @@ class InventoryClass(commands.Cog):
         self.bot = bot
         self.i = self.bot.items
         self.color = self.bot.color
+        self.botmsg = {}
+        self.he = self.bot.help_emoji
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -23,8 +24,16 @@ class InventoryClass(commands.Cog):
     async def equip(self, ctx):
         """Comando para mostrar o painel de equipamentos do seu personagem"""
         if ctx.invoked_subcommand is None:
-            global botmsg
             data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
+
+            try:
+                if self.he[ctx.author.id]:
+                    if str(ctx.command) in self.he[ctx.author.id].keys():
+                        pass
+                    else:
+                        self.he[ctx.author.id][str(ctx.command)] = False
+            except KeyError:
+                self.he[ctx.author.id] = {str(ctx.command): False}
 
             if not data['rpg']['active']:
                 embed = discord.Embed(
@@ -112,8 +121,13 @@ class InventoryClass(commands.Cog):
             equips(data_test)
             if discord.File('equips.png') is None:
                 return await ctx.send("<:negate:721581573396496464>│``ERRO!``")
-            botmsg[ctx.author.id] = await ctx.send(file=discord.File('equips.png'))
-            await botmsg[ctx.author.id].add_reaction('<a:help:767825933892583444>')
+
+            _id = create_id()
+
+            self.botmsg[_id] = await ctx.send(file=discord.File('equips.png'))
+            if not self.he[ctx.author.id][str(ctx.command)]:
+                await self.botmsg[_id].add_reaction('<a:help:767825933892583444>')
+                await self.botmsg[_id].add_reaction(self.bot.config['emojis']['arrow'][4])
 
             text = "```Markdown\n[>>]: PARA EQUIPAR UM ITEM USE O COMANDO\n<ASH EQUIP ITEM NOME_DO_ITEM>\n" \
                    "[>>]: PARA RESETAR OS EQUIPAMENTOS USE O COMANDO\n<ASH EQUIP RESET>\n\n" \
@@ -121,40 +135,61 @@ class InventoryClass(commands.Cog):
 
             again = False
             msg = None
-
-            while not self.bot.is_closed():
-                try:
-                    reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
-                    while reaction[1].id != ctx.author.id:
-                        reaction = await self.bot.wait_for('reaction_add', timeout=60.0)
-
-                    emo = "<a:help:767825933892583444>"
-                    emoji = str(emo).replace('<a:', '').replace(emo[emo.rfind(':'):], '')
+            if not self.he[ctx.author.id][str(ctx.command)]:
+                self.he[ctx.author.id][str(ctx.command)] = True
+                while not self.bot.is_closed():
                     try:
+                        reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
+                        while reaction[1].id != ctx.author.id:
+                            reaction = await self.bot.wait_for('reaction_add', timeout=30.0)
+
+                        emo = "<a:help:767825933892583444>"
+                        emoji = str(emo).replace('<a:', '').replace(emo[emo.rfind(':'):], '')
+                        emo_2 = self.bot.config['emojis']['arrow'][4]
+                        emoji_2 = str(emo_2).replace('<:', '').replace(emo_2[emo_2.rfind(':'):], '')
+
                         try:
-                            _reaction = reaction[0].emoji.name
+                            try:
+                                _reaction = reaction[0].emoji.name
+                            except AttributeError:
+                                _reaction = reaction[0].emoji
+
+                            if _reaction == emoji and reaction[0].message.id == self.botmsg[_id].id and not again:
+                                if reaction[1].id == ctx.author.id:
+                                    again = True
+                                    try:
+                                        await self.botmsg[_id].remove_reaction("<a:help:767825933892583444>",
+                                                                               ctx.author)
+                                    except discord.errors.Forbidden:
+                                        pass
+                                    msg = await ctx.send(text)
+
+                            elif _reaction == emoji and reaction[0].message.id == self.botmsg[_id].id and again:
+                                if reaction[1].id == ctx.author.id:
+                                    again = False
+                                    try:
+                                        await self.botmsg[_id].remove_reaction("<a:help:767825933892583444>",
+                                                                               ctx.author)
+                                    except discord.errors.Forbidden:
+                                        pass
+                                    await msg.delete()
+
+                            if _reaction == emoji_2 and reaction[0].message.id == self.botmsg[_id].id:
+                                if reaction[1].id == ctx.author.id:
+                                    self.he[ctx.author.id][str(ctx.command)] = False
+                                    await self.botmsg[_id].remove_reaction(
+                                        self.bot.config['emojis']['arrow'][4], ctx.me)
+                                    await self.botmsg[_id].remove_reaction(
+                                        "<a:help:767825933892583444>", ctx.me)
+                                    return
+
                         except AttributeError:
-                            _reaction = reaction[0].emoji
-                        if _reaction == emoji and not again and reaction[0].message.id == botmsg[ctx.author.id].id:
-                            again = True
-                            try:
-                                await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
-                            except discord.errors.Forbidden:
-                                pass
-                            msg = await ctx.send(text)
-
-                        elif _reaction == emoji and again and reaction[0].message.id == botmsg[ctx.author.id].id:
-                            again = False
-                            try:
-                                await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.author)
-                            except discord.errors.Forbidden:
-                                pass
-                            await msg.delete()
-
-                    except AttributeError:
-                        pass
-                except TimeoutError:
-                    return await botmsg[ctx.author.id].remove_reaction("<a:help:767825933892583444>", ctx.me)
+                            pass
+                    except TimeoutError:
+                        self.he[ctx.author.id][str(ctx.command)] = False
+                        await self.botmsg[_id].remove_reaction(self.bot.config['emojis']['arrow'][4], ctx.me)
+                        await self.botmsg[_id].remove_reaction("<a:help:767825933892583444>", ctx.me)
+                        return
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
