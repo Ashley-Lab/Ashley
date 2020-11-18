@@ -10,7 +10,7 @@ from .models import DatabaseModel, _SampleModel
 class Database(abc.ABC):
     """
     Classe abstrata para se comunicar com o banco de dados.
-    
+
     Notas
     -----
     É necessário implementar os métodos:
@@ -133,9 +133,13 @@ class Database(abc.ABC):
         raise NotImplementedError()
 
     @overload
-    async def _insert_into_cache(self, c, data: dict) -> Type[DatabaseModel]: ...
+    async def _insert_into_cache(self, c, data: dict) -> Type[DatabaseModel]:
+        ...
+
     @overload
-    async def _insert_into_cache(self, c, data: Type[DatabaseModel]) -> None: ...
+    async def _insert_into_cache(self, c, data: Type[DatabaseModel]) -> None:
+        ...
+
     async def _insert_into_cache(self, c, data):
         """
         Insere um dado no cache.
@@ -160,12 +164,15 @@ class Database(abc.ABC):
         c = self.__cache[c]
         c.add(data.id, data)
 
-        try: return_data
-        except: return
+        try:
+            return_data
+        except UnboundLocalError:
+            return
+
         return data
 
     @abc.abstractmethod
-    async def _insert_raw_data(self, c, data: dict): ...
+    async def _insert_raw_data(self, c, data: dict):
         """
         Insere um dado bruto direto no banco de dados.
 
@@ -176,11 +183,13 @@ class Database(abc.ABC):
         data : dict
             Dado que será inserido.
         """
+        ...
 
     @overload
     async def insert_data(self, c, data: dict) -> Type[DatabaseModel]: ...
     @overload
     async def insert_data(self, c, data: Type[DatabaseModel]) -> None: ...
+
     async def insert_data(self, c, data):
         """
         Insere um dado.
@@ -204,9 +213,13 @@ class Database(abc.ABC):
         return await asyncio.sleep(0, result=result)
 
     @overload
-    async def _update_cache_data(self, c, data_id, new_data: dict) -> Type[DatabaseModel]: ...
+    async def _update_cache_data(self, c, data_id,
+                                 new_data: dict) -> Type[DatabaseModel]: ...
+
     @overload
-    async def _update_cache_data(self, c, data_id, new_data: Type[DatabaseModel]) -> None: ...
+    async def _update_cache_data(self, c, data_id,
+                                 new_data: Type[DatabaseModel]) -> None: ...
+
     async def _update_cache_data(self, c, data_id, new_data):
         """
         Atualiza um dado que está no cache.
@@ -236,10 +249,10 @@ class Database(abc.ABC):
 
         c[data_id] = new_data
 
-        return await asyncio.sleep(0, result=new_data)
+        return await asyncio.sleep(0, result=return_data)
 
     @abc.abstractmethod
-    async def _update_raw_data(self, c, data_id, new_data: dict): ...
+    async def _update_raw_data(self, c, data_id, new_data: dict):
         """
         Atualiza um dado direto no banco de dados.
 
@@ -252,11 +265,16 @@ class Database(abc.ABC):
         new_data : dict
             Novos dados.
         """
+        ...
 
     @overload
-    async def update_data(self, c, data_id, new_data: dict) -> Type[DatabaseModel]: ...
+    async def update_data(self, c, data_id,
+                          new_data: dict) -> Type[DatabaseModel]: ...
+
     @overload
-    async def update_data(self, c, data_id, new_data: Type[DatabaseModel]) -> None: ...
+    async def update_data(self, c, data_id,
+                          new_data: Type[DatabaseModel]) -> None: ...
+
     async def update_data(self, c, data_id, new_data):
         """
         Atualiza um dado.
@@ -277,6 +295,6 @@ class Database(abc.ABC):
             caso contrário retorna `None`.
         """
         result = await self._update_cache_data(c, data_id, new_data)
-        data = data.to_dict() if result else data
+        new_data = new_data.to_dict() if result else new_data
         await self._update_raw_data(c, data_id, new_data)
         return await asyncio.sleep(0, result=result)

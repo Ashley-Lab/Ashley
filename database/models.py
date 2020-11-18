@@ -71,7 +71,7 @@ class DatabaseModel:
         Parâmetros
         ----------
         name : str
-            Nome do atributo. É necessário 
+            Nome do atributo.
         value : typing.Any
             Valor do atributo.
         """
@@ -122,6 +122,8 @@ class DatabaseModel:
 
 class _SampleModel:
     def __init__(self, _, raw_data: dict):
+        self.id = raw_data["_id"]
+
         cls = type(self)
         for k, v in raw_data.items():
             if type(v) is dict:
