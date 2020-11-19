@@ -57,6 +57,7 @@ class DailyClass(commands.Cog):
                                   "DEMAIS`` **USE COMANDOS COM MAIS CALMA JOVEM...**")
 
         cc, ct = 350, 1100
+        patent = update_user['user']['patent']
         if data_user['rpg']['active']:
             date_old = data_user['rpg']['activated_at']
             date_now = datetime.today()
@@ -65,13 +66,15 @@ class DailyClass(commands.Cog):
                 cc, ct = 1100, 2400
 
         coin = randint(cc, ct)
+        tot = coin + (patent * 25)
         try:
-            update_user['inventory']['coins'] += coin
+            update_user['inventory']['coins'] += tot
         except KeyError:
-            update_user['inventory']['coins'] = coin
+            update_user['inventory']['coins'] = tot
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
-                       f'<:coin:546019942936608778> **{coin}** ``fichas!``')
+                       f'<:coin:546019942936608778> **{coin}** ``fichas!`` + **{patent * 25}** '
+                       f'``pela sua patente. Olhe seu inventario usando o comando:`` **ash i**')
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -89,14 +92,14 @@ class DailyClass(commands.Cog):
 
         patent = update_user['user']['patent']
         energy = randint(250, 500)
-        energy += patent * 25
+        tot = energy + (patent * 25)
         try:
-            update_user['inventory']['Energy'] += energy
+            update_user['inventory']['Energy'] += tot
         except KeyError:
-            update_user['inventory']['Energy'] = energy
+            update_user['inventory']['Energy'] = tot
         await self.bot.db.update_data(data_user, update_user, 'users')
         await ctx.send(f'<:rank:519896825411665930>│🎊 **PARABENS** 🎉 : ``Você acabou de ganhar`` '
-                       f'<:energy:546019943603503114> **{energy}** ``Energias!`` + **{patent * 2}** '
+                       f'<:energy:546019943603503114> **{energy}** ``Energias!`` + **{patent * 25}** '
                        f'``pela sua patente. Olhe seu inventario usando o comando:`` **ash i**')
 
     @check_it(no_pm=True)

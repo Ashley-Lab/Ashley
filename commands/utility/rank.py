@@ -72,7 +72,7 @@ class RankingClass(commands.Cog):
             data_ = await bot.db.get_all_data("users")
             dict_ = dict()
             for _ in data_:
-                dict_[str(_.get('user_id'))] = _['user'].get('experience', 0)
+                dict_[str(_.get('user_id'))] = _['rpg'].get('xp', 0)
             sorted_x = sorted(dict_.items(), key=operator.itemgetter(1), reverse=True)
             rank = [int(sorted_x[x][0]) for x in range(len(data_))]
             _position = int(rank.index(member_now.id)) + 1
