@@ -26,6 +26,7 @@ class Entity(object):
         self.ln = self.db['lower_net']
         self.pvp = pvp
         self.ls = 0
+        self.potion = 0
 
         if self.is_player:
             for c in range(5):
@@ -149,7 +150,7 @@ class Entity(object):
                 description += f'<:MP:774699585620672534> **{"Pass turn MP".upper()}**\n' \
                                f'``MP Recovery:`` **+{regen} de Mana**\n\n' \
                                f'<:HP:774699585070825503> **{"Pass turn HP".upper()}**\n' \
-                               f'``HP Recovery:`` **6-12% de HP**\n\n' \
+                               f'``HP Recovery:`` **25-35% de HP**\n\n' \
                                f'<:fechar:749090949413732352> **Finalizar batalha**'
                 embed = discord.Embed(
                     title=title,
@@ -189,16 +190,16 @@ class Entity(object):
                             self.atack = "PASS-TURN"
                             break
 
-                        if reaction[0].emoji.name == emoji_hp:
+                        if reaction[0].emoji.name == emoji_hp and self.potion < 4:
                             # regeneração de HP
                             if self.p_class in ['priest', 'assassin', 'default']:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 12)
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 35)
 
-                            elif self.p_class in ['paladin', 'warrior']:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 6)
+                            elif self.p_class in ['necromancer', 'wizard', 'warlock']:
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 30)
 
                             else:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 9)
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 25)
 
                             if (self.status['hp'] + hp_regen) <= (self.status['con'] * self.rate[0]):
                                 self.status['hp'] += hp_regen
@@ -206,6 +207,7 @@ class Entity(object):
                                 self.status['hp'] = (self.status['con'] * self.rate[0])
 
                             self.atack = "PASS-TURN"
+                            self.potion += 1
                             break
 
                         if reaction[0].emoji.name == emoji_fb:
@@ -240,15 +242,27 @@ class Entity(object):
                                 remove = int(((self.status['con'] * self.rate[1]) / 100) * 35)
                             if self.atacks[_atack]['type'] == "especial":
                                 remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
-                            if self.status['mp'] >= remove:
+
+                            if self.potion > 3 and reaction[0].emoji.name == emoji_hp:
+                                embed = discord.Embed(
+                                    description=f"``{user.name.upper()} VOCÊ JA ATINGIU O LIMITE DE POÇÃO DE VIDA!\n"
+                                                f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
+                                                f"**Obs:** Passar a vez regenera a mana ou vida!",
+                                    color=0x000000
+                                )
+                                embed.set_thumbnail(url=f"{user.avatar_url}")
+                                await ctx.send(embed=embed)
+
+                            elif self.status['mp'] >= remove:
                                 self.status['mp'] -= remove
                                 self.atack = atacks[test_atack]
                                 break
+
                             else:
                                 embed = discord.Embed(
                                     description=f"``{user.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
                                                 f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
-                                                f"**Obs:** Passar a vez regenera a mana!",
+                                                f"**Obs:** Passar a vez regenera a mana ou vida!",
                                     color=0x000000
                                 )
                                 embed.set_thumbnail(url=f"{user.avatar_url}")
@@ -319,10 +333,11 @@ class Entity(object):
                     if 'damage' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
                         damage = damage if damage > 0 else 1
+
                         self.status['hp'] -= damage
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
-                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
+                        description = f"**{self.name.upper()}** ``sofreu`` **{damage}** ``de dano " \
                                       f"por efeito``"
                         hp_max = self.status['con'] * self.rate[0]
                         monster = not self.is_player
@@ -332,10 +347,12 @@ class Entity(object):
                     elif 'manadrain' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
                         damage = damage if damage > 0 else 1
+                        damage = int(((self.status['con'] * self.rate[1]) / 100) * damage)
+
                         self.status['mp'] -= damage
                         if self.status['mp'] < 0:
                             self.status['mp'] = 0
-                        description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
+                        description = f"**{self.name.upper()}** ``teve`` **{damage}** ``de mana " \
                                       f"drenada por efeito``"
                         hp_max = self.status['con'] * self.rate[0]
                         monster = not self.is_player
@@ -403,14 +420,10 @@ class Entity(object):
                     key = [k for k, v in skill['effs'].items()]
             for c in key:
 
-                rate_chance = 95
+                rate_chance = 97  # a chance da skill funcionar
                 chance = randint(1, 100)
-
-                if c not in ["gelo"]:
-                    chance += enemy_luk
-
-                if c in ["cegueira", "stun"]:
-                    rate_chance -= int(enemy_luk / 2) if enemy_luk > 0 else 0
+                chance += enemy_luk + int(lvs / 2)
+                rate_chance -= int(enemy_luk / 2) if enemy_luk > 0 else 0
 
                 if chance >= rate_chance:
                     self.chance = True
@@ -495,14 +508,14 @@ class Entity(object):
         critical_damage = enemy_cc[0]
         value_critical = 20
 
-        if enemy_cc[1] in ['necromancer', 'wizard']:
-            value_critical = 18
+        if enemy_cc[1] in ['necromancer', 'wizard', 'warlock']:
+            value_critical = 19
 
         if enemy_cc[1] in ['assassin', 'priest']:
-            value_critical = 16
+            value_critical = 18
 
         if not self.is_player or self.pvp:
-            value_critical += int(enemy_luk / 2)
+            value_critical -= int(enemy_luk / 5)
 
         try:
             if self.effects["cegueira"]['turns'] > 0:
@@ -514,7 +527,7 @@ class Entity(object):
             critical = True
 
         if critical:
-            damage = int(damage + damage / 100 * critical_damage)
+            damage = int(damage + (damage / 100 * critical_damage))
 
             file = discord.File("images/elements/critical.gif", filename="critical.gif")
             embed = discord.Embed(title="CRITICAL", color=0x38105e)

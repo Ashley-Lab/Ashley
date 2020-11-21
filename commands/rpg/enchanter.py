@@ -102,7 +102,7 @@ class EnchanterClass(commands.Cog):
                 return await ctx.send(embed=embed)
 
             self.atacks = {}
-            data_player = self.config_player(ctx.author, data['rpg'], data['rpg']['lower_net'])
+            data_player = self.config_player(member, data['rpg'], data['rpg']['lower_net'])
             rate = [_class[data_player['class']]['rate']['life'], _class[data_player['class']]['rate']['mana']]
             if data_player['level'] > 25:
                 rate[0] += _class[data_player['next_class']]['rate']['life']
@@ -158,7 +158,7 @@ class EnchanterClass(commands.Cog):
             TM = int(self.db['status']['con'] * _class[self.db['next_class']]['rate']['mana'])
 
             embed = discord.Embed(title=f"ENCHANTER PANEL - TOTAL MANA: {TM}", description=description, color=0x000000)
-            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.set_thumbnail(url=member.avatar_url)
 
             _id = create_id()
 
@@ -286,6 +286,8 @@ class EnchanterClass(commands.Cog):
             try:
                 if update['inventory']['angel_wing'] >= 1:
                     update['inventory']['angel_wing'] -= 1
+                    if update['inventory']['angel_wing'] < 1:
+                        del update['inventory']['angel_wing']
                 else:
                     msg = '<:negate:721581573396496464>│``VOCE NÃO TEM ANGEL WING, A PARTIR DO ENCANTAMENTO +10 VOCE ' \
                           'PRECISA DE 1 ANGEL STONE E 1 ANGEL WING!``'
@@ -298,6 +300,8 @@ class EnchanterClass(commands.Cog):
                 return await ctx.send(embed=embed)
 
         update['inventory']['angel_stone'] -= 1
+        if update['inventory']['angel_stone'] < 1:
+            del update['inventory']['angel_stone']
         await self.bot.db.update_data(data, update, 'users')
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
