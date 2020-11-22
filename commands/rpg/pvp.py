@@ -9,6 +9,7 @@ from resources.db import Database
 
 player_1 = {}
 player_2 = {}
+evasion = {}
 
 
 class PVP(commands.Cog):
@@ -21,7 +22,8 @@ class PVP(commands.Cog):
         db_player = data['rpg']
         db_player["img"] = user.avatar_url_as(format="png")
         db_player['name'] = user.name
-        db_player["armor"] = 0
+        db_player["pdef"] = 0
+        db_player["mdef"] = 0
         db_player["lower_net"] = lower_net
         set_e = list()
 
@@ -46,7 +48,8 @@ class PVP(commands.Cog):
             if c in set_value:
                 set_e.append(str(c))
 
-            db_player["armor"] += eq[db_player['equipped_items'][c]]['armor']
+            db_player["pdef"] += eq[db_player['equipped_items'][c]]['pdef']
+            db_player["mdef"] += eq[db_player['equipped_items'][c]]['mdef']
             for name in db_player["status"].keys():
                 try:
                     db_player["status"][name] += eq[db_player['equipped_items'][c]]['modifier'][name]
@@ -70,7 +73,8 @@ class PVP(commands.Cog):
     async def pvp(self, ctx, member: discord.Member = None):
         """Comando usado pra ir PVP no rpg da ashley
         Use ash pvp"""
-        global player_1, player_2
+        global player_1, player_2, evasion
+        evasion[ctx.author.id] = [[0, False], [0, False]]
 
         if member is None:
             return await ctx.send("<:alert:739251822920728708>│``Você precisa mencionar alguem!``")
@@ -193,11 +197,22 @@ class PVP(commands.Cog):
             dex = int(player_2[member.id].status['agi'] / 3)
             p1_chance = d20 + lvlp1 + acc
             p2_chance = d16 + lvlp2 + dex
+
+            evasion[ctx.author.id][0][1] = False if p1_chance > p2_chance else True
+            if evasion[ctx.author.id][0][1] and evasion[ctx.author.id][0][0] > 1:
+                p2_chance, evasion[ctx.author.id][0][1] = 0, False
+            if not evasion[ctx.author.id][0][1]:
+                evasion[ctx.author.id][0][0] = 0
+
             if p1_chance > p2_chance:
                 await player_2[member.id].damage(skill, player_1[ctx.author.id].level_skill, atk, ctx,
                                                  player_1[ctx.author.id].name, player_1[ctx.author.id].cc,
                                                  player_1[ctx.author.id].img, player_1[ctx.author.id].status['luk'])
             else:
+
+                if evasion[ctx.author.id][0][1]:
+                    evasion[ctx.author.id][0][0] += 1
+
                 embed = discord.Embed(
                     description=f"``{player_2[member.id].name.upper()} EVADIU``",
                     color=0x000000
@@ -241,11 +256,22 @@ class PVP(commands.Cog):
             dex = int(player_1[ctx.author.id].status['agi'] / 3)
             p2_chance = d20 + lvlp2 + acc
             p1_chance = d16 + lvlp1 + dex
+
+            evasion[ctx.author.id][1][1] = False if p2_chance > p1_chance else True
+            if evasion[ctx.author.id][1][1] and evasion[ctx.author.id][1][0] > 1:
+                p1_chance, evasion[ctx.author.id][1][1] = 0, False
+            if not evasion[ctx.author.id][1][1]:
+                evasion[ctx.author.id][1][0] = 0
+
             if p2_chance > p1_chance:
                 await player_1[ctx.author.id].damage(skill, player_2[member.id].level_skill, atk, ctx,
                                                      player_2[member.id].name, player_2[member.id].cc,
                                                      player_2[member.id].img, player_2[member.id].status['luk'])
             else:
+
+                if evasion[ctx.author.id][1][1]:
+                    evasion[ctx.author.id][1][0] += 1
+
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",
                     color=0x000000

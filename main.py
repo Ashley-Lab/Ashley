@@ -424,15 +424,10 @@ class Ashley(commands.AutoShardedBot):
                     update_user['security']['blocked'] = False
 
                 last_verify_date, date_now = update_user['security']['last_verify'], dt.today()
-                data_, limit = date_format(date_now), 2500
+                data_, limit = date_format(date_now), 5000
                 last_verify = date.mktime(last_verify_date.timetuple())
                 last_command = date.mktime(date_now.timetuple())
                 m_last_verify = int(int(last_command - last_verify) / 60)
-
-                if m_last_verify > 5:
-                    update_user['security']['last_verify'] = dt.today()
-                    update_user['security']['blocked'] = False
-                    last_verify = date.mktime(update_user['security']['last_verify'].timetuple())
 
                 if update_user['security']['last_command'] is not None and update_user['security']['status']:
                     if update_user['security']['commands_today'] > int(limit / 100 * 80):
@@ -494,8 +489,7 @@ class Ashley(commands.AutoShardedBot):
                                 if channel_ is not None:
                                     await channel_.send(embed=embed)
 
-                    m_last_verify = int(int(last_command - last_verify) / 60)
-                    if m_last_verify < 5 and update_user['security']['commands'] > 40:
+                    if m_last_verify < 5 and update_user['security']['commands'] > 30:
 
                         update_user['security']['strikes'] += 1
                         update_user['security']['commands'] = 0
@@ -514,12 +508,12 @@ class Ashley(commands.AutoShardedBot):
                                                         f'<a:red:525032764211200002>'
                                                         f'**AVISO {update_user["security"]["strikes"]}/10**')
 
-                    if update_user['security']['commands'] > 0:
+                    if m_last_verify >= 5:
+                        update_user['security']['last_verify'] = dt.today()
+                        update_user['security']['blocked'] = False
                         update_user['security']['commands'] = 0
-
-                    else:
-                        update_user['security']['commands'] = 0
-                        update_user['security']['strikes'] = 0
+                        if update_user['security']['strikes'] > 0:
+                            update_user['security']['strikes'] -= 1
 
                     if update_user['security']['strikes'] == 11:
                         update_user['security']['status'] = not update_user['security']['status']

@@ -10,6 +10,7 @@ from resources.db import Database
 from resources.img_edit import calc_xp
 from datetime import datetime
 
+evasion = {}
 player = {}
 monster = {}
 xp_off = {}
@@ -33,8 +34,9 @@ class Battle(commands.Cog):
     async def battle(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash battle"""
-        global player, monster, xp_off
+        global player, monster, xp_off, evasion
         xp_off[ctx.author.id] = False
+        evasion[ctx.author.id] = [[0, False], [0, False]]
 
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
@@ -81,7 +83,8 @@ class Battle(commands.Cog):
         db_player = data['rpg']
         db_player["img"] = ctx.author.avatar_url_as(format="png")
         db_player['name'] = ctx.author.name
-        db_player["armor"] = 0
+        db_player["pdef"] = 0
+        db_player["mdef"] = 0
         set_e = list()
 
         # bonus status player
@@ -105,7 +108,8 @@ class Battle(commands.Cog):
             if c in set_value:
                 set_e.append(str(c))
 
-            db_player["armor"] += eq[db_player['equipped_items'][c]]['armor']
+            db_player["pdef"] += eq[db_player['equipped_items'][c]]['pdef']
+            db_player["mdef"] += eq[db_player['equipped_items'][c]]['mdef']
             for name in db_player["status"].keys():
                 try:
                     db_player["status"][name] += eq[db_player['equipped_items'][c]]['modifier'][name]
@@ -127,7 +131,8 @@ class Battle(commands.Cog):
         db_monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
         db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
         db_monster['enemy'] = db_player
-        db_monster["armor"] = 0
+        db_monster["pdef"] = 0
+        db_monster["mdef"] = 0
 
         # bonus status monster
         for k in db_monster["status"].keys():
@@ -189,11 +194,21 @@ class Battle(commands.Cog):
             agi = int(monster[ctx.author.id].status['agi'] / 3)
             chance_monster = d16 + lvlm + agi
 
+            evasion[ctx.author.id][0][1] = False if chance_player > chance_monster else True
+            if evasion[ctx.author.id][0][1] and evasion[ctx.author.id][0][0] > 1:
+                chance_monster, evasion[ctx.author.id][0][1] = 0, False
+            if not evasion[ctx.author.id][0][1]:
+                evasion[ctx.author.id][0][0] = 0
+
             if chance_player > chance_monster:
                 await monster[ctx.author.id].damage(skill, player[ctx.author.id].level_skill, atk, ctx,
                                                     player[ctx.author.id].name, player[ctx.author.id].cc,
                                                     player[ctx.author.id].img, player[ctx.author.id].status['luk'])
             else:
+
+                if evasion[ctx.author.id][0][1]:
+                    evasion[ctx.author.id][0][0] += 1
+
                 embed = discord.Embed(
                     description=f"``{monster[ctx.author.id].name.upper()} EVADIU``",
                     color=0x000000
@@ -249,11 +264,21 @@ class Battle(commands.Cog):
             agi = int(player[ctx.author.id].status['agi'] / 3)
             chance_player = d16 + lvlp + agi
 
+            evasion[ctx.author.id][1][1] = False if chance_monster > chance_player else True
+            if evasion[ctx.author.id][1][1] and evasion[ctx.author.id][1][0] > 1:
+                chance_player, evasion[ctx.author.id][1][1] = 0, False
+            if not evasion[ctx.author.id][1][1]:
+                evasion[ctx.author.id][1][0] = 0
+
             if chance_monster > chance_player:
                 await player[ctx.author.id].damage(skill, monster[ctx.author.id].level_skill, atk, ctx,
                                                    monster[ctx.author.id].name, monster[ctx.author.id].cc,
                                                    monster[ctx.author.id].img, monster[ctx.author.id].status['luk'])
             else:
+
+                if evasion[ctx.author.id][1][1]:
+                    evasion[ctx.author.id][1][0] += 1
+
                 embed = discord.Embed(
                     description=f"``{ctx.author.name.upper()} EVADIU``",
                     color=0x000000

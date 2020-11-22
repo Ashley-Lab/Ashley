@@ -29,7 +29,8 @@ class EnchanterClass(commands.Cog):
         db_player = data
         db_player["img"] = user.avatar_url_as(format="png")
         db_player['name'] = user.name
-        db_player["armor"] = 0
+        db_player["pdef"] = 0
+        db_player["mdef"] = 0
         db_player["lower_net"] = lower_net
         set_e = list()
 
@@ -54,7 +55,8 @@ class EnchanterClass(commands.Cog):
             if c in set_value:
                 set_e.append(str(c))
 
-            db_player["armor"] += eq[db_player['equipped_items'][c]]['armor']
+            db_player["pdef"] += eq[db_player['equipped_items'][c]]['pdef']
+            db_player["mdef"] += eq[db_player['equipped_items'][c]]['mdef']
             for name in db_player["status"].keys():
                 try:
                     db_player["status"][name] += eq[db_player['equipped_items'][c]]['modifier'][name]
@@ -148,7 +150,7 @@ class EnchanterClass(commands.Cog):
 
                 _mana = a_mana if eff_mana != "cura" else rm
                 _mana = ru if self.atacks[c2]['type'] == "especial" else _mana
-                damage = int(self.db['status']['atk'] * 2 / 100 * (80 + c * 10))
+                damage = int(self.db['status']['atk'] * 2 / 100 * ((30 + (c * 5)) + (c * 10)))
 
                 description += f"{icon} **{c2.upper()}** ``+{ls}``\n" \
                                f"``Dano:`` {f'**{dd} + {damage}**' if ls > 0 else f'**{damage}**'}\n``Tipo:`` " \
