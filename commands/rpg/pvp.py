@@ -205,9 +205,12 @@ class PVP(commands.Cog):
                 evasion[ctx.author.id][0][0] = 0
 
             if p1_chance > p2_chance:
-                await player_2[member.id].damage(skill, player_1[ctx.author.id].level_skill, atk, ctx,
-                                                 player_1[ctx.author.id].name, player_1[ctx.author.id].cc,
-                                                 player_1[ctx.author.id].img, player_1[ctx.author.id].status['luk'])
+                _eff = await player_2[member.id].damage(skill, player_1[ctx.author.id].level_skill, atk, ctx,
+                                                        player_1[ctx.author.id].name, player_1[ctx.author.id].cc,
+                                                        player_1[ctx.author.id].img,
+                                                        player_1[ctx.author.id].status['luk'],
+                                                        player_1[ctx.author.id].effects)
+                player_1[ctx.author.id].effects = _eff
             else:
 
                 if evasion[ctx.author.id][0][1]:
@@ -264,9 +267,11 @@ class PVP(commands.Cog):
                 evasion[ctx.author.id][1][0] = 0
 
             if p2_chance > p1_chance:
-                await player_1[ctx.author.id].damage(skill, player_2[member.id].level_skill, atk, ctx,
-                                                     player_2[member.id].name, player_2[member.id].cc,
-                                                     player_2[member.id].img, player_2[member.id].status['luk'])
+                _eff = await player_1[ctx.author.id].damage(skill, player_2[member.id].level_skill, atk, ctx,
+                                                            player_2[member.id].name, player_2[member.id].cc,
+                                                            player_2[member.id].img, player_2[member.id].status['luk'],
+                                                            player_2[member.id].effects)
+                player_2[member.id].effects = _eff
             else:
 
                 if evasion[ctx.author.id][1][1]:

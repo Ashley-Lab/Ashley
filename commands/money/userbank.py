@@ -219,40 +219,21 @@ class UserBank(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
 
-        def check(m):
-            return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
-                   m.author == ctx.author and m.content == '3'
-
         n_cost = [500, 75, 25]
 
         if stone not in [1, 2, 3]:
-            await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
-                           f" Escolha uma dessas opções abaixo!``\n"
-                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                           f"``Bonus de Chance:`` **+1%**\n"
-                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                           f"``Bonus de Chance:`` **+2%**\n"
-                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                           f"``Bonus de Chance:`` **+3%**")
+            return await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                                  f" Escolha uma dessas opções abaixo!``\n"
+                                  f"**[ ash ticket 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> "
+                                  f"``Custa:`` **{n_cost[0]}** "
+                                  f"``Bonus de Chance:`` **+1%**\n"
+                                  f"**[ ash ticket 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> "
+                                  f"``Custa:`` **{n_cost[1]}** "
+                                  f"``Bonus de Chance:`` **+2%**\n"
+                                  f"**[ ash ticket 3 ]** - ``Para`` <:etherny_preto:691016493957251152> "
+                                  f"``Custa:`` **{n_cost[2]}** "
+                                  f"``Bonus de Chance:`` **+3%**")
 
-            try:
-                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-            except TimeoutError:
-                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                      ' CANCELADO**')
-
-            if int(answer.content) == 1:
-                cost = n_cost[0]
-                coin = "bronze"
-                plus = 1
-            if int(answer.content) == 2:
-                cost = n_cost[1]
-                coin = "silver"
-                plus = 2
-            if int(answer.content) == 3:
-                cost = n_cost[2]
-                coin = "gold"
-                plus = 3
         else:
             if stone == 1:
                 cost = n_cost[0]
@@ -359,40 +340,20 @@ class UserBank(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
 
-        def check(m):
-            return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
-                   m.author == ctx.author and m.content == '3'
-
         n_cost = [1000, 150, 50]
 
         if stone not in [1, 2, 3]:
-            await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
-                           f" Escolha uma dessas opções abaixo!``\n"
-                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                           f"``Bonus de Chance:`` **+1%**\n"
-                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                           f"``Bonus de Chance:`` **+2%**\n"
-                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                           f"``Bonus de Chance:`` **+3%**")
-
-            try:
-                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-            except TimeoutError:
-                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                      ' CANCELADO**')
-
-            if int(answer.content) == 1:
-                cost = n_cost[0]
-                coin = "bronze"
-                plus = 1
-            if int(answer.content) == 2:
-                cost = n_cost[1]
-                coin = "silver"
-                plus = 2
-            if int(answer.content) == 3:
-                cost = n_cost[2]
-                coin = "gold"
-                plus = 3
+            return await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                                  f" Escolha uma dessas opções abaixo!``\n"
+                                  f"**[ ash bollash 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> "
+                                  f"``Custa:`` **{n_cost[0]}** "
+                                  f"``Bonus de Chance:`` **+1%**\n"
+                                  f"**[ ash bollash 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> "
+                                  f"``Custa:`` **{n_cost[1]}** "
+                                  f"``Bonus de Chance:`` **+2%**\n"
+                                  f"**[ ash bollash 3 ]** - ``Para`` <:etherny_preto:691016493957251152> "
+                                  f"``Custa:`` **{n_cost[2]}** "
+                                  f"``Bonus de Chance:`` **+3%**")
         else:
             if stone == 1:
                 cost = n_cost[0]
@@ -467,40 +428,20 @@ class UserBank(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         global coin, cost, plus
 
-        def check(m):
-            return m.author == ctx.author and m.content == '1' or m.author == ctx.author and m.content == '2' or \
-                   m.author == ctx.author and m.content == '3'
-
         n_cost = [2000, 300, 100]
 
         if stone not in [1, 2, 3]:
-            await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
-                           f" Escolha uma dessas opções abaixo!``\n"
-                           f"**[ 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> ``Custa:`` **{n_cost[0]}** "
-                           f"``Bonus de Chance:`` **+1%**\n"
-                           f"**[ 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> ``Custa:`` **{n_cost[1]}** "
-                           f"``Bonus de Chance:`` **+2%**\n"
-                           f"**[ 3 ]** - ``Para`` <:etherny_preto:691016493957251152> ``Custa:`` **{n_cost[2]}** "
-                           f"``Bonus de Chance:`` **+3%**")
-
-            try:
-                answer = await self.bot.wait_for('message', check=check, timeout=30.0)
-            except TimeoutError:
-                return await ctx.send('<:negate:721581573396496464>│``Desculpe, você demorou muito:`` **COMANDO'
-                                      ' CANCELADO**')
-
-            if int(answer.content) == 1:
-                cost = n_cost[0]
-                coin = "bronze"
-                plus = 1
-            if int(answer.content) == 2:
-                cost = n_cost[1]
-                coin = "silver"
-                plus = 2
-            if int(answer.content) == 3:
-                cost = n_cost[2]
-                coin = "gold"
-                plus = 3
+            return await ctx.send(f"🎫│``Que tipo de`` **PEDRA** ``voce deseja gastar?"
+                                  f" Escolha uma dessas opções abaixo!``\n"
+                                  f"**[ ash stone 1 ]** - ``Para`` <:etherny_amarelo:691015381296480266> "
+                                  f"``Custa:`` **{n_cost[0]}** "
+                                  f"``Bonus de Chance:`` **+1%**\n"
+                                  f"**[ ash stone 2 ]** - ``Para`` <:etherny_roxo:691014717761781851> "
+                                  f"``Custa:`` **{n_cost[1]}** "
+                                  f"``Bonus de Chance:`` **+2%**\n"
+                                  f"**[ ash stone 3 ]** - ``Para`` <:etherny_preto:691016493957251152> "
+                                  f"``Custa:`` **{n_cost[2]}** "
+                                  f"``Bonus de Chance:`` **+3%**")
         else:
             if stone == 1:
                 cost = n_cost[0]

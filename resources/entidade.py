@@ -190,7 +190,7 @@ class Entity(object):
                             self.atack = "PASS-TURN-MP"
                             break
 
-                        potion_limit = 3 if not self.raid else 3 + (raid_num * 2)
+                        potion_limit = 3 if not self.raid else 2 + (int(raid_num / 5) * 2)
                         if reaction[0].emoji.name == emoji_hp and self.potion < potion_limit:
                             # regeneração de HP
                             if self.p_class in ['priest', 'assassin', 'default']:
@@ -250,7 +250,7 @@ class Entity(object):
                                 remove = 10000
                                 test_atack = None
 
-                            potion_limit = 3 if not self.raid else 3 + (raid_num * 2)
+                            potion_limit = 3 if not self.raid else 2 + (int(raid_num / 5) * 2)
                             if self.potion >= potion_limit and reaction[0].emoji.name == emoji_hp:
                                 if self.raid:
                                     msg = f"``MATE OUTRO MONSTRO PARA AUMENTAR O SEU LIMITE, ESCOLHA UMA SKILL OU " \
@@ -383,7 +383,12 @@ class Entity(object):
 
                 try:
                     if self.effects[c]['turns'] > 0:
-                        self.effects[c]['turns'] -= 1
+                        if "reflect" in self.effects.keys():
+                            if self.effects['reflect']['damage'] > 0:
+                                self.effects['reflect']['damage'] = 0
+                                self.effects[c]['turns'] -= 1
+                        else:
+                            self.effects[c]['turns'] -= 1
 
                     if self.effects[c]['turns'] < 1:
                         del self.effects[c]
@@ -392,10 +397,11 @@ class Entity(object):
 
         return self.atack
 
-    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img, enemy_luk):
+    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img, enemy_luk, effects):
 
-        # chance de critital 100%
         lethal = False
+        if "reflect" in effects.keys():
+            effects['reflect']['damage'] = 0
 
         if skill is None:
             description = f'**{name.upper()}** ``não pode atacar!``'
@@ -403,7 +409,8 @@ class Entity(object):
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
-            return await ctx.send(embed=embed_)
+            await ctx.send(embed=embed_)
+            return effects
 
         if skill == "PASS-TURN-MP":
             description = f'**{name.upper()}** ``passou o turno, usando a poção de MANA!``'
@@ -411,7 +418,8 @@ class Entity(object):
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
-            return await ctx.send(embed=embed_)
+            await ctx.send(embed=embed_)
+            return effects
 
         if skill == "PASS-TURN-HP":
             description = f'**{name.upper()}** ``passou o turno, usando a poção de VIDA!``'
@@ -419,7 +427,8 @@ class Entity(object):
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
-            return await ctx.send(embed=embed_)
+            await ctx.send(embed=embed_)
+            return effects
 
         if not self.is_player or self.pvp:
             skill_number = int(skill['skill'])
@@ -439,7 +448,7 @@ class Entity(object):
                     key = [k for k, v in skill['effs'].items()]
             for c in key:
 
-                rate_chance = 97  # a chance da skill funcionar
+                rate_chance = 97
                 chance = randint(1, 100)
                 chance += enemy_luk + int(lvs / 2)
                 rate_chance -= int(enemy_luk / 2) if enemy_luk > 0 else 0
@@ -557,13 +566,27 @@ class Entity(object):
         if skill['type'] == "especial":
             defense = choice([self.pdef, self.mdef])
 
+        reflect = False
+        if "reflect" in effects.keys():
+            reflect = True
+            damage = int(damage / 2)
+            effects['reflect']['damage'] = damage
+
         armor_now = defense if defense > 0 else 1
         percent = abs(int(armor_now / (damage / 100)))
-        if percent < 45:
-            dn = abs(int(damage - defense))
+        if percent < 50:
+            dn = abs(int(damage - armor_now))
         else:
             dn_chance = randint(1, 100)
-            dn = abs(int(damage - defense) if dn_chance < 5 else int(damage / 100 * randint(46, 65)))
+            dn = abs(int(damage - armor_now) if dn_chance < 25 else int(damage / 100 * randint(50, 70)))
+
+        if reflect:
+            description = f'**{self.name.upper()}** ``refletiu`` **{damage}** ``do dano que recebeu``'
+            hp_max = self.status['con'] * self.rate[0]
+            monster = not self.is_player if self.pvp else self.is_player
+            img_s = "https://uploads1.yugioh.com/card_images/953/detail/059.jpg"
+            embed_ = embed_creator(description, img_s, monster, hp_max, self.status['hp'], self.img, self.ln)
+            await ctx.send(embed=embed_)
 
         if dn < 0:
             description = f'**{self.name.upper()}** ``obsorveu todo o dano e recebeu`` **0** ``de dano``'
@@ -586,3 +609,5 @@ class Entity(object):
             monster = not self.is_player if self.pvp else self.is_player
             embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)
+
+        return effects
