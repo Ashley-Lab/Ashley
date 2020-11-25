@@ -137,7 +137,9 @@ class Battle(commands.Cog):
         min_ = min_ if min_ < 55 else 55
         if ctx.author.id in self.db_monster:
             del self.db_monster[ctx.author.id]
-        self.db_monster[ctx.author.id] = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
+
+        _monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
+        self.db_monster[ctx.author.id] = _monster.copy()
 
         if "hp" in self.db_monster[ctx.author.id]['status']:
             del self.db_monster[ctx.author.id]['status']['hp']
