@@ -345,7 +345,6 @@ class Entity(object):
                 try:
                     if 'damage' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
-                        damage = damage if damage > 0 else 1
                         self.status['hp'] -= damage
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
@@ -355,10 +354,10 @@ class Entity(object):
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/md78DFkpIIzzW/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
-                        await ctx.send(embed=embed_)
+                        if damage > 0:
+                            await ctx.send(embed=embed_)
                     elif 'manadrain' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
-                        damage = damage if damage > 0 else 1
                         damage = int(((self.status['con'] * self.rate[1]) / 100) * damage)
                         self.status['mp'] -= damage
                         if self.status['mp'] < 0:
@@ -369,7 +368,8 @@ class Entity(object):
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/pDLxcNa1r3QA0/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
-                        await ctx.send(embed=embed_)
+                        if damage > 0:
+                            await ctx.send(embed=embed_)
                     if self.effects[c]['turns'] > 0 and c == "cegueira":
                         description = f"**{self.name.upper()}** ``esta sobe o efeito de`` " \
                                       f"**{c.upper()}!**"
@@ -508,14 +508,14 @@ class Entity(object):
                     await ctx.send(embed=embed_)
 
         if not self.is_player:
-            damage = skill['damage'][self.ls]
+            damage_enchant = skill['damage'][self.ls]
         else:
             if self.pvp:
-                damage = skill['damage'][self.ls]
+                damage_enchant = skill['damage'][self.ls]
             else:
-                damage = skill['damage']
-        d1 = int(damage[:damage.find('d')])
-        d2 = int(damage[damage.find('d') + 1:])
+                damage_enchant = skill['damage']
+        d1 = int(damage_enchant[:damage_enchant.find('d')])
+        d2 = int(damage_enchant[damage_enchant.find('d') + 1:])
 
         dd = (d2, d2 * d1) if d2 != d2 * d1 else (d2, d2)
         if lvs >= 11:
@@ -581,7 +581,7 @@ class Entity(object):
             dn = abs(int(damage - armor_now) if dn_chance < 25 else int(damage / 100 * randint(50, 70)))
 
         if reflect:
-            description = f'**{self.name.upper()}** ``refletiu`` **{damage}** ``do dano que recebeu``'
+            description = f'**{self.name.upper()}** ``refletiu`` **50%** ``do dano que recebeu``'
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player if self.pvp else self.is_player
             img_s = "https://uploads1.yugioh.com/card_images/953/detail/059.jpg"
@@ -600,8 +600,8 @@ class Entity(object):
                 self.status['hp'] = 0
 
             if defense > 0:
-                description = f'**{self.name.upper()}** ``receberia`` **{damage}** ``de dano, mas absorveu parte ' \
-                              f'dele, logo recebeu`` **{dn}**'
+                _ab = abs(int(damage - armor_now))
+                description = f'**{self.name.upper()}** ``absorveu`` **{_ab}** ``de dano e recebeu`` **{dn}**'
             else:
                 description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
 

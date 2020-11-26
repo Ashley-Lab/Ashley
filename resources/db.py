@@ -545,7 +545,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['user']['experience'])}"
         return rank
 
@@ -576,7 +576,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['user']['level'])}"
         return rank
 
@@ -608,7 +608,7 @@ class DataInteraction(object):
                           " > R$ " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > R$ {money_(data_user['treasure']['money'])}"
         return rank
 
@@ -639,7 +639,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['treasure']['gold'])}"
         return rank
 
@@ -670,7 +670,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['treasure']['silver'])}"
         return rank
 
@@ -701,7 +701,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['treasure']['bronze'])}"
         return rank
 
@@ -733,7 +733,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['config']['points'])}"
         return rank
 
@@ -764,7 +764,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['user']['commands'])}"
         return rank
 
@@ -795,7 +795,7 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['rpg']['level'])}"
         return rank
 
@@ -826,6 +826,6 @@ class DataInteraction(object):
                           " > " + str(money_(sorted_x[x][1])) for x in range(limit)])
         data_user = await self.db.get_data("user_id", ctx.author.id, "users")
         player = str(ctx.author).replace("'", "").replace("#", "_")
-        rank += f"\n-------------------------------------------------------------------------\n" \
+        rank += f"\n--------------------------------------------------------------------\n" \
                 f"{position}º: {player} > {money_(data_user['user']['raid'])}"
         return rank
