@@ -600,8 +600,7 @@ class Entity(object):
                 self.status['hp'] = 0
 
             if defense > 0:
-                _ab = abs(int(damage - armor_now))
-                description = f'**{self.name.upper()}** ``absorveu`` **{_ab}** ``de dano e recebeu`` **{dn}**'
+                description = f'**{self.name.upper()}** ``absorveu`` **{armor_now}** ``de dano e recebeu`` **{dn}**'
             else:
                 description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
 

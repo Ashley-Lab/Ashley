@@ -17,7 +17,6 @@ m_raid = {}
 money = {}
 xp_tot = {}
 xp_off = {}
-_db_monster = {}
 git = ["https://media1.tenor.com/images/adda1e4a118be9fcff6e82148b51cade/tenor.gif?itemid=5613535",
        "https://media1.tenor.com/images/daf94e676837b6f46c0ab3881345c1a3/tenor.gif?itemid=9582062",
        "https://media1.tenor.com/images/0d8ed44c3d748aed455703272e2095a8/tenor.gif?itemid=3567970",
@@ -30,30 +29,32 @@ class Raid(commands.Cog):
         self.bot = bot
         self.m = self.bot.config['battle']['monsters']
         self.w_s = self.bot.config['attribute']['chance_weapon']
+        self.db_monster = {}
+        self.db_player = {}
 
     def choice_monster(self, data, db_player, id_author):
         # configuração do monstro
         lvl = raid_rank[id_author]
         _min, _max = 25 + lvl if lvl < 31 else 59, 30 + lvl if lvl < 31 else 60
         _monster = choice([m for m in self.m if _min < self.m[self.m.index(m)]['level'] < _max])
-        db_monster = _monster.copy()
-        db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
-        db_monster['enemy'] = db_player
-        db_monster["pdef"] = raid_rank[id_author] * 20
-        db_monster["mdef"] = raid_rank[id_author] * 20
-        db_monster["status"]["con"] += raid_rank[id_author] * 10
+        self.db_monster[id_author] = _monster.copy()
+        self.db_monster[id_author]['lower_net'] = True if data['rpg']['lower_net'] else False
+        self.db_monster[id_author]['enemy'] = db_player
+        self.db_monster[id_author]["pdef"] = raid_rank[id_author] * 20
+        self.db_monster[id_author]["mdef"] = raid_rank[id_author] * 20
+        self.db_monster[id_author]["status"]["con"] += raid_rank[id_author] * 10
 
         # bonus status monster
-        for k in db_monster["status"].keys():
+        for k in self.db_monster[id_author]["status"].keys():
             if db_player['level'] > 25:
-                db_monster["status"][k] += randint(2, 4)
+                self.db_monster[id_author]["status"][k] += randint(2, 4)
 
-        for k in db_monster["status"].keys():
+        for k in self.db_monster[id_author]["status"].keys():
             for sts in db_player['equipped_items'].keys():
                 if db_player['equipped_items'][sts] is not None:
                     if k in ["atk", "con", "luk"]:
-                        db_monster["status"][k] += randint(1, 2)
-        return db_monster
+                        self.db_monster[id_author]["status"][k] += randint(1, 2)
+        return self.db_monster[id_author]
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -62,7 +63,7 @@ class Raid(commands.Cog):
     async def raid(self, ctx):
         """Comando usado pra batalhar no rpg da ashley
         Use ash raid"""
-        global raid_rank, m_raid, p_raid, money, xp_tot, xp_off, evasion, _db_monster
+        global raid_rank, m_raid, p_raid, money, xp_tot, xp_off, evasion
         xp_off[ctx.author.id] = False
         evasion[ctx.author.id] = [[0, False], [0, False]]
 
@@ -115,11 +116,11 @@ class Raid(commands.Cog):
 
         # configuração do player
         set_value = ["shoulder", "breastplate", "gloves", "leggings", "boots"]
-        db_player = data['rpg']
-        db_player["img"] = ctx.author.avatar_url_as(format="png")
-        db_player['name'] = ctx.author.name
-        db_player["pdef"] = 0
-        db_player["mdef"] = 0
+        self.db_player[ctx.author.id] = data['rpg']
+        self.db_player[ctx.author.id]["img"] = ctx.author.avatar_url_as(format="png")
+        self.db_player[ctx.author.id]['name'] = ctx.author.name
+        self.db_player[ctx.author.id]["pdef"] = 0
+        self.db_player[ctx.author.id]["mdef"] = 0
         set_e = list()
 
         # bonus status player
@@ -128,49 +129,53 @@ class Raid(commands.Cog):
             for kk, vv in self.bot.config["equips"][ky].items():
                 eq[kk] = vv
 
-        for k in db_player["status"].keys():
+        for k in self.db_player[ctx.author.id]["status"].keys():
             try:
-                db_player["status"][k] += self.bot.config["skills"][db_player['class']]['modifier'][k]
-                if db_player['level'] > 25:
-                    db_player["status"][k] += self.bot.config["skills"][db_player['next_class']]['modifier'][k]
+                temp = self.bot.config["skills"][self.db_player[ctx.author.id]['class']]['modifier'][k]
+                self.db_player[ctx.author.id]["status"][k] += temp
+                if self.db_player[ctx.author.id]['level'] > 25:
+                    temp_2 = self.bot.config["skills"][self.db_player[ctx.author.id]['next_class']]['modifier'][k]
+                    self.db_player[ctx.author.id]["status"][k] += temp_2
             except KeyError:
                 pass
 
-        for c in db_player['equipped_items'].keys():
-            if db_player['equipped_items'][c] is None:
+        for c in self.db_player[ctx.author.id]['equipped_items'].keys():
+            if self.db_player[ctx.author.id]['equipped_items'][c] is None:
                 continue
 
             if c in set_value:
                 set_e.append(str(c))
 
-            db_player["pdef"] += eq[db_player['equipped_items'][c]]['pdef']
-            db_player["mdef"] += eq[db_player['equipped_items'][c]]['mdef']
-            for name in db_player["status"].keys():
+            self.db_player[ctx.author.id]["pdef"] += eq[self.db_player[ctx.author.id]['equipped_items'][c]]['pdef']
+            self.db_player[ctx.author.id]["mdef"] += eq[self.db_player[ctx.author.id]['equipped_items'][c]]['mdef']
+            for name in self.db_player[ctx.author.id]["status"].keys():
                 try:
-                    db_player["status"][name] += eq[db_player['equipped_items'][c]]['modifier'][name]
+                    temp_3 = eq[self.db_player[ctx.author.id]['equipped_items'][c]]['modifier'][name]
+                    self.db_player[ctx.author.id]["status"][name] += temp_3
                 except KeyError:
                     pass
 
         for kkk in self.bot.config["set_equips"].values():
             if kkk['set'] == set_e:
-                for name in db_player["status"].keys():
+                for name in self.db_player[ctx.author.id]["status"].keys():
                     try:
-                        db_player["status"][name] += kkk['modifier'][name]
+                        self.db_player[ctx.author.id]["status"][name] += kkk['modifier'][name]
                     except KeyError:
                         pass
 
         # criando as entidade do jogador...
-        p_raid[ctx.author.id] = Entity(db_player, True, raid=True)
+        p_raid[ctx.author.id] = Entity(self.db_player[ctx.author.id], True, raid=True)
 
         # ======================================================================================================
         # ----------------------------------- SYSTEM RAID MONSTERS / BOSS --------------------------------------
         # ======================================================================================================
 
-        _db_monster[ctx.author.id] = self.choice_monster(data, db_player, ctx.author.id)
+        _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
+        self.db_monster[ctx.author.id] = _n_monster.copy()
         # criando as entidade do monstro...
-        m_raid[ctx.author.id] = Entity(_db_monster[ctx.author.id], False, raid=True)
-        money[ctx.author.id] = _db_monster[ctx.author.id]['ethernya']
-        xp_tot[ctx.author.id] = [(_db_monster[ctx.author.id]['xp'], _db_monster[ctx.author.id]['level'])]
+        m_raid[ctx.author.id] = Entity(self.db_monster[ctx.author.id], False, raid=True)
+        money[ctx.author.id] = self.db_monster[ctx.author.id]['ethernya']
+        xp_tot[ctx.author.id] = [(self.db_monster[ctx.author.id]['xp'], self.db_monster[ctx.author.id]['level'])]
 
         # durante a batalha
         while not self.bot.is_closed():
@@ -180,15 +185,17 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _db_monster[ctx.author.id] = self.choice_monster(data, db_player, ctx.author.id)
+                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
+                self.db_monster[ctx.author.id] = _n_monster.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
-                embed.set_image(url=_db_monster[ctx.author.id]['img'])
+                embed.set_image(url=self.db_monster[ctx.author.id]['img'])
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
-                m_raid[ctx.author.id] = Entity(_db_monster[ctx.author.id], False, raid=True)
-                money[ctx.author.id] += _db_monster[ctx.author.id]['ethernya']
-                xp_tot[ctx.author.id].append((_db_monster[ctx.author.id]['xp'], _db_monster[ctx.author.id]['level']))
+                m_raid[ctx.author.id] = Entity(self.db_monster[ctx.author.id], False, raid=True)
+                money[ctx.author.id] += self.db_monster[ctx.author.id]['ethernya']
+                xp_tot[ctx.author.id].append((self.db_monster[ctx.author.id]['xp'],
+                                              self.db_monster[ctx.author.id]['level']))
 
             skill = await p_raid[ctx.author.id].turn([m_raid[ctx.author.id].status, m_raid[ctx.author.id].rate,
                                                       m_raid[ctx.author.id].name, m_raid[ctx.author.id].lvl],
@@ -202,15 +209,17 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _db_monster[ctx.author.id] = self.choice_monster(data, db_player, ctx.author.id)
+                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
+                self.db_monster[ctx.author.id] = _n_monster.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
-                embed.set_image(url=_db_monster[ctx.author.id]['img'])
+                embed.set_image(url=self.db_monster[ctx.author.id]['img'])
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
-                m_raid[ctx.author.id] = Entity(_db_monster[ctx.author.id], False, raid=True)
-                money[ctx.author.id] += _db_monster[ctx.author.id]['ethernya']
-                xp_tot[ctx.author.id].append((_db_monster[ctx.author.id]['xp'], _db_monster[ctx.author.id]['level']))
+                m_raid[ctx.author.id] = Entity(self.db_monster[ctx.author.id], False, raid=True)
+                money[ctx.author.id] += self.db_monster[ctx.author.id]['ethernya']
+                xp_tot[ctx.author.id].append((self.db_monster[ctx.author.id]['xp'],
+                                              self.db_monster[ctx.author.id]['level']))
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -263,7 +272,7 @@ class Raid(commands.Cog):
                 )
                 if not data['rpg']['lower_net']:
                     embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
-                embed.set_thumbnail(url=f"{_db_monster[ctx.author.id]['img']}")
+                embed.set_thumbnail(url=f"{self.db_monster[ctx.author.id]['img']}")
                 await ctx.send(embed=embed)
 
             # --------======== TEMPO DE ESPERA ========--------
@@ -275,15 +284,17 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _db_monster[ctx.author.id] = self.choice_monster(data, db_player, ctx.author.id)
+                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
+                self.db_monster[ctx.author.id] = _n_monster.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
-                embed.set_image(url=_db_monster[ctx.author.id]['img'])
+                embed.set_image(url=self.db_monster[ctx.author.id]['img'])
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
-                m_raid[ctx.author.id] = Entity(_db_monster[ctx.author.id], False, raid=True)
-                money[ctx.author.id] += _db_monster[ctx.author.id]['ethernya']
-                xp_tot[ctx.author.id].append((_db_monster[ctx.author.id]['xp'], _db_monster[ctx.author.id]['level']))
+                m_raid[ctx.author.id] = Entity(self.db_monster[ctx.author.id], False, raid=True)
+                money[ctx.author.id] += self.db_monster[ctx.author.id]['ethernya']
+                xp_tot[ctx.author.id].append((self.db_monster[ctx.author.id]['xp'],
+                                              self.db_monster[ctx.author.id]['level']))
 
             skill = await m_raid[ctx.author.id].turn(m_raid[ctx.author.id].status['hp'], self.bot, ctx)
 
@@ -295,15 +306,17 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _db_monster[ctx.author.id] = self.choice_monster(data, db_player, ctx.author.id)
+                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
+                self.db_monster[ctx.author.id] = _n_monster.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
-                embed.set_image(url=_db_monster[ctx.author.id]['img'])
+                embed.set_image(url=self.db_monster[ctx.author.id]['img'])
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
-                m_raid[ctx.author.id] = Entity(_db_monster[ctx.author.id], False, raid=True)
-                money[ctx.author.id] += _db_monster[ctx.author.id]['ethernya']
-                xp_tot[ctx.author.id].append((_db_monster[ctx.author.id]['xp'], _db_monster[ctx.author.id]['level']))
+                m_raid[ctx.author.id] = Entity(self.db_monster[ctx.author.id], False, raid=True)
+                money[ctx.author.id] += self.db_monster[ctx.author.id]['ethernya']
+                xp_tot[ctx.author.id].append((self.db_monster[ctx.author.id]['xp'],
+                                              self.db_monster[ctx.author.id]['level']))
             # -----------------------------------------------------------------------------
 
             if skill == "COMANDO-CANCELADO":
@@ -362,7 +375,7 @@ class Raid(commands.Cog):
                 )
                 if not data['rpg']['lower_net']:
                     embed.set_image(url="https://storage.googleapis.com/ygoprodeck.com/pics_artgame/47529357.jpg")
-                embed.set_thumbnail(url=f"{db_player['img']}")
+                embed.set_thumbnail(url=f"{self.db_player[ctx.author.id]['img']}")
                 await ctx.send(embed=embed)
 
             # --------======== TEMPO DE ESPERA ========--------
@@ -373,22 +386,22 @@ class Raid(commands.Cog):
         perc = 0
 
         for xp_now in xp_tot[ctx.author.id]:
-            test = xp_now[1] - 5 < db_player['level'] < xp_now[1] + 5
+            test = xp_now[1] - 5 < self.db_player[ctx.author.id]['level'] < xp_now[1] + 5
             xpn = xp_now[0] if test else 1
-            xp, lp, lm = xpn, db_player['level'], xp_now[1]
-            bonus = abs(0.5 * (db_player['level'] - xp_now[1]))
+            xp, lp, lm = xpn, self.db_player[ctx.author.id]['level'], xp_now[1]
+            bonus = abs(0.5 * (self.db_player[ctx.author.id]['level'] - xp_now[1]))
             perc += xp if lp - lm <= 0 else xp + bonus if test else xp
 
-        data_xp = calc_xp(db_player['xp'], db_player['level'])
+        data_xp = calc_xp(self.db_player[ctx.author.id]['xp'], self.db_player[ctx.author.id]['level'])
 
-        if db_player['xp'] < 32:
+        if self.db_player[ctx.author.id]['xp'] < 32:
             xpm = data_xp[2]
             xpr = xpm
         else:
-            if 1 < db_player['level'] < 7:
+            if 1 < self.db_player[ctx.author.id]['level'] < 7:
                 percent = [randint(50, 75), randint(40, 60), randint(30, 55), randint(25, 45), randint(20, 40)]
                 xpm = data_xp[1] - data_xp[2]
-                xpr = int(xpm / 100 * percent[db_player['level'] - 2])
+                xpr = int(xpm / 100 * percent[self.db_player[ctx.author.id]['level'] - 2])
             else:
                 xpm = data_xp[1] - data_xp[2]
                 xpr = int(xpm / 100 * perc)
@@ -411,7 +424,7 @@ class Raid(commands.Cog):
             img = "https://media1.tenor.com/images/09b085a6b0b33a9a9c8529a3d2ee1914/tenor.gif?itemid=5648908"
             if not data['rpg']['lower_net']:
                 embed.set_image(url=img)
-            embed.set_thumbnail(url=f"{db_player['img']}")
+            embed.set_thumbnail(url=f"{self.db_player[ctx.author.id]['img']}")
             await ctx.send(embed=embed)
 
         else:
@@ -426,14 +439,14 @@ class Raid(commands.Cog):
             img = "https://media1.tenor.com/images/a39aa52e78dfdc01934dd2b00c1b2a6e/tenor.gif?itemid=12772532"
             if not data['rpg']['lower_net']:
                 embed.set_image(url=img)
-            embed.set_thumbnail(url=f"{db_player['img']}")
+            embed.set_thumbnail(url=f"{self.db_player[ctx.author.id]['img']}")
             await ctx.send(embed=embed)
 
             if change < 75:
                 if data['rpg']['vip']:
-                    reward = [choice(_db_monster[ctx.author.id]['reward']) for _ in range(8)]
+                    reward = [choice(self.db_monster[ctx.author.id]['reward']) for _ in range(8)]
                 else:
-                    reward = [choice(_db_monster[ctx.author.id]['reward']) for _ in range(4)]
+                    reward = [choice(self.db_monster[ctx.author.id]['reward']) for _ in range(4)]
 
                 raid_reward = ["soul_crystal_of_love", "soul_crystal_of_love", "soul_crystal_of_love",
                                "soul_crystal_of_hope", "soul_crystal_of_hope", "soul_crystal_of_hope",
@@ -468,7 +481,7 @@ class Raid(commands.Cog):
                     reward.append(choice(raid_reward))
                     msg += "🎊 **PARABENS** 🎉│``Ganhou`` **+1** ``item especial por matar`` **30** ``monstros``\n"
 
-                if db_player['level'] > 25:
+                if self.db_player[ctx.author.id]['level'] > 25:
                     bonus = ['stone_crystal_white', 'stone_crystal_red', 'stone_crystal_green',
                              'stone_crystal_blue', 'stone_crystal_yellow']
 
@@ -496,7 +509,7 @@ class Raid(commands.Cog):
         data = await self.bot.db.get_data("user_id", ctx.author.id, "users")
         update = data
 
-        if change < 10 and raid_rank[ctx.author.id] > 0 and db_player['level'] > 25:
+        if change < 10 and raid_rank[ctx.author.id] > 0 and self.db_player[ctx.author.id]['level'] > 25:
 
             equips_list = list()
             for ky in self.bot.config['equips'].keys():
