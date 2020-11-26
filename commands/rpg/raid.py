@@ -233,6 +233,9 @@ class Raid(commands.Cog):
             await sleep(0.5)
             # --------======== ............... ========--------
 
+            print(f"PLAYER {p_raid[ctx.author.id].name.upper()}: {p_raid[ctx.author.id].status}\n"
+                  f"MONSTRO {m_raid[ctx.author.id].name.upper()}: {m_raid[ctx.author.id].status}\n")
+
             atk = int(p_raid[ctx.author.id].status['atk'] * 2)
 
             # player chance

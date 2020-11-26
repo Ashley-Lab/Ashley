@@ -489,7 +489,7 @@ class Ashley(commands.AutoShardedBot):
                                 if channel_ is not None:
                                     await channel_.send(embed=embed)
 
-                    if m_last_verify < 5 and update_user['security']['commands'] > 30:
+                    if m_last_verify < 5 and update_user['security']['commands'] > 50:
 
                         update_user['security']['strikes'] += 1
                         update_user['security']['commands'] = 0
