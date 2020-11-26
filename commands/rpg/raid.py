@@ -32,29 +32,28 @@ class Raid(commands.Cog):
         self.db_monster = {}
         self.db_player = {}
 
-    def choice_monster(self, data, db_player, id_author):
+    def choice_monster(self, data, db_player, rr):
         # configuração do monstro
-        lvl = raid_rank[id_author]
-        _min, _max = 25 + lvl if lvl < 31 else 59, 30 + lvl if lvl < 31 else 60
+        _min, _max = 25 + rr if rr < 31 else 59, 30 + rr if rr < 31 else 60
         _monster = choice([m for m in self.m if _min < self.m[self.m.index(m)]['level'] < _max])
-        self.db_monster[id_author] = _monster.copy()
-        self.db_monster[id_author]['lower_net'] = True if data['rpg']['lower_net'] else False
-        self.db_monster[id_author]['enemy'] = db_player
-        self.db_monster[id_author]["pdef"] = raid_rank[id_author] * 20
-        self.db_monster[id_author]["mdef"] = raid_rank[id_author] * 20
-        self.db_monster[id_author]["status"]["con"] += raid_rank[id_author] * 10
+        _monster_now = _monster.copy()
+        _monster_now['lower_net'] = True if data['rpg']['lower_net'] else False
+        _monster_now['enemy'] = db_player
+        _monster_now["pdef"] = rr * 20
+        _monster_now["mdef"] = rr * 20
+        _monster_now["status"]["con"] += rr * 10
 
         # bonus status monster
-        for k in self.db_monster[id_author]["status"].keys():
+        for k in _monster_now["status"].keys():
             if db_player['level'] > 25:
-                self.db_monster[id_author]["status"][k] += randint(2, 4)
+                _monster_now["status"][k] += randint(2, 4)
 
-        for k in self.db_monster[id_author]["status"].keys():
+        for k in _monster_now["status"].keys():
             for sts in db_player['equipped_items'].keys():
                 if db_player['equipped_items'][sts] is not None:
                     if k in ["atk", "con", "luk"]:
-                        self.db_monster[id_author]["status"][k] += randint(1, 2)
-        return self.db_monster[id_author]
+                        _monster_now["status"][k] += randint(1, 2)
+        return _monster_now
 
     @check_it(no_pm=True)
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -170,8 +169,8 @@ class Raid(commands.Cog):
         # ----------------------------------- SYSTEM RAID MONSTERS / BOSS --------------------------------------
         # ======================================================================================================
 
-        _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
-        self.db_monster[ctx.author.id] = _n_monster.copy()
+        _mon = self.choice_monster(data, self.db_player[ctx.author.id], raid_rank[ctx.author.id])
+        self.db_monster[ctx.author.id] = _mon.copy()
         # criando as entidade do monstro...
         m_raid[ctx.author.id] = Entity(self.db_monster[ctx.author.id], False, raid=True)
         money[ctx.author.id] = self.db_monster[ctx.author.id]['ethernya']
@@ -185,8 +184,8 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
-                self.db_monster[ctx.author.id] = _n_monster.copy()
+                _mon = self.choice_monster(data, self.db_player[ctx.author.id], raid_rank[ctx.author.id])
+                self.db_monster[ctx.author.id] = _mon.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
                 embed.set_image(url=self.db_monster[ctx.author.id]['img'])
@@ -209,8 +208,8 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
-                self.db_monster[ctx.author.id] = _n_monster.copy()
+                _mon = self.choice_monster(data, self.db_player[ctx.author.id], raid_rank[ctx.author.id])
+                self.db_monster[ctx.author.id] = _mon.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
                 embed.set_image(url=self.db_monster[ctx.author.id]['img'])
@@ -284,8 +283,8 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
-                self.db_monster[ctx.author.id] = _n_monster.copy()
+                _mon = self.choice_monster(data, self.db_player[ctx.author.id], raid_rank[ctx.author.id])
+                self.db_monster[ctx.author.id] = _mon.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
                 embed.set_image(url=self.db_monster[ctx.author.id]['img'])
@@ -306,8 +305,8 @@ class Raid(commands.Cog):
                 break
             if m_raid[ctx.author.id].status['hp'] <= 0:
                 raid_rank[ctx.author.id] += 1
-                _n_monster = self.choice_monster(data, self.db_player[ctx.author.id], ctx.author.id)
-                self.db_monster[ctx.author.id] = _n_monster.copy()
+                _mon = self.choice_monster(data, self.db_player[ctx.author.id], raid_rank[ctx.author.id])
+                self.db_monster[ctx.author.id] = _mon.copy()
                 msg = f"Voce derrotou o {raid_rank[ctx.author.id]}° monstro, proximo..."
                 embed = discord.Embed(color=self.bot.color, title=msg)
                 embed.set_image(url=self.db_monster[ctx.author.id]['img'])
