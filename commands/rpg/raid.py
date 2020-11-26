@@ -34,16 +34,13 @@ class Raid(commands.Cog):
         # configuração do monstro
         lvl = raid_rank[id_author]
         _min, _max = 25 + lvl if lvl < 31 else 59, 30 + lvl if lvl < 31 else 60
-        db_monster = choice([m for m in self.m if _min < self.m[self.m.index(m)]['level'] < _max])
+        _monster = choice([m for m in self.m if _min < self.m[self.m.index(m)]['level'] < _max])
+        db_monster = _monster.copy()
         db_monster['lower_net'] = True if data['rpg']['lower_net'] else False
         db_monster['enemy'] = db_player
-        db_monster["pdef"] = raid_rank[id_author] * 25
-        db_monster["mdef"] = raid_rank[id_author] * 25
-
-        if "hp" in db_monster['status']:
-            del db_monster['status']['hp']
-        if "mp" in db_monster['status']:
-            del db_monster['status']['mp']
+        db_monster["pdef"] = raid_rank[id_author] * 20
+        db_monster["mdef"] = raid_rank[id_author] * 20
+        db_monster["status"]["con"] += raid_rank[id_author] * 10
 
         # bonus status monster
         for k in db_monster["status"].keys():
@@ -53,9 +50,7 @@ class Raid(commands.Cog):
         for k in db_monster["status"].keys():
             for sts in db_player['equipped_items'].keys():
                 if db_player['equipped_items'][sts] is not None:
-                    if k == "luk":
-                        db_monster["status"][k] += randint(1, 2)
-                    if k in ["atk", "con"]:
+                    if k in ["atk", "con", "luk"]:
                         db_monster["status"][k] += randint(1, 2)
         return db_monster
 
@@ -173,7 +168,6 @@ class Raid(commands.Cog):
         db_monster = self.choice_monster(data, db_player, ctx.author.id)
         # criando as entidade do monstro...
         m_raid[ctx.author.id] = Entity(db_monster, False, raid=True)
-        m_raid[ctx.author.id].status['hp'] += raid_rank[ctx.author.id] * 100
         money[ctx.author.id] = db_monster['ethernya']
         xp_tot[ctx.author.id] = [(db_monster['xp'], db_monster['level'])]
 
@@ -192,7 +186,6 @@ class Raid(commands.Cog):
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
                 m_raid[ctx.author.id] = Entity(db_monster, False, raid=True)
-                m_raid[ctx.author.id].status['hp'] += raid_rank[ctx.author.id] * 100
                 money[ctx.author.id] += db_monster['ethernya']
                 xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
 
@@ -215,7 +208,6 @@ class Raid(commands.Cog):
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
                 m_raid[ctx.author.id] = Entity(db_monster, False, raid=True)
-                m_raid[ctx.author.id].status['hp'] += raid_rank[ctx.author.id] * 100
                 money[ctx.author.id] += db_monster['ethernya']
                 xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
             # -----------------------------------------------------------------------------
@@ -289,7 +281,6 @@ class Raid(commands.Cog):
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
                 m_raid[ctx.author.id] = Entity(db_monster, False, raid=True)
-                m_raid[ctx.author.id].status['hp'] += raid_rank[ctx.author.id] * 100
                 money[ctx.author.id] += db_monster['ethernya']
                 xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
 
@@ -310,7 +301,6 @@ class Raid(commands.Cog):
                 await ctx.send(embed=embed)
                 # criando as entidade do monstro...
                 m_raid[ctx.author.id] = Entity(db_monster, False, raid=True)
-                m_raid[ctx.author.id].status['hp'] += raid_rank[ctx.author.id] * 100
                 money[ctx.author.id] += db_monster['ethernya']
                 xp_tot[ctx.author.id].append((db_monster['xp'], db_monster['level']))
             # -----------------------------------------------------------------------------

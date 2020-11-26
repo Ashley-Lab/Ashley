@@ -140,12 +140,6 @@ class Battle(commands.Cog):
 
         _monster = choice([m for m in self.m if min_ < self.m[self.m.index(m)]['level'] < max_])
         self.db_monster[ctx.author.id] = _monster.copy()
-
-        if "hp" in self.db_monster[ctx.author.id]['status']:
-            del self.db_monster[ctx.author.id]['status']['hp']
-        if "mp" in self.db_monster[ctx.author.id]['status']:
-            del self.db_monster[ctx.author.id]['status']['mp']
-
         self.db_monster[ctx.author.id]['lower_net'] = True if data['rpg']['lower_net'] else False
         self.db_monster[ctx.author.id]['enemy'] = self.db_player[ctx.author.id]
         self.db_monster[ctx.author.id]["pdef"] = 0 + lvl
