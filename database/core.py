@@ -50,6 +50,11 @@ class Database(abc.ABC):
         self.models = models
         self.__cache = collections.defaultdict(Cache)
 
+    def _format_filter(self, f) -> dict:
+        if type(f) is not dict:
+            raise TypeError("invalid filter, filter need to be a dict")
+        return f
+
     def _transform_raw_data(self, data, from_):
         """
         Transforma um dado bruto em um modelo.
@@ -67,7 +72,7 @@ class Database(abc.ABC):
         model = self.models.get(from_, _SampleModel)
         return model.from_dict(self, data)
 
-    async def get_data(self, c, data_id):
+    async def get_data(self, c, filter):
         """
         Retorna um dado de id `data_id` na coleção `c`.
 
@@ -75,8 +80,8 @@ class Database(abc.ABC):
         ----------
         c : str
             Coleção onde o dado será procurado.
-        data_id : typing.Any
-            Id do dado que será buscado.
+        filter : typing.Any
+            Filtro do dado que será buscado.
 
         Retornos
         --------
@@ -84,15 +89,19 @@ class Database(abc.ABC):
             Retorna Type[DatabaseModel] se encontrar, caso contrário
             retorna `None`.
         """
-        data = await self._get_cache_data(c, data_id)
+        filter = self._format_filter(filter)
+
+        data = await self._get_cache_data(c, filter)
 
         if not data:
-            data = await self._get_raw_data(c, data_id)
-            data = self._transform_raw_data(data, c)
+            data = await self._get_raw_data(c, filter)
+
+            if data:
+                data = self._transform_raw_data(data, c)
 
         return data
 
-    async def _get_cache_data(self, c, data_id):
+    async def _get_cache_data(self, c, filter):
         """
         Retorna um dado de id `data_id` na coleção `c` em cache.
 
@@ -100,8 +109,8 @@ class Database(abc.ABC):
         ----------
         c : str
             Coleção onde o dado será procurado.
-        data_id : typing.Any
-            Id do dado que será buscado.
+        filter : typing.Any
+            Filtro do dado que será buscado.
 
         Retornos
         --------
@@ -109,11 +118,21 @@ class Database(abc.ABC):
             Retorna Type[DatabaseModel] se encontrar, caso contrário
             retorna `None`.
         """
-        data = self.__cache[c][data_id]
+        c = self.__cache[c]
+        for data in c:
+            for key, value in filter.items():
+                try:
+                    if data[key] == value:
+                        break
+                except KeyError:
+                    continue
+        else:
+            data = None
+
         return await asyncio.sleep(0, result=data)
 
     @abc.abstractmethod
-    async def _get_raw_data(self, c, data_id) -> dict:
+    async def _get_raw_data(self, c, filter) -> dict:
         """
         Retorna um dado direto do banco de dados. Retorna `None` se nada
         econtrado.
@@ -122,15 +141,15 @@ class Database(abc.ABC):
         ----------
         c : str
             Coleção da onde o dado será pego.
-        data_id : typing.Any
-            Id do dado que será pego.
+        filter : typing.Any
+            Filtro do dado que será pego.
 
         Retornos
         --------
         typing.Union[dict, None]
             Os dados pegos.
         """
-        raise NotImplementedError()
+        ...
 
     @overload
     async def _insert_into_cache(self, c, data: dict) -> Type[DatabaseModel]:
@@ -157,18 +176,15 @@ class Database(abc.ABC):
             Retorna um Type[DatabaseModel] se `data` for um `dict`, caso
             contrário retorna `None`.
         """
-        return_data = False
+        return_data = data
         if type(data) is dict:
             data = self._transform_raw_data(data, c)
-            return_data = True
+            return_data = None
 
         c = self.__cache[c]
         c.add(data.id, data)
 
-        if not return_data:
-            return
-
-        return data
+        return return_data
 
     @abc.abstractmethod
     async def _insert_raw_data(self, c, data: dict):
@@ -207,19 +223,19 @@ class Database(abc.ABC):
             contrário retorna `None`.
         """
         result = await self._insert_into_cache(c, data)
-        data = data.to_dict() if result else data
+        data = data.to_dict() if result is not None else data
         await self._insert_raw_data(c, data)
         return await asyncio.sleep(0, result=result)
 
     @overload
-    async def _update_cache_data(self, c, data_id,
+    async def _update_cache_data(self, c, filter,
                                  new_data: dict) -> Type[DatabaseModel]: ...
 
     @overload
-    async def _update_cache_data(self, c, data_id,
+    async def _update_cache_data(self, c, filter,
                                  new_data: Type[DatabaseModel]) -> None: ...
 
-    async def _update_cache_data(self, c, data_id, new_data):
+    async def _update_cache_data(self, c, filter, new_data):
         """
         Atualiza um dado que está no cache.
 
@@ -227,8 +243,8 @@ class Database(abc.ABC):
         ----------
         c : str
             Coleção onde o dado está.
-        data_id : typing.Any
-            Id do dado que será atualizado.
+        filter : typing.Any
+            Filtro do dado que será atualizado.
         new_data : typing.Union[typing.Type[DatabaseModel], dict]
             Novos dados.
 
@@ -238,8 +254,13 @@ class Database(abc.ABC):
             Retorna um Type[DatabaseModel] se `new_data` for um `dict`,
             caso contrário retorna `None`.
         """
+        return
+
         c = self.__cache[c]
-        del c[data_id]
+        try:
+            del c[data_id]
+        except KeyError:
+            pass
 
         return_data = None
         if type(new_data) is dict:
@@ -251,7 +272,7 @@ class Database(abc.ABC):
         return await asyncio.sleep(0, result=return_data)
 
     @abc.abstractmethod
-    async def _update_raw_data(self, c, data_id, new_data: dict):
+    async def _update_raw_data(self, c, filter, new_data: dict):
         """
         Atualiza um dado direto no banco de dados.
 
@@ -259,22 +280,22 @@ class Database(abc.ABC):
         ----------
         c : str
             Coleção aonde o dado será atualizado.
-        data_id : typing.Any
-            Id do dado que será atualizado.
+        filter : typing.Any
+            Filtro do dado que será atualizado.
         new_data : dict
             Novos dados.
         """
         ...
 
     @overload
-    async def update_data(self, c, data_id,
+    async def update_data(self, c, filter,
                           new_data: dict) -> Type[DatabaseModel]: ...
 
     @overload
-    async def update_data(self, c, data_id,
+    async def update_data(self, c, filter,
                           new_data: Type[DatabaseModel]) -> None: ...
 
-    async def update_data(self, c, data_id, new_data):
+    async def update_data(self, c, filter, new_data):
         """
         Atualiza um dado.
 
@@ -282,8 +303,8 @@ class Database(abc.ABC):
         ----------
         c : str
             Coleção onde o dado está.
-        data_id : typing.Any
-            Id do dado que será atualizado.
+        filter : typing.Any
+            Filtro do dado que será atualizado.
         new_data : typing.Union[typing.Type[DatabaseModel], dict]
             Novos dados.
 
@@ -293,7 +314,7 @@ class Database(abc.ABC):
             Retorna um Type[DatabaseModel] se `new_data` for um `dict`,
             caso contrário retorna `None`.
         """
-        result = await self._update_cache_data(c, data_id, new_data)
-        new_data = new_data.to_dict() if result else new_data
-        await self._update_raw_data(c, data_id, new_data)
+        result = await self._update_cache_data(c, filter, new_data)
+        new_data = new_data.to_dict() if result is None else new_data
+        await self._update_raw_data(c, filter, new_data)
         return await asyncio.sleep(0, result=result)
