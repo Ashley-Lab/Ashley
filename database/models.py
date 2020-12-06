@@ -137,8 +137,12 @@ class _SampleModel:
 
         self.__dict__[name] = value
 
+    @classmethod
+    def from_dict(cls, _, data):
+        return cls(_, data)
+
     def to_dict(self):
-        return self.__dict__
+        return self.__dict__.copy()
 
     def __repr__(self) -> str:
         return f"<_SampleModel {self.__dict__!s}>"
