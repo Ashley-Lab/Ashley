@@ -64,6 +64,20 @@ class DatabaseModel:
         # Gera `KeyError` se `_id` não foi definido.
         self.define("_id", raw_data["_id"])
 
+    def _validates(self, filter):
+        """Diz se o objeto valida `filter`.
+        Diz se o objeto corresponde com as informações de `filter`."""
+        for k, v in filter.items():
+            try:
+                if self.get(k) == v:
+                    continue
+                return False
+            except KeyError:
+                return False
+        # Se o `for` não rodar significa que `filter` == `{}`, logo,
+        # esse objeto corresponde ao filtro.
+        return True
+
     def define(self, name, value):
         """
         Define um atributo no modelo.
@@ -90,6 +104,11 @@ class DatabaseModel:
         ----------
         name : str
             Nome do atributo.
+
+        Raises
+        ------
+        KeyError
+            Nenhum atributo encontrado.
 
         Retorno
         -------
@@ -121,6 +140,8 @@ class DatabaseModel:
 
 
 class _SampleModel:
+    _validates = DatabaseModel._validates
+
     def __init__(self, _, raw_data: dict):
         self.id = raw_data["_id"]
 
@@ -137,8 +158,12 @@ class _SampleModel:
 
         self.__dict__[name] = value
 
+    @classmethod
+    def from_dict(cls, _, data):
+        return cls(_, data)
+
     def to_dict(self):
-        return self.__dict__
+        return self.__dict__.copy()
 
     def __repr__(self) -> str:
         return f"<_SampleModel {self.__dict__!s}>"

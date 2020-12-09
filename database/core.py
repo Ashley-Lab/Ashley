@@ -49,6 +49,7 @@ class Database(abc.ABC):
     def __init__(self, models: dict):
         self.models = models
         self.__cache = collections.defaultdict(Cache)
+        self.cache = self.__cache
 
     def _format_filter(self, f) -> dict:
         if type(f) is not dict:
@@ -99,6 +100,8 @@ class Database(abc.ABC):
             if data:
                 data = self._transform_raw_data(data, c)
 
+            await self._insert_into_cache(c, data)
+
         return data
 
     async def _get_cache_data(self, c, filter):
@@ -120,15 +123,10 @@ class Database(abc.ABC):
         """
         c = self.__cache[c]
         for data in c:
-            for key, value in filter.items():
-                try:
-                    if data[key] == value:
-                        break
-                except KeyError:
-                    continue
+            if data._validates(filter):
+                break
         else:
             data = None
-
         return await asyncio.sleep(0, result=data)
 
     @abc.abstractmethod
@@ -181,10 +179,9 @@ class Database(abc.ABC):
             data = self._transform_raw_data(data, c)
             return_data = None
 
-        c = self.__cache[c]
-        c.add(data.id, data)
+        self.__cache[c].push(data)
 
-        return return_data
+        return await asyncio.sleep(0, result=return_data)
 
     @abc.abstractmethod
     async def _insert_raw_data(self, c, data: dict):
@@ -254,20 +251,15 @@ class Database(abc.ABC):
             Retorna um Type[DatabaseModel] se `new_data` for um `dict`,
             caso contrário retorna `None`.
         """
-        return
-
-        c = self.__cache[c]
-        try:
-            del c[data_id]
-        except KeyError:
-            pass
-
         return_data = None
         if type(new_data) is dict:
             new_data = self._transform_raw_data(new_data, c)
             return_data = new_data
 
-        c[data_id] = new_data
+        c = self.__cache[c]
+        for index, data in enumerate(c):
+            if data._validates(filter):
+                c.replace(index, to=new_data)
 
         return await asyncio.sleep(0, result=return_data)
 
