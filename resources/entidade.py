@@ -10,7 +10,7 @@ levels = [5, 10, 15, 20, 25]
 
 
 class Entity(object):
-    def __init__(self, db, is_player, pvp=False):
+    def __init__(self, db, is_player, pvp=False, raid=False):
         self.db = db
         self.name = self.db['name']
         self.status = self.db['status']
@@ -21,11 +21,14 @@ class Entity(object):
         self.atack = None
         self.chance = False
         self.is_player = is_player
-        self.armor = self.db['armor']
+        self.pdef = self.db['pdef']
+        self.mdef = self.db['mdef']
         self.img = self.db['img']
         self.ln = self.db['lower_net']
         self.pvp = pvp
+        self.raid = raid
         self.ls = 0
+        self.potion = 0
 
         if self.is_player:
             for c in range(5):
@@ -63,7 +66,7 @@ class Entity(object):
             self.level_skill = 10
             self.cc = [self.db['cc'], "monster"]
 
-    async def turn(self, enemy_info, bot, ctx, user=None):
+    async def turn(self, enemy_info, bot, ctx, user=None, raid_num=0):
         user = ctx.author if user is None else user
         stun = False
         ice = False
@@ -86,13 +89,11 @@ class Entity(object):
                 pass
 
         for c in [['fraquesa', 'fisico'], ['silencio', 'magico']]:
-            try:
-                if c[0] in effects and self.effects[c[0]]['turns'] > 0:
+            if c[0] in effects:
+                if self.effects[c[0]]['turns'] > 0:
                     for c2 in atacks:
                         if self.atacks[c2]['type'] == c[1]:
                             atacks.remove(c2)
-            except KeyError:
-                pass
 
         if stun is False and ice is False:
             if self.is_player:
@@ -112,7 +113,7 @@ class Entity(object):
                     lvs = self.level_skill[c]
                     self.ls = lvs if 0 <= lvs <= 9 else 9
                     c2, ls = atacks[c], self.ls
-                    damage = int(self.status['atk'] * 2 / 100 * (80 + c * 10))
+                    damage = int(self.status['atk'] * 2 / 100 * ((30 + (c * 5)) + (c * 10)))
                     dado = self.atacks[c2]['damage'][self.ls]
                     d1 = int(dado[:dado.find('d')])
                     d2 = int(dado[dado.find('d') + 1:])
@@ -149,7 +150,7 @@ class Entity(object):
                 description += f'<:MP:774699585620672534> **{"Pass turn MP".upper()}**\n' \
                                f'``MP Recovery:`` **+{regen} de Mana**\n\n' \
                                f'<:HP:774699585070825503> **{"Pass turn HP".upper()}**\n' \
-                               f'``HP Recovery:`` **6-12% de HP**\n\n' \
+                               f'``HP Recovery:`` **25-35% de HP**\n\n' \
                                f'<:fechar:749090949413732352> **Finalizar batalha**'
                 embed = discord.Embed(
                     title=title,
@@ -186,26 +187,28 @@ class Entity(object):
                             else:
                                 self.status['mp'] = (self.status['con'] * self.rate[1])
 
-                            self.atack = "PASS-TURN"
+                            self.atack = "PASS-TURN-MP"
                             break
 
-                        if reaction[0].emoji.name == emoji_hp:
+                        potion_limit = 3 if not self.raid else 2 + (int(raid_num / 5) * 2)
+                        if reaction[0].emoji.name == emoji_hp and self.potion < potion_limit:
                             # regeneração de HP
                             if self.p_class in ['priest', 'assassin', 'default']:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 12)
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 35)
 
-                            elif self.p_class in ['paladin', 'warrior']:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 6)
+                            elif self.p_class in ['necromancer', 'wizard', 'warlock']:
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 30)
 
                             else:
-                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 9)
+                                hp_regen = int(((self.status['con'] * self.rate[0]) / 100) * 25)
 
                             if (self.status['hp'] + hp_regen) <= (self.status['con'] * self.rate[0]):
                                 self.status['hp'] += hp_regen
                             else:
                                 self.status['hp'] = (self.status['con'] * self.rate[0])
 
-                            self.atack = "PASS-TURN"
+                            self.atack = "PASS-TURN-HP"
+                            self.potion += 1
                             break
 
                         if reaction[0].emoji.name == emoji_fb:
@@ -214,41 +217,65 @@ class Entity(object):
                     except AttributeError:
                         pass
 
+                    potion_msg = False
                     for c in emojis:
                         emoji = str(c).replace('<:', '').replace(c[c.rfind(':'):], '')
                         try:
                             _reaction = reaction[0].emoji.name
                         except AttributeError:
                             _reaction = reaction[0].emoji
-                        if _reaction == emoji:
-                            test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
-                            _atack = atacks[test_atack]
-                            lvs = self.level_skill[self.atacks[_atack]['skill'] - 1]
-                            self.ls = lvs if 0 <= lvs <= 9 else 9
-                            a_mana_1 = self.atacks[_atack]['mana'][self.ls] + self.lvl
-                            a_mana_2 = self.atacks[_atack]['mana'][self.ls] + (self.lvl * 2)
-                            remove = a_mana_2 if self.lvl > 25 else a_mana_1
-                            try:
-                                effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.ls].items()]
-                            except TypeError:
-                                effects_skill = ['nenhum']
-                            heal = False
-                            for eff in effects_skill:
-                                if eff == "cura":
-                                    heal = True
-                            if heal:
-                                remove = int(((self.status['con'] * self.rate[1]) / 100) * 35)
-                            if self.atacks[_atack]['type'] == "especial":
-                                remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
-                            if self.status['mp'] >= remove:
+                        if _reaction == emoji or _reaction == emoji_hp:
+
+                            if _reaction == emoji:
+                                test_atack = emojis.index(f'<:{reaction[0].emoji.name}:{reaction[0].emoji.id}>')
+                                _atack = atacks[test_atack]
+                                lvs = self.level_skill[self.atacks[_atack]['skill'] - 1]
+                                self.ls = lvs if 0 <= lvs <= 9 else 9
+                                a_mana_1 = self.atacks[_atack]['mana'][self.ls] + self.lvl
+                                a_mana_2 = self.atacks[_atack]['mana'][self.ls] + (self.lvl * 2)
+                                remove = a_mana_2 if self.lvl > 25 else a_mana_1
+                                try:
+                                    effects_skill = [k for k, v in self.atacks[_atack]['effs'][self.ls].items()]
+                                except TypeError:
+                                    effects_skill = ['nenhum']
+                                heal = False
+                                for eff in effects_skill:
+                                    if eff == "cura":
+                                        heal = True
+                                if heal:
+                                    remove = int(((self.status['con'] * self.rate[1]) / 100) * 35)
+                                if self.atacks[_atack]['type'] == "especial":
+                                    remove = int(((self.status['con'] * self.rate[1]) / 100) * 50)
+                            else:
+                                remove = 10000
+                                test_atack = None
+
+                            potion_limit = 3 if not self.raid else 2 + (int(raid_num / 5) * 2)
+                            if self.potion >= potion_limit and reaction[0].emoji.name == emoji_hp:
+                                if self.raid:
+                                    msg = f"``MATE OUTRO MONSTRO PARA AUMENTAR O SEU LIMITE, ESCOLHA UMA SKILL OU " \
+                                          f"PASSE A VEZ...``\n**Obs:** Passar a vez regenera a mana ou vida!"
+                                else:
+                                    msg = f"``ENTÃO ESCOLHA UMA SKILL OU PASSE A VEZ...``\n" \
+                                          f"**Obs:** Passar a vez regenera a mana ou vida!"
+                                embed = discord.Embed(
+                                    description=f"``{user.name.upper()} VOCÊ JA ATINGIU O LIMITE DE POÇÃO DE VIDA!``\n"
+                                                f"{msg}", color=0x000000)
+                                embed.set_thumbnail(url=f"{user.avatar_url}")
+                                if not potion_msg:
+                                    await ctx.send(embed=embed)
+                                    potion_msg = True
+
+                            elif self.status['mp'] >= remove:
                                 self.status['mp'] -= remove
                                 self.atack = atacks[test_atack]
                                 break
+
                             else:
                                 embed = discord.Embed(
-                                    description=f"``{user.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!\n"
-                                                f"ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
-                                                f"**Obs:** Passar a vez regenera a mana!",
+                                    description=f"``{user.name.upper()} VOCÊ NÃO TEM MANA O SUFICIENTE!``\n"
+                                                f"``ENTÃO ESCOLHA OUTRA SKILL OU PASSE A VEZ...``\n"
+                                                f"**Obs:** Passar a vez regenera a mana ou vida!",
                                     color=0x000000
                                 )
                                 embed.set_thumbnail(url=f"{user.avatar_url}")
@@ -265,7 +292,7 @@ class Entity(object):
                 embed.set_thumbnail(url=f"{self.img}")
                 await ctx.send(embed=embed)
 
-            if self.atack is not None and self.atack != "PASS-TURN":
+            if self.atack is not None and self.atack not in ["PASS-TURN-MP", "PASS-TURN-HP"]:
                 self.atack = self.atacks[self.atack]
 
         else:
@@ -318,30 +345,31 @@ class Entity(object):
                 try:
                     if 'damage' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
-                        damage = damage if damage > 0 else 1
                         self.status['hp'] -= damage
                         if self.status['hp'] < 0:
                             self.status['hp'] = 0
-                        description = f"**{self.name.upper()}** ``sofreu`` **{self.effects[c]['damage']}** ``de dano " \
-                                      f"por efeito``"
+                        description = f"**{self.name.upper()}** ``sofreu`` **{damage}** ``de dano " \
+                                      f"por efeito de`` **{c.upper()}!**"
                         hp_max = self.status['con'] * self.rate[0]
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/md78DFkpIIzzW/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
-                        await ctx.send(embed=embed_)
+                        if damage > 0:
+                            await ctx.send(embed=embed_)
                     elif 'manadrain' in self.effects[c]['type']:
                         damage = self.effects[c]['damage']
-                        damage = damage if damage > 0 else 1
+                        damage = int(((self.status['con'] * self.rate[1]) / 100) * damage)
                         self.status['mp'] -= damage
                         if self.status['mp'] < 0:
                             self.status['mp'] = 0
-                        description = f"**{self.name.upper()}** ``teve`` **{self.effects[c]['damage']}** ``de mana " \
-                                      f"drenada por efeito``"
+                        description = f"**{self.name.upper()}** ``teve`` **{damage}** ``de mana " \
+                                      f"drenada por efeito de`` **{c.upper()}!**"
                         hp_max = self.status['con'] * self.rate[0]
                         monster = not self.is_player
                         img_ = "https://media1.giphy.com/media/pDLxcNa1r3QA0/source.gif"
                         embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], self.img, self.ln)
-                        await ctx.send(embed=embed_)
+                        if damage > 0:
+                            await ctx.send(embed=embed_)
                     if self.effects[c]['turns'] > 0 and c == "cegueira":
                         description = f"**{self.name.upper()}** ``esta sobe o efeito de`` " \
                                       f"**{c.upper()}!**"
@@ -355,19 +383,25 @@ class Entity(object):
 
                 try:
                     if self.effects[c]['turns'] > 0:
-                        self.effects[c]['turns'] -= 1
+                        if "reflect" in self.effects.keys():
+                            if self.effects['reflect']['damage'] > 0:
+                                self.effects['reflect']['damage'] = 0
+                                self.effects[c]['turns'] -= 1
+                        else:
+                            self.effects[c]['turns'] -= 1
 
-                    if self.effects[c]['turns'] == 0:
+                    if self.effects[c]['turns'] < 1:
                         del self.effects[c]
                 except KeyError:
                     pass
 
-        return self.atack if self.atack != "PASS-TURN" else "PASS-TURN"
+        return self.atack
 
-    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img, enemy_luk):
+    async def damage(self, skill, lvlskill, enemy_atack, ctx, name, enemy_cc, enemy_img, enemy_luk, effects):
 
-        # chance de critital 100%
         lethal = False
+        if "reflect" in effects.keys():
+            effects['reflect']['damage'] = 0
 
         if skill is None:
             description = f'**{name.upper()}** ``não pode atacar!``'
@@ -375,15 +409,26 @@ class Entity(object):
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://uploads1.yugioh.com/card_images/2110/detail/2004.jpg?1385103024"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
-            return await ctx.send(embed=embed_)
+            await ctx.send(embed=embed_)
+            return effects
 
-        if skill == "PASS-TURN":
-            description = f'**{name.upper()}** ``passou o turno!``'
+        if skill == "PASS-TURN-MP":
+            description = f'**{name.upper()}** ``passou o turno, usando a poção de MANA!``'
             hp_max = self.status['con'] * self.rate[0]
             monster = not self.is_player if self.pvp else self.is_player
             img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
             embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
-            return await ctx.send(embed=embed_)
+            await ctx.send(embed=embed_)
+            return effects
+
+        if skill == "PASS-TURN-HP":
+            description = f'**{name.upper()}** ``passou o turno, usando a poção de VIDA!``'
+            hp_max = self.status['con'] * self.rate[0]
+            monster = not self.is_player if self.pvp else self.is_player
+            img_ = "https://vignette.wikia.nocookie.net/yugioh/images/6/61/OfferingstotheDoomed-TF04-JP-VG.png"
+            embed_ = embed_creator(description, img_, monster, hp_max, self.status['hp'], enemy_img, self.ln)
+            await ctx.send(embed=embed_)
+            return effects
 
         if not self.is_player or self.pvp:
             skill_number = int(skill['skill'])
@@ -403,14 +448,10 @@ class Entity(object):
                     key = [k for k, v in skill['effs'].items()]
             for c in key:
 
-                rate_chance = 95
+                rate_chance = 97
                 chance = randint(1, 100)
-
-                if c not in ["gelo"]:
-                    chance += enemy_luk
-
-                if c in ["cegueira", "stun"]:
-                    rate_chance -= int(enemy_luk / 2) if enemy_luk > 0 else 0
+                chance += enemy_luk + int(lvs / 2)
+                rate_chance -= int(enemy_luk / 2) if enemy_luk > 0 else 0
 
                 if chance >= rate_chance:
                     self.chance = True
@@ -467,14 +508,14 @@ class Entity(object):
                     await ctx.send(embed=embed_)
 
         if not self.is_player:
-            damage = skill['damage'][self.ls]
+            damage_enchant = skill['damage'][self.ls]
         else:
             if self.pvp:
-                damage = skill['damage'][self.ls]
+                damage_enchant = skill['damage'][self.ls]
             else:
-                damage = skill['damage']
-        d1 = int(damage[:damage.find('d')])
-        d2 = int(damage[damage.find('d') + 1:])
+                damage_enchant = skill['damage']
+        d1 = int(damage_enchant[:damage_enchant.find('d')])
+        d2 = int(damage_enchant[damage_enchant.find('d') + 1:])
 
         dd = (d2, d2 * d1) if d2 != d2 * d1 else (d2, d2)
         if lvs >= 11:
@@ -486,7 +527,7 @@ class Entity(object):
             bk = dd[0]
 
         if not self.is_player or self.pvp:
-            damage = int(enemy_atack / 100 * (80 + skill['skill'] * 10)) + bk
+            damage = int(enemy_atack / 100 * ((30 + (skill['skill'] * 5)) + (skill['skill'] * 10))) + bk
         else:
             damage = enemy_atack + bk
 
@@ -495,14 +536,14 @@ class Entity(object):
         critical_damage = enemy_cc[0]
         value_critical = 20
 
-        if enemy_cc[1] in ['necromancer', 'wizard']:
-            value_critical = 18
+        if enemy_cc[1] in ['necromancer', 'wizard', 'warlock']:
+            value_critical = 19
 
         if enemy_cc[1] in ['assassin', 'priest']:
-            value_critical = 16
+            value_critical = 18
 
         if not self.is_player or self.pvp:
-            value_critical += int(enemy_luk / 2)
+            value_critical -= int(enemy_luk / 5)
 
         try:
             if self.effects["cegueira"]['turns'] > 0:
@@ -514,20 +555,38 @@ class Entity(object):
             critical = True
 
         if critical:
-            damage = int(damage + damage / 100 * critical_damage)
+            damage = int(damage + (damage / 100 * critical_damage))
 
             file = discord.File("images/elements/critical.gif", filename="critical.gif")
             embed = discord.Embed(title="CRITICAL", color=0x38105e)
             embed.set_image(url="attachment://critical.gif")
             await ctx.send(file=file, embed=embed)
 
-        armor_now = self.armor if self.armor > 0 else 1
+        defense = self.pdef if skill['type'] == "fisico" else self.mdef
+        if skill['type'] == "especial":
+            defense = choice([self.pdef, self.mdef])
+
+        reflect = False
+        if "reflect" in effects.keys():
+            reflect = True
+            damage = int(damage / 2)
+            effects['reflect']['damage'] = damage
+
+        armor_now = defense if defense > 0 else 1
         percent = abs(int(armor_now / (damage / 100)))
-        if percent < 45:
-            dn = abs(int(damage - self.armor))
+        if percent < 50:
+            dn = abs(int(damage - armor_now))
         else:
             dn_chance = randint(1, 100)
-            dn = abs(int(damage - self.armor) if dn_chance < 5 else int(damage / 100 * randint(46, 65)))
+            dn = abs(int(damage - armor_now) if dn_chance < 25 else int(damage / 100 * randint(50, 70)))
+
+        if reflect:
+            description = f'**{self.name.upper()}** ``refletiu`` **50%** ``do dano que recebeu``'
+            hp_max = self.status['con'] * self.rate[0]
+            monster = not self.is_player if self.pvp else self.is_player
+            img_s = "https://uploads1.yugioh.com/card_images/953/detail/059.jpg"
+            embed_ = embed_creator(description, img_s, monster, hp_max, self.status['hp'], self.img, self.ln)
+            await ctx.send(embed=embed_)
 
         if dn < 0:
             description = f'**{self.name.upper()}** ``obsorveu todo o dano e recebeu`` **0** ``de dano``'
@@ -540,9 +599,8 @@ class Entity(object):
             if self.status['hp'] < 0:
                 self.status['hp'] = 0
 
-            if self.armor > 0:
-                description = f'**{self.name.upper()}** ``receberia`` **{damage}** ``de dano, mas absorveu parte ' \
-                              f'dele, logo recebeu`` **{dn}**'
+            if defense > 0:
+                description = f'**{self.name.upper()}** ``absorveu`` **{armor_now}** ``de dano e recebeu`` **{dn}**'
             else:
                 description = f'**{self.name.upper()}** ``recebeu`` **{damage}** ``de dano``'
 
@@ -550,3 +608,5 @@ class Entity(object):
             monster = not self.is_player if self.pvp else self.is_player
             embed_ = embed_creator(description, skill['img'], monster, hp_max, self.status['hp'], self.img, self.ln)
             await ctx.send(embed=embed_)
+
+        return effects

@@ -228,8 +228,7 @@ class InventoryClass(commands.Cog):
 
         msg = '```Markdown\n'
         for item in equipped_items:
-            text = "DAMAGE_ABSORPTION"
-            msg += f"[>>]: {item['name'].upper()}\n<{text} = {item['armor']} RARITY = \"{item['rarity']}\">\n" \
+            msg += f"[>>]: {item['name'].upper()}\n<DEFENSE: PDEF = {item['pdef']} MDEF = \"{item['mdef']}\">\n" \
                    f"<STATUS: ATK = \"{item['modifier']['atk']}\" DEX = \"{item['modifier']['agi']}\" " \
                    f"ACC = \"{item['modifier']['prec']}\" CON = \"{item['modifier']['con']}\">\n\n"
         msg += "```"

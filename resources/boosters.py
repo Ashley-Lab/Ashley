@@ -7,7 +7,6 @@ class Booster(object):
         self.ranking = None
         self.is_vip = None
         self.item_ = None
-        self.key_item = None
 
         # box configs
         self.box = {"status": {"active": True, "secret": 0, "ur": 0, "sr": 0, "r": 0, "i": 0, "c": 0}}
@@ -80,66 +79,66 @@ class Booster(object):
         self.define_limit(self.rarity[rarity])
         self.box['status']['rarity'] = rarity
         self.box['status']['size'] = size
-        self.box['items'] = dict()
+        self.box['items'] = {"Comum": {}, "Incomum": {}, "Raro": {}, "Super Raro": {}, "Ultra Raro": {}, "Secret": {}}
         while self.box_count < size:
             item = choice(list(self.items.keys()))
             if self.items[item][3] == 5:
                 if self.secret < self.l_secret:
-                    if item not in self.box['items']:
-                        self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                    if item not in self.box['items']['Secret']:
+                        self.box['items']['Secret'][item] = {"size": 1, "data": self.items[item]}
                         self.box['status']['secret'] += 1
                     else:
-                        self.box['items'][item]['size'] += 1
+                        self.box['items']['Secret'][item]['size'] += 1
                         self.box['status']['secret'] += 1
                     self.secret += 1
                     self.box_count += 1
             elif self.items[item][3] == 4:
                 if self.ur < self.l_ur:
-                    if item not in self.box['items']:
-                        self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                    if item not in self.box['items']['Ultra Raro']:
+                        self.box['items']['Ultra Raro'][item] = {"size": 1, "data": self.items[item]}
                         self.box['status']['ur'] += 1
                     else:
-                        self.box['items'][item]['size'] += 1
+                        self.box['items']['Ultra Raro'][item]['size'] += 1
                         self.box['status']['ur'] += 1
                     self.ur += 1
                     self.box_count += 1
             elif self.items[item][3] == 3:
                 if self.sr < self.l_sr:
-                    if item not in self.box['items']:
-                        self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                    if item not in self.box['items']['Super Raro']:
+                        self.box['items']['Super Raro'][item] = {"size": 1, "data": self.items[item]}
                         self.box['status']['sr'] += 1
                     else:
-                        self.box['items'][item]['size'] += 1
+                        self.box['items']['Super Raro'][item]['size'] += 1
                         self.box['status']['sr'] += 1
                     self.sr += 1
                     self.box_count += 1
             elif self.items[item][3] == 2:
                 if self.r < self.l_r:
-                    if item not in self.box['items']:
-                        self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                    if item not in self.box['items']['Raro']:
+                        self.box['items']['Raro'][item] = {"size": 1, "data": self.items[item]}
                         self.box['status']['r'] += 1
                     else:
-                        self.box['items'][item]['size'] += 1
+                        self.box['items']['Raro'][item]['size'] += 1
                         self.box['status']['r'] += 1
                     self.r += 1
                     self.box_count += 1
             elif self.items[item][3] == 1:
                 if self.i < self.l_i:
-                    if item not in self.box['items']:
-                        self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                    if item not in self.box['items']['Incomum']:
+                        self.box['items']['Incomum'][item] = {"size": 1, "data": self.items[item]}
                         self.box['status']['i'] += 1
                     else:
-                        self.box['items'][item]['size'] += 1
+                        self.box['items']['Incomum'][item]['size'] += 1
                         self.box['status']['i'] += 1
                     self.i += 1
                     self.box_count += 1
             elif self.items[item][3] == 0:
                 if self.c < self.l_c:
-                    if item not in self.box['items']:
-                        self.box['items'][item] = {"size": 1, "data": self.items[item]}
+                    if item not in self.box['items']['Comum']:
+                        self.box['items']['Comum'][item] = {"size": 1, "data": self.items[item]}
                         self.box['status']['c'] += 1
                     else:
-                        self.box['items'][item]['size'] += 1
+                        self.box['items']['Comum'][item]['size'] += 1
                         self.box['status']['c'] += 1
                     self.c += 1
                     self.box_count += 1
@@ -162,7 +161,6 @@ class Booster(object):
 
     def buy_item(self, box_):
         self.item_ = None
-
         for k, v in self.bl.items():
             self.booster_choice[k] = box_['status'][v]
 
@@ -170,15 +168,15 @@ class Booster(object):
         for i_, amount in self.booster_choice.items():
             list_items += [i_] * amount
 
-        for _ in range(len(list_items)):
-            result = choice(list_items)
-            if box_['status'][self.bl[result]] > 0:
-                self.item_ = choice(list(box_['items'].values()))
-                while list(self.legend.keys())[list(self.legend.values()).index(self.item_['data'][3])] != result:
-                    self.item_ = choice(list(box_['items'].values()))
-                break
+        result = choice(list_items)
 
-        return self.item_
+        temp_list = []
+        for k in box_['items'][result].keys():
+            if box_['items'][result][k]['size'] > 0:
+                temp_list += [k] * box_['items'][result][k]['size']
+
+        self.item_ = choice(temp_list)
+        return self.item_, box_['items'][result][self.item_]
 
     async def buy_booster(self, bot, ctx, vip):
         data = await bot.db.get_data("user_id", ctx.author.id, "users")
@@ -209,17 +207,13 @@ class Booster(object):
         if item is None:
             return "<:alert:739251822920728708>│``VOCÊ FALHOU EM COMPRAR O ITEM...``", None
 
-        for k, v in self.items.items():
-            if v == item['data']:
-                self.key_item = k
-
         Empty = False
-        rarity = list(self.legend.keys())[list(self.legend.values()).index(item['data'][3])]
+        rarity = list(self.legend.keys())[list(self.legend.values()).index(item[1]['data'][3])]
         update['box']['status'][self.bl[rarity]] -= 1
         update['box']['status']['size'] -= 1
-        update['box']['items'][self.key_item]['size'] -= 1
+        update['box']['items'][rarity][item[0]]['size'] -= 1
 
-        if update['box']['status']['size'] <= 0:
+        if update['box']['status']['size'] < 1:
             update['box']['status']['active'] = False
             Empty = True
 
@@ -230,9 +224,9 @@ class Booster(object):
         quant_3 = randint(1, 3)
 
         try:
-            update['inventory'][self.key_item] += quant_1
+            update['inventory'][item[0]] += quant_1
         except KeyError:
-            update['inventory'][self.key_item] = quant_1
+            update['inventory'][item[0]] = quant_1
 
         try:
             update['inventory'][bonus_1] += quant_2
@@ -260,23 +254,23 @@ class Booster(object):
 
         if rarity.lower() in ["ultra raro", "secret"]:
             if vip:
-                return (f"``{quant_1}`` - **{item['data'][1]}**\n"
+                return (f"``{quant_1}`` - **{item[1]['data'][1]}**\n"
                         f"**+{quant_2}** - {self.items[bonus_1][1]} | "
                         f"**+{quant_3}** - {self.items[bonus_2][1]}", empty)
 
             return (f"<a:fofo:524950742487007233>│🎊 **PARABENS** 🎉 ``VOCE TIROU:``\n"
-                    f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
+                    f"``{quant_1}`` {item[1]['data'][0]} **{item[1]['data'][1]}** "
                     f"``ELE TEM O TIER`` ✨ **{rarity.upper()}** ✨\n"
                     f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
                     f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**", empty)
 
         if vip:
-            return (f"**{quant_1}** - {item['data'][1]}\n"
+            return (f"**{quant_1}** - {item[1]['data'][1]}\n"
                     f"**+{quant_2}** - {self.items[bonus_1][1]} | "
                     f"**+{quant_3}** - {self.items[bonus_2][1]}", empty)
 
         return (f"<:mito:745375589145247804>│``VOCE TIROU:``\n"
-                f"``{quant_1}`` {item['data'][0]} **{item['data'][1]}** "
+                f"``{quant_1}`` {item[1]['data'][0]} **{item[1]['data'][1]}** "
                 f"``ELE TEM O TIER`` **{rarity.upper()}**\n"
                 f"``+{quant_2}`` {self.items[bonus_1][0]} **{self.items[bonus_1][1]}** | "
                 f"``+{quant_3}`` {self.items[bonus_2][0]} **{self.items[bonus_2][1]}**", empty)

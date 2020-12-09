@@ -218,8 +218,8 @@ class LoverClass(commands.Cog):
                               f"{'🟢' if vip else '🔴'} `Vip` Se tiver verde está disponivel pra usar.")
 
         embed.add_field(name="--== COMANDOS USADOS ==--", inline=False,
-                        value=f"``{user}{(' ' * (5 - len(str(user))))}`` {s1}\n"
-                              f"``{commands_today}{(' ' * (5 - len(str(commands_today))))}`` {s2}\n"
+                        value=f"``{commands_today}/5000{(' ' * (10 - len(f'{commands_today}/5000')))}`` {s2}\n"
+                              f"``{user}{(' ' * (5 - len(str(user))))}`` {s1}\n"
                               f"``{guild}{(' ' * (5 - len(str(guild))))}`` {s3}")
 
         embed.add_field(name="--== SECURITY ==--", inline=False,
